@@ -6,7 +6,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/.coverage" afterPath="$PROJECT_DIR$/tRecorderApi/.coverage" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_tests_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_tests_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_views_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_views_py.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/test_log.txt" afterPath="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
@@ -21,11 +20,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="346">
-              <caret line="78" column="35" lean-forward="false" selection-start-line="78" selection-start-column="7" selection-end-line="78" selection-end-column="35" />
+            <state relative-caret-position="307">
+              <caret line="56" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
                 <element signature="e#0#59#0" expanded="true" />
               </folding>
@@ -55,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tests.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tests.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="160" column="81" lean-forward="false" selection-start-line="160" selection-start-column="81" selection-end-line="160" selection-end-column="81" />
+            <state relative-caret-position="355">
+              <caret line="159" column="77" lean-forward="false" selection-start-line="159" selection-start-column="77" selection-end-line="159" selection-end-column="77" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -785,22 +784,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="78" column="35" lean-forward="false" selection-start-line="78" selection-start-column="7" selection-end-line="78" selection-end-column="35" />
+        <state relative-caret-position="355">
+          <caret line="159" column="77" lean-forward="false" selection-start-line="159" selection-start-column="77" selection-end-line="159" selection-end-column="77" />
           <folding>
-            <element signature="e#0#59#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests.py">
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="160" column="81" lean-forward="false" selection-start-line="160" selection-start-column="81" selection-end-line="160" selection-end-column="81" />
+        <state relative-caret-position="307">
+          <caret line="56" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
