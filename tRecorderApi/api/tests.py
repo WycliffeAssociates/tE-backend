@@ -137,15 +137,12 @@ class ViewTestCases(TestCase):
         test_log.close()
 
     # def test_api_can_update_file_object(self):
-    #      """Test the API has file creation capability:
-    #      Sending JSON File Object To API and
-    #      Expecting HTTP Success Message Returned"""
-    #      self.client.post('http://127.0.0.1:8000/api/files', self.file_data, format='json')
-    #      self.response = self.client.put('http://127.0.0.1:8000/api/files/1', {'location' : 'new_location'}, format='json')  # send POST to API
-    #      self.assertEqual(self.response.status_code, status.HTTP_200_OK)
-    #      test_log = open("test_log.txt", "a")
-    #      test_log.write("TEST: Posting File Object to API................................PASSED\n")
-    #      test_log.close()
+    #       """Test the API has file creation capability:
+    #       Sending JSON File Object To API and
+    #       Expecting HTTP Success Message Returned"""
+    #       change_file = {'location' : 'new_file'}
+    #       response = self.client.put('http://127.0.0.1:8000/api/files/' + str(change_file.id), change_file, format='json')
+    #       self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_posting_file_to_api_returns_success_response(self):
         """Testing That zip files can be uploaded to the api"""
@@ -156,8 +153,10 @@ class ViewTestCases(TestCase):
          test_log.write("TEST: Uploading ZIP File to API.................................PASSED\n")
          test_log.close()
 
-    def test_client_can_post_project_to_api(self):
-        self.response = self.client.post('http://127.0.0.1:8000/api/languages')
+    # def test_client_can_post_project_to_api(self):
+    #     self.response = self.client.post('http://127.0.0.1:8000/api/get_project', {'language' : 'english', 'slug' : 'ulb', 'chapter' : 1}, format='json')
+    #     self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
     # def test_that_api_does_not_accept_uploads_other_files(self):
     #     """Testing that uploading something that is not a file will return a HTTP 404 code"""
     #     self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', self.file_data, format='multipart')
