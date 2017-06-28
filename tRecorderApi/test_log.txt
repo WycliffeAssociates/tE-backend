@@ -1,5 +1,5 @@
 API TEST LOG
-DATE:06/28/2017_14:56:19
+DATE:06/28/2017_15:24:52
 
 TEST: Printing Each Model's Unicode.............................PASSED
 TEST: Creating and Storing a Comment Object.....................PASSED

@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.core.files import File
-from django.http import HttpRequest
 from .models import File, Language, User, Meta, Comment
 from views import FileUploadView
 from datetime import datetime
@@ -102,7 +101,6 @@ class ViewTestCases(TestCase):
         self.comment = {'location':'test_location'}
         self.file_mock = mock.MagicMock(spec=File, name='FileMock') #creating a temporary zip file for testing purposes
         self.file_mock.name = 'test1.zip'
-        self.file_uploader = FileUploadView()
 
     def test_api_can_create_file_object(self):
         """Test the API has file creation capability:
@@ -155,13 +153,9 @@ class ViewTestCases(TestCase):
     #      test_log.write("TEST: Posting File Object to API................................PASSED\n")
     #      test_log.close()
 
-    # def test_posting_file_to_api_returns_success_response(self):
-    #     self.request = HttpRequest()
-    #     self.request.method = 'POST'
-    #     self.request.data['file'] = self.file_mock
-    #     self.response = self.file_uploader.post(self, self.request, self.file_mock.name)
-    #     #self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', self.file_mock)
-    #     self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+    def test_posting_file_to_api_returns_success_response(self):
+         self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', {'Media type' : '*/*', 'Content' : self.file_mock}, format='multipart')
+         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     #def test_api_can_update_####_object:
         ######
