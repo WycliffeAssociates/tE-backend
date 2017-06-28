@@ -1,8 +1,13 @@
 from django.test import TestCase
+from django.core.files import File
+from django.http import HttpRequest
 from .models import File, Language, User, Meta, Comment
+from views import FileUploadView
 from datetime import datetime
 from rest_framework.test import APIClient
 from rest_framework import status
+import mock
+
 
 #Creating a text file to log the results of each of the tests
 with open("test_log.txt", "w") as test_log:
@@ -90,11 +95,14 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.file_data = {'location' : 'test_location'}
+        self.file_data = {'location' : 'test1.zip'}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         #self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.meta_data = {'anthology':'ub', 'language':'english', 'version':'ESV', 'slug':'mrk', 'mode':'test'}
         self.comment = {'location':'test_location'}
+        self.file_mock = mock.MagicMock(spec=File, name='FileMock') #creating a temporary zip file for testing purposes
+        self.file_mock.name = 'test1.zip'
+        self.file_uploader = FileUploadView()
 
     def test_api_can_create_file_object(self):
         """Test the API has file creation capability:
@@ -136,6 +144,24 @@ class ViewTestCases(TestCase):
         test_log.write("TEST: Posting Comment Object to API.............................PASSED\n")
         test_log.close()
 
+    def test_api_can_update_file_object(self):
+         """Test the API has file creation capability:
+         Sending JSON File Object To API and
+         Expecting HTTP Success Message Returned"""
+         self.client.post('http://127.0.0.1:8000/api/files', self.file_data, format='json')
+         self.response = self.client.put('http://127.0.0.1:8000/api/files/1', {'location' : 'new_location'}, format='json')  # send POST to API
+         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+         test_log = open("test_log.txt", "a")
+         test_log.write("TEST: Posting File Object to API................................PASSED\n")
+         test_log.close()
+
+    # def test_posting_file_to_api_returns_success_response(self):
+    #     self.request = HttpRequest()
+    #     self.request.method = 'POST'
+    #     self.request.data['file'] = self.file_mock
+    #     self.response = self.file_uploader.post(self, self.request, self.file_mock.name)
+    #     #self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', self.file_mock)
+    #     self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     #def test_api_can_update_####_object:
         ######

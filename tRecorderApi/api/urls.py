@@ -1,8 +1,8 @@
 from django.conf.urls import url, include
 from . import views
 from rest_framework import routers
-from api.views import LanguageViewSet, UserViewSet, FileViewSet
-from api.views import MetaViewSet, CommentViewSet, FileUploadView
+from views import LanguageViewSet, UserViewSet, FileViewSet
+from views import MetaViewSet, CommentViewSet, FileUploadView
 
 router = routers.DefaultRouter()
 router.register(r'languages', LanguageViewSet)
