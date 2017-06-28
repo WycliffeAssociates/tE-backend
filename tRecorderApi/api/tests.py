@@ -1,11 +1,9 @@
 from django.test import TestCase
 from django.core.files import File
 from .models import File, Language, User, Meta, Comment
-from views import FileUploadView
 from datetime import datetime
 from rest_framework.test import APIClient
 from rest_framework import status
-import mock
 
 
 #Creating a text file to log the results of each of the tests
@@ -88,8 +86,6 @@ class ModelTestCase(TestCase):
         test_log.write("TEST: Printing Each Model's Unicode.............................PASSED\n")
         test_log.close()
 
-
-
 class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
@@ -99,8 +95,6 @@ class ViewTestCases(TestCase):
         #self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.meta_data = {'anthology':'ub', 'language':'english', 'version':'ESV', 'slug':'mrk', 'mode':'test'}
         self.comment = {'location':'test_location'}
-        self.file_mock = mock.MagicMock(spec=File, name='FileMock') #creating a temporary zip file for testing purposes
-        self.file_mock.name = 'test1.zip'
 
     def test_api_can_create_file_object(self):
         """Test the API has file creation capability:
@@ -154,8 +148,18 @@ class ViewTestCases(TestCase):
     #      test_log.close()
 
     def test_posting_file_to_api_returns_success_response(self):
-         self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', {'Media type' : '*/*', 'Content' : self.file_mock}, format='multipart')
+        """Testing That zip files can be uploaded to the api"""
+        with open('test.zip', 'rb') as test_zip:
+         self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', {'Media type' : '*/*', 'Content' : test_zip}, format='multipart')
          self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+         test_log = open("test_log.txt", "a")
+         test_log.write("TEST: Uploading ZIP File to API.................................PASSED\n")
+         test_log.close()
+
+    def test_that_api_does_not_accept_uploads_other_files(self):
+        """Testing that uploading something that is not a file will return a HTTP 404 code"""
+        self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', {'name' : 'not_a_file'}, format='json')
+        self.assertEqual(self.response.status_code, status.HTTP_404_NOT_FOUND)
 
     #def test_api_can_update_####_object:
         ######
