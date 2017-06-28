@@ -2,41 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9599c9ef-48d5-48be-8b20-6e2839ddbc7a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/audio.mp3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/16seconds.mp3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/chapter.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/unzipped/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/api/parsers.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0002_auto_20170627_1503.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0002_auto_20170627_1535.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0003_auto_20170627_1520.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0003_auto_20170627_1651.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0004_auto_20170627_1525.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0004_auto_20170627_1658.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0005_merge_20170627_1648.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0006_merge_20170628_0851.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/tRecorderApi/db .sqlite3" afterPath="$PROJECT_DIR$/tRecorderApi/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/migrations/0001_initial.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/models.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/templates/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/api/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/urls.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/views.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/tRecorderApi/settings.py" afterPath="$PROJECT_DIR$/tRecorderApi/tRecorderApi/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/.coverage" afterPath="$PROJECT_DIR$/tRecorderApi/.coverage" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/test_log.txt" afterPath="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -51,10 +19,10 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+            <state relative-caret-position="465">
+              <caret line="31" column="67" lean-forward="false" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
               <folding>
-                <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+                <element signature="e#0#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,18 +31,18 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="486">
+              <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <state relative-caret-position="315">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -85,11 +53,21 @@
       <file leaf-file-name="tests.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="159" column="38" lean-forward="false" selection-start-line="159" selection-start-column="38" selection-end-line="159" selection-end-column="38" />
+            <state relative-caret-position="229">
+              <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parsers.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tRecorderApi/api/parsers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -105,8 +83,8 @@
         <option value="$PROJECT_DIR$/tRecorderApi/api/models.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/views.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
-        <option value="$PROJECT_DIR$/tRecorderApi/api/tests.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/urls.py" />
+        <option value="$PROJECT_DIR$/tRecorderApi/api/tests.py" />
       </list>
     </option>
   </component>
@@ -180,28 +158,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="translationDB" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="translationDB" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tRecorderApi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="migrations" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -456,22 +412,12 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="66" lean-forward="false" selection-start-line="16" selection-start-column="66" selection-end-line="16" selection-end-column="66" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
           <caret line="39" column="40" lean-forward="false" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
           <folding>
-            <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -511,7 +457,7 @@
         <state relative-caret-position="420">
           <caret line="39" column="40" lean-forward="true" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
           <folding>
-            <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -623,7 +569,7 @@
         <state relative-caret-position="345">
           <caret line="23" column="92" lean-forward="false" selection-start-line="23" selection-start-column="92" selection-end-line="23" selection-end-column="92" />
           <folding>
-            <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -725,7 +671,7 @@
         <state relative-caret-position="345">
           <caret line="53" column="92" lean-forward="false" selection-start-line="53" selection-start-column="92" selection-end-line="53" selection-end-column="92" />
           <folding>
-            <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -818,41 +764,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        <state relative-caret-position="486">
+          <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+        <state relative-caret-position="465">
+          <caret line="31" column="67" lean-forward="false" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
           <folding>
-            <marker date="1498674447000" expanded="true" signature="0:36" ph="import ..." />
+            <element signature="e#0#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="159" column="38" lean-forward="false" selection-start-line="159" selection-start-column="38" selection-end-line="159" selection-end-column="38" />
+        <state relative-caret-position="229">
+          <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/urls.py">
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/parsers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
