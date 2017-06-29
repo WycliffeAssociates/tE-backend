@@ -1,9 +1,6 @@
 from django.test import TestCase
-from django.core.files import File
-from .models import Take, Language, User, Comment
+from .models import Take, Language, User, Comment, Book
 from datetime import datetime
-from rest_framework.test import APIClient
-from rest_framework import status
 
 
 #Creating a text file to log the results of each of the tests
@@ -21,6 +18,7 @@ class ModelTestCase(TestCase):
         self.language = Language(code='abc', name='english')
         self.user = User(name='tester', agreed=True, picture='test.pic')
         self.comment = Comment(location='test_location')
+        self.book = Book(code='en-demo',name='english', booknum=5)
 
     def test_model_can_create_a_take(self):
         """Test the File model can create a file."""
@@ -69,7 +67,7 @@ class ModelTestCase(TestCase):
         self.assertEqual('None-', self.take.__unicode__())
         self.assertEqual("english", self.language.__unicode__())
         self.assertEqual("tester", self.user.__unicode__())
-        #self.assertEqual("english-ub-mrk", self.meta.__unicode__())
+        self.assertEqual("english", self.book.__unicode__())
         self.assertEqual("test_location", self.comment.__unicode__())
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Printing Each Model's Unicode.............................PASSED\n")
