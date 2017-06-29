@@ -1,9 +1,8 @@
 from django.test import TestCase
 from django.core.files import File
 from .models import Take, Language, User, Comment, Book
+from .models import Take, Language, User, Comment, Book
 from datetime import datetime
-from rest_framework.test import APIClient
-from rest_framework import status
 
 
 #Creating a text file to log the results of each of the tests
@@ -23,6 +22,7 @@ class ModelTestCase(TestCase):
         self.comment = Comment(location='test_location')
         self.book = Book(code='mrk', name='Mark', booknum = '41')
         self.take.save()
+        self.book = Book(code='en-demo',name='english', booknum=5)
 
     def test_model_can_edit_take(self):
         """Test the take model can be edited and reflected in database"""
@@ -99,6 +99,7 @@ class ModelTestCase(TestCase):
         self.assertEqual("tester", self.user.__unicode__())
         self.assertEqual("Mark", self.book.__unicode__())
         #self.assertEqual("english-ub-mrk", self.meta.__unicode__())
+        self.assertEqual("english", self.book.__unicode__())
         self.assertEqual("test_location", self.comment.__unicode__())
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Printing Each Model's Unicode.............................PASSED\n")
