@@ -21,11 +21,11 @@ class ViewTestCases(TestCase):
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
 
-    def test_api_can_create_file_object(self):
-        """Test the API has file creation capability:
+    def test_api_can_create_take_object(self):
+        """Test the API has take creation capability:
         Sending JSON File Object To API and
         Expecting HTTP Success Message Returned"""
-        self.response = self.client.post(base_url + 'files/', self.take_data, format='json') #send POST to API
+        self.response = self.client.post(base_url + 'takes/', self.take_data, format='json') #send POST to API
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Posting Take Object to API................................PASSED\n")
@@ -63,7 +63,7 @@ class ViewTestCases(TestCase):
         Sending Take Object To API and
         Expecting HTTP Success Message Returned"""
         take_object = Take.objects.create(location='test_location', id=1)
-        response = self.client.put(base_url + 'files/1/', {'location' : 'new_location'}, format='json')
+        response = self.client.put(base_url + 'takes/1/', {'location' : 'new_location'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         take_object.delete()
         self.assertEqual(0, len(Take.objects.filter(id=1)))
@@ -127,7 +127,7 @@ class ViewTestCases(TestCase):
     def test_get_take_request_returns_success(self):
          """Testing API can handle GET requests for Take objects"""
          take_object = Take.objects.create(location='test_location', id=1)
-         response = self.client.get(base_url + 'files/1/')
+         response = self.client.get(base_url + 'takes/1/')
          self.assertEqual(response.status_code, status.HTTP_200_OK)
          take_object.delete()    #delete object from temporary database
          self.assertEqual(0,len(Take.objects.filter(id=1)))  #check that take_object was deleted from temporary database
@@ -181,7 +181,7 @@ class ViewTestCases(TestCase):
 
     def test_posting_file_to_api_returns_success_response(self):
         """Testing That zip files can be uploaded to the api"""
-        with open('test.zip', 'rb') as test_zip:
+        with open('en-x-demo2_ulb_mrk.zip', 'rb') as test_zip:
          self.response = self.client.post(base_url + 'upload/zip', {'Media type' : '*/*', 'Content' : test_zip}, format='multipart')
          self.assertEqual(self.response.status_code, status.HTTP_200_OK)
          test_log = open("test_log.txt", "a")

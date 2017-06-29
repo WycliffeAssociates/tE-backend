@@ -64,7 +64,7 @@ class ModelTestCase(TestCase):
     def test_each_model_can_be_read_in_a_human_readable_format(self):
         """Each Model has a __unicode__() which prints a readable name to the DB
         This test makes sure each model's unicode method outputs correctly"""
-        self.assertEqual('None-', self.take.__unicode__())
+        self.assertEqual('None--None(None)', self.take.__unicode__())
         self.assertEqual("english", self.language.__unicode__())
         self.assertEqual("tester", self.user.__unicode__())
         self.assertEqual("english", self.book.__unicode__())
