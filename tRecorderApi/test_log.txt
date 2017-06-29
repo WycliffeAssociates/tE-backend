@@ -1,5 +1,5 @@
 API TEST LOG
-DATE:06/29/2017_10:45:02
+DATE:06/29/2017_10:49:04
 
 TEST: Posting Comment Object to API.............................PASSED
 TEST: Posting Take Object to API................................PASSED
