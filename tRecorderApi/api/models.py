@@ -41,7 +41,7 @@ class Take(models.Model):
     markers = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return '{}-{}-{}'.format(self.language, self.anthology, self.slug)
+        return '{}-{}'.format(self.language, self.anthology)
 
 class Comment(models.Model):
     location = models.CharField(max_length=250)
