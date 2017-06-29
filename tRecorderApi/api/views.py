@@ -9,9 +9,9 @@ from rest_framework import viewsets, views
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
 from parsers import MP3StreamParser
-from .serializers import LanguageSerializer, UserSerializer, FileSerializer
-from .serializers import CommentSerializer, MetaSerializer
-from .models import Language, User, File, Comment, Meta
+from .serializers import LanguageSerializer, BookSerializer, UserSerializer
+from .serializers import TakeSerializer, CommentSerializer
+from .models import Language, Book, User, Take, Comment 
 import pydub
 
 class LanguageViewSet(viewsets.ModelViewSet):
@@ -19,20 +19,20 @@ class LanguageViewSet(viewsets.ModelViewSet):
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
 
+class BookViewSet(viewsets.ModelViewSet):
+    """This class handles the http GET, PUT and DELETE requests."""
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
 class UserViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class FileViewSet(viewsets.ModelViewSet):
+class TakeViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
-    queryset = File.objects.all()
-    serializer_class = FileSerializer
-
-class MetaViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
-    queryset = Meta.objects.all()
-    serializer_class = MetaSerializer
+    queryset = Take.objects.all()
+    serializer_class = TakeSerializer
 
 class CommentViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
@@ -43,17 +43,35 @@ class ProjectViewSet(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
-        # just to test that it works
         data = json.loads(request.body)
 
-        f = File.objects.filter(checked_level=data["checked_level"])
-        f.filter(meta__language=data["language"])
-        f.filter(meta__slug=data["slug"])
-        f.filter(meta__chapter=data["chapter"])
+        lst = []
+        takes = Take.objects \
+            .filter(language__code=data["language"]) \
+            .filter(book__code=data["slug"]) \
+            .filter(chapter=data["chapter"]) \
+            .values()
 
-        res = serializers.serialize('json', f)
-                
-        return Response(res, status=200)
+        """for take in takes:
+            take["language"] = Language.objects.get(pk=take["language_id"])
+            take["book"] = Book.objects.get(pk=take["book_id"])
+"""
+        """metas = Meta.objects.filter(language=data["language"])
+        metas.filter(slug=data["slug"])
+        metas.filter(chapter=data["chapter"])
+
+        lst = []
+        for item in metas.values():
+            dic = {}
+            dic["take"] = Take.objects.filter(meta=item["take_id"]).values()[0]
+            if item["markers"]:
+                item["markers"] = json.loads(item["markers"])
+            else:
+                item["markers"] = {}
+            dic["meta"] = item
+            lst.append(dic)"""
+
+        return Response(takes, status=200)
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -62,6 +80,7 @@ class FileUploadView(views.APIView):
         if request.method == 'POST' and request.data['file']:
             import uuid
             import time
+            from tinytag import TinyTag
 
             uuid_name = str(time.time()) + str(uuid.uuid4())
             upload = request.data['file']
@@ -71,9 +90,13 @@ class FileUploadView(views.APIView):
             zip.extractall("media/dump/"+uuid_name)
             zip.close()
 
-            # Read wave meta
+            # Walk through all extracted files
+            # And read wave meta
+            #file = TinyTag.get("path to file")
 
             # Move files to specified folders
+
+            # Save meta to database
 
             return Response({"response":"ok"}, status=200)
         return Response(status=404)
