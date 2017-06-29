@@ -2,20 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9599c9ef-48d5-48be-8b20-6e2839ddbc7a" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests_api.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests_db.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests_models.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/api/migrations/0005_take_user.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.2984c18ba-95e1-496f-8205-3d3c96a6094d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498681415.39b33ee3e3-a026-4a47-ae53-164b83151d59/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/db.sqlite3" afterPath="$PROJECT_DIR$/tRecorderApi/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/.coverage" afterPath="$PROJECT_DIR$/tRecorderApi/.coverage" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_admin_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_admin_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_migrations_0001_initial_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_migrations_0001_initial_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_models_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_models_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_serializers_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_serializers_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_urls_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_urls_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_views_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/api_views_py.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/test_log.txt" afterPath="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/models.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/templates/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/api/templates/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/urls.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/views.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,11 +52,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="34" column="42" lean-forward="false" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
+            <state relative-caret-position="336">
+              <caret line="42" column="87" lean-forward="false" selection-start-line="42" selection-start-column="87" selection-end-line="42" selection-end-column="87" />
               <folding />
             </state>
           </provider>
@@ -49,7 +74,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_log.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_log.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="345">
@@ -81,13 +106,13 @@
       <list>
         <option value="$PROJECT_DIR$/tRecorderApi/api/views.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/urls.py" />
-        <option value="$PROJECT_DIR$/tRecorderApi/api/models.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests_db.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests_api.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests_models.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
+        <option value="$PROJECT_DIR$/tRecorderApi/api/models.py" />
       </list>
     </option>
   </component>
@@ -449,7 +474,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tRecorderApi/api/views.py</url>
-          <line>77</line>
+          <line>88</line>
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="1" />
@@ -810,14 +835,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="34" column="42" lean-forward="false" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="452">
@@ -832,6 +849,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="42" column="87" lean-forward="false" selection-start-line="42" selection-start-column="87" selection-end-line="42" selection-end-column="87" />
           <folding />
         </state>
       </provider>
