@@ -1,0 +1,46 @@
+create table books (
+    book_id smallint,
+    num smallint not null unique,
+    name varchar (25),
+    code varchar(20),
+    constraint pk_book_id primary key(book_id)
+);
+
+create table wavs (
+    file_id int unsigned,
+    lang smallint not null,
+    ant varchar(3) not null,
+    version varchar(3),
+    book smallint not null,
+    ch smallint not null,
+    sverse smallint,
+    everse smallint,
+    file_name varchar(100) not null,
+    location varchar(100) not null,
+    constraint pk_wav_files primary key (file_id),
+    constraint fk_book_id foreign key(book) references books(book_id),
+    constraint fk_lang_id foreign key(lang) references lang(lang_id)
+);
+
+
+create table lang (
+    lang_id smallint,
+    name varchar (25),
+    code varchar(20),
+    constraint pk_lang_id primary key(lang_id)
+);
+
+create table users (
+    user_id smallint unsigned,
+    name varchar (30),
+    image_path varchar(100),
+    constraint pk_user_id primary key(user_id)
+);
+
+create table comments (
+    comment_id int unsigned,
+    left_by int unsigned not null,
+    comment_path varchar(100) not null,
+    constraint pk_comment_id primary key (comment_id),
+    constraint fk_comment_left_by_id foreign key (left_by) references users(user_id)
+);
