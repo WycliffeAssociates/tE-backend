@@ -30,8 +30,8 @@
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
-            13 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">13 run</span>
+            12 statements &nbsp;
+            <span class="run hide_run shortkey_r button_toggle_run">12 run</span>
             <span class="mis shortkey_m button_toggle_mis">0 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
@@ -71,16 +71,16 @@
 <p id="n2" class="stm run hide_run"><a href="#n2">2</a></p>
 <p id="n3" class="stm run hide_run"><a href="#n3">3</a></p>
 <p id="n4" class="stm run hide_run"><a href="#n4">4</a></p>
-<p id="n5" class="stm run hide_run"><a href="#n5">5</a></p>
-<p id="n6" class="pln"><a href="#n6">6</a></p>
+<p id="n5" class="pln"><a href="#n5">5</a></p>
+<p id="n6" class="stm run hide_run"><a href="#n6">6</a></p>
 <p id="n7" class="stm run hide_run"><a href="#n7">7</a></p>
 <p id="n8" class="stm run hide_run"><a href="#n8">8</a></p>
 <p id="n9" class="stm run hide_run"><a href="#n9">9</a></p>
 <p id="n10" class="stm run hide_run"><a href="#n10">10</a></p>
 <p id="n11" class="stm run hide_run"><a href="#n11">11</a></p>
-<p id="n12" class="stm run hide_run"><a href="#n12">12</a></p>
-<p id="n13" class="pln"><a href="#n13">13</a></p>
-<p id="n14" class="stm run hide_run"><a href="#n14">14</a></p>
+<p id="n12" class="pln"><a href="#n12">12</a></p>
+<p id="n13" class="stm run hide_run"><a href="#n13">13</a></p>
+<p id="n14" class="pln"><a href="#n14">14</a></p>
 <p id="n15" class="pln"><a href="#n15">15</a></p>
 <p id="n16" class="pln"><a href="#n16">16</a></p>
 <p id="n17" class="pln"><a href="#n17">17</a></p>
@@ -94,20 +94,20 @@
 <p id="t1" class="stm run hide_run"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">conf</span><span class="op">.</span><span class="nam">urls</span> <span class="key">import</span> <span class="nam">url</span><span class="op">,</span> <span class="nam">include</span><span class="strut">&nbsp;</span></p>
 <p id="t2" class="stm run hide_run"><span class="key">from</span> <span class="op">.</span> <span class="key">import</span> <span class="nam">views</span><span class="strut">&nbsp;</span></p>
 <p id="t3" class="stm run hide_run"><span class="key">from</span> <span class="nam">rest_framework</span> <span class="key">import</span> <span class="nam">routers</span><span class="strut">&nbsp;</span></p>
-<p id="t4" class="stm run hide_run"><span class="key">from</span> <span class="nam">api</span><span class="op">.</span><span class="nam">views</span> <span class="key">import</span> <span class="nam">LanguageViewSet</span><span class="op">,</span> <span class="nam">UserViewSet</span><span class="op">,</span> <span class="nam">FileViewSet</span><span class="strut">&nbsp;</span></p>
-<p id="t5" class="stm run hide_run"><span class="key">from</span> <span class="nam">api</span><span class="op">.</span><span class="nam">views</span> <span class="key">import</span> <span class="nam">MetaViewSet</span><span class="op">,</span> <span class="nam">CommentViewSet</span><span class="op">,</span> <span class="nam">FileUploadView</span><span class="strut">&nbsp;</span></p>
-<p id="t6" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t7" class="stm run hide_run"><span class="nam">router</span> <span class="op">=</span> <span class="nam">routers</span><span class="op">.</span><span class="nam">DefaultRouter</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t8" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'languages'</span><span class="op">,</span> <span class="nam">LanguageViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t9" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'users'</span><span class="op">,</span> <span class="nam">UserViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t10" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'files'</span><span class="op">,</span> <span class="nam">FileViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t11" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'metas'</span><span class="op">,</span> <span class="nam">MetaViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t12" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'comments'</span><span class="op">,</span> <span class="nam">CommentViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t13" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t14" class="stm run hide_run"><span class="nam">urlpatterns</span> <span class="op">=</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
-<p id="t15" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^$'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">'index'</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t16" class="pln">    <span class="com">#url(r'^upload$', views.upload, name='upload'),</span><span class="strut">&nbsp;</span></p>
-<p id="t17" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^upload/(?P&lt;filename>[^/]+)$'</span><span class="op">,</span> <span class="nam">FileUploadView</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t4" class="stm run hide_run"><span class="key">from</span> <span class="nam">api</span> <span class="key">import</span> <span class="nam">views</span><span class="strut">&nbsp;</span></p>
+<p id="t5" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t6" class="stm run hide_run"><span class="nam">router</span> <span class="op">=</span> <span class="nam">routers</span><span class="op">.</span><span class="nam">DefaultRouter</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t7" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'languages'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">LanguageViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t8" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'books'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">BookViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t9" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'users'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">UserViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t10" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'files'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">TakeViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t11" class="stm run hide_run"><span class="nam">router</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="str">r'comments'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">CommentViewSet</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t12" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t13" class="stm run hide_run"><span class="nam">urlpatterns</span> <span class="op">=</span> <span class="op">[</span><span class="strut">&nbsp;</span></p>
+<p id="t14" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^$'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">'index'</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t15" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^upload/(?P&lt;filename>[^/]+)$'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">FileUploadView</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t16" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^stream/(?P&lt;filepath>.*)$'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">FileStreamView</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
+<p id="t17" class="pln">    <span class="nam">url</span><span class="op">(</span><span class="str">r'^get_project/$'</span><span class="op">,</span> <span class="nam">views</span><span class="op">.</span><span class="nam">ProjectViewSet</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t18" class="pln"><span class="op">]</span><span class="strut">&nbsp;</span></p>
 <p id="t19" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t20" class="stm run hide_run"><span class="nam">urlpatterns</span> <span class="op">+=</span> <span class="nam">router</span><span class="op">.</span><span class="nam">urls</span><span class="strut">&nbsp;</span></p>
@@ -122,7 +122,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.1</a>,
-            created at 2017-06-28 10:37
+            created at 2017-06-29 11:12
         </p>
     </div>
 </div>

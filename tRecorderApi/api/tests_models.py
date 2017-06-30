@@ -1,6 +1,4 @@
 from django.test import TestCase
-from django.core.files import File
-from .models import Take, Language, User, Comment, Book
 from .models import Take, Language, User, Comment, Book
 from datetime import datetime
 
@@ -20,13 +18,7 @@ class ModelTestCase(TestCase):
         self.language = Language(code='abc', name='english')
         self.user = User(name='tester', agreed=True, picture='test.pic')
         self.comment = Comment(location='test_location')
-        self.book = Book(code='mrk', name='Mark', booknum = '41')
-        self.take.save()
         self.book = Book(code='en-demo',name='english', booknum=5)
-
-    def test_model_can_edit_take(self):
-        """Test the take model can be edited and reflected in database"""
-
 
     def test_model_can_create_a_take(self):
         """Test the File model can create a file."""
@@ -51,6 +43,7 @@ class ModelTestCase(TestCase):
     def test_model_can_create_a_User(self):
         """Test the User model can create a file."""
         old_count = User.objects.count()
+
         self.user.save()
         new_count = User.objects.count()
         self.assertNotEqual(old_count, new_count)
@@ -68,37 +61,12 @@ class ModelTestCase(TestCase):
         test_log.write("TEST: Creating and Storing a Comment Object.....................PASSED\n")
         test_log.close()
 
-    def test_model_can_create_a_Book(self):
-        """Test the Book model can create a file."""
-        old_count = Book.objects.count()
-        #creating
-        self.book.save()
-        new_count = Book.objects.count()
-        self.assertNotEqual(old_count,new_count)
-        test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Creating and Storing a Book Object.....................PASSED\n")
-        test_log.close()
-
-    def test_model_can_create_a_Language(self):
-        """Test the Book model can create a file."""
-        old_count = Language.objects.count()
-        #creating through the setup(self)
-        self.language.save()
-        new_count = Language.objects.count()
-        self.assertNotEqual(old_count,new_count)
-        test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Creating and Storing a Language Object.....................PASSED\n")
-        test_log.close()
-
     def test_each_model_can_be_read_in_a_human_readable_format(self):
-        #just for coverage
         """Each Model has a __unicode__() which prints a readable name to the DB
         This test makes sure each model's unicode method outputs correctly"""
-        self.assertEqual('None-', self.take.__unicode__())
+        self.assertEqual('None--None(None)', self.take.__unicode__())
         self.assertEqual("english", self.language.__unicode__())
         self.assertEqual("tester", self.user.__unicode__())
-        self.assertEqual("Mark", self.book.__unicode__())
-        #self.assertEqual("english-ub-mrk", self.meta.__unicode__())
         self.assertEqual("english", self.book.__unicode__())
         self.assertEqual("test_location", self.comment.__unicode__())
         test_log = open("test_log.txt", "a")

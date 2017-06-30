@@ -1,17 +1,14 @@
 API TEST LOG
-DATE:06/29/2017_11:56:06
-DATE:06/29/2017_16:13:11
+DATE:06/29/2017_16:50:56
 
 TEST: Printing Each Model's Unicode.............................PASSED
-TEST: Creating and Storing a Book Object.....................PASSED
 TEST: Creating and Storing a Comment Object.....................PASSED
-TEST: Creating and Storing a Language Object.....................PASSED
 TEST: Creating and Storing a Project Object.....................PASSED
 TEST: Creating and Storing a User Object........................PASSED
 TEST: Creating and Storing a Take Object........................PASSED
 TEST: Posting Comment Object to API.............................PASSED
-TEST: Posting Take Object to API................................PASSED
 TEST: Posting Language Object to API............................PASSED
+TEST: Posting Take Object to API................................PASSED
 TEST: Sending PUT Request For Book Object To API................PASSED
 TEST: Sending PUT Request For Comment Object To API.............PASSED
 TEST: Sending PUT Request For Language Object To API............PASSED
