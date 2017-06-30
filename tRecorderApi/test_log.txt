@@ -1,13 +1,5 @@
 API TEST LOG
-<<<<<<< HEAD
-DATE:06/30/2017_15:38:54
-=======
-<<<<<<< HEAD
-DATE:06/30/2017_13:15:33
-=======
-DATE:06/30/2017_11:52:08
->>>>>>> more-tests
->>>>>>> 5039d8168f5b098fcda1e94ef7f08eb286ff5ed1
+DATE:06/30/2017_16:14:47
 
 TEST: File uploaded to file server.................................PASSED
 TEST: Printing Each Model's Unicode.............................PASSED
