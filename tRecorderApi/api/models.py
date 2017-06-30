@@ -49,7 +49,7 @@ class Take(models.Model):
     markers = models.TextField(null=True, blank=True)
 
     class Meta:
-        ordering = ["startv"]
+        ordering = ["chapter", "startv"]
 
     def __unicode__(self):
         return '{}-{}-{}({})'.format(self.language, self.anthology, self.book, self.id)
