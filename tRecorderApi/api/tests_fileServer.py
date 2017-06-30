@@ -37,7 +37,7 @@ class fileServerTestCases(TestCase):
             new_count = len(list2)
             self.assertNotEqual(old_count, new_count)
             test_log = open("test_log.txt", "a")
-            test_log.write("TEST: File uploaded to file server.................................PASSED\n")
+            test_log.write("TEST: File uploaded to file server..............................PASSED\n")
             test_log.close()
 
 
