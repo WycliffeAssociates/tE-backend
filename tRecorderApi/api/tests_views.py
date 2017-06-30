@@ -261,3 +261,13 @@ class ViewTestCases(TestCase):
          test_log = open("test_log.txt", "a")
          test_log.write("TEST: Uploading ZIP File to API.................................PASSED\n")
          test_log.close()
+
+    def test_that_we_can_get_projects(self):
+        """Testing that submitting a POST request to get projects returns a JSON onbject"""
+        #create a json object
+        self.take_object.save()
+        #submit parameters to base_url/get_project
+        response = self.client.post(base_url + 'get_project/', self.take_object)
+        #check that POST was succesful
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        #check that returned JSON object mathces what was expected
