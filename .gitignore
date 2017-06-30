@@ -7,9 +7,20 @@ __pycache__/
 # C extensions
 *.so
 
-# Mac Systems
-*.DS_Store
-
+# Mac Systems 
+*._DS_Store 
+*.DS_Store 
+ 
+# Others 
+test_log.txt 
+*.html 
+*dump/ 
+*.coverage 
+*.idea/ 
+*.sqlite3 
+*.pyc 
+*.zip 
+*.wav 
 # Mockups and designs
 *.png
 *.jpeg
