@@ -2,9 +2,336 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9599c9ef-48d5-48be-8b20-6e2839ddbc7a" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498678675.09d140d7ea-4bbc-49b2-a840-ace06c1a5da6/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498679362.762ccd9747-e28d-4d5f-a574-2aaf50a37042/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498679847.011e583e53-8033-4dca-815a-d9e19fec73b2/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498679884.95c2842b0a-253a-40fc-abb5-cd2b1a8c2db1/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498680232.7f3d95bdd-b102-451e-882a-a5c51ae5b38c/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498680891.35aabc51d-b499-4b2b-9771-807379836e2c/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498682206.533a389639-baa4-487c-8933-79586d5073af/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498683394.714325f9f9-927c-4c38-b567-b4f930431b8f/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498746423.59d76f211b-f49d-437d-83ec-26bc3edd9178/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498746541.09638adbbb-7823-4967-8f94-a0a28f776b9c/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498746672.7776dab6a-fc8c-49a6-80b2-4f0dd2dfaf88/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498746766.7992707de0-1e54-41f1-9b42-dc61cbec011d/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498746851.15466cef9b-08ce-4a27-90d0-5dd1061c9fde/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498747210.64b3fb1a29-2591-49c4-bb00-feda6ddd2aea/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498747313.02e774ed0-4913-48a6-ab54-17b05768615f/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498747503.112f92e59b-f531-48f1-987c-2d4285371bc8/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498747745.761ab26729-2d62-4194-8f14-c862f0c71c92/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498749156.1503071e6d-d7f9-4388-b1ad-6d2d1b8a4e26/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498749978.56e79053d2-42f0-4ed1-88bd-73e6bb48f069/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498750668.48cb462894-3c41-46ac-a12f-644ea4d124b1/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498750779.891638f1ee-84a4-430d-945d-669e48f58884/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498751151.365c2b8235-6f80-4055-9f82-96755b28e000/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498751177.9646c99787-ac0a-4072-a991-7c738966e3b4/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498751220.413c55cb0c-3c8b-40a1-ace5-219cb5774c70/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498756313.7484489ea8-0034-4b76-9bb2-13e6d1e507f4/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498756455.69f1926a7a-9b93-4da6-b279-362eceac84f6/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498757077.737988ae17-d144-4242-871e-ce3d43af0a30/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498757190.476787de15-2121-45b8-820c-eb90a081a75f/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498757889.71e6facddb-7510-444b-b016-9a5467741bb0/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498758257.28a58f4ee-7542-445f-a228-53d9d22771d7/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498758562.8857a04f35-d02c-4d8b-8dae-29f6e5b10c73/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498758892.4988521d6d-741b-4ad3-a8cc-fbbefad44a38/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498759270.68e622d60b-cec7-4288-9a24-604103dc228e/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498759320.4156815465-98bb-42f0-8399-fc35011597b5/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498760259.1715d50ddb-db9a-46d0-8c42-d9c96f679153/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498760867.0611e2cccb-60d2-4f89-aced-1b5faba7e1e5/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498761844.57a6e81ca3-9b12-4ef3-9741-bfec2f3b1c54/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498762594.178094b92e-3ce8-4cbf-920f-89dcd13f5064/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763153.54911edde-94e5-44eb-8451-72b7e32f2825/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763432.5665ebb8de-3ea9-4f28-af25-d5383471657b/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763628.0377ecad0c-1c00-46e7-843f-854c9704c28e/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763646.52493bdf9c-6482-4db4-9d7b-baebb0f231c7/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763793.02d574f0a-e0c7-44b1-a05c-dc655ca914ca/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498763981.19134fb689-74a4-4b92-bffd-42e40fa67ec1/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764023.74ec3de520-15de-4f12-baf0-32d771fe206f/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764051.26c7df878f-27f5-4c05-ae12-cdfa5653dc39/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764228.4be6035e5-40a4-498f-92d0-67a353e0954b/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764273.5480200b33-8bc2-4fe9-a54c-00c07343f65f/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764448.27649f60c4-7c2a-46a9-8b24-14024b63f0f9/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498764722.07fabfd03e-7e82-4559-8543-eb1e204aaedf/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765122.81591ca080-6bf9-4a45-9904-0319eb7ef404/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765182.92d20d56e0-2cbc-43bf-8f86-6205ca1aa2c8/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765441.07a788af3f-c601-40a9-b901-182191c23103/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765529.26d0738047-2f17-4cbc-a133-607c4953c687/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765552.139109b0e2-a3cf-402d-9cec-8f66443e7099/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765570.1568175ce3-d64a-4cf8-ab66-0dfa4c8c4eb9/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498765949.61cd0e16fa-dc19-4263-b27c-aadf0730a924/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498766056.981ba4fa5d-37f7-4221-857b-40b38ab963c3/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498766209.87e822e289-64aa-423e-bed8-5a4cd119c0f5/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498766390.62063f3cfb-6d22-4821-830a-20fcf07e90a7/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498766535.6628f1c7c3-aaa8-4577-a103-93828c944b08/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767065.5399dc33a7-078c-4b8b-a740-8c6decb64cc4/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767164.893c95c263-c801-4d46-939c-e7a56f15ec66/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767192.35269f2ce7-664f-409a-8585-da9201e2d1f7/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767643.244edcb02b-9528-402d-84e6-9f0e4af3bf49/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767806.3814143296-de1a-472b-b27a-9f52eda6a14a/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767827.647a7b2daa-b496-42c6-a7de-35941834f50e/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767855.4cf46f6d6-ba71-400f-bdaf-4197ee670ebd/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498767907.130a8e00e9-03b0-40a3-ac16-4bcd980d13f9/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498768865.116c67cdc1-baa5-4eea-81bf-a3911bae0089/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769061.0710022013-ce2f-4c66-9252-fc85900d5798/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769458.35d38bb67b-6877-48f1-b314-15d99abeebd4/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498825302.65a5ac579f-5162-4fb9-9295-e708296e7754/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828623.99b926d2c5-57f8-42e1-adb2-d9b21853154d/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498828748.5395bc696a-ed69-46ff-afd3-2beb49afb370/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829326.82336d04cf-8d5c-4649-a869-1799abf39d80/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498829991.1472940909-1705-4b30-a6cd-6955c6d19c5c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830102.323eaecfd1-3903-42bb-9f2c-dcf40a6c898f/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498830354.9efbfd30d-4b2e-4744-8c75-329fb8bddf9e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831059.52978430cc-bfbc-4c1d-a132-12bb6477677e/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498831264.29b1e4268c-7de7-4027-80cf-9fb8681ae2ec/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832225.726ae80cb2-aab9-4167-bff5-7122c39e8eb5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832244.425a30bed3-5065-4de2-a239-0902334760ac/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498832387.1455211a3-3cc4-4c07-97a9-cc318589b19c/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498833328.26cf04d24b-850b-4ce4-8ac7-338aa3d3e6c5/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/chapter.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v05_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v11-13_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v14-16_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v17-19_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v24-26_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/media/dump/1498834777.4bbe11ba3-e3a1-4782-8415-669c58d67746/mrk/07/en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/.coverage" afterPath="$PROJECT_DIR$/tRecorderApi/.coverage" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/test_log.txt" afterPath="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,7 +347,7 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1410">
+            <state relative-caret-position="321">
               <caret line="112" column="39" lean-forward="false" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
               <folding>
                 <element signature="e#0#59#0" expanded="true" />
@@ -42,8 +369,8 @@
       <file leaf-file-name="tests_views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-75">
-              <caret line="8" column="28" lean-forward="true" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state relative-caret-position="426">
+              <caret line="269" column="80" lean-forward="true" selection-start-line="269" selection-start-column="80" selection-end-line="269" selection-end-column="80" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -78,8 +405,8 @@
         <option value="$PROJECT_DIR$/tRecorderApi/api/models.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/views.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/api/tests_models.py" />
-        <option value="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
         <option value="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
+        <option value="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
       </list>
     </option>
   </component>
@@ -111,6 +438,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -134,6 +463,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tRecorderApi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="translationDB" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="translationDB" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tRecorderApi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="media" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -179,8 +526,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -382,13 +727,13 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -742,21 +1087,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1410">
-          <caret line="112" column="39" lean-forward="false" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Python Files/AudioInfo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -764,7 +1098,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -772,7 +1105,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -780,9 +1112,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
           <caret line="82" column="24" lean-forward="true" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#32#0" expanded="false" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -794,18 +1130,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="321">
+          <caret line="112" column="39" lean-forward="false" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-75">
-          <caret line="8" column="28" lean-forward="true" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+        <state relative-caret-position="426">
+          <caret line="269" column="80" lean-forward="true" selection-start-line="269" selection-start-column="80" selection-end-line="269" selection-end-column="80" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
