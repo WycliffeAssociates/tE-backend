@@ -4,6 +4,8 @@ from django.core.files.storage import FileSystemStorage
 import json
 from django.core import serializers
 import zipfile
+import urllib2
+import pickle
 #from os import remove
 from rest_framework import viewsets, views
 from rest_framework.response import Response
@@ -162,20 +164,16 @@ def convertstring(dictionary):
     return dict((str(k), convertstring(v))
         for k, v in dictionary.items())
 def getLanguageByCode(code):
-    # which URL should we cache?
     url = 'http://td.unfoldingword.org/exports/langnames.json'
     response = urllib2.urlopen(url)
-    #obtain jsonfile from webscraping
     webFile = json.loads(response.read())
-
-    with open("language.json", "wb") as fp:
+    with open('language.json', 'wb') as fp:
         pickle.dump(webFile, fp)
-    with open ("language.json", "rb") as fp:
+    with open ('language.json', 'rb') as fp:
         languages = pickle.load(fp)
-    langname = ""
+    ln = ""
     for dicti in languages:
         if dicti["lc"] == code:
-            langname = dicti["ln"]
-        break
-
-    return langname
+            ln = dicti["ln"]
+            break
+    return ln
