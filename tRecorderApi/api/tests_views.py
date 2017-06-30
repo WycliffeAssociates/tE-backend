@@ -16,7 +16,7 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location' : 'test1.zip'}
+        self.take_data = {'location' : 'test_location'}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
@@ -267,7 +267,7 @@ class ViewTestCases(TestCase):
         #create a json object
         self.take_object.save()
         #submit parameters to base_url/get_project
-        response = self.client.post(base_url + 'get_project/', self.take_object)
+        response = self.client.post(base_url + 'get_project/', self.take_data)
         #check that POST was succesful
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         #check that returned JSON object mathces what was expected
