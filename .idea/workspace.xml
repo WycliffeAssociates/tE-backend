@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9599c9ef-48d5-48be-8b20-6e2839ddbc7a" name="Default" comment="">
+<<<<<<< HEAD
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/audio.mp3" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/en-x-demo2_ulb_mrk.zip" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/media/dump/1498769348.45cb6cdbb0-88f3-48c3-b95e-5ed6ee9835c5/mrk/07/chapter.wav" />
@@ -152,6 +153,19 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/status.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/htmlcov/tRecorderApi_settings_py.html" afterPath="$PROJECT_DIR$/tRecorderApi/htmlcov/tRecorderApi_settings_py.html" />
+=======
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/db.sqlite3" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tRecorderApi/en-x-demo2_ulb_mrk.zip" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0005_take_user.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/test.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tRecorderApi/test.zip" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/db.sqlite3" afterPath="$PROJECT_DIR$/tRecorderApi/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/.coverage" afterPath="$PROJECT_DIR$/tRecorderApi/.coverage" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/migrations/0001_initial.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests_models.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests_models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" afterPath="$PROJECT_DIR$/tRecorderApi/api/tests_views.py" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tRecorderApi/test_log.txt" afterPath="$PROJECT_DIR$/tRecorderApi/test_log.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -173,8 +187,13 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1904">
               <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+=======
+            <state relative-caret-position="532">
+              <caret line="112" column="39" lean-forward="false" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
               <folding>
                 <element signature="e#0#59#0" expanded="true" />
               </folding>
@@ -185,8 +204,13 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="850">
               <caret line="50" column="28" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
+=======
+            <state relative-caret-position="477">
+              <caret line="50" column="28" lean-forward="false" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
               <folding />
             </state>
           </provider>
@@ -195,8 +219,13 @@
       <file leaf-file-name="tests_views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_views.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="554">
               <caret line="201" column="13" selection-start-line="201" selection-start-column="13" selection-end-line="201" selection-end-column="13" />
+=======
+            <state relative-caret-position="483">
+              <caret line="199" column="38" lean-forward="false" selection-start-line="199" selection-start-column="38" selection-end-line="199" selection-end-column="38" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -204,6 +233,7 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="CreateZIP.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Files/Extract for tR/CreateZIP.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -239,6 +269,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
               <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+=======
+      <file leaf-file-name="test_log.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
               <folding />
             </state>
           </provider>
@@ -283,6 +320,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< HEAD
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1616" />
@@ -297,6 +335,12 @@
     <OptionsSetting value="true" id="Edit" />
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
+=======
+    <option name="x" value="39" />
+    <option name="y" value="55" />
+    <option name="width" value="1052" />
+    <option name="height" value="697" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -524,7 +568,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+=======
+    <frame x="39" y="55" width="1052" height="697" extended-state="0" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -607,7 +655,11 @@
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
+<<<<<<< HEAD
           <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+=======
+          <caret line="39" column="40" lean-forward="true" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -711,7 +763,11 @@
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
+<<<<<<< HEAD
           <caret line="23" column="92" selection-start-line="23" selection-start-column="92" selection-end-line="23" selection-end-column="92" />
+=======
+          <caret line="23" column="92" lean-forward="false" selection-start-line="23" selection-start-column="92" selection-end-line="23" selection-end-column="92" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -811,7 +867,11 @@
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
+<<<<<<< HEAD
           <caret line="53" column="92" selection-start-line="53" selection-start-column="92" selection-end-line="53" selection-end-column="92" />
+=======
+          <caret line="53" column="92" lean-forward="false" selection-start-line="53" selection-start-column="92" selection-end-line="53" selection-end-column="92" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -915,14 +975,22 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="70" column="31" lean-forward="false" selection-start-line="70" selection-start-column="31" selection-end-line="70" selection-end-column="31" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1904">
@@ -937,10 +1005,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="50" column="28" lean-forward="false" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/test_log.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
+          <folding />
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/Python Files/AudioInfo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
@@ -954,6 +1037,25 @@
         <state relative-caret-position="296">
           <caret line="53" column="43" selection-start-line="53" selection-start-column="43" selection-end-line="53" selection-end-column="43" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="112" column="39" lean-forward="false" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tRecorderApi/api/tests_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="199" column="38" lean-forward="false" selection-start-line="199" selection-start-column="38" selection-end-line="199" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+>>>>>>> c4bea0f47f3964a3d299885f6f56ad4a905047a1
         </state>
       </provider>
     </entry>
