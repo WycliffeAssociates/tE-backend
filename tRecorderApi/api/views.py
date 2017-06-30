@@ -104,10 +104,12 @@ class FileUploadView(views.APIView):
 
                     #store the metadata inside the database
 
-
-            return Response({"response": "ok"}, status=200)
+                return Response({"response": "ok"}, status=200)
         else:
             return Response(status=404)
+
+
+
 
 class FileStreamView(views.APIView):
     parser_classes = (MP3StreamParser,)
