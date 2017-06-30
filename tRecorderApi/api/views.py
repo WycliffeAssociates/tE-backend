@@ -63,7 +63,7 @@ class ProjectViewSet(views.APIView):
         for take in takes:
             dic = {}
             # Include language name
-            dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+            dic["language"] = Language.objects.filter(id=take["language_id"]).values()[0]
             # Include book name
             dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
             # Include author of file

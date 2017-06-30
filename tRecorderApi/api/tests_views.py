@@ -16,12 +16,12 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location' : 'test_location'}
+        self.take_data = {'location' : 'test_location', 'chapter' : 5}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
-        self.take_object = Take(location='test_location', id=1)
+        self.take_object = Take(location='test_location', id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(code='en-demo', name='english', id=1)
         self.book_object = Book(code='en-demo', name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
@@ -212,6 +212,7 @@ class ViewTestCases(TestCase):
         self.take_object.save()
         response = self.client.delete(base_url + 'takes/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.take_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
         test_log.close()
@@ -221,6 +222,7 @@ class ViewTestCases(TestCase):
         self.language_object.save()
         response = self.client.delete(base_url + 'languages/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.language_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Language Object to API.........PASSED\n")
         test_log.close()
@@ -230,6 +232,7 @@ class ViewTestCases(TestCase):
         self.book_object.save()
         response = self.client.delete(base_url + 'books/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.book_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Book Object to API.............PASSED\n")
         test_log.close()
@@ -239,6 +242,7 @@ class ViewTestCases(TestCase):
         self.user_object.save()
         response = self.client.delete(base_url + 'users/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.user_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for User Object to API.............PASSED\n")
         test_log.close()
@@ -248,6 +252,7 @@ class ViewTestCases(TestCase):
         self.comment_object.save()
         response = self.client.delete(base_url + 'comments/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.comment_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
         test_log.close()
@@ -264,10 +269,17 @@ class ViewTestCases(TestCase):
 
     def test_that_we_can_get_projects(self):
         """Testing that submitting a POST request to get projects returns a JSON onbject"""
-        #create a json object
+        #saving objects in temporary database so they can be read by the API
+        self.language_object.save()
+        self.book_object.save()
+        self.user_object.save()
         self.take_object.save()
-        #submit parameters to base_url/get_project
-        response = self.client.post(base_url + 'get_project/', self.take_data)
-        #check that POST was succesful
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        #check that returned JSON object mathces what was expected
+        response = self.client.post(base_url + 'get_project/', {'chapter' : 5}, format='json') #telling the API that I want all takes that have chapter 5 of a book recorded
+        self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+        #freeing up the temporary database
+        self.take_object.delete()
+        self.user_object.delete()
+        self.book_object.delete()
+        test_log = open("test_log.txt", "a")
+        test_log.write("TEST: Retrieving Project from API...............................PASSED\n")
+        test_log.close()

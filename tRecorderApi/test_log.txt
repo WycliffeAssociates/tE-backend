@@ -1,5 +1,5 @@
 API TEST LOG
-DATE:06/30/2017_13:55:01
+DATE:06/30/2017_15:38:54
 
 TEST: Printing Each Model's Unicode.............................PASSED
 TEST: Creating and Storing a Language Object....................PASSED
@@ -28,3 +28,4 @@ TEST: Sending DELETE request for Comment Object to API..........PASSED
 TEST: Sending DELETE request for Language Object to API.........PASSED
 TEST: Sending DELETE request for Comment Object to API..........PASSED
 TEST: Sending DELETE request for User Object to API.............PASSED
+TEST: Retrieving Project from API...............................PASSED
