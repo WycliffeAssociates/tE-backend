@@ -27,6 +27,7 @@ class ViewTestCases(TestCase):
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
         self.comment_object = Comment.objects.create(location='/test-location/', id=1)
 
+############################## Testing POST Request #####################################################
     def test_api_can_create_take_object(self):
         """Test the API has take creation capability:
         Sending JSON Take Object To API and
@@ -76,6 +77,9 @@ class ViewTestCases(TestCase):
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Posting User Object to API................................PASSED\n")
         test_log.close()
+#######################################################################################################
+
+############################### Testing Update Requests ###############################################
 
     def test_api_can_update_take_object(self):
         """Test that the API can update a take object:
@@ -141,6 +145,9 @@ class ViewTestCases(TestCase):
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending PUT Request For Comment Object To API.............PASSED\n")
         test_log.close()
+#####################################################################################################
+
+#################################### Testing GET Requests ###########################################
 
     def test_get_take_request_returns_success(self):
          """Testing API can handle GET requests for Take objects"""
@@ -196,6 +203,9 @@ class ViewTestCases(TestCase):
          test_log = open("test_log.txt", "a")
          test_log.write("TEST: Sending GET request for Comment Object to API.............PASSED\n")
          test_log.close()
+#####################################################################################################
+
+############################### Testing DELETE Requests #############################################
 
     def test_that_api_can_delete_take_objects(self):
         """Testing that the API has Take Object deletion functionality"""
@@ -203,7 +213,7 @@ class ViewTestCases(TestCase):
         response = self.client.delete(base_url + 'takes/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Sending DELETE request for Comment Object to API...........PASSED\n")
+        test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
         test_log.close()
 
     def test_that_api_can_delete_language_objects(self):
@@ -212,7 +222,7 @@ class ViewTestCases(TestCase):
         response = self.client.delete(base_url + 'languages/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Sending DELETE request for Language Object to API..........PASSED\n")
+        test_log.write("TEST: Sending DELETE request for Language Object to API.........PASSED\n")
         test_log.close()
 
     def test_that_api_can_delete_book_objects(self):
@@ -221,7 +231,7 @@ class ViewTestCases(TestCase):
         response = self.client.delete(base_url + 'books/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Sending DELETE request for Book Object to API..............PASSED\n")
+        test_log.write("TEST: Sending DELETE request for Book Object to API.............PASSED\n")
         test_log.close()
 
     def test_that_api_can_delete_user_objects(self):
@@ -230,7 +240,7 @@ class ViewTestCases(TestCase):
         response = self.client.delete(base_url + 'users/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Sending DELETE request for User Object to API..............PASSED\n")
+        test_log.write("TEST: Sending DELETE request for User Object to API.............PASSED\n")
         test_log.close()
 
     def test_that_api_can_delete_comment_objects(self):
@@ -239,8 +249,9 @@ class ViewTestCases(TestCase):
         response = self.client.delete(base_url + 'comments/1/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         test_log = open("test_log.txt", "a")
-        test_log.write("TEST: Sending DELETE request for Comment Object to API...........PASSED\n")
+        test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
         test_log.close()
+#####################################################################################################
 
     def test_posting_file_to_api_returns_success_response(self):
         """Testing That zip files can be uploaded to the api"""
@@ -250,20 +261,3 @@ class ViewTestCases(TestCase):
          test_log = open("test_log.txt", "a")
          test_log.write("TEST: Uploading ZIP File to API.................................PASSED\n")
          test_log.close()
-
-    # def test_client_can_post_project_to_api(self):
-    #     self.response = self.client.post('http://127.0.0.1:8000/api/get_project', {'language' : 'english', 'slug' : 'ulb', 'chapter' : 1}, format='json')
-    #     self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
-
-    # def test_that_api_does_not_accept_uploads_other_files(self):
-    #     """Testing that uploading something that is not a file will return a HTTP 404 code"""
-    #     self.response = self.client.post('http://127.0.0.1:8000/api/upload/zip', self.file_data, format='multipart')
-    #     self.assertEqual(self.response.status_code, status.HTTP_404_NOT_FOUND)
-
-    #def test_api_can_update_####_object:
-        ######
-        #####
-
-    #def test_api_can_delete_####_object:
-        ######
-        #####
