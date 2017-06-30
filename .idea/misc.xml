@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.13 (/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7)" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.12 (C:\Python27\python.exe)" project-jdk-type="Python SDK" />
+>>>>>>> 5039d8168f5b098fcda1e94ef7f08eb286ff5ed1
 </project>
