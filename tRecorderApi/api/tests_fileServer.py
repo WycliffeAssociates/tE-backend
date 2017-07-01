@@ -3,7 +3,7 @@ from datetime import datetime
 from views import ProjectViewSet,FileUploadView, FileStreamView
 from rest_framework.test import APIClient
 from rest_framework import status
-from pathlib import Path
+#from pathlib import Path
 import os
 
 
@@ -13,7 +13,7 @@ with open("test_log.txt", "w") as test_log:
     sttime = datetime.now().strftime('%m/%d/%Y_%H:%M:%S') #create time stamp for test log
     test_log.write("DATE:" + sttime + "\n\n")  #print time stamp to test log
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = 'C:/Users/ann_ejones/Documents/translationDB/tRecorderApi/media/dump'
+my_file = 'media/dump'
 
 
 #delete file from dump
@@ -37,7 +37,7 @@ class fileServerTestCases(TestCase):
             new_count = len(list2)
             self.assertNotEqual(old_count, new_count)
             test_log = open("test_log.txt", "a")
-            test_log.write("TEST: File uploaded to file server.................................PASSED\n")
+            test_log.write("TEST: File uploaded to file server..............................PASSED\n")
             test_log.close()
 
 
