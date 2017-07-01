@@ -7,7 +7,7 @@ import zipfile
 import urllib2
 import pickle
 #from os import remove
-from rest_framework import viewsets, views
+from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
 from parsers import MP3StreamParser
@@ -42,10 +42,28 @@ class TakeViewSet(viewsets.ModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
 
+    def destroy(self, request, pk = None):
+        instance = self.get_object()
+        try:
+            os.remove(instance.location)
+        except OSError:
+            pass
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_200_OK)
+
 class CommentViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def destroy(self, request, pk = None):
+        instance = self.get_object()
+        try:
+            os.remove(instance.location)
+        except OSError:
+            pass
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_200_OK)
 
 class ProjectViewSet(views.APIView):
     parser_classes = (JSONParser,)

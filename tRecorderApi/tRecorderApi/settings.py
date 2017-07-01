@@ -134,6 +134,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = 'media/uploads/'
-#MEDIA_URL = '/Users/lcheng/Desktop/translationDB/translationDB/tRecorderApi/media/unzipped/mrk/07/16seconds.mp3/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media', 'uploads')
+#MEDIA_URL = 'dump/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

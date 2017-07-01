@@ -4,6 +4,9 @@ class Language(models.Model):
     code = models.CharField(max_length=20, unique=True, blank=True)
     name = models.CharField(max_length=100, blank=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __unicode__(self):
         return self.name
 
@@ -12,6 +15,9 @@ class Book(models.Model):
     name = models.CharField(max_length=100, blank=True)
     booknum = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ["booknum"]
+
     def __unicode__(self):
         return self.name
 
@@ -19,6 +25,9 @@ class User(models.Model):
     name = models.CharField(max_length=50)
     agreed = models.BooleanField()
     picture = models.CharField(max_length=250)
+
+    class Meta:
+        ordering = ["name"]
 
     def __unicode__(self):
         return self.name
@@ -38,6 +47,9 @@ class Take(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
     markers = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["chapter", "startv"]
 
     def __unicode__(self):
         return '{}-{}-{}({})'.format(self.language, self.anthology, self.book, self.id)
