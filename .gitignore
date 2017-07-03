@@ -228,3 +228,4 @@ ENV/
 .vscode/
 tRecorderApi/test_log.txt
 tRecorderApi/htmlcov/
+language.json

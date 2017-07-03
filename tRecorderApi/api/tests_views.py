@@ -211,7 +211,7 @@ class ViewTestCases(TestCase):
         """Testing that the API has Take Object deletion functionality"""
         self.take_object.save()
         response = self.client.delete(base_url + 'takes/1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         self.take_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
@@ -251,7 +251,7 @@ class ViewTestCases(TestCase):
         """Testing that the API has Take Object deletion functionality"""
         self.comment_object.save()
         response = self.client.delete(base_url + 'comments/1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         self.comment_object.delete()
         test_log = open("test_log.txt", "a")
         test_log.write("TEST: Sending DELETE request for Comment Object to API..........PASSED\n")
