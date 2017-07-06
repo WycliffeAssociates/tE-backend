@@ -136,7 +136,11 @@ class FileUploadView(views.APIView):
                 for root, dirs, files in os.walk(file_name):
                     for f in files:
                         abpath = os.path.join(root, os.path.basename(f))
-                        meta = TinyTag.get(abpath)
+                        try:
+                            meta = TinyTag.get(abpath)
+                        except LookupError:
+                            return Response({"response": "badwavefile"}, status=403)
+
                         a = meta.artist
                         lastindex = a.rfind("}") + 1
                         substr = a[:lastindex]
