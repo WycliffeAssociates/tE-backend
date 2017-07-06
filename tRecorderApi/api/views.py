@@ -74,8 +74,8 @@ class ProjectViewSet(views.APIView):
             takes = takes.filter(language__slug=data["language"])
         if "version" in data: 
             takes = takes.filter(version=data["version"])
-        if "slug" in data: 
-            takes = takes.filter(book__slug=data["slug"])
+        if "book" in data: 
+            takes = takes.filter(book__slug=data["book"])
         if "chapter" in data: 
             takes = takes.filter(chapter=data["chapter"])
         if "startv" in data: 
