@@ -71,11 +71,11 @@ class ProjectViewSet(views.APIView):
         lst = []
         takes = Take.objects
         if "language" in data: 
-            takes = takes.filter(language__code=data["language"])
+            takes = takes.filter(language__slug=data["language"])
         if "version" in data: 
             takes = takes.filter(version=data["version"])
         if "slug" in data: 
-            takes = takes.filter(book__code=data["slug"])
+            takes = takes.filter(book__slug=data["slug"])
         if "chapter" in data: 
             takes = takes.filter(chapter=data["chapter"])
         if "startv" in data: 
@@ -182,12 +182,12 @@ def index(request):
 
 def prepareDataToSave(meta, abpath, data):
     book, b_created = Book.objects.get_or_create(
-        code = meta["slug"],
-        defaults={'code': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
+        slug = meta["slug"],
+        defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
     )
     language, l_created = Language.objects.get_or_create(
-        code = meta["language"],
-        defaults={'code': meta['language'], 'name': data['langname']},
+        slug = meta["language"],
+        defaults={'slug': meta['language'], 'name': data['langname']},
     )
     markers = json.dumps(meta['markers'])
 
