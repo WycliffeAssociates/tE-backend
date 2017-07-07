@@ -47,6 +47,23 @@ class fileServerTestCases(TestCase):
         #get(self, request, filepath, format='mp3'):
         response = self.client.get(base_url + 'takes/1/')
 
+    def test_upload_non_zip_file_returns_403_error(self):
+        """Verify that uploading a non zip file will return a 403 FORBIDDEN code"""
+        with open('DS TEST 1.docx', 'rb') as test_nonzip:
+             self.response = self.client.post(base_url + 'upload/zip', {'Media type' : '*/*', 'Content' : test_nonzip}, format='multipart')
+             self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
+             test_log = open("test_log.txt", "a")
+             test_log.write("TEST: Uploading non-ZIP File to API...............................PASSED\n")
+             test_log.close()
+
+    def test_upload_non_zip_file_returns_403_error(self):
+        """Verify that uploading a zip file containing non .wav files returns 403 FORBIDDEN code"""
+        with open('no_wav_files.zip', 'rb') as test_zip_nowav:
+             self.response = self.client.post(base_url + 'upload/zip', {'Media type' : '*/*', 'Content' : test_zip_nowav}, format='multipart')
+             self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
+             test_log = open("test_log.txt", "a")
+             test_log.write("TEST: Uploading ZIP File with non .wav Files to API.......................PASSED\n")
+             test_log.close()
 
 
 
