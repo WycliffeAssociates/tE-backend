@@ -5,7 +5,7 @@ from django.core import serializers
 from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
-from api.parsers import MP3StreamParser
+from parsers import MP3StreamParser
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
 from .models import Language, Book, User, Take, Comment

@@ -15,10 +15,10 @@ class ModelTestCase(TestCase):
         """Define the test client and other test variables."""
         self.file_location = "uploads/file.zip"
         self.take = Take(location=self.file_location)
-        self.language = Language(code='abc', name='english')
+        self.language = Language(slug='abc', name='english')
         self.user = User(name='tester', agreed=True, picture='test.pic')
         self.comment = Comment(location='test_location')
-        self.book = Book(code='en-demo',name='english', booknum=5)
+        self.book = Book(slug='en-demo',name='english', booknum=5)
 
     def test_model_can_create_a_take(self):
         """Test the File model can create a take."""
