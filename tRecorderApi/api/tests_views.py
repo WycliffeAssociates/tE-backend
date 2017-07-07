@@ -15,7 +15,7 @@ class ViewTestCases(TestCase):
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
-        self.take_object = Take(location='test_location', id=1, language_id=1, book_id=1, user_id=1)
+        self.take_object = Take(location='test_location', chapter=5, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
@@ -207,7 +207,23 @@ class ViewTestCases(TestCase):
         self.take_object.save()
         response = self.client.post(base_url + 'get_project/', {'chapter' : 5}, format='json') #telling the API that I want all takes that have chapter 5 of a book recorded
         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+        self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
         #freeing up the temporary database
         self.take_object.delete()
         self.user_object.delete()
         self.book_object.delete()
+
+    def test_that_we_can_get_no_projects_from_api(self):
+         """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
+         #saving objects in temporary database so they can be read by the API
+         self.language_object.save()
+         self.book_object.save()
+         self.user_object.save()
+         self.take_object.save()
+         response = self.client.post(base_url + 'get_project/', {'chapter' : 6}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
+         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+         self.assertEqual(0, len(response.data))
+         #freeing up the temporary database
+         self.take_object.delete()
+         self.user_object.delete()
+         self.book_object.delete()
