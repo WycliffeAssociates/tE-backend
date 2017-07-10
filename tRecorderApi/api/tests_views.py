@@ -12,12 +12,12 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location' : 'test_location', 'chapter' : 5}
+        self.take_data = {'location' : 'test_location', 'chapter' : 5, 'is_export' : True, 'is_source' : False}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
-        self.take_object = Take(location='test_location', chapter=5, id=1, language_id=1, book_id=1, user_id=1)
+        self.take_object = Take(location='test_location', chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)

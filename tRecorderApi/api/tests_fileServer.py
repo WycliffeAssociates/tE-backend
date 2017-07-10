@@ -26,7 +26,7 @@ class fileServerTestCases(TestCase):
         list1 = os.listdir(my_file)
         old_count = len(list1)
         with open('en-x-demo2_ulb_mrk.zip', 'rb') as test_zip:
-            response = self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': test_zip}, format='multipart')
+            self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': test_zip}, format='multipart')
             #list2 to reinitialize the dump folder to count updates
             list2 = os.listdir(my_file)
             new_count = len(list2)
