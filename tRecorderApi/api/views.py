@@ -10,16 +10,18 @@ from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
 from .models import Language, Book, User, Take, Comment
 from tinytag import TinyTag
+from pydub import AudioSegment
+from random import randint
 import zipfile
+import shutil
 import urllib2
 import pickle
 import json
 import pydub
 import time
 import uuid
-import os
-import subprocess
-import shutil
+import os, glob
+from django.conf import settings
 
 class LanguageViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
@@ -69,16 +71,137 @@ class ProjectViewSet(views.APIView):
 
     def post(self, request):
         data = json.loads(request.body)
-        lst = getTakesByProject(data)
+
+        lst = []
+        takes = Take.objects
+        if "language" in data:
+            takes = takes.filter(language__slug=data["language"])
+        if "version" in data:
+            takes = takes.filter(version=data["version"])
+        if "book" in data:
+            takes = takes.filter(book__slug=data["book"])
+        if "chapter" in data:
+            takes = takes.filter(chapter=data["chapter"])
+        if "startv" in data:
+            takes = takes.filter(startv=data["startv"])
+
+        res = takes.values()
+
+        for take in res:
+            dic = {}
+            # Include language name
+            dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+            # Include book name
+            dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
+            # Include author of file
+            user = User.objects.filter(pk=take["user_id"])
+            if user:
+                dic["user"] = user.values()[0]
+
+            # Include comments
+            dic["comments"] = []
+            for cmt in Comment.objects.filter(file=take["id"]).values():
+                dic2 = {}
+                dic2["comment"] = cmt
+                # Include author of comment
+                cuser = User.objects.filter(pk=cmt["user_id"])
+                if cuser:
+                    dic2["user"] = cuser.values()[0]
+                dic["comments"].append(dic2)
+
+            # Parse markers
+            if take["markers"]:
+                take["markers"] = json.loads(take["markers"])
+            else:
+                take["markers"] = {}
+            dic["take"] = take
+            lst.append(dic)
+        return Response(lst, status=200)
+
+class ProjectZipFiles(views.APIView):
+    parser_classes = (JSONParser,)
+    def post(self, request):
+        data = json.loads(request.body)
+        lst = []
+        wavfiles = []
+        takes = Take.objects
+
+        #filter the database with the given parameters
+        if "language" in data:
+            takes = takes.filter(language__slug=data["language"])
+        if "version" in data:
+            takes = takes.filter(version=data["version"])
+        if "book" in data:
+            takes = takes.filter(book__slug=data["book"])
+        if "chapter" in data:
+            takes = takes.filter(chapter=data["chapter"])
+        if "startv" in data:
+            takes = takes.filter(startv=data["startv"])
+
+        #create list for locations
+        test = []
+        lst.append(takes.values())
+        for i in lst[0]:
+            test.append(i["location"])
+
+        filesInZip = []
+
+        #if an export folder in media doesn't exist, create one
+        if not os.path.exists(os.path.join(settings.BASE_DIR, 'media/export/')):
+            os.makedirs(os.path.join(settings.BASE_DIR, 'media/export/'))
+        location = os.path.join(settings.BASE_DIR, 'media/export/')
+
+        #use shutil to copy the wav files to a new file
+        for loc in test:
+            abpath = os.path.join(settings.BASE_DIR, loc)
+            shutil.copy2(abpath, location)
+
+        #process of renaming/converting to mp3
+        for subdir, dirs, files in os.walk(location):
+            
+            for file in files:
+                # store the absolute path which is is it's subdir and where the os step is
+                filePath = subdir + os.sep + file
+
+                if filePath.endswith(".wav") or filePath.endswith(".mp3"):
+                    # Add to array so it can be added to the archive
+                    inputFile = filePath.title().lower()
+                    sound = AudioSegment.from_wav(inputFile)
+                    fileName = file.title()[:-4].strip().replace(" ","").lower() + ".mp3"
+                    sound.export(fileName, format="mp3")
+                    filesInZip.append(fileName)
+
+        # Creating zip file
+        with zipfile.ZipFile('media/export/' + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
+            for members in filesInZip:
+                zipped_f.write(members)
+
+        #delete the newly created mp3 files (files are still in zip)
+        filelist = [ f for f in os.listdir(settings.BASE_DIR) if f.endswith(".mp3") ]
+
+        #delete the mp3 files we copied
+        for f in filelist:
+            os.remove(f)
+        directory=os.path.join(settings.BASE_DIR, 'media/export/')
+
+        #delete the wav files we copied
+        os.chdir(directory)
+        files=glob.glob('*.wav')
+
+        for filename in files:
+            os.remove(filename)
+        #currently returns list of the takes we have gathered but this can easily be changed 
         return Response(lst, status=200)
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
+
     def post(self, request, filename, format='zip'):
         if request.method == 'POST' and request.data['file']:
             uuid_name = str(time.time()) + str(uuid.uuid4())
             upload = request.data["file"]
             #unzip files
+
             try:
                 zip = zipfile.ZipFile(upload)
                 file_name = 'media/dump/' + uuid_name
@@ -95,6 +218,7 @@ class FileUploadView(views.APIView):
                 for root, dirs, files in os.walk(file_name):
                     for f in files:
                         abpath = os.path.join(root, os.path.basename(f))
+                        #abpath = os.path.abspath(os.path.join(root, f))
                         try:
                             meta = TinyTag.get(abpath)
                         except LookupError:
@@ -265,8 +389,8 @@ def getLanguageByCode(code):
     return ln
 
 def getBookByCode(code):
-    with open('books.json') as books_file:    
-        books = json.load(books_file) 
+    with open('books.json') as books_file:
+        books = json.load(books_file)
 
     bn = ""
     for dicti in books:

@@ -230,3 +230,8 @@ tRecorderApi/test_log.txt
 tRecorderApi/htmlcov/
 language.json
 tRecorderApi/language.json
+tRecorderApi/api/CreateZIP.py
+*.docx
+*.doc
+*.docs
+*.pages
