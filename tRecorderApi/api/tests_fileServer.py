@@ -18,7 +18,7 @@ my_file = 'media/dump'
 class fileServerTestCases(TestCase):
     def SetUp(self):
         """Set up environment for fileServer test suite"""
-        #self.client = APIClient()
+        self.client = APIClient()
 
     def test_fileServer_can_upload_file(self):
         """Verify that fileServer can upload file to dump folder through POST"""
@@ -43,6 +43,10 @@ class fileServerTestCases(TestCase):
          with open('no_wav_files.zip', 'rb') as test_zip_nowav:
               self.response = self.client.post(base_url + 'upload/zip', {'Media type' : '*/*', 'Content' : test_zip_nowav}, format='multipart')
               self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def tearDown(self):
+        os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
+        os.system('mkdir ' + my_file)
 
 
 

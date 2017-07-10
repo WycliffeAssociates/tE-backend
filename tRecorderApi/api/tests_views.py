@@ -3,8 +3,10 @@ from datetime import datetime
 from models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
+import os
 
 base_url = 'http://127.0.0.1:8000/api/'
+my_file = 'media/dump'
 
 class ViewTestCases(TestCase):
     def setUp(self):
@@ -227,3 +229,7 @@ class ViewTestCases(TestCase):
          self.take_object.delete()
          self.user_object.delete()
          self.book_object.delete()
+
+    def tearDown(self):
+        os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
+        os.system('mkdir ' + my_file)
