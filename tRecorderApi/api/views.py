@@ -5,7 +5,6 @@ from django.core import serializers, files
 from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
-from api.parsers import MP3StreamParser
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
 from .models import Language, Book, User, Take, Comment
@@ -64,7 +63,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_200_OK)
 
-class ProjectViewSet(views.APIView):
+class ProjectView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
@@ -81,8 +80,8 @@ class FileUploadView(views.APIView):
             #unzip files
             try:
                 zip = zipfile.ZipFile(upload)
-                file_name = 'media/dump/' + uuid_name
-                zip.extractall(file_name)
+                folder_name = 'media/dump/' + uuid_name
+                zip.extractall(folder_name)
                 zip.close()
                 #extract metadata / get the apsolute path to the file to be stored
 
@@ -92,7 +91,7 @@ class FileUploadView(views.APIView):
                 langname = ''
                 langcode = ''
 
-                for root, dirs, files in os.walk(file_name):
+                for root, dirs, files in os.walk(folder_name):
                     for f in files:
                         abpath = os.path.join(root, os.path.basename(f))
                         try:
@@ -132,14 +131,19 @@ class FileStreamView(views.APIView):
         return StreamingHttpResponse(file)
 
 class SourceFileView(views.APIView):
-    def get(self, request, lang, ver):
-        if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
-            takes = getTakesByProject({"language":lang,"version":ver})
-            
+    parser_classes = (JSONParser,)
+    
+    def post(self, request):
+        #if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
+        data = json.loads(request.body)
+        print data
+        takes = getTakesByProject(data)
+
+        if 'language' in data and 'version' in data:
             if len(takes) > 0:
                 uuid_name = str(time.time()) + str(uuid.uuid4())
                 root_folder = 'media/tmp/'+uuid_name
-                project_folder = root_folder+'/'+lang+'/'+ver
+                project_folder = root_folder+'/'+data.language+'/'+data.version
                 for take in takes:
                     chapter_folder = project_folder+'/'+take['book']['slug']+'/'+str(take['take']['chapter']).zfill(2)
                     if not os.path.exists(chapter_folder):
@@ -157,14 +161,16 @@ class SourceFileView(views.APIView):
                 subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder], 
                     stdout=FNULL, stderr=subprocess.STDOUT)
                 FNULL.close()
-                os.rename(root_folder+'.tr', 'media/tmp/'+lang+'_'+ver+'.tr')
+                os.rename(root_folder+'.tr', 'media/tmp/'+data.language+'_'+data.version+'.tr')
                 #shutil.rmtree(root_folder)
             else:
                 return Response({"response": "nosource"}, status=403)
+        else:
+            return Response({"response": "notenoughparameters"}, status=403)
         
-        source_file = open('media/tmp/'+lang+'_'+ver+'.tr', 'rb')
+        source_file = open('media/tmp/'+data.language+'_'+data.version+'.tr', 'rb')
         response = HttpResponse(files.File(source_file), content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % (lang+'_'+ver+'.tr')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % (data.language+'_'+data.version+'.tr')
         source_file.close()
         return response
 
