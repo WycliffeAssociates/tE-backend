@@ -255,42 +255,42 @@ class FileStreamView(views.APIView):
 
         return StreamingHttpResponse(file)
 
-class SourceFileView(views.APIView):
-    def get(self, request, lang, ver):
-        if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
-            takes = getTakesByProject({"language":lang,"version":ver})
-            
-            if len(takes) > 0:
-                uuid_name = str(time.time()) + str(uuid.uuid4())
-                root_folder = 'media/tmp/'+uuid_name
-                project_folder = root_folder+'/'+lang+'/'+ver
-                for take in takes:
-                    chapter_folder = project_folder+'/'+take['book']['slug']+'/'+str(take['take']['chapter']).zfill(2)
-                    if not os.path.exists(chapter_folder):
-                        os.makedirs(chapter_folder)
-                    shutil.copy2(take['take']['location'], chapter_folder)
-                    file_name = os.path.basename(take['take']['location'])
-                    file_path = chapter_folder+'/'+file_name
-                    file_path_mp3 = file_path.replace('.wav','.mp3')
-
-                    sound = pydub.AudioSegment.from_wav(file_path)
-                    sound.export(file_path_mp3, format='mp3')
-                    os.remove(file_path)
-                
-                FNULL = open(os.devnull, 'w')
-                subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder], 
-                    stdout=FNULL, stderr=subprocess.STDOUT)
-                FNULL.close()
-                os.rename(root_folder+'.tr', 'media/tmp/'+lang+'_'+ver+'.tr')
-                #shutil.rmtree(root_folder)
-            else:
-                return Response({"response": "nosource"}, status=403)
-        
-        source_file = open('media/tmp/'+lang+'_'+ver+'.tr', 'rb')
-        response = HttpResponse(files.File(source_file), content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % (lang+'_'+ver+'.tr')
-        source_file.close()
-        return response
+# class SourceFileView(views.APIView):
+#     def get(self, request, lang, ver):
+#         if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
+#             takes = getTakesByProject({"language":lang,"version":ver})
+#
+#             if len(takes) > 0:
+#                 uuid_name = str(time.time()) + str(uuid.uuid4())
+#                 root_folder = 'media/tmp/'+uuid_name
+#                 project_folder = root_folder+'/'+lang+'/'+ver
+#                 for take in takes:
+#                     chapter_folder = project_folder+'/'+take['book']['slug']+'/'+str(take['take']['chapter']).zfill(2)
+#                     if not os.path.exists(chapter_folder):
+#                         os.makedirs(chapter_folder)
+#                     shutil.copy2(take['take']['location'], chapter_folder)
+#                     file_name = os.path.basename(take['take']['location'])
+#                     file_path = chapter_folder+'/'+file_name
+#                     file_path_mp3 = file_path.replace('.wav','.mp3')
+#
+#                     sound = pydub.AudioSegment.from_wav(file_path)
+#                     sound.export(file_path_mp3, format='mp3')
+#                     os.remove(file_path)
+#
+#                 FNULL = open(os.devnull, 'w')
+#                 subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder],
+#                     stdout=FNULL, stderr=subprocess.STDOUT)
+#                 FNULL.close()
+#                 os.rename(root_folder+'.tr', 'media/tmp/'+lang+'_'+ver+'.tr')
+#                 #shutil.rmtree(root_folder)
+#             else:
+#                 return Response({"response": "nosource"}, status=403)
+#
+#         source_file = open('media/tmp/'+lang+'_'+ver+'.tr', 'rb')
+#         response = HttpResponse(files.File(source_file), content_type='application/zip')
+#         response['Content-Disposition'] = 'attachment; filename="%s"' % (lang+'_'+ver+'.tr')
+#         source_file.close()
+#         return response
 
 def index(request):
     take = Take.objects.all().last()
@@ -366,6 +366,8 @@ def prepareDataToSave(meta, abpath, data):
                 startv = meta['startv'],
                 endv = meta['endv'],
                 markers = markers,
+                is_export=True,
+                is_source=False,
                 user_id = 1) # TODO get author of file and save it to Take model
     take.save()
 
