@@ -18,7 +18,7 @@ my_file = 'media/dump'
 class fileServerTestCases(TestCase):
     def SetUp(self):
         """Set up environment for fileServer test suite"""
-        self.client = APIClient()
+        #self.client = APIClient()
 
     def test_fileServer_can_upload_file(self):
         """Verify that fileServer can upload file to dump folder through POST"""
