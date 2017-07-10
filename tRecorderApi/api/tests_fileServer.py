@@ -7,14 +7,9 @@ from rest_framework import status
 import os
 
 
-#Creating a text file to log the results of each of the tests
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 
-
-#delete file from dump
-#get file from dump,
-#get JSON (?)
 class fileServerTestCases(TestCase):
     def SetUp(self):
         """Set up environment for fileServer test suite"""
@@ -47,11 +42,3 @@ class fileServerTestCases(TestCase):
     def tearDown(self):
         os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
         os.system('mkdir ' + my_file)
-
-
-
-
-
-
-
-

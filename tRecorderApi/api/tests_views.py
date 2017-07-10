@@ -208,8 +208,10 @@ class ViewTestCases(TestCase):
         self.user_object.save()
         self.take_object.save()
         response = self.client.post(base_url + 'get_project/', {'chapter' : 5}, format='json') #telling the API that I want all takes that have chapter 5 of a book recorded
+        result = str(response.data) #convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
         self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
+        self.assertIn("'chapter': 5", result) #test that the term we searched for is in the data returned from the post request
         #freeing up the temporary database
         self.take_object.delete()
         self.user_object.delete()
@@ -225,6 +227,7 @@ class ViewTestCases(TestCase):
          response = self.client.post(base_url + 'get_project/', {'chapter' : 6}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
          self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
          self.assertEqual(0, len(response.data))
+         self.assertEqual(response.data, [])
          #freeing up the temporary database
          self.take_object.delete()
          self.user_object.delete()
