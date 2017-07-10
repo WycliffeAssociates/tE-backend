@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.core import serializers, files
 from rest_framework import viewsets, views, status
+from rest_framework.generics import ListAPIView
+from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
@@ -25,27 +27,31 @@ import shutil
 import glob
 from django.conf import settings
 
+
 class LanguageViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
+
 
 class BookViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class TakeViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
 
-    def destroy(self, request, pk = None):
+    def destroy(self, request, pk=None):
         instance = self.get_object()
         try:
             os.remove(instance.location)
@@ -54,12 +60,13 @@ class TakeViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_200_OK)
 
+
 class CommentViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT and DELETE requests."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def destroy(self, request, pk = None):
+    def destroy(self, request, pk=None):
         instance = self.get_object()
         try:
             os.remove(instance.location)
@@ -344,7 +351,7 @@ def getLanguageByCode(code):
         with open('language.json', 'wb') as fp:
             pickle.dump(languages, fp)
     except urllib2.URLError, e:
-        with open ('language.json', 'rb') as fp:
+        with open('language.json', 'rb') as fp:
             languages = pickle.load(fp)
 
     ln = ""
@@ -353,6 +360,7 @@ def getLanguageByCode(code):
             ln = dicti["ln"]
             break
     return ln
+
 
 def getBookByCode(code):
     with open('books.json') as books_file:
