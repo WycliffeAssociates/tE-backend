@@ -158,7 +158,7 @@ class SourceFileView(views.APIView):
                     stdout=FNULL, stderr=subprocess.STDOUT)
                 FNULL.close()
                 os.rename(root_folder+'.tr', 'media/tmp/'+lang+'_'+ver+'.tr')
-                shutil.rmtree(root_folder)
+                #shutil.rmtree(root_folder)
             else:
                 return Response({"response": "nosource"}, status=403)
         

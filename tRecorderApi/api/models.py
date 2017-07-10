@@ -47,7 +47,7 @@ class Take(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
     markers = models.TextField(null=True, blank=True)
-    source = models.CharField(max_length=250)
+    is_source = models.BooleanField()
     is_export = models.BooleanField()
     date_modified = models.DateTimeField(auto_now=True)
 
