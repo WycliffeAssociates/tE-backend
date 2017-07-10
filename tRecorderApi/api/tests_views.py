@@ -1,5 +1,4 @@
 from django.test import TestCase
-from datetime import datetime
 from models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -7,6 +6,10 @@ import os
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
+
+#create multiple classes for tests that match each model Example class TakeEndpointTestCases
+#double check if creating test folder is practical
+#import views and test methods associated with views
 
 class ViewTestCases(TestCase):
     def setUp(self):
