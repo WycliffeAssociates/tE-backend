@@ -150,8 +150,7 @@ class ProjectZipFiles(views.APIView):
 
         for filename in files:
             os.remove(filename)
-        #currently returns list of the takes we have gathered but this can easily be changed 
-
+        #currently returns list of the takes we have gathered but this can easily be changed
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -341,6 +340,8 @@ def prepareDataToSave(meta, abpath, data):
                 startv = meta['startv'],
                 endv = meta['endv'],
                 markers = markers,
+                is_export=True,
+                is_source=False,
                 user_id = 1) # TODO get author of file and save it to Take model
     take.save()
 
