@@ -1,7 +1,7 @@
 from django.db import models
 
 class Language(models.Model):
-    code = models.CharField(max_length=20, unique=True, blank=True)
+    slug = models.CharField(max_length=20, unique=True, blank=True)
     name = models.CharField(max_length=100, blank=True)
 
     class Meta:
@@ -11,7 +11,7 @@ class Language(models.Model):
         return self.name
 
 class Book(models.Model):
-    code = models.CharField(max_length=3, unique=True, blank=True)
+    slug = models.CharField(max_length=3, unique=True, blank=True)
     name = models.CharField(max_length=100, blank=True)
     booknum = models.IntegerField(default=0)
 
@@ -47,17 +47,21 @@ class Take(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
     markers = models.TextField(null=True, blank=True)
+    is_source = models.BooleanField(default=False)
+    is_export = models.BooleanField(default=False)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["chapter", "startv"]
 
     def __unicode__(self):
-        return '{}-{}-{}({})'.format(self.language, self.anthology, self.book, self.id)
+        return '{}-{}-{} ({})'.format(self.language, self.anthology, self.book, self.id)
 
 class Comment(models.Model):
     location = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     file = models.ForeignKey(Take, on_delete=models.CASCADE, null=True, blank=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.location

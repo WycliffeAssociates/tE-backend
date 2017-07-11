@@ -1,24 +1,29 @@
+# from os import remove
+
+import glob
 import hashlib
 import json
 import os
 import pickle
+import shutil
+import subprocess
 import time
 import urllib2
 import uuid
 import zipfile
+from random import randint
 
 import pydub
-from django.http import StreamingHttpResponse
+from django.conf import settings
+from django.core import files
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
-# from os import remove
+from pydub import AudioSegment
 from rest_framework import viewsets, views, status
-from rest_framework.generics import ListAPIView
-from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser, FileUploadParser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from tinytag import TinyTag
 
-from parsers import MP3StreamParser, CustomUploadParser
 from .models import Language, Book, User, Take, Comment
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
@@ -72,46 +77,90 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
 
-class ProjectViewSet(views.APIView):
+class ProjectView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = json.loads(request.body)
-
-        lst = []
-        takes = Take.objects.all()
-        if "language" in data: takes.filter(language__code=data["language"])
-        if "slug" in data: takes.filter(book__code=data["slug"])
-        if "chapter" in data: takes.filter(chapter=data["chapter"])
-        takes = takes.values()
-
-        for take in takes:
-            dic = {}
-            # Include language name
-            dic["language"] = Language.objects.filter(id=take["language_id"]).values()[0]
-            # Include book name
-            dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
-            # Include author of file
-            dic["user"] = User.objects.filter(pk=take["user_id"]).values()[0]
-
-            # Include comments
-            dic["comments"] = []
-            for cmt in Comment.objects.filter(file=take["id"]).values():
-                dic2 = {}
-                dic2["comment"] = cmt
-                # Include author of comment
-                dic2["user"] = User.objects.filter(pk=cmt["user_id"]).values()[0]
-                dic["comments"].append(dic2)
-
-            # Parse markers
-            if take["markers"]:
-                take["markers"] = json.loads(take["markers"])
-            else:
-                take["markers"] = {}
-            dic["take"] = take
-            lst.append(dic)
+        lst = getTakesByProject(data)
 
         return Response(lst, status=200)
+
+
+class ProjectZipFiles(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        data = json.loads(request.body)
+        lst = []
+        wavfiles = []
+        takes = Take.objects
+
+        # filter the database with the given parameters
+        if "language" in data:
+            takes = takes.filter(language__slug=data["language"])
+        if "version" in data:
+            takes = takes.filter(version=data["version"])
+        if "book" in data:
+            takes = takes.filter(book__slug=data["book"])
+        if "chapter" in data:
+            takes = takes.filter(chapter=data["chapter"])
+        if "startv" in data:
+            takes = takes.filter(startv=data["startv"])
+
+        # create list for locations
+        test = []
+        lst.append(takes.values())
+        for i in lst[0]:
+            test.append(i["location"])
+
+        filesInZip = []
+
+        # if an export folder in media doesn't exist, create one
+        if not os.path.exists(os.path.join(settings.BASE_DIR, 'media/export/')):
+            os.makedirs(os.path.join(settings.BASE_DIR, 'media/export/'))
+        location = os.path.join(settings.BASE_DIR, 'media/export/')
+
+        # use shutil to copy the wav files to a new file
+        for loc in test:
+            abpath = os.path.join(settings.BASE_DIR, loc)
+            shutil.copy2(abpath, location)
+
+        # process of renaming/converting to mp3
+        for subdir, dirs, files in os.walk(location):
+
+            for file in files:
+                # store the absolute path which is is it's subdir and where the os step is
+                filePath = subdir + os.sep + file
+
+                if filePath.endswith(".wav") or filePath.endswith(".mp3"):
+                    # Add to array so it can be added to the archive
+                    inputFile = filePath.title().lower()
+                    sound = AudioSegment.from_wav(inputFile)
+                    fileName = file.title()[:-4].strip().replace(" ", "").lower() + ".mp3"
+                    sound.export(fileName, format="mp3")
+                    filesInZip.append(fileName)
+
+        # Creating zip file
+        with zipfile.ZipFile('media/export/' + str(randint(0, 20)) + 'zipped_file.zip', 'w') as zipped_f:
+            for members in filesInZip:
+                zipped_f.write(members)
+
+        # delete the newly created mp3 files (files are still in zip)
+        filelist = [f for f in os.listdir(settings.BASE_DIR) if f.endswith(".mp3")]
+
+        # delete the mp3 files we copied
+        for f in filelist:
+            os.remove(f)
+        directory = os.path.join(settings.BASE_DIR, 'media/export/')
+
+        # delete the wav files we copied
+        os.chdir(directory)
+        files = glob.glob('*.wav')
+
+        for filename in files:
+            os.remove(filename)
+            # currently returns list of the takes we have gathered but this can easily be changed
 
 
 class FileUploadView(views.APIView):
@@ -123,49 +172,58 @@ class FileUploadView(views.APIView):
             upload = request.data["file"]
 
             # unzip files
-            zip = zipfile.ZipFile(upload)
-            file_name = "media" + os.sep + "dump" + os.sep + uuid_name
 
-            zip.extractall(file_name)
-            zip.close()
-            # extract metadata / get the apsolute path to the file to be stored
+            try:
+                zip = zipfile.ZipFile(upload)
+                folder_name = 'media/dump/' + uuid_name
 
-            # Cache language and book to re-use later
-            bookname = ''
-            bookcode = ''
-            langname = ''
-            langcode = ''
+                zip.extractall(folder_name)
+                zip.close()
 
-            for root, dirs, files in os.walk(file_name):
-                for f in files:
-                    abpath = os.path.join(root, os.path.basename(f))
-                    meta = TinyTag.get(abpath)
-                    a = meta.artist
-                    lastindex = a.rfind("}") + 1
-                    substr = a[:lastindex]
-                    pls = json.loads(substr)
+                # extract metadata / get the apsolute path to the file to be stored
 
-                    if bookcode != pls['slug']:
-                        bookcode = pls['slug']
-                        bookname = getBookByCode(bookcode)
-                    if langcode != pls['language']:
-                        langcode = pls['language']
-                        langname = getLanguageByCode(langcode)
+                # Cache language and book to re-use later
+                bookname = ''
+                bookcode = ''
+                langname = ''
+                langcode = ''
 
-                    data = {
-                        "langname": langname,
-                        "bookname": bookname,
-                        "duration": meta.duration
-                    }
-                    prepareDataToSave(pls, abpath, data)
-            return Response({"response": "ok"}, status=200)
+                for root, dirs, files in os.walk(folder_name):
+                    for f in files:
+                        abpath = os.path.join(root, os.path.basename(f))
+                        # abpath = os.path.abspath(os.path.join(root, f))
+                        try:
+                            meta = TinyTag.get(abpath)
+                        except LookupError:
+                            return Response({"response": "badwavefile"}, status=403)
+
+                        a = meta.artist
+                        lastindex = a.rfind("}") + 1
+                        substr = a[:lastindex]
+                        pls = json.loads(substr)
+
+                        if bookcode != pls['slug']:
+                            bookcode = pls['slug']
+                            bookname = getBookByCode(bookcode)
+                        if langcode != pls['language']:
+                            langcode = pls['language']
+                            langname = getLanguageByCode(langcode)
+
+                        data = {
+                            "langname": langname,
+                            "bookname": bookname,
+                            "duration": meta.duration
+                        }
+                        prepareDataToSave(pls, abpath, data)
+                return Response({"response": "ok"}, status=200)
+
+            except zipfile.BadZipfile:
+                return Response({"response": "badzipfile"}, status=403)
         else:
             return Response(status=404)
 
 
 class FileStreamView(views.APIView):
-    parser_classes = (MP3StreamParser,)
-
     def get(self, request, filepath, format='mp3'):
         sound = pydub.AudioSegment.from_wav(filepath)
         file = sound.export()
@@ -173,21 +231,128 @@ class FileStreamView(views.APIView):
         return StreamingHttpResponse(file)
 
 
+class SourceFileView(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        # if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
+        data = json.loads(request.body)
+        takes = getTakesByProject(data)
+
+        if 'language' in data and 'version' in data:
+            if len(takes) > 0:
+                uuid_name = str(time.time()) + str(uuid.uuid4())
+                root_folder = 'media/tmp/' + uuid_name
+                project_folder = root_folder + '/' + data['language'] + '/' + data['version']
+                for take in takes:
+                    chapter_folder = project_folder + '/' + take['book']['slug'] + '/' + str(
+                        take['take']['chapter']).zfill(2)
+                    if not os.path.exists(chapter_folder):
+                        os.makedirs(chapter_folder)
+                    shutil.copy2(take['take']['location'], chapter_folder)
+                    file_name = os.path.basename(take['take']['location'])
+                    file_path = chapter_folder + '/' + file_name
+                    file_path_mp3 = file_path.replace('.wav', '.mp3')
+
+                    sound = pydub.AudioSegment.from_wav(file_path)
+                    sound.export(file_path_mp3, format='mp3')
+                    os.remove(file_path)
+
+                FNULL = open(os.devnull, 'w')
+                subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder],
+                                stdout=FNULL, stderr=subprocess.STDOUT)
+                FNULL.close()
+                os.rename(root_folder + '.tr', 'media/tmp/' + data['language'] + '_' + data['version'] + '.tr')
+                # shutil.rmtree(root_folder)
+            else:
+                return Response({"response": "nosource"}, status=403)
+        else:
+            return Response({"response": "notenoughparameters"}, status=403)
+
+        source_file = open('media/tmp/' + data['language'] + '_' + data['version'] + '.tr', 'rb')
+        response = HttpResponse(files.File(source_file), content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % (
+            data['language'] + '_' + data['version'] + '.tr')
+        source_file.close()
+        return response
+
+
+class ExcludeFilesView(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        files_to_exclude = {}
+        data = json.loads(request.body)
+        takes = getTakesByProject(data)
+        for take in takes:
+            location = take['take']['location']
+            files_to_exclude[getFileName(location)] = md5Hash(location)
+        return Response(files_to_exclude, status=200)
+
+
 def index(request):
-    return render(request, 'index.html')
+    take = Take.objects.all().last()
+    return render(request, 'index.html', {"lasttake": take})
+
+
+def getTakesByProject(data):
+    lst = []
+    takes = Take.objects
+    if "language" in data:
+        takes = takes.filter(language__slug=data["language"])
+    if "version" in data:
+        takes = takes.filter(version=data["version"])
+    if "book" in data:
+        takes = takes.filter(book__slug=data["book"])
+    if "chapter" in data:
+        takes = takes.filter(chapter=data["chapter"])
+    if "startv" in data:
+        takes = takes.filter(startv=data["startv"])
+
+    res = takes.values()
+
+    for take in res:
+        dic = {}
+        # Include language name
+        dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+        # Include book name
+        dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
+        # Include author of file
+        user = User.objects.filter(pk=take["user_id"])
+        if user:
+            dic["user"] = user.values()[0]
+
+        # Include comments
+        dic["comments"] = []
+        for cmt in Comment.objects.filter(file=take["id"]).values():
+            dic2 = {}
+            dic2["comment"] = cmt
+            # Include author of comment
+            cuser = User.objects.filter(pk=cmt["user_id"])
+            if cuser:
+                dic2["user"] = cuser.values()[0]
+            dic["comments"].append(dic2)
+
+        # Parse markers
+        if take["markers"]:
+            take["markers"] = json.loads(take["markers"])
+        else:
+            take["markers"] = {}
+        dic["take"] = take
+        lst.append(dic)
+    return lst
 
 
 def prepareDataToSave(meta, abpath, data):
     book, b_created = Book.objects.get_or_create(
-        code=meta["slug"],
-        defaults={'code': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
+        slug=meta["slug"],
+        defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
     )
     language, l_created = Language.objects.get_or_create(
-        code=meta["language"],
-        defaults={'code': meta['language'], 'name': data['langname']},
+        slug=meta["language"],
+        defaults={'slug': meta['language'], 'name': data['langname']},
     )
-    markers = convertstring(meta['markers'])
-    # TODO get author of file and save it to Take model
+    markers = json.dumps(meta['markers'])
     take = Take(location=abpath,
                 duration=data['duration'],
                 book=book,
@@ -197,17 +362,14 @@ def prepareDataToSave(meta, abpath, data):
                 version=meta['version'],
                 mode=meta['mode'],
                 chapter=meta['chapter'],
-                startv=meta['startv'],
-                endv=meta['endv'],
-                markers=markers)
+                startv=meta[
+                    'startv'],
+                endv=
+                meta['endv'],
+                markers=markers,
+                user_id=1
+                )
     take.save()
-
-
-def convertstring(dictionary):
-    if not isinstance(dictionary, dict):
-        return dictionary
-    return dict((str(k), convertstring(v))
-                for k, v in dictionary.items())
 
 
 def getLanguageByCode(code):
@@ -240,3 +402,15 @@ def getBookByCode(code):
             bn = dicti["name"]
             break
     return bn
+
+
+def md5Hash(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+
+def getFileName(location):
+    return location.split(os.sep)[-1]
