@@ -3,11 +3,11 @@ from models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
-import os.path
-import glob
+
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
+export_path = '/Users/nicholasdipinto1/Desktop/translationDB/8woc2017backend/tRecorderApi/en-x-demo2_ulb_mrk.zip'
 
 #double check if creating test folder is practical - Not practical
 #import views and test methods associated with views
@@ -18,12 +18,12 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location' : '/test_location', 'chapter' : 5, 'is_export' : True, 'is_source' : False}
+        self.take_data = {'location' : export_path, 'chapter' : 5, 'is_export' : True, 'is_source' : False}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
-        self.take_object = Take(location= 'test_location', chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
+        self.take_object = Take(location= export_path, chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
@@ -75,14 +75,15 @@ class ViewTestCases(TestCase):
         self.book_object.save()
         self.user_object.save()
         self.take_object.save()
+        response = self.client.post(base_url + 'get_project/', {'chapter' : 5}, format='json')
         response = self.client.post(base_url + 'zipFiles/', {'chapter' : 5}, format='json') #telling the API that I want all takes that have chapter 5 of a book recorded
-        self.assertTrue(os.path.exists())
-        #self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
-        #self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
+        #self.assertTrue(os.path.exists())
+        self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+        self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
         #freeing up the temporary database
-        #self.take_object.delete()
-        #self.user_object.delete()
-        #self.book_object.delete()
+        self.take_object.delete()
+        self.user_object.delete()
+        self.book_object.delete()
 
     def tearDown(self):
         os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests

@@ -5,6 +5,14 @@ from models import Take, Language, User, Comment, Book
 #Creating a text file to log the results of each of the tests
 class ModelTestCase(TestCase):
     """This class defines the test suite for the each of the models."""
+
+    def setUp(self):
+        self.book = Book()
+        self.comment = Comment(location='/location')
+        self.user = User(name='tester', agreed=True, picture='test_image.jpg')
+        self.take = Take(location='/test_location')
+        self.language = Language()
+
     def test_model_can_create_a_take(self):
         """Test the File model can create a take."""
         old_count = Take.objects.count()  #obtain current count of object in database
@@ -34,7 +42,7 @@ class ModelTestCase(TestCase):
         self.assertNotEqual(old_count, new_count)
 
     def test_model_can_create_a_Book(self):
-        """Test the Language model can create a language."""
+        """Test the Book model can create a book."""
         old_count = Book.objects.count()
         self.book.save()
         new_count = Book.objects.count()
