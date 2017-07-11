@@ -26,22 +26,22 @@ import glob
 from django.conf import settings
 
 class LanguageViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class TakeViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
 
@@ -55,7 +55,7 @@ class TakeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
 class CommentViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT and DELETE requests."""
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -69,6 +69,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
 class ProjectView(views.APIView):
+    """This class handles the http POST requests."""
     parser_classes = (JSONParser,)
 
     def post(self, request):
@@ -182,25 +183,28 @@ class FileUploadView(views.APIView):
                             meta = TinyTag.get(abpath)
                         except LookupError:
                             return Response({"response": "badwavefile"}, status=403)
+                        
+                        if meta and meta.artist:
+                            a = meta.artist
+                            lastindex = a.rfind("}") + 1
+                            substr = a[:lastindex]
+                            pls = json.loads(substr)
 
-                        a = meta.artist
-                        lastindex = a.rfind("}") + 1
-                        substr = a[:lastindex]
-                        pls = json.loads(substr)
+                            if bookcode != pls['slug']:
+                                bookcode = pls['slug']
+                                bookname = getBookByCode(bookcode)
+                            if langcode != pls['language']:
+                                langcode = pls['language']
+                                langname = getLanguageByCode(langcode)
 
-                        if bookcode != pls['slug']:
-                            bookcode = pls['slug']
-                            bookname = getBookByCode(bookcode)
-                        if langcode != pls['language']:
-                            langcode = pls['language']
-                            langname = getLanguageByCode(langcode)
-
-                        data = {
-                            "langname": langname,
-                            "bookname": bookname,
-                            "duration": meta.duration
-                            }
-                        prepareDataToSave(pls, abpath, data)
+                            data = {
+                                "langname": langname,
+                                "bookname": bookname,
+                                "duration": meta.duration
+                                }
+                            prepareDataToSave(pls, abpath, data)
+                        else:
+                            return Response({"response": "badwavefile"}, status=403)
                 return Response({"response": "ok"}, status=200)
             except zipfile.BadZipfile:
                 return Response({"response": "badzipfile"}, status=403)
@@ -211,7 +215,6 @@ class FileStreamView(views.APIView):
     def get(self, request, filepath, format='mp3'):
         sound = pydub.AudioSegment.from_wav(filepath)
         file = sound.export()
-
         return StreamingHttpResponse(file)
 
 class SourceFileView(views.APIView):
@@ -219,7 +222,8 @@ class SourceFileView(views.APIView):
     
     def post(self, request):
         #if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
-        data = json.loads(request.body)
+        data = request.data
+        data["is_source"] = True
         takes = getTakesByProject(data)
 
         if 'language' in data and 'version' in data:
@@ -245,7 +249,7 @@ class SourceFileView(views.APIView):
                     stdout=FNULL, stderr=subprocess.STDOUT)
                 FNULL.close()
                 os.rename(root_folder+'.tr', 'media/tmp/'+data['language']+'_'+data['version']+'.tr')
-                #shutil.rmtree(root_folder)
+                shutil.rmtree(root_folder)
             else:
                 return Response({"response": "nosource"}, status=403)
         else:
@@ -274,18 +278,24 @@ def getTakesByProject(data):
         takes = takes.filter(chapter=data["chapter"])
     if "startv" in data: 
         takes = takes.filter(startv=data["startv"])
+    if "is_source" in data: 
+        takes = takes.filter(is_source=data["is_source"])
     
     res = takes.values()
 
     for take in res:
         dic = {}
         # Include language name
-        dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+        lang = Language.objects.filter(pk=take["language_id"])
+        if lang and lang.count() > 0:
+            dic["language"] = lang.values()[0]
         # Include book name
-        dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
+        book = Book.objects.filter(pk=take["book_id"])
+        if book and book.count() > 0:
+            dic["book"] = book.values()[0]
         # Include author of file
         user = User.objects.filter(pk=take["user_id"])
-        if user:
+        if user and user.count() > 0:
             dic["user"] = user.values()[0]
 
         # Include comments
@@ -295,7 +305,7 @@ def getTakesByProject(data):
             dic2["comment"] = cmt
             # Include author of comment
             cuser = User.objects.filter(pk=cmt["user_id"])
-            if cuser:
+            if cuser and cuser.count() > 0:
                 dic2["user"] = cuser.values()[0]
             dic["comments"].append(dic2)
 
