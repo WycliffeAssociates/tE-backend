@@ -1,10 +1,11 @@
 from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from django.core import serializers, files
+from django.core import serializers
 from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
+from api.parsers import MP3StreamParser
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
 from .models import Language, Book, User, Take, Comment
@@ -19,10 +20,7 @@ import json
 import pydub
 import time
 import uuid
-import os
-import subprocess
-import shutil
-import glob
+import os, glob
 from django.conf import settings
 
 class LanguageViewSet(viewsets.ModelViewSet):
@@ -68,13 +66,56 @@ class CommentViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_200_OK)
 
-class ProjectView(views.APIView):
+class ProjectViewSet(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = json.loads(request.body)
-        lst = getTakesByProject(data)
 
+        lst = []
+        takes = Take.objects
+        if "language" in data:
+            takes = takes.filter(language__slug=data["language"])
+        if "version" in data:
+            takes = takes.filter(version=data["version"])
+        if "book" in data:
+            takes = takes.filter(book__slug=data["book"])
+        if "chapter" in data:
+            takes = takes.filter(chapter=data["chapter"])
+        if "startv" in data:
+            takes = takes.filter(startv=data["startv"])
+
+        res = takes.values()
+
+        for take in res:
+            dic = {}
+            # Include language name
+            dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+            # Include book name
+            dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
+            # Include author of file
+            user = User.objects.filter(pk=take["user_id"])
+            if user:
+                dic["user"] = user.values()[0]
+
+            # Include comments
+            dic["comments"] = []
+            for cmt in Comment.objects.filter(file=take["id"]).values():
+                dic2 = {}
+                dic2["comment"] = cmt
+                # Include author of comment
+                cuser = User.objects.filter(pk=cmt["user_id"])
+                if cuser:
+                    dic2["user"] = cuser.values()[0]
+                dic["comments"].append(dic2)
+
+            # Parse markers
+            if take["markers"]:
+                take["markers"] = json.loads(take["markers"])
+            else:
+                take["markers"] = {}
+            dic["take"] = take
+            lst.append(dic)
         return Response(lst, status=200)
 
 class ProjectZipFiles(views.APIView):
@@ -131,7 +172,8 @@ class ProjectZipFiles(views.APIView):
                     filesInZip.append(fileName)
 
         # Creating zip file
-        with zipfile.ZipFile('media/export/' + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
+        with zipfile.ZipFile(os.path.join(settings.BASE_DIR, 'media/export/') + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
+        #with zipfile.ZipFile('media/export/' + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
             for members in filesInZip:
                 zipped_f.write(members)
 
@@ -149,20 +191,47 @@ class ProjectZipFiles(views.APIView):
 
         for filename in files:
             os.remove(filename)
+        os.chdir(directory)
+        files = glob.glob('*.mp3')
+
+        for filename in files:
+                os.remove(filename)
+        #currently returns list of the takes we have gathered but this can easily be changed
         return Response(lst, status=200)
 
 class viewAllProjects(views.APIView):
     parser_classes = (JSONParser,)
     def post(self, request):
         data = json.loads(request.body)
-        allLanguages = Language.objects.all()
-        takes = Take.objects
+        allLanguages = Language.objects.all().values()
+        #takes = Take.objects
+        books = Book.objects
         projects = []
         for lang in allLanguages:
-            lan = {}
-            takes = takes.filter(language__slug = lang["id"])
+            lang = dict(lang)
+            print type(lang)
+            takes = Take.objects.filter(language = lang['id']).values()
+            print(type(takes))
+            takes = list(takes)
+            print type(takes)
+            for indTake in takes:
+                lan = {}
+                indTake = convert_keys_to_string(indTake)
+                if "book_id" not in lan.keys():
+                    spBook = books.filter(id = indTake["book_id"])
+                    spBook = list(spBook)
+                    json.dumps(spBook)
+                    print(spBook)
+                    print(spBook[0])
+                    lan["book"] = (spBook[0])
+                    lan["lang"] = lang
+                    lan["version"] = indTake["version"]
+                    lan["timestamp"] = indTake["date_modified"]
+                    lan["completed"] = 75
+                    projects.append(lan)
+        return Response(projects, status = 200)
 
-            #lan["book"] = lang
+
 
 
 
@@ -179,8 +248,8 @@ class FileUploadView(views.APIView):
 
             try:
                 zip = zipfile.ZipFile(upload)
-                folder_name = 'media/dump/' + uuid_name
-                zip.extractall(folder_name)
+                file_name = 'media/dump/' + uuid_name
+                zip.extractall(file_name)
                 zip.close()
                 #extract metadata / get the apsolute path to the file to be stored
 
@@ -190,7 +259,7 @@ class FileUploadView(views.APIView):
                 langname = ''
                 langcode = ''
 
-                for root, dirs, files in os.walk(folder_name):
+                for root, dirs, files in os.walk(file_name):
                     for f in files:
                         abpath = os.path.join(root, os.path.basename(f))
                         #abpath = os.path.abspath(os.path.join(root, f))
@@ -224,105 +293,17 @@ class FileUploadView(views.APIView):
             return Response(status=404)
 
 class FileStreamView(views.APIView):
+    parser_classes = (MP3StreamParser,)
+
     def get(self, request, filepath, format='mp3'):
         sound = pydub.AudioSegment.from_wav(filepath)
         file = sound.export()
 
         return StreamingHttpResponse(file)
 
-class SourceFileView(views.APIView):
-    parser_classes = (JSONParser,)
-    
-    def post(self, request):
-        #if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
-        data = json.loads(request.body)
-        takes = getTakesByProject(data)
-
-        if 'language' in data and 'version' in data:
-            if len(takes) > 0:
-                uuid_name = str(time.time()) + str(uuid.uuid4())
-                root_folder = 'media/tmp/'+uuid_name
-                project_folder = root_folder+'/'+data['language']+'/'+data['version']
-                for take in takes:
-                    chapter_folder = project_folder+'/'+take['book']['slug']+'/'+str(take['take']['chapter']).zfill(2)
-                    if not os.path.exists(chapter_folder):
-                        os.makedirs(chapter_folder)
-                    shutil.copy2(take['take']['location'], chapter_folder)
-                    file_name = os.path.basename(take['take']['location'])
-                    file_path = chapter_folder+'/'+file_name
-                    file_path_mp3 = file_path.replace('.wav','.mp3')
-
-                    sound = pydub.AudioSegment.from_wav(file_path)
-                    sound.export(file_path_mp3, format='mp3')
-                    os.remove(file_path)
-                
-                FNULL = open(os.devnull, 'w')
-                subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder], 
-                    stdout=FNULL, stderr=subprocess.STDOUT)
-                FNULL.close()
-                os.rename(root_folder+'.tr', 'media/tmp/'+data['language']+'_'+data['version']+'.tr')
-                #shutil.rmtree(root_folder)
-            else:
-                return Response({"response": "nosource"}, status=403)
-        else:
-            return Response({"response": "notenoughparameters"}, status=403)
-        
-        source_file = open('media/tmp/'+data['language']+'_'+data['version']+'.tr', 'rb')
-        response = HttpResponse(files.File(source_file), content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % (data['language']+'_'+data['version']+'.tr')
-        source_file.close()
-        return response
-
 def index(request):
     take = Take.objects.all().last()
     return render(request, 'index.html', {"lasttake":take})
-
-def getTakesByProject(data):
-    lst = []
-    takes = Take.objects
-    if "language" in data: 
-        takes = takes.filter(language__slug=data["language"])
-    if "version" in data: 
-        takes = takes.filter(version=data["version"])
-    if "book" in data: 
-        takes = takes.filter(book__slug=data["book"])
-    if "chapter" in data: 
-        takes = takes.filter(chapter=data["chapter"])
-    if "startv" in data: 
-        takes = takes.filter(startv=data["startv"])
-    
-    res = takes.values()
-
-    for take in res:
-        dic = {}
-        # Include language name
-        dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
-        # Include book name
-        dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
-        # Include author of file
-        user = User.objects.filter(pk=take["user_id"])
-        if user:
-            dic["user"] = user.values()[0]
-
-        # Include comments
-        dic["comments"] = []
-        for cmt in Comment.objects.filter(file=take["id"]).values():
-            dic2 = {}
-            dic2["comment"] = cmt
-            # Include author of comment
-            cuser = User.objects.filter(pk=cmt["user_id"])
-            if cuser:
-                dic2["user"] = cuser.values()[0]
-            dic["comments"].append(dic2)
-
-        # Parse markers
-        if take["markers"]:
-            take["markers"] = json.loads(take["markers"])
-        else:
-            take["markers"] = {}
-        dic["take"] = take
-        lst.append(dic)
-    return lst
 
 def prepareDataToSave(meta, abpath, data):
     book, b_created = Book.objects.get_or_create(
@@ -347,8 +328,6 @@ def prepareDataToSave(meta, abpath, data):
                 startv = meta['startv'],
                 endv = meta['endv'],
                 markers = markers,
-                is_export=True,
-                is_source=False,
                 user_id = 1) # TODO get author of file and save it to Take model
     take.save()
 
@@ -381,3 +360,9 @@ def getBookByCode(code):
             bn = dicti["name"]
             break
     return bn
+def convert_keys_to_string(dictionary):
+    """Recursively converts dictionary keys to strings."""
+    if not isinstance(dictionary, dict):
+        return dictionary
+    return dict((str(k), convert_keys_to_string(v))
+        for k, v in dictionary.items())
