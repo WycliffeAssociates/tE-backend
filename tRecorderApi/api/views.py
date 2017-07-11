@@ -204,22 +204,16 @@ class viewAllProjects(views.APIView):
     def post(self, request):
         data = json.loads(request.body)
         allLanguages = Language.objects.all().values()
-        #takes = Take.objects
-        #books = Book.objects
         projects = []
         for lang in allLanguages:
-            print("AYYYYLMAOOOOO")
             usedBooks = []
+            usedVersion = []
             lang = dict(lang)
-            print type(lang)
             takes = Take.objects.filter(language = lang['id']).values()
-            print(type(takes))
             takes = list(takes)
-            print type(takes)
             for indTake in takes:
                 lan = {}
                 indTake = convert_keys_to_string(indTake)
-                print(indTake["book_id"])
                 if indTake["book_id"] not in usedBooks:
                     spBook = Book.objects.filter(id = indTake["book_id"]).values()
                     lan["book"] = (spBook)
@@ -230,7 +224,21 @@ class viewAllProjects(views.APIView):
                     #future user = User.objects.filter(id = indTake["user"]).values()
                     lan["contributors"] =  "Jerome"
                     usedBooks.append(indTake["book_id"])
+                    usedVersion.append(indTake["version"])
                     projects.append(lan)
+                elif indTake["version"] not in usedVersion:
+                    spBook = Book.objects.filter(id = indTake["book_id"]).values()
+                    lan["book"] = (spBook)
+                    lan["lang"] = lang
+                    lan["version"] = indTake["version"]
+                    lan["timestamp"] = indTake["date_modified"]
+                    lan["completed"] = 75
+                    #future user = User.objects.filter(id = indTake["user"]).values()
+                    lan["contributors"] =  "Jerome"
+                    usedVersion.append(indTake["version"])
+                    projects.append(lan)
+                else:
+                    continue
         return Response(projects, status = 200)
 
 
