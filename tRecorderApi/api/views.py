@@ -117,7 +117,7 @@ class ProjectZipFiles(views.APIView):
 
         #process of renaming/converting to mp3
         for subdir, dirs, files in os.walk(location):
-            
+
             for file in files:
                 # store the absolute path which is is it's subdir and where the os step is
                 filePath = subdir + os.sep + file
@@ -149,7 +149,24 @@ class ProjectZipFiles(views.APIView):
 
         for filename in files:
             os.remove(filename)
-        #currently returns list of the takes we have gathered but this can easily be changed
+        return Response(lst, status=200)
+
+class viewAllProjects(views.APIView):
+    parser_classes = (JSONParser,)
+    def post(self, request):
+        data = json.loads(request.body)
+        allLanguages = Language.objects.all()
+        takes = Take.objects
+        projects = []
+        for lang in allLanguages:
+            lan = {}
+            takes = takes.filter(language__slug = lang["id"])
+
+            #lan["book"] = lang
+
+
+
+
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)

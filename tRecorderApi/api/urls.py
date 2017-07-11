@@ -14,9 +14,10 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^upload/(?P<filename>[^/]+)$', views.FileUploadView.as_view()),
     url(r'^stream/(?P<filepath>.*)$', views.FileStreamView.as_view()),
-    url(r'^get_project/$', views.ProjectView.as_view()),
+    url(r'^view_Project/$', views.viewAllProjects.as_view())
     url(r'^get_source/$', views.SourceFileView.as_view()),
-    url(r'^zipFiles/$', views.ProjectZipFiles.as_view())
+    url(r'^zipFiles/$', views.ProjectZipFiles.as_view()),
+    url(r'^get_project/$', views.ProjectViewSet.as_view()),
 ]
 
 urlpatterns += router.urls
