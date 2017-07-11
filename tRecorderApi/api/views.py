@@ -158,7 +158,7 @@ class ProjectZipFiles(views.APIView):
 
         #process of renaming/converting to mp3
         for subdir, dirs, files in os.walk(location):
-            
+
             for file in files:
                 # store the absolute path which is is it's subdir and where the os step is
                 filePath = subdir + os.sep + file
@@ -172,7 +172,7 @@ class ProjectZipFiles(views.APIView):
                     filesInZip.append(fileName)
 
         # Creating zip file
-        with zipfile.ZipFile('media/export/' + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
+        with zipfile.ZipFile(os.path.join(settings.BASE_DIR, 'media/export/') + str(randint(0,20)) + 'zipped_file.zip', 'w') as zipped_f:
             for members in filesInZip:
                 zipped_f.write(members)
 
@@ -190,7 +190,13 @@ class ProjectZipFiles(views.APIView):
 
         for filename in files:
             os.remove(filename)
-        #currently returns list of the takes we have gathered but this can easily be changed 
+        #delete mp3 in folder
+        os.chdir(directory)
+        files=glob.glob('*.mp3')
+
+        for filename in files:
+            os.remove(filename)
+        #currently returns list of the takes we have gathered but this can easily be changed
         return Response(lst, status=200)
 
 class FileUploadView(views.APIView):
@@ -299,17 +305,17 @@ def index(request):
 def getTakesByProject(data):
     lst = []
     takes = Take.objects
-    if "language" in data: 
+    if "language" in data:
         takes = takes.filter(language__slug=data["language"])
-    if "version" in data: 
+    if "version" in data:
         takes = takes.filter(version=data["version"])
-    if "book" in data: 
+    if "book" in data:
         takes = takes.filter(book__slug=data["book"])
-    if "chapter" in data: 
+    if "chapter" in data:
         takes = takes.filter(chapter=data["chapter"])
-    if "startv" in data: 
+    if "startv" in data:
         takes = takes.filter(startv=data["startv"])
-    
+
     res = takes.values()
 
     for take in res:
