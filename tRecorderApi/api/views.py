@@ -227,6 +227,8 @@ class viewAllProjects(views.APIView):
                     lan["version"] = indTake["version"]
                     lan["timestamp"] = indTake["date_modified"]
                     lan["completed"] = 75
+                    #future user = User.objects.filter(id = indTake["user"]).values()
+                    lan["contributors"] =  "Jerome"
                     usedBooks.append(indTake["book_id"])
                     projects.append(lan)
         return Response(projects, status = 200)
