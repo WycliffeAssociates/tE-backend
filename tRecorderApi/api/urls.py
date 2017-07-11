@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from . import views
 from rest_framework import routers
-from api import views
+import views
 
 router = routers.DefaultRouter()
 router.register(r'languages', views.LanguageViewSet)

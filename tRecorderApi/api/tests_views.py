@@ -3,6 +3,8 @@ from models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
+from sys import platform
+import json
 import os.path
 import glob
 
@@ -21,6 +23,7 @@ class ViewTestCases(TestCase):
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
+        self.take_object = Take(location='test_location', chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1, startv=3)
         self.take_object = Take(location= filepath, chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
@@ -34,7 +37,7 @@ class ViewTestCases(TestCase):
          self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def test_that_we_can_get_projects(self):
-        """Testing that submitting a POST request to get projects returns a JSON onbject"""
+        """Testing that submitting a POST request through key search returns a JSON object"""
         #saving objects in temporary database so they can be read by the API
         self.language_object.save()
         self.book_object.save()
@@ -51,7 +54,7 @@ class ViewTestCases(TestCase):
         #self.book_object.delete()
 
     def test_that_we_can_get_no_projects_from_api(self):
-         """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
+         """Testing that getting a projec that does not exist from key value returns no object"""
          #saving objects in temporary database so they can be read by the API
          self.language_object.save()
          self.book_object.save()
@@ -66,6 +69,56 @@ class ViewTestCases(TestCase):
          self.user_object.delete()
          self.book_object.delete()
 
+    def test_that_we_can_get_a_project_from_language_key(self):
+         """Testing that submitting a POST request through language key search returns on object"""
+         #saving objects in temporary database so they can be read by the API
+         self.language_object.save()
+         self.book_object.save()
+         self.user_object.save()
+         self.take_object.save()
+         response = self.client.post(base_url + 'get_project/', {'language' : 'english'}, format='json')
+         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+         self.assertEqual(0, len(response.data))
+         #freeing up the temporary database
+         self.take_object.delete()
+         self.user_object.delete()
+         self.book_object.delete()
+
+    def test_that_we_can_get_correct_project_from_book_key(self):
+        """Testing that submitting a POST request through book key search returns an object"""
+        # saving objects in temporary database so they can be read by the API
+        self.language_object.save()
+        self.book_object.save()
+        response = self.client.post(base_url + 'get_project/', {'book': 'english'},
+                                    format='json')  # telling the API that I want all takes that are in book English
+        self.assertEqual(0,len(response.data))
+        # freeing up the temporary database
+        self.language_object.delete()
+        self.book_object.delete()
+
+    def test_that_we_can_get_correct_project_from_startv_key(self):
+        """Testing that submitting a POST request through book key search returns an object"""
+        # saving objects in temporary database so they can be read by the API
+        self.take_object.save()
+        self.book_object.save()
+        response = self.client.post(base_url + 'get_project/', {'take': 'startv = 3'}, format='json') # tell API I want startv at 3
+        self.assertEqual(0,len(response.data))
+        # freeing up the temporary database
+        self.language_object.delete()
+        self.take_object.delete()
+
+#    def test_the_get_method(self):
+#        """"testing the get method first"""
+#        response = self.client.get(base_url + 'get_project/', )
+
+
+    def tearDown(self):
+        if platform == "darwin": #OSX
+            os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
+            os.system('mkdir ' + my_file)
+        elif platform == "win32": #Windows
+            os.system('rmdir /s /q ' + 'media\dump')  # cleaning out all files generated during tests
+            os.system('mkdir ' + 'media\dump')
 #    def test_that_we_can_get_no_projects_from_api(self):
 #         """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
 #         #saving objects in temporary database so they can be read by the API
