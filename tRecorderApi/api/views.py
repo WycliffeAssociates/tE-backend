@@ -208,6 +208,8 @@ class viewAllProjects(views.APIView):
         books = Book.objects
         projects = []
         for lang in allLanguages:
+            print("AYYYYLMAOOOOO")
+            usedBooks = []
             lang = dict(lang)
             print type(lang)
             takes = Take.objects.filter(language = lang['id']).values()
@@ -217,17 +219,19 @@ class viewAllProjects(views.APIView):
             for indTake in takes:
                 lan = {}
                 indTake = convert_keys_to_string(indTake)
-                if "book_id" not in lan.keys():
+                print(indTake["book_id"])
+                if indTake["book_id"] not in usedBooks:
                     spBook = books.filter(id = indTake["book_id"])
                     spBook = list(spBook)
-                    json.dumps(spBook)
+                    spBook = str(spBook)
                     print(spBook)
                     print(spBook[0])
-                    lan["book"] = (spBook[0])
+                    lan["book"] = (spBook)
                     lan["lang"] = lang
                     lan["version"] = indTake["version"]
                     lan["timestamp"] = indTake["date_modified"]
                     lan["completed"] = 75
+                    usedBooks.append(indTake["book_id"])
                     projects.append(lan)
         return Response(projects, status = 200)
 
