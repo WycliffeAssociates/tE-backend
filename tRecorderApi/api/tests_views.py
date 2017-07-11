@@ -3,6 +3,8 @@ from models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
+import os.path
+import glob
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
@@ -14,12 +16,12 @@ class ViewTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location' : 'test_location', 'chapter' : 5, 'is_export' : True, 'is_source' : False}
+        self.take_data = {'location' : filepath, 'chapter' : 5, 'is_export' : True, 'is_source' : False}
         self.lang_data = {'lang' : 'english', 'code' : 'abc'}
         self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
         self.comment = {'location':'test_location'}
         self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
-        self.take_object = Take(location='test_location', chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
+        self.take_object = Take(location= filepath, chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
@@ -44,9 +46,9 @@ class ViewTestCases(TestCase):
         self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
         self.assertIn("'chapter': 5", result) #test that the term we searched for is in the data returned from the post request
         #freeing up the temporary database
-        self.take_object.delete()
-        self.user_object.delete()
-        self.book_object.delete()
+        #self.take_object.delete()
+        #self.user_object.delete()
+        #self.book_object.delete()
 
     def test_that_we_can_get_no_projects_from_api(self):
          """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
@@ -64,6 +66,21 @@ class ViewTestCases(TestCase):
          self.user_object.delete()
          self.book_object.delete()
 
-    def tearDown(self):
-        os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
-        os.system('mkdir ' + my_file)
+#    def test_that_we_can_get_no_projects_from_api(self):
+#         """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
+#         #saving objects in temporary database so they can be read by the API
+#         self.language_object.save()
+#         self.book_object.save()
+#         self.user_object.save()
+#         self.take_object.save()
+#         response = self.client.post(base_url + 'get_project/', {'chapter' : 6}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
+#         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+#         self.assertEqual(0, len(response.data))
+#         #freeing up the temporary database
+#         self.take_object.delete()
+#         self.user_object.delete()
+#         self.book_object.delete()
+
+    #def tearDown(self):
+    #    os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
+    #    os.system('mkdir ' + my_file)

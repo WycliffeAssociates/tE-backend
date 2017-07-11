@@ -5,14 +5,15 @@ from models import Take, Language, User, Comment, Book
 class ModelTestCase(TestCase):
     """This class defines the test suite for the each of the models."""
 
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.file_location = "uploads/file.zip"
-        self.take = Take(location=self.file_location, is_source=False, is_export=True)
-        self.language = Language(slug='abc', name='english')
-        self.user = User(name='tester', agreed=True, picture='test.pic')
-        self.comment = Comment(location='test_location')
-        self.book = Book(slug='en-demo',name='english', booknum=5)
+#    def test_model_can_create_a_take(self):
+#        """Test the File model can create a take."""
+#        old_count = Take.objects.count()  #obtain current count of object in database
+#        self.take.save()   #save object to database
+#        new_count = Take.objects.count()  #obtain new count of object in database
+#        self.assertNotEqual(old_count, new_count)
+#        test_log = open("test_log.txt", "a")  #append test results to test log
+#        test_log.write("TEST: Creating and Storing a Take Object........................PASSED\n")
+#        test_log.close()#
 
     def test_model_can_create_a_take(self):
         """Test the File model can create a take."""
