@@ -1,10 +1,11 @@
-<form action="/api/upload/zip" method="post" enctype="multipart/form-data" style="float:left;margin-right:60px">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Zip"/>
+<form action="/api/upload/zip" method="post" enctype="multipart/form-data">
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Zip" />
 </form>
+<br>
 <form action="/api/source/source_filename" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Source"/>
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Source (.tr)" />
 </form>
 
 {% if lasttake %}
