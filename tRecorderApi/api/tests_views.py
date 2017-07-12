@@ -85,6 +85,51 @@ class ViewTestCases(TestCase):
         self.user_object.delete()
         self.book_object.delete()
 
+    # def test_that_wav_files_exist_in_file_system(self):
+    #     """Testing that wav files continue to exist in file system after they are compressed to a zip file"""
+    #     self.language_object.save()
+    #     self.book_object.save()
+    #     self.user_object.save()
+    #     self.take_object.save()
+    #     with open('en-x-demo2_ulb_mrk.zip', 'rb') as test_zip:
+    #         self.response = self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': test_zip},
+    #                                          format='multipart')        #generate wav files
+    #     #TODO: filter through directories using metadata from take object because that
+    #     # affects the name of the folder that contains the wav files
+    #     old_count = 0
+    #     for fname in os.listdir(my_file):    #search through media/dump for mrk
+    #         path = os.path.join(my_file, fname)
+    #         for dirname in os.listdir(path):
+    #             if self.book_object.name in dirname:   #if folder has mrk in the directory name
+    #                 path = os.path.join(dirname, self.book_object.name)  #append mrk to path
+    #                 for chname in os.listdir(path):  #search for take object's chapter name
+    #                     if self.take_object.chapter in chname:
+    #                         path = os.path.join(path, chname)  #append chapter to path
+    #                         for file in path:   #iterate through all files in final directory
+    #                             old_count = old_count+1   #get count of wav files
+    #
+    #
+    #
+    #     #results from filtering should be appended to a list
+    #     #filtering should lead to only one result so we only check the first element in the list
+    #     #TODO: get a count of the number of wav files in that folder
+    #     response = self.client.post(base_url + 'zipFiles/', {'chapter': 5}, format='json') #generate zip file to be exported
+    #     #TODO: get a new count of the number of wav files that are in the same directory
+    #     #compare the old count to the new count
+    #     self.take_object.delete()
+    #     self.user_object.delete()
+    #     self.book_object.delete()
+
+    def test_that_one_mp3_file_is_generated_from_each_wav_file(self):
+        """Testing that each wav file is converted to an MP3 file"""
+        #TODO: find location of the wav files inside a directory associated with a particular project
+        #TODO: get the count of the number of wav files in that directory
+        #TODO: find out which request I need to make to get wav files converted to mp3 files
+        #TODO: find location of mp3 files
+        #TODO: get count of mp3 files inside of location found in previous step
+        #TODO: compare count of wav files to count of mp3 files
+
+
     def tearDown(self):
         os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
         os.system('mkdir ' + my_file)
