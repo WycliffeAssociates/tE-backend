@@ -41,7 +41,7 @@ class ModelTestCase(TestCase):
         self.assertNotEqual(old_count, new_count)
 
     def test_model_can_create_a_Book(self):
-        """Test the Language model can create a language."""
+        """Test the Book model can create a book."""
         old_count = Book.objects.count()
         self.book.save()
         new_count = Book.objects.count()
