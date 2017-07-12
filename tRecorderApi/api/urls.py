@@ -2,9 +2,6 @@ from django.conf.urls import url, include
 #from . import views_sets
 from rest_framework import routers
 from .views import *
-#import sys
-
-#sys.path.append("./views_sets")
 
 router = routers.DefaultRouter()
 router.register(r'languages', LanguageViewSet)
