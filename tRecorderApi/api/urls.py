@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^get_source/$', views.SourceFileView.as_view()),
     url(r'^zipFiles/$', views.ProjectZipFiles.as_view()),
     url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
+    url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
 ]
 
 urlpatterns += router.urls
