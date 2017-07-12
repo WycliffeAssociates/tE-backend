@@ -266,6 +266,28 @@ class viewAllProjects(views.APIView):
                     continue
         return Response(projects, status = 200)
 
+class projectChapterInfo(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        data = json.loads(request.body)
+        allTakes = Take.objects.all().values()
+        allTakes = allTakes.filter(version=data["version"])
+        allTakes = allTakes.filter(book__slug=data["book"])
+        allTakes = allTakes.filter(language__slug=data["language"])
+        chap = {}
+        chapters = []
+        for take in allTakes:
+            if take["chapter"] not in chapters:
+                idv = {}
+                idv["chapter"] = take["chapter"]
+                idv["checked_level"] = take["checked_level"]
+                idv["contributors"] = "Jerome"
+                idv["percent_complete"] = 75
+                idv["timestamp"] = 12
+                chapters.append(idv)
+        return Response(chapters, status = 200)
+
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
