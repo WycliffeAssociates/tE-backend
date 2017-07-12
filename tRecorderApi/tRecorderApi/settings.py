@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['172.19.145.91', '172.19.145.88', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    #'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,12 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api',
     'corsheaders',
+    'api',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 """REST_FRAMEWORK = {
@@ -133,8 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_ROOT = 'static'
-STATIC_URL = '/static/'
+STATIC_ROOT = 'media'
+STATIC_URL = '/media/'
 
-MEDIA_ROOT = 'media'
-MEDIA_URL = '/media/'
+#MEDIA_ROOT = 'media'
+#MEDIA_URL = '/media/'
