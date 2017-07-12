@@ -1,7 +1,6 @@
-from django.conf.urls import url, include
-from . import views
-from rest_framework import routers
 from api import views
+from django.conf.urls import url
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'languages', views.LanguageViewSet)
@@ -18,6 +17,7 @@ urlpatterns = [
     url(r'^get_source/$', views.SourceFileView.as_view()),
     url(r'^zipFiles/$', views.ProjectZipFiles.as_view()),
     url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
+    url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
 ]
 
 urlpatterns += router.urls

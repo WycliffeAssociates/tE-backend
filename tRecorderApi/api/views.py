@@ -16,6 +16,8 @@ from random import randint
 import pydub
 from django.conf import settings
 from django.core import files
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from pydub import AudioSegment
@@ -290,6 +292,70 @@ class ExcludeFilesView(views.APIView):
         return Response(files_to_exclude, status=200)
 
 
+class UploadSourceFileView(views.APIView):
+    parser_classes = (FileUploadParser,)
+
+    def post(self, request, filename, format='tr'):
+        global uuid_name
+        if request.method == 'POST':
+            uuid_name = str(time.time()) + str(uuid.uuid4())
+            tempFolder = "media" + os.sep + "dump" + os.sep + uuid_name + os.sep
+            if not os.path.exists(tempFolder):
+                os.makedirs(tempFolder)
+                data = request.data['file']
+                with open(tempFolder + os.sep + "source.tr", 'w') as temp_file:
+                    i = 0
+                    for line in data:
+                        if i > 3:
+                            temp_file.write(line)
+                        i += 1
+            else:
+                print "error"
+        try:
+            FNULL = open(os.devnull, 'w')
+            subprocess.call(
+                ['java', '-jar', 'aoh/aoh.jar', '-x', tempFolder + os.sep + "source.tr"],
+                stdout=FNULL, stderr=subprocess.STDOUT)
+            os.remove(tempFolder + os.sep + "source.tr")
+            FNULL.close()
+            bookname = ''
+            bookcode = ''
+            langname = ''
+            langcode = ''
+
+            for root, dirs, files in os.walk(tempFolder):
+                for f in files:
+                    abpath = os.path.join(root, os.path.basename(f))
+                    # abpath = os.path.abspath(os.path.join(root, f))
+                    try:
+                        meta = TinyTag.get(abpath)
+                    except LookupError:
+                        return Response({"response": "badwavefile"}, status=403)
+
+                    a = meta.artist
+                    lastindex = a.rfind("}") + 1
+                    substr = a[:lastindex]
+                    pls = json.loads(substr)
+
+                    if bookcode != pls['slug']:
+                        bookcode = pls['slug']
+                        bookname = getBookByCode(bookcode)
+                    if langcode != pls['language']:
+                        langcode = pls['language']
+                        langname = getLanguageByCode(langcode)
+
+                    data = {
+                        "langname": langname,
+                        "bookname": bookname,
+                        "duration": meta.duration
+                    }
+                    prepareDataToSave(pls, abpath, data, True)
+            return Response({"response": "ok"}, status=200)
+        except:
+            return Response({"response": "failed"}, status=403)
+        return Response(status=200)
+
+
 def index(request):
     take = Take.objects.all().last()
     return render(request, 'index.html', {"lasttake": take})
@@ -343,7 +409,7 @@ def getTakesByProject(data):
     return lst
 
 
-def prepareDataToSave(meta, abpath, data):
+def prepareDataToSave(meta, abpath, data, is_source=False):
     book, b_created = Book.objects.get_or_create(
         slug=meta["slug"],
         defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
@@ -367,7 +433,8 @@ def prepareDataToSave(meta, abpath, data):
                 endv=
                 meta['endv'],
                 markers=markers,
-                user_id=1
+                user_id=1,
+                is_source=is_source
                 )
     take.save()
 
