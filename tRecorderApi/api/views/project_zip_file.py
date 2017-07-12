@@ -10,7 +10,7 @@ from pydub import AudioSegment
 import zipfile
 from rest_framework.response import Response
 
-class ProjectZipFiles(views.APIView):
+class ProjectZipFilesView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):

@@ -20,6 +20,8 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from pydub import AudioSegment
+from django.core.files.storage import FileSystemStorage
+from django.core import serializers
 from rest_framework import viewsets, views, status
 from rest_framework.parsers import JSONParser, FileUploadParser
 from rest_framework.response import Response
@@ -27,7 +29,23 @@ from tinytag import TinyTag
 from .models import Language, Book, User, Take, Comment
 from .serializers import LanguageSerializer, BookSerializer, UserSerializer
 from .serializers import TakeSerializer, CommentSerializer
-
+from api.parsers import MP3StreamParser
+from .serializers import LanguageSerializer, BookSerializer, UserSerializer
+from .serializers import TakeSerializer, CommentSerializer
+from .models import Language, Book, User, Take, Comment
+from tinytag import TinyTag
+from pydub import AudioSegment
+from random import randint
+import zipfile
+import shutil
+import urllib2
+import pickle
+import json
+import pydub
+import time
+import uuid
+import os, glob
+from django.conf import settings
 
 class LanguageViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
@@ -83,8 +101,51 @@ class ProjectView(views.APIView):
 
     def post(self, request):
         data = json.loads(request.body)
-        lst = getTakesByProject(data)
 
+        lst = []
+        takes = Take.objects
+        if "language" in data:
+            takes = takes.filter(language__slug=data["language"])
+        if "version" in data:
+            takes = takes.filter(version=data["version"])
+        if "book" in data:
+            takes = takes.filter(book__slug=data["book"])
+        if "chapter" in data:
+            takes = takes.filter(chapter=data["chapter"])
+        if "startv" in data:
+            takes = takes.filter(startv=data["startv"])
+
+        res = takes.values()
+
+        for take in res:
+            dic = {}
+            # Include language name
+            dic["language"] = Language.objects.filter(pk=take["language_id"]).values()[0]
+            # Include book name
+            dic["book"] = Book.objects.filter(pk=take["book_id"]).values()[0]
+            # Include author of file
+            user = User.objects.filter(pk=take["user_id"])
+            if user:
+                dic["user"] = user.values()[0]
+
+            # Include comments
+            dic["comments"] = []
+            for cmt in Comment.objects.filter(file=take["id"]).values():
+                dic2 = {}
+                dic2["comment"] = cmt
+                # Include author of comment
+                cuser = User.objects.filter(pk=cmt["user_id"])
+                if cuser:
+                    dic2["user"] = cuser.values()[0]
+                dic["comments"].append(dic2)
+
+            # Parse markers
+            if take["markers"]:
+                take["markers"] = json.loads(take["markers"])
+            else:
+                take["markers"] = {}
+            dic["take"] = take
+            lst.append(dic)
         return Response(lst, status=200)
 
 
@@ -160,6 +221,95 @@ class ProjectZipFiles(views.APIView):
         else:
             return Response({"response":"notenoughparameters"}, status=403)
 
+class viewAllProjects(views.APIView):
+    parser_classes = (JSONParser,)
+    def post(self, request):
+        allTakes = Take.objects.all().values()
+        aVersion = []
+        aBook = []
+        data = json.loads(request.body)
+        #filters projects if needed
+        if "version" in data:
+            allTakes = allTakes.filter(version=data["version"])
+        if "book" in data:
+            allTakes = allTakes.filter(book__slug=data["book"])
+        for take in allTakes:
+            if take["language_id"] not in aVersion:
+                aVersion.append(take["language_id"])
+            if take["book_id"] not in aBook:
+                aBook.append(take["book_id"])
+        convert_keys_to_string(data)
+        if "language" in data:
+            allLanguages = Language.objects.filter(slug = data["language"]).values()
+        else:
+            allLanguages = Language.objects.all().values()
+        projects = []
+        #loops through languages to find projects
+        for lang in allLanguages:
+            usedBooks = []
+            usedVersion = []
+            lang = dict(lang)
+            takes = Take.objects.filter(language = lang['id']).values()
+            takes = list(takes)
+            #looks through takes to make sure Books/versions are correct
+            for indTake in takes:
+                lan = {}
+                indTake = convert_keys_to_string(indTake)
+                if indTake["book_id"] not in usedBooks:
+                    if indTake["book_id"] not in aBook:
+                        continue
+                    else:
+                        spBook = Book.objects.filter(id = indTake["book_id"]).values()
+                        lan["book"] = (spBook)
+                        lan["lang"] = lang
+                        lan["version"] = indTake["version"]
+                        lan["timestamp"] = indTake["date_modified"]
+                        lan["completed"] = 75
+                        #future user = User.objects.filter(id = indTake["user"]).values()
+                        lan["contributors"] =  "Jerome"
+                        usedBooks.append(indTake["book_id"])
+                        usedVersion.append(indTake["version"])
+                        projects.append(lan)
+                elif indTake["version"] not in usedVersion:
+                    if indTake["version"] not in aVersion:
+                        continue
+                    else:
+                        spBook = Book.objects.filter(id = indTake["book_id"]).values()
+                        lan["book"] = (spBook)
+                        lan["lang"] = lang
+                        lan["version"] = indTake["version"]
+                        lan["timestamp"] = indTake["date_modified"]
+                        lan["completed"] = 75
+                        #future user = User.objects.filter(id = indTake["user"]).values()
+                        lan["contributors"] =  "Jerome"
+                        usedVersion.append(indTake["version"])
+                        projects.append(lan)
+                else:
+                    continue
+        return Response(projects, status = 200)
+
+class projectChapterInfo(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        data = json.loads(request.body)
+        allTakes = Take.objects.all().values()
+        allTakes = allTakes.filter(version=data["version"])
+        allTakes = allTakes.filter(book__slug=data["book"])
+        allTakes = allTakes.filter(language__slug=data["language"])
+        chap = {}
+        chapters = []
+        for take in allTakes:
+            if take["chapter"] not in chapters:
+                idv = {}
+                idv["chapter"] = take["chapter"]
+                idv["checked_level"] = take["checked_level"]
+                idv["contributors"] = "Jerome"
+                idv["percent_complete"] = 75
+                idv["timestamp"] = 12
+                chapters.append(idv)
+        return Response(chapters, status = 200)
+
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
 
@@ -172,7 +322,6 @@ class FileUploadView(views.APIView):
             try:
                 zip = zipfile.ZipFile(upload)
                 folder_name = 'media/dump/' + uuid_name
-
                 zip.extractall(folder_name)
                 zip.close()
 
@@ -184,7 +333,7 @@ class FileUploadView(views.APIView):
                 langname = ''
                 langcode = ''
 
-                for root, dirs, files in os.walk(folder_name):
+                for root, dirs, files in os.walk(file_name):
                     for f in files:
                         abpath = os.path.join(root, os.path.basename(f))
                         # abpath = os.path.abspath(os.path.join(root, f))
@@ -223,6 +372,8 @@ class FileUploadView(views.APIView):
 
 
 class FileStreamView(views.APIView):
+    parser_classes = (MP3StreamParser,)
+
     def get(self, request, filepath, format='mp3'):
         sound = pydub.AudioSegment.from_wav(filepath)
         file = sound.export()
@@ -480,6 +631,12 @@ def md5Hash(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-
 def getFileName(location):
     return location.split(os.sep)[-1]
+
+def convert_keys_to_string(dictionary):
+    """Recursively converts dictionary keys to strings."""
+    if not isinstance(dictionary, dict):
+        return dictionary
+    return dict((str(k), convert_keys_to_string(v))
+        for k, v in dictionary.items())
