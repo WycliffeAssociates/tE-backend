@@ -100,6 +100,7 @@ class ProjectZipFiles(views.APIView):
         if "version" in data:
             new_data["version"] = data["version"]
         if "book" in data:
+# <<<<<<< HEAD
             new_data["book"] = data["book"]
 
         if 'language' in new_data and 'version' in new_data and 'book' in new_data:
@@ -307,7 +308,6 @@ def getTakesByProject(data):
         takes = takes.filter(startv=data["startv"])
     if "is_source" in data: 
         takes = takes.filter(is_source=data["is_source"])
-    
     res = takes.values()
 
     for take in res:
