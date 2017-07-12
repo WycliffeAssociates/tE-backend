@@ -1,6 +1,10 @@
-<form action="/api/upload/zip" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload" /> {% csrf_token %}
-    <input type="submit" />
+<form action="/api/upload/zip" method="post" enctype="multipart/form-data" style="float:left;margin-right:60px">
+    <input type="file" name="upload"/> {% csrf_token %}
+    <input type="submit" value="Upload Zip"/>
+</form>
+<form action="/api/source/source_filename" method="post" enctype="multipart/form-data">
+    <input type="file" name="upload"/> {% csrf_token %}
+    <input type="submit" value="Upload Source"/>
 </form>
 
 {% if lasttake %}
@@ -16,11 +20,27 @@
 <div>
     <div>{{ lasttake }}</div>
     <audio controls>
-    <source src="/api/stream/{{ lasttake.location }}" type="audio/mpeg">
-    Your browser does not support the audio element.
+        <source src="/api/stream/{{ lasttake.location }}" type="audio/mpeg">
+        Your browser does not support the audio element.
     </audio>
 </div>
 <div>
-    <a href="/api/get_source/">Source file</a>
+    <button id="getsource">Get Source</button>
 </div>
 {% endif %}
+
+<script>
+    document.getElementById("getsource").addEventListener("click", function(event) {
+        jspost("/api/get_source/", {
+            "language": "en-x-demo2",
+            "version": "ulb",
+        })
+    }, false);
+
+    function jspost(url, data) {
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+        xmlhttp.open("POST", url);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify(data));
+    }
+</script>
