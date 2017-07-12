@@ -5,6 +5,7 @@ from rest_framework import status
 import os
 from sys import platform
 import json
+import hashlib
 import os.path
 import glob
 
@@ -12,6 +13,7 @@ import glob
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 export_path = '/Users/nicholasdipinto1/Desktop/translationDB/8woc2017backend/tRecorderApi/en-x-demo2_ulb_mrk.zip'
+tr_path = 'media/tmp/english_ulb.tr'
 
 #import views_sets and test methods associated with views_sets
 
@@ -122,6 +124,93 @@ class ViewTestCases(TestCase):
          self.take_object.delete()
          self.user_object.delete()
          self.book_object.delete()
+
+         ############################ Testing tr TDD ####################################
+
+    def test_that_tR_file_was_returned_in_response_from_wav_files(self):
+        """Verify that files are ready for exporting in a folder with file extension tR only"""
+        self.take_object.save()
+        self.language_object.save()
+        # from SourceFileView class
+        # upload zip maybe?
+        self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': 'en-x-demo2_ulb_mrk.zip'})
+        self.response = self.client.post(base_url + 'get_source', {'language': 'english', 'version': 'ulb'},
+                                         format='json')
+        r = str(self.response)
+        # just checking for existence of .tr file extension
+        self.assertIn(r, '.tr')
+        self.take_object.delete()
+        self.language_object.save()
+
+    def test_that_tR_is_in_correct_directory(self):
+        """Verify that tR was created in correct directory"""
+        self.take_object.save()
+        self.language_object.save()
+        self.response = self.client.post(base_url + 'get_source', {'language': 'english', 'version': 'ulb'},
+                                         format='json')
+        # double check tr_path variable
+        self.assertTrue(os.path.exists(tr_path))
+        self.take_object.delete()
+        self.language_object.save()
+
+    def test_that_source_audio_in_tR_file_is_in_MP3_format(self):
+        """Verify that source audio in tR file contains files with MP3 file ext. only"""
+        self.take_object.save()
+        self.language_object.save()
+        self.response = self.client.post(base_url + 'get_source', {'language': 'english', 'version': 'ulb'},
+                                         format='json')
+        ##fix directory location possibly if previous test doesn't work either
+        if any(File.endswith(".mp3") and not any(File.endswith(".wav")) for File in os.listdir('tr_path')):
+            i = 1
+        else:
+            i = 0
+        self.assertTrue(i == 1)
+        # assert that media/tmp file_path_mp3 contains mp3 files
+        self.take_object.delete()
+        self.language_object.save()
+
+        ##################### duplicate wav file checking #################################
+
+    def integration_test_that_duplicate_wav_files_are_excluded_test(self):  ####go back, TDD####
+        """Verify that hash function MD5 returns duplicate wav files"""
+        # upload zip file that will be unzipped
+        self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': 'en-x-demo2_ulb_mrk.zip'})
+        # post request to return list of wav files with same hash?
+        self.response = self.client.post(base_url + 'exclude_files', {'version': 'ulb', 'chapter': '7'}, format='wav')
+        # some duplicate file name(s) below with version ulb and chapter 7, depends on how response is returned
+        self.assertIn('chapter.wav', self.response)
+
+    def unit_testing_md5Hash_method_for_equality_with_duplicate_wav_files(
+            self):  # create object later when this is added to views_sets.py
+        hash_md5a = hashlib.md5()
+        with open('chapter.wav', "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5a.update(chunk)
+        hash1 = hash_md5a.hexdigest()
+
+        hash_md5b = hashlib.md5()
+        with open('chapter.wav', "rb") as g:
+            for chunk in iter(lambda: g.read(4096), b""):
+                hash_md5b.update(chunk)
+        hash2 = hash_md5b.hexdigest()
+
+        self.assertEqual(hash1, hash2)
+
+    def unit_testing_md5Hash_method_for_inequality_with_different_wav_files(
+            self):  # create object later when this is in views_sets.py
+        hash_md5a = hashlib.md5()
+        with open('chapter.wav', "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5a.update(chunk)
+        hash1 = hash_md5a.hexdigest()
+
+        hash_md5b = hashlib.md5()
+        with open('en-x-demo2_ulb_b42_mrk_c07_v33-35_t04.wav', "rb") as g:
+            for chunk in iter(lambda: g.read(4096), b""):
+                hash_md5b.update(chunk)
+        hash2 = hash_md5b.hexdigest()
+
+        self.assertNotEqual(hash1, hash2)
 
     def tearDown(self):
         if platform == "darwin": #OSX
