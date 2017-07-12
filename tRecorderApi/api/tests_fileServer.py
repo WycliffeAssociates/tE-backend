@@ -1,7 +1,7 @@
 from django.test import TestCase
 from datetime import datetime
 from models import Take, Language, Book, User, Comment
-from views import SourceFileView,FileUploadView, FileStreamView
+from views_sets import SourceFileView,FileUploadView, FileStreamView
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
@@ -93,7 +93,7 @@ class FileServerTests(TestCase):
         #some duplicate file name(s) below with version ulb and chapter 7, depends on how response is returned
         self.assertIn('chapter.wav', self.response)
 
-    def unit_testing_md5Hash_method_for_equality_with_duplicate_wav_files(self): #create object later when this is added to views.py
+    def unit_testing_md5Hash_method_for_equality_with_duplicate_wav_files(self): #create object later when this is added to views_sets.py
         hash_md5a = hashlib.md5()
         with open('chapter.wav', "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -108,7 +108,7 @@ class FileServerTests(TestCase):
 
         self.assertEqual(hash1, hash2)
 
-    def unit_testing_md5Hash_method_for_inequality_with_different_wav_files(self):  # create object later when this is in views.py
+    def unit_testing_md5Hash_method_for_inequality_with_different_wav_files(self):  # create object later when this is in views_sets.py
         hash_md5a = hashlib.md5()
         with open('chapter.wav', "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):

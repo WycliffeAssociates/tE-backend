@@ -13,7 +13,7 @@ base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 export_path = '/Users/nicholasdipinto1/Desktop/translationDB/8woc2017backend/tRecorderApi/en-x-demo2_ulb_mrk.zip'
 
-#import views and test methods associated with views
+#import views_sets and test methods associated with views_sets
 
 
 class ViewTestCases(TestCase):
