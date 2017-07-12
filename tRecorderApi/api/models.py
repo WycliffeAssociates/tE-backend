@@ -51,6 +51,7 @@ class Take(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
     markers = models.TextField(null=True, blank=True)
+    source_language = models.ForeignKey(Language, related_name="language_source", null=True, blank=True)
     is_source = models.BooleanField(default=False)
     is_export = models.BooleanField(default=False)
     date_modified = models.DateTimeField(auto_now=True)

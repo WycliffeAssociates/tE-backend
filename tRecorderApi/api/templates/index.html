@@ -26,6 +26,22 @@
     </audio>
 </div>
 <div>
-    <a href="/api/get_source/">Source file</a>
+    <button id="getsource">Get Source</button>
 </div>
 {% endif %}
+
+<script>
+    document.getElementById("getsource").addEventListener("click", function(event) {
+        jspost("/api/get_source/", {
+            "language": "en-x-demo2",
+            "version": "ulb",
+        })
+    }, false);
+
+    function jspost(url, data) {
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+        xmlhttp.open("POST", url);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify(data));
+    }
+</script>
