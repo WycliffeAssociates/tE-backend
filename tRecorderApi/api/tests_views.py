@@ -4,9 +4,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import os
 from sys import platform
-import json
 import os.path
-import glob
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'

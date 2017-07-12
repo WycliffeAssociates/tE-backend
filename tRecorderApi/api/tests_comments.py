@@ -1,5 +1,6 @@
 from django.test import TestCase
 from models import Comment
+from .views_sets import CommentViewSet
 from rest_framework.test import APIClient
 from rest_framework import status
 
@@ -11,6 +12,7 @@ class IntegrationCommentTests(TestCase):
         self.client = APIClient()
         self.comment_object = Comment.objects.create(location='/test-location/', id=1)
         self.comment_data = {'location': 'test_location'}
+        self.commentVS = CommentViewSet()
 
     def test_api_can_create_comment_object(self):
         """Test the API has comment creation capability:
@@ -38,8 +40,9 @@ class IntegrationCommentTests(TestCase):
         self.assertEqual(0, len(Comment.objects.filter(id=1)))  # check that object was deleted from temporary database
 
     def test_that_api_can_delete_comment_objects(self):
-        """Testing that the API has Take Object deletion functionality"""
+        """Testing that the API has Comment Object deletion functionality"""
         self.comment_object.save()
         response = self.client.delete(base_url + 'comments/1/')
         self.assertEqual(response.status_code, status.HTTP_200_OK) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
         self.comment_object.delete()
+
