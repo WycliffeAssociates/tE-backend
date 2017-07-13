@@ -7,6 +7,7 @@ from rest_framework import status
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 
+
 class IntegrationCommentTests(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -26,7 +27,7 @@ class IntegrationCommentTests(TestCase):
         Sending User Object To API and
         Expecting HTTP Success Message Returned"""
         self.comment_object.save()
-        response = self.client.put(base_url + 'comments/1/', {'location' : '/new-location/'}, format='json')
+        response = self.client.put(base_url + 'comments/1/', {'location': '/new-location/'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.comment_object.delete()  # delete object from temporary database
         self.assertEqual(0, len(Comment.objects.filter(id=1)))
@@ -43,6 +44,6 @@ class IntegrationCommentTests(TestCase):
         """Testing that the API has Comment Object deletion functionality"""
         self.comment_object.save()
         response = self.client.delete(base_url + 'comments/1/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)  # after deleting an object, nothing should be returned, which is why we check against a 204 status code
         self.comment_object.delete()
-

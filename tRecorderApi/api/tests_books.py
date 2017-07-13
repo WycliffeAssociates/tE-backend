@@ -6,8 +6,8 @@ from rest_framework import status
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 
-class IntegrationBookTests(TestCase):
 
+class IntegrationBookTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.book_data = {'code': 'ex', 'name': 'english', 'booknum': 5}
@@ -17,7 +17,7 @@ class IntegrationBookTests(TestCase):
         """Test the API has book creation capability:
         Sending JSON Book Object To API and
         Expecting HTTP Success Message Returned"""
-        self.response = self.client.post(base_url + 'books/', self.book_data,format='json')  # send POST to API
+        self.response = self.client.post(base_url + 'books/', self.book_data, format='json')  # send POST to API
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
     def test_api_can_update_book_object(self):
@@ -42,5 +42,6 @@ class IntegrationBookTests(TestCase):
         """Testing that the API has Take Object deletion functionality"""
         self.book_object.save()
         response = self.client.delete(base_url + 'books/1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) #after deleting an object, nothing should be returned, which is why we check against a 204 status code
+        self.assertEqual(response.status_code,
+                         status.HTTP_204_NO_CONTENT)  # after deleting an object, nothing should be returned, which is why we check against a 204 status code
         self.book_object.delete()

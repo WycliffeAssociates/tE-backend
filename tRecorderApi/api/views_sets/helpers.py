@@ -8,6 +8,7 @@ from api.models import Take, Language, Book, User, Comment
 def getTakesByProject(data):
     lst = []
     takes = Take.objects
+
     if "language" in data:
         takes = takes.filter(language__slug=data["language"])
     if "version" in data:
@@ -20,6 +21,7 @@ def getTakesByProject(data):
         takes = takes.filter(startv=data["startv"])
     if "is_source" in data: 
         takes = takes.filter(is_source=data["is_source"])
+
     
     res = takes.values()
 
