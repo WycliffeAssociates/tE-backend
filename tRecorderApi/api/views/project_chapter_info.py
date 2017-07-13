@@ -1,8 +1,10 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser
 import json
+
 from api.models import Take
+from rest_framework import views
+from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+
 
 class ProjectChapterInfoView(views.APIView):
     parser_classes = (JSONParser,)

@@ -3,7 +3,10 @@ import pickle
 import urllib2
 import os
 import hashlib
+import zipfile
+
 from api.models import Take, Language, Book, User, Comment
+
 
 def getTakesByProject(data):
     lst = []
@@ -18,9 +21,9 @@ def getTakesByProject(data):
         takes = takes.filter(chapter=data["chapter"])
     if "startv" in data:
         takes = takes.filter(startv=data["startv"])
-    if "is_source" in data: 
+    if "is_source" in data:
         takes = takes.filter(is_source=data["is_source"])
-    
+
     res = takes.values()
 
     for take in res:
@@ -69,24 +72,24 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
         defaults={'slug': meta['language'], 'name': data['langname']},
     )
     markers = json.dumps(meta['markers'])
-    
-    if(is_source):
-        defaults={
-                'location': abpath,
-                'duration': data['duration'],
-                'rating': 0, 
-                'checked_level': 0,
-                'markers': markers,
-                }
+
+    if (is_source):
+        defaults = {
+            'location': abpath,
+            'duration': data['duration'],
+            'rating': 0,
+            'checked_level': 0,
+            'markers': markers,
+        }
         try:
             obj = Take.objects.get(
-                language = language,
-                version = meta['version'], 
-                book = book,
-                mode = meta['mode'],
-                chapter = meta['chapter'],
-                startv = meta['startv'],
-                endv = meta['endv'],
+                language=language,
+                version=meta['version'],
+                book=book,
+                mode=meta['mode'],
+                chapter=meta['chapter'],
+                startv=meta['startv'],
+                endv=meta['endv'],
                 is_source=True,
             )
             os.remove(obj.location)
@@ -96,7 +99,7 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
         except Take.DoesNotExist:
             new_values = {
                 'language': language,
-                'version': meta['version'], 
+                'version': meta['version'],
                 'book': book,
                 'mode': meta['mode'],
                 'chapter': meta['chapter'],
@@ -109,20 +112,20 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
             obj.save()
     else:
         take = Take(location=abpath,
-                    duration = data['duration'],
-                    book = book,
-                    language = language,
-                    rating = 0, 
-                    checked_level = 0,
-                    anthology = meta['anthology'],
-                    version = meta['version'],
-                    mode = meta['mode'],
-                    chapter = meta['chapter'],
-                    startv = meta['startv'],
-                    endv = meta['endv'],
-                    markers = markers,
+                    duration=data['duration'],
+                    book=book,
+                    language=language,
+                    rating=0,
+                    checked_level=0,
+                    anthology=meta['anthology'],
+                    version=meta['version'],
+                    mode=meta['mode'],
+                    chapter=meta['chapter'],
+                    startv=meta['startv'],
+                    endv=meta['endv'],
+                    markers=markers,
                     is_source=is_source,
-                    user_id = 1) # TODO get author of file and save it to Take model
+                    user_id=1)  # TODO get author of file and save it to Take model
         take.save()
 
 
@@ -168,3 +171,13 @@ def md5Hash(fname):
 
 def getFileName(location):
     return location.split(os.sep)[-1]
+
+
+def getFilePath(location):
+    list = location.split(os.sep)[3:]
+    return "/".join(list)
+
+
+def zip_given_file(locationToFile):
+    file_like_object = os.io.BytesIO(locationToFile)
+    zipfile_ob = zipfile.ZipFile(file_like_object)
