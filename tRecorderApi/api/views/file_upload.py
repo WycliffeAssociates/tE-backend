@@ -33,8 +33,11 @@ class FileUploadView(views.APIView):
                 langname = ''
                 langcode = ''
 
+                is_empty_zip = True # for testing if zip file is empty
+
                 for root, dirs, files in os.walk(folder_name):
                     for f in files:
+                        is_empty_zip = False
                         abpath = os.path.join(root, os.path.basename(f))
                         # abpath = os.path.abspath(os.path.join(root, f))
                         try:
@@ -63,6 +66,9 @@ class FileUploadView(views.APIView):
                             prepareDataToSave(pls, abpath, data)
                         else:
                             return Response({"response": "badwavefile"}, status=403)
+                
+                if is_empty_zip:
+                    return Response({"response": "badzipfile"}, status=403)
                 return Response({"response": "ok"}, status=200)
 
             except zipfile.BadZipfile:
