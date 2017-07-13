@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 #from . import views_sets
 from rest_framework import routers
-from .views import *
+from .views_sets import *
 #import sys
 
 #sys.path.append("./views_sets")
@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^get_source/$', SourceFileView.as_view()),
     url(r'^zipFiles/$', ProjectZipFiles.as_view()),
     url(r'^exclude_files/$', ExcludeFilesView.as_view()),
-    url(r'^source/(?P<filename>[^/]+)$', UploadSourceFileView.as_view()),
+    url(r'^source/(?P<filename>[^/]+)$', SourceFileView.as_view()),
 ]
 
 urlpatterns += router.urls
