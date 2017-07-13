@@ -25,16 +25,19 @@ class ProjectZipFileViewTestCases(TestCase):
         self.book_object.save()
         self.user_object.save()
         self.take_object.save()
+        old_folder_size = len(os.listdir('media/export')) #find the total number of files in the media/export folder
         response = self.client.post(view_url, {'language' : 'english', 'version' : 'ESV', 'book' : 'Mark'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK) #making sure that we return the correct status code
+        new_folder_size = len(os.listdir('media/export')) #new zip file should have been added to media/export folder
+        self.assertNotEqual(old_folder_size, new_folder_size) #check that a new file exists in media/export
         self.take_object.delete()
         self.user_object.delete()
         self.book_object.delete()
 
     def tearDown(self):
-         if platform == "darwin": #OSX
-             os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
-             os.system('mkdir ' + 'media/export')
-         elif platform == "win32": #Windows
-             os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
-             os.system('mkdir ' + 'media\export')
+          if platform == "darwin": #OSX
+              os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
+              os.system('mkdir ' + 'media/export')
+          elif platform == "win32": #Windows
+              os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
+              os.system('mkdir ' + 'media\export')
