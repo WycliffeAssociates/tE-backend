@@ -4,15 +4,10 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import os
 from sys import platform
-import os.path
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 export_path = '/Users/nicholasdipinto1/Desktop/translationDB/8woc2017backend/tRecorderApi/en-x-demo2_ulb_mrk.zip'
-
-
-# import views_sets and test methods associated with views_sets
-
 
 class ViewTestCases(TestCase):
     def setUp(self):
@@ -109,14 +104,37 @@ class ViewTestCases(TestCase):
         self.book_object.save()
         self.user_object.save()
         self.take_object.save()
-        response = self.client.post(base_url + 'get_project/', {'chapter': 6},
-                                    format='json')  # telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
-        self.assertEqual(response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
-        self.assertEqual(0, len(response.data))
-        # freeing up the temporary database
+        response = self.client.post(base_url + 'get_project/', {'chapter' : 5}, format='json') #telling the API that I want all takes that have chapter 5 of a book recorded
+        result = str(response.data) #convert data returned from post request to string so we can checkthe data inside
+        self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+        self.assertNotEqual(0, len(response.data)) #testing that api does not return nothing
+        self.assertIn("'chapter': 5", result) #test that the term we searched for is in the data returned from the post request
+        #freeing up the temporary database
         self.take_object.delete()
         self.user_object.delete()
         self.book_object.delete()
+
+    def test_that_we_can_get_no_projects_from_api(self):
+         """Testing that submitting a POST request to get projects JSON data that can be parsed into takes"""
+         #saving objects in temporary database so they can be read by the API
+         self.language_object.save()
+         self.book_object.save()
+         self.user_object.save()
+         self.take_object.save()
+         response = self.client.post(base_url + 'get_project/', {'chapter' : 6}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
+         self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
+         self.assertEqual(0, len(response.data))
+         self.assertEqual(response.data, [])
+         #freeing up the temporary database
+         self.take_object.delete()
+         self.user_object.delete()
+         self.book_object.delete()
+
+    def test_that_uploading_tr_file_with_wav_file_returns_200_OK(self):
+        with open('en-x-demo2_ulb.tr', 'rb') as test_tr:
+            self.response = self.client.post(base_url + 'source/en-x-demo2_ulb.tr', {'Media type': '*/*', 'Content': test_tr},
+                                             format='multipart')
+            self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
         if platform == "darwin":  # OSX

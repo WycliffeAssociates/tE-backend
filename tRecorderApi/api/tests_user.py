@@ -6,7 +6,6 @@ from rest_framework import status
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 
-
 class IntegrationUserTests(TestCase):
     def setUp(self):
         self.client = APIClient()

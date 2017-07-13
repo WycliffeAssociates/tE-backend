@@ -6,7 +6,6 @@ from rest_framework import status
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
 
-
 class IntegrationTakeTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""

@@ -1,8 +1,7 @@
 from django.test import TestCase
 from models import Take, Language, User, Comment, Book
-
-
 # Creating a text file to log the results of each of the tests
+
 class ModelTestCase(TestCase):
     """This class defines the test suite for the each of the models."""
 
@@ -14,6 +13,7 @@ class ModelTestCase(TestCase):
         self.book = Book(name='english', booknum=5, id=1)
         self.user = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
         self.comment = Comment(location='/test-location/', id=1)
+
 
     def test_model_can_create_a_take(self):
         """Test the File model can create a take."""
@@ -49,3 +49,4 @@ class ModelTestCase(TestCase):
         self.book.save()
         new_count = Book.objects.count()
         self.assertNotEqual(old_count, new_count)
+
