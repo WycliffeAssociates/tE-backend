@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^stream/(?P<filepath>.*)$', views.FileStreamView.as_view()),
     url(r'^get_project/$', views.ProjectView.as_view()),
     url(r'^get_source/$', views.SourceFileView.as_view()),
+    url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
     url(r'^zipFiles/$', views.ProjectZipFilesView.as_view()),
     url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     url(r'^all_project/$', views.AllProjectsView.as_view()),
