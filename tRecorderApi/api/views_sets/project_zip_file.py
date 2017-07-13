@@ -10,7 +10,7 @@ from pydub import AudioSegment
 import zipfile
 from rest_framework.response import Response
 
-class ProjectZipFiles(views.APIView):
+class ProjectZipFilesView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
@@ -36,6 +36,9 @@ class ProjectZipFiles(views.APIView):
             project_name = new_data["language"] + \
                 "_" + new_data["version"] + \
                 "_" + new_data["book"]
+
+            if not os.path.exists(root_folder):
+                    os.makedirs(root_folder)
 
             # create list for locations
             locations = []

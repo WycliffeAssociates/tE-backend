@@ -237,3 +237,5 @@ tRecorderApi/media/dump/**/*.docx
 tRecorderApi/media/dump/**/*.docs
 tRecorderApi/media/dump/**/*.doc
 tRecorderApi/sample.docx
+tRecorderApi/aoh
+tRecorderApi/config.py

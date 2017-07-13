@@ -55,11 +55,33 @@ def getTakesByProject(data):
         else:
             take["markers"] = {}
         dic["take"] = take
+
+        # Include source file if any
+        if "is_source" in data and data["is_source"] is False:
+            if take["source_language_id"] and dic["book"]:
+                s_lang = Language.objects.filter(pk=take["source_language_id"])
+                if s_lang and s_lang.count() > 0:
+                    s_dic = {}
+                    s_dic["language"] = s_lang.values()[0] 
+                    
+                    s_take = Take.objects \
+                        .filter(language__slug=s_dic["language"]["slug"]) \
+                        .filter(version=take["version"]) \
+                        .filter(book__slug=dic["book"]["slug"]) \
+                        .filter(mode=take["mode"]) \
+                        .filter(chapter=take["chapter"]) \
+                        .filter(startv=take["startv"]) \
+                        .filter(endv=take["endv"]) \
+                        .filter(is_source=True)
+                    if s_take and s_take.count() > 0:
+                        s_dic["take"] = s_take.values()
+                        dic["source"] = s_dic
+
         lst.append(dic)
     return lst
 
 
-def prepareDataToSave(meta, abpath, data):
+def prepareDataToSave(meta, abpath, data, is_source=False):
     book, b_created = Book.objects.get_or_create(
         slug=meta["slug"],
         defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
@@ -69,22 +91,61 @@ def prepareDataToSave(meta, abpath, data):
         defaults={'slug': meta['language'], 'name': data['langname']},
     )
     markers = json.dumps(meta['markers'])
-    take = Take(location=abpath,
-                duration = data['duration'],
-                book = book,
+    
+    if(is_source):
+        defaults={
+                'location': abpath,
+                'duration': data['duration'],
+                'rating': 0, 
+                'checked_level': 0,
+                'markers': markers,
+                }
+        try:
+            obj = Take.objects.get(
                 language = language,
-                rating = 0, checked_level = 0,
-                anthology = meta['anthology'],
-                version = meta['version'],
+                version = meta['version'], 
+                book = book,
                 mode = meta['mode'],
                 chapter = meta['chapter'],
                 startv = meta['startv'],
                 endv = meta['endv'],
-                markers = markers,
-                is_export=True,
-                is_source=False,
-                user_id = 1) # TODO get author of file and save it to Take model
-    take.save()
+                is_source=True,
+            )
+            os.remove(obj.location)
+            for key, value in defaults.items():
+                setattr(obj, key, value)
+            obj.save()
+        except Take.DoesNotExist:
+            new_values = {
+                'language': language,
+                'version': meta['version'], 
+                'book': book,
+                'mode': meta['mode'],
+                'chapter': meta['chapter'],
+                'startv': meta['startv'],
+                'endv': meta['endv'],
+                'is_source': True,
+            }
+            new_values.update(defaults)
+            obj = Take(**new_values)
+            obj.save()
+    else:
+        take = Take(location=abpath,
+                    duration = data['duration'],
+                    book = book,
+                    language = language,
+                    rating = 0, 
+                    checked_level = 0,
+                    anthology = meta['anthology'],
+                    version = meta['version'],
+                    mode = meta['mode'],
+                    chapter = meta['chapter'],
+                    startv = meta['startv'],
+                    endv = meta['endv'],
+                    markers = markers,
+                    is_source=is_source,
+                    user_id = 1) # TODO get author of file and save it to Take model
+        take.save()
 
 
 def getLanguageByCode(code):

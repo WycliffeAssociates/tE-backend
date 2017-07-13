@@ -16,9 +16,11 @@ urlpatterns = [
     url(r'^stream/(?P<filepath>.*)$', FileStreamView.as_view()),
     url(r'^get_project/$', ProjectView.as_view()),
     url(r'^get_source/$', SourceFileView.as_view()),
-    url(r'^zipFiles/$', ProjectZipFiles.as_view()),
-    url(r'^exclude_files/$', ExcludeFilesView.as_view()),
     url(r'^source/(?P<filename>[^/]+)$', SourceFileView.as_view()),
+    url(r'^zipFiles/$', ProjectZipFilesView.as_view()),
+    url(r'^exclude_files/$', ExcludeFilesView.as_view()),
+    url(r'^all_project/$', views.AllProjectsView.as_view()),
+    url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view())
 ]
 
 urlpatterns += router.urls
