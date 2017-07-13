@@ -6,6 +6,7 @@ import uuid
 import os
 import shutil
 import pydub
+import json
 import subprocess
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -35,8 +36,21 @@ class SourceFileView(views.APIView):
                     file_path = chapter_folder + '/' + file_name
                     file_path_mp3 = file_path.replace('.wav', '.mp3')
 
+                    meta = {
+                        "anthology": take['take']["anthology"],
+                        "language": take["language"]["slug"],
+                        "version": take['take']["version"],
+                        "slug": take['book']["slug"],
+                        "book_number": str(take['book']["booknum"]).zfill(2),
+                        "mode": take['take']["mode"],
+                        "chapter": str(take['take']["chapter"]).zfill(2),
+                        "startv": take['take']["startv"],
+                        "endv": take['take']["endv"],
+                        "markers": take['take']["markers"]
+                    }
+
                     sound = pydub.AudioSegment.from_wav(file_path)
-                    sound.export(file_path_mp3, format='mp3')
+                    sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
                     os.remove(file_path)
 
                 FNULL = open(os.devnull, 'w')

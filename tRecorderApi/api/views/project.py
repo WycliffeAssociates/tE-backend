@@ -10,6 +10,7 @@ class ProjectView(views.APIView):
 
     def post(self, request):
         data = json.loads(request.body)
+        data["is_source"] = False
         lst = getTakesByProject(data)
 
         return Response(lst, status=200)
