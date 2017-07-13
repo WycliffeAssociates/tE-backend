@@ -31,10 +31,10 @@ class ProjectZipFileViewTestCases(TestCase):
         self.user_object.delete()
         self.book_object.delete()
 
-    # def tearDown(self):
-    #     if platform == "darwin": #OSX
-    #         os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
-    #         os.system('mkdir ' + 'media/export')
-    #     elif platform == "win32": #Windows
-    #         os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
-    #         os.system('mkdir ' + 'media\export')
+    def tearDown(self):
+         if platform == "darwin": #OSX
+             os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
+             os.system('mkdir ' + 'media/export')
+         elif platform == "win32": #Windows
+             os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
+             os.system('mkdir ' + 'media\export')
