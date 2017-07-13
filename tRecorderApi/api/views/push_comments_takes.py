@@ -30,13 +30,22 @@ class PushCommentsTakesView(views.APIView):
                 "en-x-demo2_ulb_b42_mrk_c07_v36-37_t02.wav": "84697692eef682f3537a87e58393e465",
                 "en-x-demo2_ulb_b42_mrk_c07_v20-23_t10.wav": "c6832e0a287f94a47918c02e5a826832",
                 "en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav": "81cd316c41b9c7d6ad3bc8b4d3d1b5c2",
-                # "en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav": "db3ce227b34a54bfaddaca42c2d33c6e",
+                "en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav": "db3ce227b34a54bfaddaca42c2d33c6e",
                 # "chapter.wav": "0a4af2fc1f922b083ab84ce695c30904",
-                # "en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav": "6be47559aeb09c0526fe5c9bf415d726",
+                "en-x-demo2_ulb_b42_mrk_c07_v01_t05_c01.wav": "6be47559aeb09c0526fe5c9bf415d726",
                 # "en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav": "f2ebbcc59319b16b67f07b055ed5cc9b",
                 # "en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav": "f92d2bc9d8611b3dc7a8d720a71f0873"
             }
             for take in takes:
+                comments = take['comments']
+                for comment in comments:
+                    comment_location = comment['comment']['location']
+                    comment_file_name = getFileName(comment_location)
+                    comment_file_hash = md5Hash(comment_location)
+                    if comment_file_name not in response_array:
+                        takes_name_and_locations.append(comment_location)
+                    elif comment_file_hash != response_array[comment_file_name]:
+                        takes_name_and_locations.append(comment_location)
                 location = take['take']['location']
                 file_name = getFileName(location)
                 file_hash = md5Hash(location)
