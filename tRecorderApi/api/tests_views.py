@@ -7,7 +7,7 @@ from sys import platform
 
 base_url = 'http://127.0.0.1:8000/api/'
 my_file = 'media/dump'
-export_path = '/Users/nicholasdipinto1/Desktop/translationDB/8woc2017backend/tRecorderApi/en-x-demo2_ulb_mrk.zip'
+tr_path = 'media/tmp/english_ulb.tr'
 
 class ViewTestCases(TestCase):
     def setUp(self):

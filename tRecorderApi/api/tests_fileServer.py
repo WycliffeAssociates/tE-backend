@@ -19,18 +19,28 @@ class FileServerTests(TestCase):
     def SetUp(self):
         """Set up environment for fileServer test suite"""
         self.client = APIClient()
-        self.take_object = Take(location='my_file', chapter=5, is_export=True, is_source=False, id=1, language_id=1,
-                                book_id=1, user_id=1)
+        self.take_data = {'location' : 'my_file', 'chapter' : 5, 'is_export' : True, 'is_source' : False}
+        self.lang_data = {'lang' : 'english', 'code' : 'abc'}
+        self.user_data = {'name' : 'tester', 'agreed' : True, 'picture' : 'test.pic'}
+        self.comment = {'location':'my_file'}
+        self.book_data = {'code':'ex', 'name' : 'english', 'booknum' : 5}
+        self.take_object = Take(location='my_file', chapter=5, is_export=True, is_source=False, id=1, language_id=1, book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
-        self.comment_object = Comment.objects.create(location='/test-location/', id=1)
+        self.comment_object = Comment(location='/test-location/', id=1)
 
     def test_that_uploading_non_zip_file_returns_403_error(self):
         """Verify that uploading a non zip file will return a 403 FORBIDDEN code"""
         with open('Sample.docx', 'rb') as test_nonzip:
             self.response = self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': test_nonzip},
                                              format='multipart')
+            self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_that_uploading_empty_wav_file_returns_403_error(self):
+        """Verify that uploading a zip file containing non .wav files returns 403 FORBIDDEN code"""
+        with open('empty_zip_folder.zip', 'rb') as test_zip_nowav:
+            self.response = self.client.post(base_url + 'upload/zip', {'Media type' : '*/*', 'Content' : test_zip_nowav}, format='multipart')
             self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_that_uploading_non_wav_file_returns_403_error(self):

@@ -1,8 +1,8 @@
 from django.conf.urls import url, include
 #from . import views_sets
 from rest_framework import routers
-from .views_sets import *
-from .views_sets import version_list
+from views_sets import *
+from views_sets import version_list, source_file, project, file_stream, file_upload
 
 router = routers.DefaultRouter()
 router.register(r'languages', LanguageViewSet)
@@ -13,10 +13,10 @@ router.register(r'comments', CommentViewSet)
  
 urlpatterns = [
     url(r'^$', index, name='index'),
-    url(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
-    url(r'^stream/(?P<filepath>.*)$', FileStreamView.as_view()),
-    url(r'^get_project/$', ProjectView.as_view()),
-    url(r'^get_source/$', SourceFileView.as_view()),
+    url(r'^upload/(?P<filename>[^/]+)$', file_upload.FileUploadView.as_view()),
+    url(r'^stream/(?P<filepath>.*)$', file_stream.FileStreamView.as_view()),
+    url(r'^get_project/$', project.ProjectView.as_view()),
+    url(r'^get_source/$', source_file.SourceFileView.as_view()),
     url(r'^source/(?P<filename>[^/]+)$', UploadSourceFileView.as_view()),
     url(r'^zipFiles/$', ProjectZipFilesView.as_view()),
     url(r'^exclude_files/$', ExcludeFilesView.as_view()),
