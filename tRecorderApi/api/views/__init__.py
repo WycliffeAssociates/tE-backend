@@ -16,3 +16,4 @@ from all_projects import *
 from project_chapter_info import *
 from push_comments_takes import *
 from version_list import *
+from update_project import *

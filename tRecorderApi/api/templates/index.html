@@ -61,7 +61,8 @@
         document.getElementById("getsource_loader").style.display = "inline-block";
         jspost("/api/get_source/", {
             "language": "en-x-demo2",
-            "version": "ulb"
+            "version": "ulb",
+            "is_source": false
         }, function(response) {
             document.getElementById("getsource_loader").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb.tr')
