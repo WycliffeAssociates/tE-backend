@@ -16,7 +16,6 @@
 <a href="/api/comments">Comments</a> <br><br>
 <a href="/api/get_project">Get Project</a> <br><br><br>
 <a href="/api/zipFiles">Zip Files</a> <br><br><br>
-<a href="/api/upload/zip">Upload zip</a> <br><br>
 <a href="/api/all_project">Show Project</a> <br><br>
 <a href="/api/get_chapters">Show Chapters</a><br><br>
 <a href="/api/get_versions">Show Versions</a><br><br>
@@ -28,8 +27,20 @@
         Your browser does not support the audio element.
     </audio>
 </div>
+<br>
 <div>
-    <button id="getsource">Get Source</button>
+    <button id="getexport">Get Zip For Export</button>
+    <img style="display: none" id="getexport_loader" src="/media/loader.gif" />
+</div>
+<br>
+<div>
+    <button id="getsource">Get Source (.tr)</button>
+    <img style="display: none" id="getsource_loader" src="/media/loader.gif" />
+</div>
+<br>
+<div>
+    <button id="getzip">Get zip</button>
+    <img style="display: none" id="getzip_loader" src="/media/loader.gif" />
 </div>
 <div>
     <button id="getzip">Get zip</button>
@@ -37,24 +48,55 @@
 {% endif %}
 
 <script>
-    document.getElementById("getsource").addEventListener("click", function(event) {
-        jspost("/api/get_source/", {
+    document.getElementById("getexport").addEventListener("click", function(event) {
+        document.getElementById("getexport_loader").style.display = "inline-block";
+        jspost("/api/zipFiles/", {
             "language": "en-x-demo2",
             "version": "ulb",
+            "book": "mrk"
+        }, function(response) {
+            document.getElementById("getexport_loader").style.display = "none";
+            saveAs(response, 'en-x-demo2_ulb_mrk.zip')
         })
     }, false);
-  document.getElementById("getzip").addEventListener("click", function(event) {
+
+    document.getElementById("getsource").addEventListener("click", function(event) {
+        document.getElementById("getsource_loader").style.display = "inline-block";
+        jspost("/api/get_source/", {
+            "language": "en-x-demo2",
+            "version": "ulb"
+        }, function(response) {
+            document.getElementById("getsource_loader").style.display = "none";
+            saveAs(response, 'en-x-demo2_ulb.tr')
+        })
+    }, false);
+
+    document.getElementById("getzip").addEventListener("click", function(event) {
+        document.getElementById("getzip").style.display = "inline-block";
         jspost("/api/push_comments_takes/", {
-            "project":{"language": "en-x-demo2",
-            "version": "ulb",
-            "book":"mrk"},
-            "files_list":{}
+            "project": {
+                "language": "en-x-demo2",
+                "version": "ulb",
+                "book": "mrk"
+            },
+            "files_list": {}
+        }, function(response) {
+            document.getElementById("getzip").style.display = "none";
+            saveAs(response, 'en-x-demo2_ulb_mrk.zip')
         })
     }, false);
-    function jspost(url, data) {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+
+    function jspost(url, data, success) {
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
         xmlhttp.open("POST", url);
-        xmlhttp.responseType="blob"
+        xmlhttp.responseType = "blob"
+
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                success(this.response);
+            }
+        }
+
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify(data));
         xmlhttp.onreadystatechange=function(){
@@ -65,4 +107,5 @@
         }}
     }
 </script>
+
 <script src="/media/FileSaver.min.js"></script>

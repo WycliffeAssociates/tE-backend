@@ -34,24 +34,26 @@ class SourceFileView(views.APIView):
                     shutil.copy2(take['take']['location'], chapter_folder)
                     file_name = os.path.basename(take['take']['location'])
                     file_path = chapter_folder + '/' + file_name
-                    file_path_mp3 = file_path.replace('.wav', '.mp3')
+                    
+                    if file_path.endswith('.wav'):
+                        file_path_mp3 = file_path.replace('.wav', '.mp3')
 
-                    meta = {
-                        "anthology": take['take']["anthology"],
-                        "language": take["language"]["slug"],
-                        "version": take['take']["version"],
-                        "slug": take['book']["slug"],
-                        "book_number": str(take['book']["booknum"]).zfill(2),
-                        "mode": take['take']["mode"],
-                        "chapter": str(take['take']["chapter"]).zfill(2),
-                        "startv": take['take']["startv"],
-                        "endv": take['take']["endv"],
-                        "markers": take['take']["markers"]
-                    }
+                        meta = {
+                            "anthology": take['take']["anthology"],
+                            "language": take["language"]["slug"],
+                            "version": take['take']["version"],
+                            "slug": take['book']["slug"],
+                            "book_number": str(take['book']["booknum"]).zfill(2),
+                            "mode": take['take']["mode"],
+                            "chapter": str(take['take']["chapter"]).zfill(2),
+                            "startv": take['take']["startv"],
+                            "endv": take['take']["endv"],
+                            "markers": take['take']["markers"]
+                        }
 
-                    sound = pydub.AudioSegment.from_wav(file_path)
-                    sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
-                    os.remove(file_path)
+                        sound = pydub.AudioSegment.from_wav(file_path)
+                        sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
+                        os.remove(file_path)
 
                 FNULL = open(os.devnull, 'w')
                 subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder],

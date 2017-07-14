@@ -19,10 +19,12 @@ class ProjectChapterInfoView(views.APIView):
             allTakes = allTakes.filter(version=data["version"])
             allTakes = allTakes.filter(book__slug=data["book"])
             allTakes = allTakes.filter(language__slug=data["language"])
+
             bookid = getBookInfo(allTakes)
             langid = getLangInfo(allTakes)
             bookInfo = Book.objects.filter(id = bookid).values()
             langInfo = Language.objects.filter(id = langid).values()
+
             chap = []
             chapters = []
             for take in allTakes:
@@ -37,6 +39,7 @@ class ProjectChapterInfoView(views.APIView):
                     chap.append(take["chapter"])
                     chapters.append(idv)
                     chapters = sorted(chapters, key = itemgetter('chapter'))
+
             a = {}
             a["book"] = bookInfo
             b = {}
