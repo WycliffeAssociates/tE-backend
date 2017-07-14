@@ -7,7 +7,7 @@ from sys import platform
 
 base_url = 'http://127.0.0.1:8000/api/'
 view_set_url = 'http://127.0.0.1:8000/api/exclude_files/'
-my_file = 'en-x-demo2_ulb_b42_mrk_c07_v02-04_t07.wav'
+my_file = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
 class ExcludedFileViewTestCases(TestCase):

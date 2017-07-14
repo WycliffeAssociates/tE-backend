@@ -1,6 +1,6 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-from helpers import getTakesByProject
+from helpers import getTakesByProject, getFileName, getFilePath
 import time
 import os
 import uuid
@@ -10,14 +10,14 @@ from pydub import AudioSegment
 import zipfile
 from rest_framework.response import Response
 from django.http import HttpResponse
+import StringIO
 
-class ProjectZipFilesView(views.APIView):
+class ProjectZipFilesNoStoreView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = request.data
         new_data = {}
-        wavfiles = []
 
         # filter the database with the given parameters
         if "language" in data:
@@ -34,7 +34,6 @@ class ProjectZipFilesView(views.APIView):
             filesInZip = []
             uuid_name = str(time.time()) + str(uuid.uuid4())
             root_folder = 'media/export/' + uuid_name
-            os.makedirs(root_folder)
             chapter_folder = ""
             project_name = new_data["language"] + \
                 "_" + new_data["version"] + \
@@ -61,10 +60,18 @@ class ProjectZipFilesView(views.APIView):
 
             # use shutil to copy the wav files to a new file
             for loc in locations:
-                shutil.copy2(loc["src"], loc["dst"])
+                #shutil.copy2(loc["src"], loc["dst"])
+                if loc["src"].endswith(".wav"):
+                    # Add to array so it can be added to the archive
+                    sound = AudioSegment.from_wav(loc["src"])
+                    filename = loc["dst"] + "/" + getFileName(loc["src"]).replace(".wav", ".mp3")
+                    sound.export(filename, format="mp3")
+                    filesInZip.append(filename)
+                else:
+                    filesInZip.append(loc["src"])
 
             # process of renaming/converting to mp3
-            for subdir, dirs, files in os.walk(root_folder):
+            """for subdir, dirs, files in os.walk(root_folder):
                 for file in files:
                     # store the absolute path which is is it's subdir and where the os step is
                     filePath = subdir + os.sep + file
@@ -76,20 +83,23 @@ class ProjectZipFilesView(views.APIView):
                         sound.export(filename, format="mp3")
                         filesInZip.append(filename)
                     else:
-                        filesInZip.append(filePath)
+                        filesInZip.append(filePath)"""
 
             # Creating zip file
-            with zipfile.ZipFile('media/export/' + project_name + '.zip', 'w') as zipped_f:
+            """with zipfile.ZipFile('media/export/' + project_name + '.zip', 'w') as zipped_f:
                 for members in filesInZip:
-                    zipped_f.write(members, members.replace(root_folder,""))
+                    zipped_f.write(members, members.replace(root_folder,""))"""
 
+            mf = StringIO.StringIO()
+            with zipfile.ZipFile(mf, 'w') as zipped_f:
+                for audioFile in filesInZip:
+                    zipped_f.write(audioFile, getFilePath(audioFile))
+            response = HttpResponse(mf.getvalue(), content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename=file.zip'
+            
             # delete the newly created wave and mp3 files
             shutil.rmtree(root_folder)
-
-            zip_file = open('media/export/' + project_name + '.zip', 'rb')
-            response = HttpResponse(zip_file, content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename=file.zip'
-            zip_file.close()
+            
             #return Response(lst, status=200)
             return response
         else:

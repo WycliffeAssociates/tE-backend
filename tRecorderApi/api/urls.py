@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from rest_framework import routers
 
-from views_sets import version_list, index, language, book, file_upload,comment, user, file_stream, take, source_file, source_file_upload, exclude_files,index,helpers,project,project_chapter_info,project_zip_file,all_projects
+from .views_sets import version_list, index, language, book, file_upload,comment, user, file_stream, take, source_file, source_file_upload, exclude_files,index,helpers,project,project_chapter_info,project_zip_file,all_projects
 
 #sys.path.append("./views_sets")
 

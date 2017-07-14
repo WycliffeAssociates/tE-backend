@@ -1,9 +1,11 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser
 import json
 from api.models import Take
+from rest_framework import views
+from rest_framework.parsers import JSONParser
+from api.models import Take, Book, Language
 from rest_framework.response import Response
 from operator import itemgetter
+
 
 class ProjectChapterInfoView(views.APIView):
     parser_classes = (JSONParser,)
@@ -17,6 +19,12 @@ class ProjectChapterInfoView(views.APIView):
             allTakes = allTakes.filter(version=data["version"])
             allTakes = allTakes.filter(book__slug=data["book"])
             allTakes = allTakes.filter(language__slug=data["language"])
+
+            bookid = getBookInfo(allTakes)
+            langid = getLangInfo(allTakes)
+            bookInfo = Book.objects.filter(id = bookid).values()
+            langInfo = Language.objects.filter(id = langid).values()
+
             chap = []
             chapters = []
             for take in allTakes:
@@ -31,4 +39,23 @@ class ProjectChapterInfoView(views.APIView):
                     chap.append(take["chapter"])
                     chapters.append(idv)
                     chapters = sorted(chapters, key = itemgetter('chapter'))
+
+            a = {}
+            a["book"] = bookInfo
+            b = {}
+            b["lang"] = langInfo
+            chapters.append(a)
+            chapters.append(b)
             return Response(chapters, status = 200)
+
+def getBookInfo(allTakes):
+    for take in allTakes:
+        book_id = take["book_id"]
+        break
+    return book_id
+
+def getLangInfo(allTakes):
+    for take in allTakes:
+        book_id = take["language_id"]
+        break
+    return book_id
