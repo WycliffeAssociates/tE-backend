@@ -190,3 +190,7 @@ def md5Hash(fname):
 
 def getFileName(location):
     return location.split(os.sep)[-1]
+
+def getFilePath(location):
+    list = location.split(os.sep)[3:]
+    return "/".join(list)

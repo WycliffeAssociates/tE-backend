@@ -4,6 +4,9 @@ from django.http import StreamingHttpResponse
 
 class FileStreamView(views.APIView):
     def get(self, request, filepath, format='mp3'):
-        sound = pydub.AudioSegment.from_wav(filepath)
-        file = sound.export()
+        if filepath.endswith(".wav"):
+            sound = pydub.AudioSegment.from_wav(filepath)
+            file = sound.export()
+        else:
+            file = open(filepath, "rb")
         return StreamingHttpResponse(file)
