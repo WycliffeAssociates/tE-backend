@@ -8,7 +8,7 @@ router.register(r'books', views.BookViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
- 
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^upload/(?P<filename>[^/]+)$', views.FileUploadView.as_view()),
@@ -20,7 +20,8 @@ urlpatterns = [
     url(r'^zipFilesNoStore/$', views.ProjectZipFilesNoStoreView.as_view()),
     url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     url(r'^all_project/$', views.AllProjectsView.as_view()),
-    url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view())
+    url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),
+    url(r'^get_versions/$', views.getVersionsView.as_view())
 ]
 
 urlpatterns += router.urls
