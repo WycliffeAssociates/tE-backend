@@ -1,11 +1,11 @@
 <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Zip"/>
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Zip" />
 </form>
 <br>
 <form action="/api/source/source_filename" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Source (.tr)"/>
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Source (.tr)" />
 </form>
 
 {% if lasttake %}
@@ -69,7 +69,8 @@
     }, false);
 
     document.getElementById("getzip").addEventListener("click", function(event) {
-        document.getElementById("getzip").style.display = "inline-block";
+        loader = document.getElementById("getzip_loader");
+        loader.style.display = "inline-block"
         jspost("/api/push_comments_takes/", {
             "project": {
                 "language": "en-x-demo2",
@@ -78,7 +79,8 @@
             },
             "files_list": {}
         }, function(response) {
-            document.getElementById("getzip").style.display = "none";
+            loader.style.display = "none";
+            console.log(loader.style.display);
             saveAs(response, 'en-x-demo2_ulb_mrk.zip')
         })
     }, false);
@@ -96,12 +98,6 @@
 
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify(data));
-        xmlhttp.onreadystatechange=function(){
-        console.log(xmlhttp.responseType)
-        if(xmlhttp.readyState==XMLHttpRequest.DONE){
-        var blob=xmlhttp.response
-        saveAs(blob,'file.zip')
-        }}
     }
 </script>
 
