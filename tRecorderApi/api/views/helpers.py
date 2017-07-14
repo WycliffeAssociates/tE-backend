@@ -160,7 +160,7 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
             new_values.update(defaults)
             obj = Take(**new_values)
             obj.save()
-        dic["take"] = model_to_dict(obj)
+        #dic["take"] = model_to_dict(obj)
     else:
         take = Take(location=abpath,
                     duration=data['duration'],
@@ -178,7 +178,7 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
                     is_source=is_source,
                     user_id=1)  # TODO get author of file and save it to Take model
         take.save()
-        dic["take"] = model_to_dict(take)
+        #dic["take"] = model_to_dict(take)
     return dic
 
 
