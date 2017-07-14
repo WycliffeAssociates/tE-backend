@@ -62,7 +62,7 @@
             "language": "en-x-demo2",
             "version": "ulb"
         }, function(response) {
-            document.getElementById("getsource_loader").style.display = "inline-block";
+            document.getElementById("getsource_loader").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb.tr')
         })
     }, false);
@@ -77,7 +77,7 @@
             },
             "files_list": {}
         }, function(response) {
-            document.getElementById("getzip").style.display = "inline-block";
+            document.getElementById("getzip").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb_mrk.zip')
         })
     }, false);
