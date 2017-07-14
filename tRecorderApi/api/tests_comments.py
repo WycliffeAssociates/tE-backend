@@ -1,6 +1,6 @@
 from django.test import TestCase
 from models import Comment
-from .views_sets import CommentViewSet
+from .views import CommentViewSet
 from rest_framework.test import APIClient
 from rest_framework import status
 
