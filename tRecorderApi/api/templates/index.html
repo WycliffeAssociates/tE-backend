@@ -1,11 +1,11 @@
 <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload" /> {% csrf_token %}
-    <input type="submit" value="Upload Zip" />
+    <input type="file" name="upload"/> {% csrf_token %}
+    <input type="submit" value="Upload Zip"/>
 </form>
 <br>
 <form action="/api/source/source_filename" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload" /> {% csrf_token %}
-    <input type="submit" value="Upload Source (.tr)" />
+    <input type="file" name="upload"/> {% csrf_token %}
+    <input type="submit" value="Upload Source (.tr)"/>
 </form>
 
 {% if lasttake %}
@@ -41,6 +41,9 @@
 <div>
     <button id="getzip">Get zip</button>
     <img style="display: none" id="getzip_loader" src="/media/loader.gif" />
+</div>
+<div>
+    <button id="getzip">Get zip</button>
 </div>
 {% endif %}
 
@@ -96,6 +99,12 @@
 
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify(data));
+        xmlhttp.onreadystatechange=function(){
+        console.log(xmlhttp.responseType)
+        if(xmlhttp.readyState==XMLHttpRequest.DONE){
+        var blob=xmlhttp.response
+        saveAs(blob,'file.zip')
+        }}
     }
 </script>
 
