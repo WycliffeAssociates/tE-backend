@@ -37,6 +37,9 @@ class ProjectZipFilesView(views.APIView):
                 "_" + new_data["version"] + \
                 "_" + new_data["book"]
 
+            if not os.path.exists(root_folder):
+                    os.makedirs(root_folder)
+
             # create list for locations
             locations = []
             for i in lst:
