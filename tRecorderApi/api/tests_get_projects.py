@@ -12,6 +12,7 @@ class GetProjectsTestCases(TestCase):
     
     
     def setUp(self):
+        self.client = APIClient()
         self.take_object = Take(location=my_file, chapter=5, is_export=True, is_source=False, id=1, language_id=1,
                                 book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
