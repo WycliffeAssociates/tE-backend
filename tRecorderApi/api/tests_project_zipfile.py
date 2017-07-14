@@ -7,6 +7,7 @@ from sys import platform
 import os.path
 
 view_url = 'http://127.0.0.1:8000/api/zipFiles/'
+upload_url = 'http://127.0.0.1:8000/api/upload/zip'
 my_file = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
@@ -34,6 +35,27 @@ class ProjectZipFileViewTestCases(TestCase):
         self.take_object.delete()
         self.user_object.delete()
         self.book_object.delete()
+
+    def test_posting_file_to_api_returns_success_response(self):
+        """Testing That zip files can be uploaded to the api"""
+        with open('en-x-demo2_ulb_mrk.zip', 'rb') as test_zip:
+            self.response = self.client.post(upload_url, {'Media type': '*/*', 'Content': test_zip},
+                                             format='multipart')
+            self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+
+    def test_that_we_get_403_error_when_not_enough_parameters_in_ProjectZipFile(self):
+        """Testing that submitting a POST request through book key search returns an object"""
+        # saving objects in temporary database so they can be read by the API
+        self.response = self.client.post(view_url, {'language': 'eng', 'version': 'ulb'},
+                                    format='json')  # telling the API that I want all takes that are in book English
+        self.assertEqual(self.response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_that_we_get_202_when_enough_parameters_in_ProjectZipFile(self):
+        """Testing that submitting a POST request through book key search returns an object"""
+        # saving objects in temporary database so they can be read by the API
+        self.response = self.client.post(view_url, {'language': 'eng', 'version': 'ulb', 'book':'gen'},
+                                    format='json')  # telling the API that I want all takes that are in book English
+        self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
         if platform == "darwin":  # OSX
