@@ -44,12 +44,8 @@ class TRTestCases(TestCase):
         self.take_object.save()
         self.response = self.client.post(base_url + 'get_source/', {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'},
                                          format='json')
-
-        result = str(self.response.data)
-        print result
-
         # double check tr_path variable
-        #self.assertTrue(os.path.exists(tr_path))
+        self.assertTrue(os.path.exists(tr_path))
         self.take_object.delete()
         self.language_object.delete()
         self.book_object.delete()
@@ -65,17 +61,13 @@ class TRTestCases(TestCase):
         self.take_object.save()
         self.response = self.client.post(base_url + 'get_source/', {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'},
                                          format='json')
-
-        result = str(self.response.data)
-        print result
-
         ##fix directory location possibly if previous test doesn't work either
         if any(File.endswith(".mp3") for File in os.listdir(tr_path)):
             i = 1
         else:
             i = 0
 
-        #self.assertTrue(i == 1)
+        self.assertTrue(i == 1)
         # assert that media/tmp file_path_mp3 contains mp3 files
         self.take_object.delete()
         self.language_object.delete()
