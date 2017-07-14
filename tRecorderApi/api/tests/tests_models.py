@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import Take, Language, User, Comment, Book
+from api.models import Take, Language, User, Comment, Book
 # Creating a text file to log the results of each of the tests
 
 class ModelTestCase(TestCase):

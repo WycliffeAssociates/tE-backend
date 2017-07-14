@@ -1,5 +1,5 @@
 from django.test import TestCase
-from views import md5Hash
+from api.views import md5Hash
 
 class HelperTestCases(TestCase):
 

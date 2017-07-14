@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import User
+from api.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
 
