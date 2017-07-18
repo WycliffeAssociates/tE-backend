@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import Take, Language, Book, User, Comment
+from api.models import Take, Language, Book, User, Comment
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
