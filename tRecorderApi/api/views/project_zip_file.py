@@ -34,6 +34,7 @@ class ProjectZipFilesView(views.APIView):
             filesInZip = []
             uuid_name = str(time.time()) + str(uuid.uuid4())
             root_folder = 'media/export/' + uuid_name
+            os.makedirs(root_folder)
             chapter_folder = ""
             project_name = new_data["language"] + \
                 "_" + new_data["version"] + \

@@ -11,6 +11,11 @@ import subprocess
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django.core import files
+from rest_framework.parsers import JSONParser, FileUploadParser
+from tinytag import TinyTag
+import urllib2
+import pickle
+
 
 class SourceFileView(views.APIView):
     parser_classes = (JSONParser,)
@@ -72,3 +77,4 @@ class SourceFileView(views.APIView):
             data['language'] + '_' + data['version'] + '.tr')
         source_file.close()
         return response
+

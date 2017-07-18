@@ -11,7 +11,8 @@ from django.forms.models import model_to_dict
 
 def getTakesByProject(data):
     lst = []
-    takes = Take.objects
+    takes = Take.objects.all()
+
     if "language" in data:
         takes = takes.filter(language__slug=data["language"])
     if "version" in data:
