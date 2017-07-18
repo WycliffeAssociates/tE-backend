@@ -64,25 +64,25 @@ def getTakesByProject(data):
         dic["take"] = take
 
         # Include source file if any
-        if "is_source" in data and data["is_source"] is False:
-            if take["source_language_id"] and dic["book"]:
-                s_lang = Language.objects.filter(pk=take["source_language_id"])
-                if s_lang and s_lang.count() > 0:
-                    s_dic = {}
-                    s_dic["language"] = s_lang.values()[0] 
-                    
-                    s_take = Take.objects \
-                        .filter(language__slug=s_dic["language"]["slug"]) \
-                        .filter(version=take["version"]) \
-                        .filter(book__slug=dic["book"]["slug"]) \
-                        .filter(mode=take["mode"]) \
-                        .filter(chapter=take["chapter"]) \
-                        .filter(startv=take["startv"]) \
-                        .filter(endv=take["endv"]) \
-                        .filter(is_source=True)
-                    if s_take and s_take.count() > 0:
-                        s_dic["take"] = s_take.values()
-                        dic["source"] = s_dic
+        #if take["is_source"] is False:
+        if take["source_language_id"] and dic["book"]:
+            s_lang = Language.objects.filter(pk=take["source_language_id"])
+            if s_lang and s_lang.count() > 0:
+                s_dic = {}
+                s_dic["language"] = s_lang.values()[0] 
+                
+                s_take = Take.objects \
+                    .filter(language__slug=s_dic["language"]["slug"]) \
+                    .filter(version=take["version"]) \
+                    .filter(book__slug=dic["book"]["slug"]) \
+                    .filter(mode=take["mode"]) \
+                    .filter(chapter=take["chapter"]) \
+                    .filter(startv=take["startv"]) \
+                    .filter(endv=take["endv"]) \
+                    .filter(is_source=True)
+                if s_take and s_take.count() > 0:
+                    s_dic["take"] = s_take.values()
+                    dic["source"] = s_dic
 
         lst.append(dic)
     return lst
