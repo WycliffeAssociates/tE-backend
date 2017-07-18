@@ -24,6 +24,8 @@ def getTakesByProject(data):
         takes = takes.filter(startv=data["startv"])
     if "is_source" in data:
         takes = takes.filter(is_source=data["is_source"])
+    if "is_export" in data:
+        takes = takes.filter(is_export=data["is_export"])
 
     res = takes.values()
 
@@ -123,6 +125,10 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
 
     markers = json.dumps(meta['markers'])
 
+    # If the take came from .tr file (Source audio)
+    # then check if it exists in database
+    # if it exists then update it's data
+    # otherwise create new record
     if (is_source):
         defaults = {
             'location': abpath,
@@ -229,8 +235,3 @@ def getFileName(location):
 def getFilePath(location):
     list = location.split(os.sep)[3:]
     return "/".join(list)
-
-
-def zip_given_file(locationToFile):
-    file_like_object = os.io.BytesIO(locationToFile)
-    zipfile_ob = zipfile.ZipFile(file_like_object)

@@ -9,6 +9,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    def create(self, request):
+        pass
+
     def destroy(self, request, pk=None):
         instance = self.get_object()
         try:
