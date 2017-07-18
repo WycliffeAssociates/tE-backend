@@ -13,8 +13,9 @@
 <a href="/api/books">Books</a> <br><br>
 <a href="/api/takes">Takes</a> <br><br>
 <a href="/api/users">Users</a> <br><br>
-<a href="/api/comments">Comments</a> <br><br>
-<a href="/api/get_project">Get Project</a> <br><br><br>
+<a href="/api/comments">Comments</a> <br><br><br>
+<a href="/api/get_project">Get Project</a> <br><br>
+<a href="/api/update_project">Update Project</a> <br><br><br>
 <a href="/api/zipFiles">Zip Files</a> <br><br><br>
 <a href="/api/all_project">Show Project</a> <br><br>
 <a href="/api/get_chapters">Show Chapters</a><br><br>
@@ -62,7 +63,8 @@
         document.getElementById("getsource_loader").style.display = "inline-block";
         jspost("/api/get_source/", {
             "language": "en-x-demo2",
-            "version": "ulb"
+            "version": "ulb",
+            "is_source": false
         }, function(response) {
             document.getElementById("getsource_loader").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb.tr')
