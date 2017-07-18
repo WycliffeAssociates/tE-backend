@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import Language
+from api.models import Language
 from rest_framework.test import APIClient
 from rest_framework import status
 

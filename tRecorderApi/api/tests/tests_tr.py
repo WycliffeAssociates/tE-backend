@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 import os
-from models import *
+from api.models import *
 from sys import platform
 
 base_url = 'http://127.0.0.1:8000/api/'
