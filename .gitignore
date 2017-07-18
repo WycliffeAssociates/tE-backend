@@ -229,7 +229,8 @@ ENV/
 tRecorderApi/test_log.txt
 tRecorderApi/htmlcov/
 language.json
-tRecorderApi/language.json
+**/language.json
+tRecorderApi/language.json
 tRecorderApi/api/CreateZIP.py
 tRecorderApi/media/dump/**/*.xml
 tRecorderApi/media/dump/**/*.rels
