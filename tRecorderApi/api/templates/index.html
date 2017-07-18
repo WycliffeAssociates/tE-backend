@@ -1,11 +1,11 @@
 <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Zip"/>
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Zip" />
 </form>
 <br>
 <form action="/api/source/source_filename" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload"/> {% csrf_token %}
-    <input type="submit" value="Upload Source (.tr)"/>
+    <input type="file" name="upload" /> {% csrf_token %}
+    <input type="submit" value="Upload Source (.tr)" />
 </form>
 
 {% if lasttake %}
@@ -19,6 +19,7 @@
 <a href="/api/all_project">Show Project</a> <br><br>
 <a href="/api/get_chapters">Show Chapters</a><br><br>
 <a href="/api/get_versions">Show Versions</a><br><br>
+<a href="/api/get_versions">Show Versions</a><br><br>
 
 <div>
     <div>{{ lasttake }}</div>
@@ -30,20 +31,17 @@
 <br>
 <div>
     <button id="getexport">Get Zip For Export</button>
-    <img style="display: none" id="getexport_loader" src="/media/loader.gif" />
+    <img style="display: none" id="getexport_loader" src="/static/loader.gif" />
 </div>
 <br>
 <div>
     <button id="getsource">Get Source (.tr)</button>
-    <img style="display: none" id="getsource_loader" src="/media/loader.gif" />
+    <img style="display: none" id="getsource_loader" src="/static/loader.gif" />
 </div>
 <br>
 <div>
     <button id="getzip">Get zip</button>
-    <img style="display: none" id="getzip_loader" src="/media/loader.gif" />
-</div>
-<div>
-    <button id="getzip">Get zip</button>
+    <img style="display: none" id="getzip_loader" src="/static/loader.gif" />
 </div>
 {% endif %}
 
@@ -72,7 +70,8 @@
     }, false);
 
     document.getElementById("getzip").addEventListener("click", function(event) {
-        document.getElementById("getzip").style.display = "inline-block";
+        loader = document.getElementById("getzip_loader");
+        loader.style.display = "inline-block"
         jspost("/api/push_comments_takes/", {
             "project": {
                 "language": "en-x-demo2",
@@ -81,13 +80,14 @@
             },
             "files_list": {}
         }, function(response) {
-            document.getElementById("getzip").style.display = "none";
+            loader.style.display = "none";
+            console.log(loader.style.display);
             saveAs(response, 'en-x-demo2_ulb_mrk.zip')
         })
     }, false);
 
     function jspost(url, data, success) {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
         xmlhttp.open("POST", url);
         xmlhttp.responseType = "blob"
 
@@ -99,13 +99,7 @@
 
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify(data));
-        xmlhttp.onreadystatechange=function(){
-        console.log(xmlhttp.responseType)
-        if(xmlhttp.readyState==XMLHttpRequest.DONE){
-        var blob=xmlhttp.response
-        saveAs(blob,'file.zip')
-        }}
     }
 </script>
+<script src="/static/FileSaver.min.js"></script>
 
-<script src="/media/FileSaver.min.js"></script>
