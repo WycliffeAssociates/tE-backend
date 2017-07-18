@@ -6,6 +6,7 @@ import hashlib
 import zipfile
 
 from api.models import Take, Language, Book, User, Comment
+from django.forms.models import model_to_dict
 
 
 def getTakesByProject(data):
@@ -84,16 +85,43 @@ def getTakesByProject(data):
         lst.append(dic)
     return lst
 
+def updateTakesByProject(data):
+    lst = []
+    filter = data["filter"]
+    fields = data["fields"]
+
+    takes = Take.objects
+    if "language" in filter:
+        takes = takes.filter(language__slug=filter["language"])
+    if "version" in filter:
+        takes = takes.filter(version=filter["version"])
+    if "book" in filter:
+        takes = takes.filter(book__slug=filter["book"])
+    if "chapter" in filter:
+        takes = takes.filter(chapter=filter["chapter"])
+    if "startv" in filter:
+        takes = takes.filter(startv=filter["startv"])
+    if "is_source" in filter:
+        takes = takes.filter(is_source=filter["is_source"])
+
+    updated = takes.update(**fields)
+    return updated
 
 def prepareDataToSave(meta, abpath, data, is_source=False):
+    dic = {}
+    
     book, b_created = Book.objects.get_or_create(
         slug=meta["slug"],
         defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
     )
+    dic["book"] = model_to_dict(book)
+
     language, l_created = Language.objects.get_or_create(
         slug=meta["language"],
         defaults={'slug': meta['language'], 'name': data['langname']},
     )
+    dic["language"] = model_to_dict(language)
+
     markers = json.dumps(meta['markers'])
 
     if (is_source):
@@ -133,6 +161,7 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
             new_values.update(defaults)
             obj = Take(**new_values)
             obj.save()
+        #dic["take"] = model_to_dict(obj)
     else:
         take = Take(location=abpath,
                     duration=data['duration'],
@@ -150,6 +179,8 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
                     is_source=is_source,
                     user_id=1)  # TODO get author of file and save it to Take model
         take.save()
+        #dic["take"] = model_to_dict(take)
+    return dic
 
 
 def getLanguageByCode(code):

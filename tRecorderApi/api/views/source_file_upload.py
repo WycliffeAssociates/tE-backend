@@ -15,6 +15,8 @@ class UploadSourceFileView(views.APIView):
 
     def post(self, request, filename, format='tr'):
         if request.method == 'POST' and request.data['file']:
+            response = {}
+            #response["takes"] = []
             uuid_name = str(time.time()) + str(uuid.uuid4())
             tempFolder = "media" + os.sep + "dump" + os.sep + uuid_name + os.sep
             if not os.path.exists(tempFolder):
@@ -69,11 +71,15 @@ class UploadSourceFileView(views.APIView):
                             "bookname": bookname,
                             "duration": meta.duration
                         }
-                        prepareDataToSave(pls, abpath, data, True)
+                        saved = prepareDataToSave(pls, abpath, data, True)
+                        if "language" in saved and "language" not in response:
+                            response["language"] = saved["language"]
+                        if "book" in saved and "book" not in response:
+                            response["book"] = saved["book"]
+                        #response["takes"].append(saved["take"])
                     else:
                         return Response({"response": "badwavefile"}, status=403)
-            return Response({"response": "ok"}, status=200)
+            return Response(response, status=200)
         except subprocess.CalledProcessError:
             shutil.rmtree(tempFolder)
             return Response({"response": "badtrfile"}, status=403)
-        return Response(status=200)
