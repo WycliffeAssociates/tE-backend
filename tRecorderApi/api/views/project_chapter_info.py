@@ -19,7 +19,8 @@ class ProjectChapterInfoView(views.APIView):
             allTakes = allTakes.filter(version=data["version"])
             allTakes = allTakes.filter(book__slug=data["book"])
             allTakes = allTakes.filter(language__slug=data["language"])
-
+            allTakes = allTakes.filter(is_source = False)
+            
             bookid = getBookInfo(allTakes)
             langid = getLangInfo(allTakes)
             bookInfo = Book.objects.filter(id = bookid).values()

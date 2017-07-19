@@ -18,3 +18,5 @@ from push_comments_takes import *
 from version_list import *
 from update_project import *
 from version_list import *
+from lang_list import*
+from book_list import*
