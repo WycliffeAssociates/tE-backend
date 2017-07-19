@@ -16,6 +16,6 @@ class getBooksView(views.APIView):
         for take in allTakes:
             bo_oks = Book.objects.filter(id = take["book_id"]).values()
             bo_oks = list(bo_oks)
-            if bo_oks[0]["slug"] not in books:
-                books.append(bo_oks[0]["slug"])
+            if bo_oks[0] not in books:
+                books.append(bo_oks[0])
         return Response(books, status = 200)

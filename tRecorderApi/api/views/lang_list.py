@@ -16,8 +16,6 @@ class getLangsView(views.APIView):
         for take in allTakes:
             lang_uage = Language.objects.filter(id = take["language_id"]).values()
             lang_uage = list(lang_uage)
-            print(lang_uage)
-            print(lang_uage[0]["slug"])
-            if lang_uage[0]["slug"] not in langs:
-                langs.append(lang_uage[0]["slug"])
+            if lang_uage[0] not in langs:
+                langs.append(lang_uage[0])
         return Response(langs, status = 200)
