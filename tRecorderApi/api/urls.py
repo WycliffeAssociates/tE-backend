@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     url(r'^all_project/$', views.AllProjectsView.as_view()),
     url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),
+    url(r'^get_langs/$', views.getLangsView.as_view()),
+    url(r'^get_versions/$', views.getVersionsView.as_view()),
+    url(r'^get_books/$', views.getBooksView.as_view()),
     url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
 ]
 

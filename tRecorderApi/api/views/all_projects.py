@@ -10,18 +10,27 @@ class AllProjectsView(views.APIView):
         allTakes = Take.objects.all().values()
         aVersion = []
         aBook = []
+        authors = {}
         data = json.loads(request.body)
+        convert_keys_to_string(data)
         #filters projects if needed
         if "version" in data:
             allTakes = allTakes.filter(version=data["version"])
         if "book" in data:
             allTakes = allTakes.filter(book__slug=data["book"])
+        allTakes = allTakes.filter(is_source = False)
         for take in allTakes:
             if take["language_id"] not in aVersion:
                 aVersion.append(take["language_id"])
             if take["book_id"] not in aBook:
                 aBook.append(take["book_id"])
-        convert_keys_to_string(data)
+            tempAuthor = (take["language_id"], take["book_id"], take["version"])
+            if tempAuthor not in authors:
+                authors[tempAuthor] = []
+            authorName = User.objects.filter(id = take["user_id"]).values()
+            authorName = list(authorName)
+            if str(authorName[0]["name"]) not in authors[tempAuthor]:
+                authors[tempAuthor].append(str(authorName[0]["name"]))
         if "language" in data:
             allLanguages = Language.objects.filter(slug = data["language"]).values()
         else:
@@ -49,7 +58,8 @@ class AllProjectsView(views.APIView):
                         lan["timestamp"] = indTake["date_modified"]
                         lan["completed"] = 75
                         #future user = User.objects.filter(id = indTake["user"]).values()
-                        lan["contributors"] =  "Jerome"
+                        tempAuthor = (indTake["language_id"], indTake["book_id"], indTake["version"])
+                        lan["contributors"] =  authors[tempAuthor]
                         usedBooks.append(indTake["book_id"])
                         usedVersion.append(indTake["version"])
                         projects.append(lan)
@@ -64,7 +74,8 @@ class AllProjectsView(views.APIView):
                         lan["timestamp"] = indTake["date_modified"]
                         lan["completed"] = 75
                         #future user = User.objects.filter(id = indTake["user"]).values()
-                        lan["contributors"] =  "Jerome"
+                        tempAuthor = (indTake["language_id"], indTake["book_id"], indTake["version"])
+                        lan["contributors"] =  authors[tempAuthor]
                         usedVersion.append(indTake["version"])
                         projects.append(lan)
                 else:
