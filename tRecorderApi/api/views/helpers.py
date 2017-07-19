@@ -106,8 +106,7 @@ def updateTakesByProject(data):
     if "is_source" in filter:
         takes = takes.filter(is_source=filter["is_source"])
 
-    updated = takes.update(**fields)
-    return updated
+    return takes.update(**fields)
 
 def prepareDataToSave(meta, abpath, data, is_source=False):
     dic = {}
