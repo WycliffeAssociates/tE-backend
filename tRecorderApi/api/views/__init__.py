@@ -1,4 +1,7 @@
 from index import *
+from project import *
+from chapter import *
+from chunk import *
 from language import *
 from book import *
 from user import *
@@ -6,7 +9,7 @@ from take import *
 from comment import *
 from file_upload import *
 from file_stream import *
-from project import *
+from get_project import *
 from source_file import *
 from project_zip_file import *
 from project_zip_file_nostore import *

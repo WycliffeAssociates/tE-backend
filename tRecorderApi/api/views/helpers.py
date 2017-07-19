@@ -5,7 +5,7 @@ import os
 import hashlib
 import zipfile
 
-from api.models import Take, Language, Book, User, Comment
+from api.models import Take, Language, Book, User, Comment, Project, Chapter, Chunk
 from django.forms.models import model_to_dict
 
 
@@ -112,17 +112,63 @@ def updateTakesByProject(data):
 def prepareDataToSave(meta, abpath, data, is_source=False):
     dic = {}
     
+    # Create Language in database if it's not there
+    language, l_created = Language.objects.get_or_create(
+        slug=meta["language"],
+        defaults={
+            'slug': meta['language'], 
+            'name': data['langname']},
+    )
+    dic["language"] = model_to_dict(language)
+
+    # Create Book in database if it's not there
     book, b_created = Book.objects.get_or_create(
         slug=meta["slug"],
-        defaults={'slug': meta['slug'], 'booknum': meta['book_number'], 'name': data['bookname']},
+        defaults={
+            'slug': meta['slug'], 
+            'booknum': meta['book_number'], 
+            'name': data['bookname']},
     )
     dic["book"] = model_to_dict(book)
 
-    language, l_created = Language.objects.get_or_create(
-        slug=meta["language"],
-        defaults={'slug': meta['language'], 'name': data['langname']},
+    # Create Project in database if it's not there
+    project, p_created = Project.objects.get_or_create(
+        version=meta["version"],
+        mode=meta["mode"],
+        anthology=meta["anthology"],
+        language=language,
+        book=book,
+        defaults={
+            'version': meta['version'], 
+            'mode': meta['mode'], 
+            'anthology': meta['anthology'],
+            'language': language,
+            'book': book},
     )
-    dic["language"] = model_to_dict(language)
+    dic["project"] = model_to_dict(project)
+
+    # Create Chapter in database if it's not there
+    chapter, cr_created = Chapter.objects.get_or_create(
+        project=project,
+        number=meta['chapter'],
+        defaults={
+            'number': meta['chapter'], 
+            'checked_level': 0,  #TODO get checked_level from tR
+            'project': project},
+    )
+    dic["chapter"] = model_to_dict(chapter)
+
+    # Create Chunk in database if it's not there
+    chunk, ck_created = Chunk.objects.get_or_create(
+        chapter=chapter,
+        startv=meta['startv'],
+        endv=meta['endv'],
+        defaults={
+            'startv': meta['startv'], 
+            'endv': meta['endv'],
+            'chapter': chapter},
+    )
+    dic["chunk"] = model_to_dict(chunk)
 
     markers = json.dumps(meta['markers'])
 
@@ -135,18 +181,11 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
             'location': abpath,
             'duration': data['duration'],
             'rating': 0,
-            'checked_level': 0,
             'markers': markers,
         }
         try:
             obj = Take.objects.get(
-                language=language,
-                version=meta['version'],
-                book=book,
-                mode=meta['mode'],
-                chapter=meta['chapter'],
-                startv=meta['startv'],
-                endv=meta['endv'],
+                chunk=chunk,
                 is_source=True,
             )
             os.remove(obj.location)
@@ -155,37 +194,22 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
             obj.save()
         except Take.DoesNotExist:
             new_values = {
-                'language': language,
+                'chunk': chunk,
                 'version': meta['version'],
-                'book': book,
-                'mode': meta['mode'],
-                'chapter': meta['chapter'],
-                'startv': meta['startv'],
-                'endv': meta['endv'],
                 'is_source': True,
             }
             new_values.update(defaults)
             obj = Take(**new_values)
             obj.save()
-        #dic["take"] = model_to_dict(obj)
     else:
         take = Take(location=abpath,
                     duration=data['duration'],
-                    book=book,
-                    language=language,
                     rating=0,
-                    checked_level=0,
-                    anthology=meta['anthology'],
-                    version=meta['version'],
-                    mode=meta['mode'],
-                    chapter=meta['chapter'],
-                    startv=meta['startv'],
-                    endv=meta['endv'],
                     markers=markers,
                     is_source=is_source,
-                    user_id=1)  # TODO get author of file and save it to Take model
+                    user_id=1,
+                    chunk=chunk)  # TODO get author of file and save it to Take model
         take.save()
-        #dic["take"] = model_to_dict(take)
     return dic
 
 

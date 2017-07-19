@@ -5,6 +5,9 @@ from api import views
 #sys.path.append("./views")
 
 router = routers.DefaultRouter()
+router.register(r'projects', views.ProjectViewSet)
+router.register(r'chapters', views.ChapterViewSet)
+router.register(r'chunks', views.ChunkViewSet)
 router.register(r'languages', views.LanguageViewSet)
 router.register(r'books', views.BookViewSet)
 router.register(r'users', views.UserViewSet)
@@ -16,7 +19,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^upload/(?P<filename>[^/]+)$', views.FileUploadView.as_view()),
     url(r'^stream/(?P<filepath>.*)$', views.FileStreamView.as_view()),
-    url(r'^get_project/$', views.ProjectView.as_view()),
+    url(r'^get_project/$', views.GetProjectView.as_view()),
     url(r'^update_project/$', views.UpdateProjectView.as_view()),
     url(r'^get_source/$', views.SourceFileView.as_view()),
     url(r'^zipFiles/$', views.ProjectZipFilesView.as_view()),
