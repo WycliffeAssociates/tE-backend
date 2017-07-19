@@ -45,41 +45,44 @@ class AllProjectsView(views.APIView):
             takes = list(takes)
             #looks through takes to make sure Books/versions are correct
             for indTake in takes:
-                lan = {}
-                indTake = convert_keys_to_string(indTake)
-                if indTake["book_id"] not in usedBooks:
-                    if indTake["book_id"] not in aBook:
-                        continue
-                    else:
-                        spBook = Book.objects.filter(id = indTake["book_id"]).values()
-                        lan["book"] = (spBook)
-                        lan["lang"] = lang
-                        lan["version"] = indTake["version"]
-                        lan["timestamp"] = indTake["date_modified"]
-                        lan["completed"] = 75
-                        #future user = User.objects.filter(id = indTake["user"]).values()
-                        tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
-                        lan["contributors"] =  authors[tempAuthor]
-                        usedBooks.append(indTake["book_id"])
-                        usedVersion.append(indTake["version"])
-                        projects.append(lan)
-                elif indTake["version"] not in usedVersion:
-                    if indTake["version"] not in aVersion:
-                        continue
-                    else:
-                        spBook = Book.objects.filter(id = indTake["book_id"]).values()
-                        lan["book"] = (spBook)
-                        lan["lang"] = lang
-                        lan["version"] = indTake["version"]
-                        lan["timestamp"] = indTake["date_modified"]
-                        lan["completed"] = 75
-                        #future user = User.objects.filter(id = indTake["user"]).values()
-                        tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
-                        lan["contributors"] =  authors[tempAuthor]
-                        usedVersion.append(indTake["version"])
-                        projects.append(lan)
-                else:
+                if indTake["is_source"] == True:
                     continue
+                else:
+                    lan = {}
+                    indTake = convert_keys_to_string(indTake)
+                    if indTake["book_id"] not in usedBooks:
+                        if indTake["book_id"] not in aBook:
+                            continue
+                        else:
+                            spBook = Book.objects.filter(id = indTake["book_id"]).values()
+                            lan["book"] = (spBook)
+                            lan["lang"] = lang
+                            lan["version"] = indTake["version"]
+                            lan["timestamp"] = indTake["date_modified"]
+                            lan["completed"] = 75
+                            #future user = User.objects.filter(id = indTake["user"]).values()
+                            tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
+                            lan["contributors"] =  authors[tempAuthor]
+                            usedBooks.append(indTake["book_id"])
+                            usedVersion.append(indTake["version"])
+                            projects.append(lan)
+                    elif indTake["version"] not in usedVersion:
+                        if indTake["version"] not in aVersion:
+                            continue
+                        else:
+                            spBook = Book.objects.filter(id = indTake["book_id"]).values()
+                            lan["book"] = (spBook)
+                            lan["lang"] = lang
+                            lan["version"] = indTake["version"]
+                            lan["timestamp"] = indTake["date_modified"]
+                            lan["completed"] = 75
+                            #future user = User.objects.filter(id = indTake["user"]).values()
+                            tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
+                            lan["contributors"] =  authors[tempAuthor]
+                            usedVersion.append(indTake["version"])
+                            projects.append(lan)
+                    else:
+                        continue
         return Response(projects, status = 200)
 
 
