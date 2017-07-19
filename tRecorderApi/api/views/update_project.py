@@ -14,6 +14,9 @@ class UpdateProjectView(views.APIView):
         if "filter" not in data or "fields" not in data:
             return Response({"response": "notenoughparameters"}, status=403)
 
-        updated = updateTakesByProject(data)
+        result = updateTakesByProject(data)
 
-        return Response({"response": {"rows_affected": updated}}, status=200)
+        if type(result) is not int:
+            return Response({"error": str(result)}, status=400)
+        
+        return Response({"response": {"rows_affected": result}}, status=200)

@@ -7,6 +7,7 @@ import zipfile
 
 from api.models import Take, Language, Book, User, Comment
 from django.forms.models import model_to_dict
+from django.core.exceptions import FieldDoesNotExist
 
 
 def getTakesByProject(data):
@@ -106,7 +107,12 @@ def updateTakesByProject(data):
     if "is_source" in filter:
         takes = takes.filter(is_source=filter["is_source"])
 
-    updated = takes.update(**fields)
+    try:
+        updated = takes.update(**fields)
+    except (FieldDoesNotExist, ValueError) as e:
+        updated = e
+    except Exception as e:
+        updated = e
     return updated
 
 def prepareDataToSave(meta, abpath, data, is_source=False):
