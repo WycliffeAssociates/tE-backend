@@ -24,7 +24,7 @@ class AllProjectsView(views.APIView):
                 aVersion.append(take["language_id"])
             if take["book_id"] not in aBook:
                 aBook.append(take["book_id"])
-            tempAuthor = (take["language_id"], take["book_id"], take["version"])
+            tempAuthor = (take["language_id"], take["book_id"], str(take["version"]))
             if tempAuthor not in authors:
                 authors[tempAuthor] = []
             authorName = User.objects.filter(id = take["user_id"]).values()
@@ -58,7 +58,7 @@ class AllProjectsView(views.APIView):
                         lan["timestamp"] = indTake["date_modified"]
                         lan["completed"] = 75
                         #future user = User.objects.filter(id = indTake["user"]).values()
-                        tempAuthor = (indTake["language_id"], indTake["book_id"], indTake["version"])
+                        tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
                         lan["contributors"] =  authors[tempAuthor]
                         usedBooks.append(indTake["book_id"])
                         usedVersion.append(indTake["version"])
@@ -74,7 +74,7 @@ class AllProjectsView(views.APIView):
                         lan["timestamp"] = indTake["date_modified"]
                         lan["completed"] = 75
                         #future user = User.objects.filter(id = indTake["user"]).values()
-                        tempAuthor = (indTake["language_id"], indTake["book_id"], indTake["version"])
+                        tempAuthor = (indTake["language_id"], indTake["book_id"], str(indTake["version"]))
                         lan["contributors"] =  authors[tempAuthor]
                         usedVersion.append(indTake["version"])
                         projects.append(lan)
