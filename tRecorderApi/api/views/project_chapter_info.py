@@ -2,7 +2,7 @@ import json
 from api.models import Take
 from rest_framework import views
 from rest_framework.parsers import JSONParser
-from api.models import Take, Book, Language
+from api.models import Take, Book, Language, User
 from rest_framework.response import Response
 from operator import itemgetter
 
@@ -16,15 +16,13 @@ class ProjectChapterInfoView(views.APIView):
             return Response({"response":"notenoughparameters"}, status=403)
         else:
             allTakes = Take.objects.all().values()
-            allTakes = allTakes.filter(version=data["version"])
-            allTakes = allTakes.filter(book__slug=data["book"])
-            allTakes = allTakes.filter(language__slug=data["language"])
-            allTakes = allTakes.filter(is_source = False)
-            
+            allTakes = allTakes.filter(version=data["version"], book__slug=data["book"], language__slug=data["language"], is_source = False)
+
             bookid = getBookInfo(allTakes)
             langid = getLangInfo(allTakes)
             bookInfo = Book.objects.filter(id = bookid).values()
             langInfo = Language.objects.filter(id = langid).values()
+            authorInfo = authorDict(allTakes)
 
             chap = []
             chapters = []
@@ -33,7 +31,7 @@ class ProjectChapterInfoView(views.APIView):
                     idv = {}
                     idv["chapter"] = take["chapter"]
                     idv["checked_level"] = take["checked_level"]
-                    idv["contributors"] = "Jerome"
+                    idv["contributors"] = authorInfo[take["chapter"]]
                     idv["percent_complete"] = 75
                     #mostRecent = ""
                     idv["timestamp"] = take["date_modified"]
@@ -48,6 +46,18 @@ class ProjectChapterInfoView(views.APIView):
             chapters.append(a)
             chapters.append(b)
             return Response(chapters, status = 200)
+
+def authorDict(allTakes):
+    authors = {}
+    for take in allTakes:
+        if take["chapter"] not in authors:
+            authors[take["chapter"]] = []
+        authorName = User.objects.filter(id = take["user_id"]).values()
+        authorName = list(authorName)
+        if str(authorName[0]["name"]) not in authors[take["chapter"]]:
+            authors[take["chapter"]].append(authorName[0]["name"])
+    return authors
+
 
 def getBookInfo(allTakes):
     for take in allTakes:
