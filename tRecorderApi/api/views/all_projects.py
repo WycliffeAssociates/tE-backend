@@ -54,8 +54,8 @@ class AllProjectsView(views.APIView):
                         if indTake["book_id"] not in aBook:
                             continue
                         else:
-                            spBook = Book.objects.filter(id = indTake["book_id"]).values()
-                            lan["book"] = (spBook)
+                            bookDict = Book.objects.filter(id = indTake["book_id"]).values()
+                            lan["book"] = (bookDict)
                             lan["lang"] = lang
                             lan["version"] = indTake["version"]
                             lan["timestamp"] = indTake["date_modified"]
@@ -70,8 +70,8 @@ class AllProjectsView(views.APIView):
                         if indTake["version"] not in aVersion:
                             continue
                         else:
-                            spBook = Book.objects.filter(id = indTake["book_id"]).values()
-                            lan["book"] = (spBook)
+                            bookDict = Book.objects.filter(id = indTake["book_id"]).values()
+                            lan["book"] = (bookDict)
                             lan["lang"] = lang
                             lan["version"] = indTake["version"]
                             lan["timestamp"] = indTake["date_modified"]
