@@ -8,7 +8,7 @@ import json
 import shutil
 from rest_framework.response import Response
 from tinytag import TinyTag
-from helpers import getBookByCode, getLanguageByCode, prepareDataToSave
+from helpers import getBookByCode, getLanguageByCode, prepareDataToSave, highPassFilter
 
 class UploadSourceFileView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -71,12 +71,13 @@ class UploadSourceFileView(views.APIView):
                             "bookname": bookname,
                             "duration": meta.duration
                         }
+
+                        #highPassFilter(abpath)
                         saved = prepareDataToSave(pls, abpath, data, True)
                         if "language" in saved and "language" not in response:
                             response["language"] = saved["language"]
                         if "book" in saved and "book" not in response:
                             response["book"] = saved["book"]
-                        #response["takes"].append(saved["take"])
                     else:
                         return Response({"response": "badwavefile"}, status=403)
             return Response(response, status=200)

@@ -9,7 +9,7 @@ class GetProjectView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
-        data = json.loads(request.body)
+        data = request.data
         data["is_source"] = False
         lst = getTakesByProject(data)
 

@@ -16,6 +16,7 @@ class PushCommentsTakesView(views.APIView):
     def post(self, request):
         data = request.data
         if all(k in data["project"] for k in ('language', 'version', 'book')):
+            data["project"]["is_source"] = False
             takes = getTakesByProject(data["project"])
             takes_name_and_locations = []
             response_array = {

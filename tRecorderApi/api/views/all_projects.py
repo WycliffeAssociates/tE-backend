@@ -3,8 +3,21 @@ from rest_framework.parsers import JSONParser
 from api.models import Take, Language, Book, User, Comment
 import json
 from rest_framework.response import Response
+from helpers import getProjects
 
 class AllProjectsView(views.APIView):
+    parser_classes = (JSONParser,)
+
+    def post(self, request):
+        data = request.data
+        
+        projects = getProjects(data)
+
+        return Response(projects, status = 200)
+        
+
+
+"""class AllProjectsView(views.APIView):
     parser_classes = (JSONParser,)
     def post(self, request):
         allTakes = Take.objects.all().values()
@@ -69,7 +82,7 @@ class AllProjectsView(views.APIView):
                         projects.append(lan)
                 else:
                     continue
-        return Response(projects, status = 200)
+        return Response(projects, status = 200)"""
 
 
 def convert_keys_to_string(dictionary):

@@ -4,6 +4,8 @@ import urllib2
 import os
 import hashlib
 import zipfile
+from pydub import AudioSegment, effects
+from django.db.models import Prefetch
 
 from api.models import Take, Language, Book, User, Comment, Project, Chapter, Chunk
 from django.forms.models import model_to_dict
@@ -11,102 +13,180 @@ from django.forms.models import model_to_dict
 
 def getTakesByProject(data):
     lst = []
+    filter = {}
     takes = Take.objects.all()
 
     if "language" in data:
-        takes = takes.filter(language__slug=data["language"])
+        filter["chunk__chapter__project__language__slug"] = data["language"]
     if "version" in data:
-        takes = takes.filter(version=data["version"])
+        filter["chunk__chapter__project__version"] = data["version"]
     if "book" in data:
-        takes = takes.filter(book__slug=data["book"])
+        filter["chunk__chapter__project__book__slug"] = data["book"]
     if "chapter" in data:
-        takes = takes.filter(chapter=data["chapter"])
+        filter["chunk__chapter__number"] = data["chapter"]
     if "startv" in data:
-        takes = takes.filter(startv=data["startv"])
+        filter["chunk__startv"] = data["startv"]
     if "is_source" in data:
-        takes = takes.filter(is_source=data["is_source"])
-    if "is_export" in data:
-        takes = takes.filter(is_export=data["is_export"])
+        filter["chunk__chapter__project__is_source"] = data["is_source"]
+    if "is_publish" in data:
+        filter["chunk__chapter__is_publish"] = data["is_publish"]
 
-    res = takes.values()
-
+    res = takes.filter(**filter)
+       
     for take in res:
         dic = {}
         # Include language name
-        lang = Language.objects.filter(pk=take["language_id"])
-        if lang and lang.count() > 0:
-            dic["language"] = lang.values()[0]
+        try:
+            dic["language"] = model_to_dict(take.chunk.chapter.project.language, 
+                fields=["slug","name"])
+        except:
+            pass
         # Include book name
-        book = Book.objects.filter(pk=take["book_id"])
-        if book and book.count() > 0:
-            dic["book"] = book.values()[0]
+        try:
+            dic["book"] = model_to_dict(take.chunk.chapter.project.book, 
+                fields=["booknum","slug","name"])
+        except:
+            pass
         # Include author of file
-        user = User.objects.filter(pk=take["user_id"])
-        if user and user.count() > 0:
-            dic["user"] = user.values()[0]
+        try:
+            dic["user"] = model_to_dict(take.user, fields=["name","agreed","picture"])
+        except:
+            pass
+            
 
         # Include comments
         dic["comments"] = []
-        for cmt in Comment.objects.filter(file=take["id"]).values():
+        #for cmt in Comment.objects.filter(content_type=take.id).values():
+        for cmt in take.comments.all():
             dic2 = {}
-            dic2["comment"] = cmt
+            dic2["comment"] = model_to_dict(cmt, fields=["location","date"])
             # Include author of comment
-            cuser = User.objects.filter(pk=cmt["user_id"])
-            if cuser and cuser.count() > 0:
-                dic2["user"] = cuser.values()[0]
+            try:
+                dic2["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+            except:
+                pass
             dic["comments"].append(dic2)
 
         # Parse markers
-        if take["markers"]:
-            take["markers"] = json.loads(take["markers"])
+        if take.markers:
+            take.markers = json.loads(take.markers)
         else:
-            take["markers"] = {}
-        dic["take"] = take
+            take.markers = {}
+
+        dic["take"] = model_to_dict(take, fields=[
+            "location","duration","rating",
+            "date_modified","markers"
+        ])
+        dic["take"]["anthology"] = take.chunk.chapter.project.anthology
+        dic["take"]["version"] = take.chunk.chapter.project.version
+        dic["take"]["chapter"] = take.chunk.chapter.number
+        dic["take"]["mode"] = take.chunk.chapter.project.mode
+        dic["take"]["startv"] = take.chunk.startv
+        dic["take"]["endv"] = take.chunk.endv
 
         # Include source file if any
         #if take["is_source"] is False:
-        if take["source_language_id"] and dic["book"]:
-            s_lang = Language.objects.filter(pk=take["source_language_id"])
-            if s_lang and s_lang.count() > 0:
-                s_dic = {}
-                s_dic["language"] = s_lang.values()[0] 
-                
-                s_take = Take.objects \
-                    .filter(language__slug=s_dic["language"]["slug"]) \
-                    .filter(version=take["version"]) \
-                    .filter(book__slug=dic["book"]["slug"]) \
-                    .filter(mode=take["mode"]) \
-                    .filter(chapter=take["chapter"]) \
-                    .filter(startv=take["startv"]) \
-                    .filter(endv=take["endv"]) \
-                    .filter(is_source=True)
-                if s_take and s_take.count() > 0:
-                    s_dic["take"] = s_take.values()
-                    dic["source"] = s_dic
+        source_language = take.chunk.chapter.project.source_language
+        if source_language and take.chunk.chapter.project.book:
+            s_dic = {}
+            s_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
+            
+            s_take = Take.objects \
+                .filter(chunk__chapter__project__language__slug=s_dic["language"]["slug"]) \
+                .filter(chunk__chapter__project__version=dic["take"]["version"]) \
+                .filter(chunk__chapter__project__book__slug=dic["book"]["slug"]) \
+                .filter(chunk__chapter__project__mode=dic["take"]["mode"]) \
+                .filter(chunk__chapter__number=dic["take"]["chapter"]) \
+                .filter(chunk__startv=dic["take"]["startv"]) \
+                .filter(chunk__endv=dic["take"]["endv"]) \
+                .filter(chunk__chapter__project__is_source=True) \
+                .first()
+            if s_take:
+                if s_take.markers:
+                    s_take.markers = json.loads(s_take.markers)
+                else:
+                    s_take.markers = {}
+
+                s_dic["take"] = model_to_dict(s_take, fields=[
+                    "markers","location"
+                ])
+                s_dic["take"]["version"] = s_take.chunk.chapter.project.version
+                dic["source"] = s_dic
 
         lst.append(dic)
     return lst
 
+def getProjects(data):
+    lst = []
+    filter = {}
+
+    if "language" in data:
+        filter["language__slug"] = data["language"]
+    if "version" in data:
+        filter["version"] = data["version"]
+    if "book" in data:
+        filter["book__slug"] = data["book"]
+
+    filter["is_source"] = False
+    projects = Project.objects.filter(**filter)
+
+    for project in projects:
+        dic = {}
+        
+        dic["version"] = project.version
+
+        # Get contributors        
+        dic["contributors"] = []
+        chapters = project.chapter_set.all()
+        for chapter in chapters:
+            chunks = chapter.chunk_set.all()
+            for chunk in chunks:
+                takes = chunk.take_set.all()
+                for take in takes:
+                    if take.user.name not in dic["contributors"]:
+                        dic["contributors"].append(take.user.name)
+                            
+        dic["completed"] = 75
+
+        # Get language
+        try:
+            dic["language"] = model_to_dict(project.language, 
+                fields=["slug","name"])
+        except:
+            pass
+
+        # Get book
+        try:
+            dic["book"] = model_to_dict(project.book, 
+                fields=["booknum","slug","name"])
+        except:
+            pass
+
+        lst.append(dic)
+
+    return lst
+
 def updateTakesByProject(data):
     lst = []
-    filter = data["filter"]
+    filter = {}
     fields = data["fields"]
 
-    takes = Take.objects
-    if "language" in filter:
-        takes = takes.filter(language__slug=filter["language"])
-    if "version" in filter:
-        takes = takes.filter(version=filter["version"])
-    if "book" in filter:
-        takes = takes.filter(book__slug=filter["book"])
-    if "chapter" in filter:
-        takes = takes.filter(chapter=filter["chapter"])
-    if "startv" in filter:
-        takes = takes.filter(startv=filter["startv"])
-    if "is_source" in filter:
-        takes = takes.filter(is_source=filter["is_source"])
+    if "language" in data["filter"]:
+        filter["chunk__chapter__project__language__slug"] = data["filter"]["language"]
+    if "version" in data["filter"]:
+        filter["chunk__chapter__project__version"] = data["filter"]["version"]
+    if "book" in data["filter"]:
+        filter["chunk__chapter__project__book__slug"] = data["filter"]["book"]
+    if "chapter" in data["filter"]:
+        filter["chunk__chapter__number"] = data["filter"]["chapter"]
+    if "startv" in data["filter"]:
+        filter["chunk__startv"] = data["filter"]["startv"]
+    if "is_source" in data["filter"]:
+        filter["chunk__chapter__project__is_source"] = data["filter"]["is_source"]
+    if "is_publish" in data["filter"]:
+        filter["chunk__chapter__is_publish"] = data["filter"]["is_publish"]
 
-    return takes.update(**fields)
+    return Take.objects.filter(**filter).update(**fields)
 
 def prepareDataToSave(meta, abpath, data, is_source=False):
     dic = {}
@@ -137,12 +217,14 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
         anthology=meta["anthology"],
         language=language,
         book=book,
+        is_source=is_source,
         defaults={
             'version': meta['version'], 
             'mode': meta['mode'], 
             'anthology': meta['anthology'],
             'language': language,
-            'book': book},
+            'book': book,
+            'is_source': is_source},
     )
     dic["project"] = model_to_dict(project)
 
@@ -179,13 +261,12 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
         defaults = {
             'location': abpath,
             'duration': data['duration'],
-            'rating': 0,
+            'rating': 0,  # TODO get rating from tR
             'markers': markers,
         }
         try:
             obj = Take.objects.get(
                 chunk=chunk,
-                is_source=True,
             )
             os.remove(obj.location)
             for key, value in defaults.items():
@@ -194,8 +275,6 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
         except Take.DoesNotExist:
             new_values = {
                 'chunk': chunk,
-                'version': meta['version'],
-                'is_source': True,
             }
             new_values.update(defaults)
             obj = Take(**new_values)
@@ -203,9 +282,8 @@ def prepareDataToSave(meta, abpath, data, is_source=False):
     else:
         take = Take(location=abpath,
                     duration=data['duration'],
-                    rating=0,
+                    rating=0,  # TODO get rating from tR
                     markers=markers,
-                    is_source=is_source,
                     user_id=1,
                     chunk=chunk)  # TODO get author of file and save it to Take model
         take.save()
@@ -259,3 +337,9 @@ def getFileName(location):
 def getFilePath(location):
     list = location.split(os.sep)[3:]
     return "/".join(list)
+
+
+def highPassFilter(location):
+    song = AudioSegment.from_wav(location)
+    new = song.high_pass_filter(80)
+    new.export(location, format = "wav")

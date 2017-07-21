@@ -7,7 +7,7 @@ import os
 from tinytag import TinyTag
 from rest_framework.response import Response
 import json
-from helpers import getBookByCode, getLanguageByCode, prepareDataToSave
+from helpers import getBookByCode, getLanguageByCode, prepareDataToSave, highPassFilter
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -63,6 +63,8 @@ class FileUploadView(views.APIView):
                                 "bookname": bookname,
                                 "duration": meta.duration
                                 }
+                            
+                            #highPassFilter(abpath)
                             prepareDataToSave(pls, abpath, data)
                         else:
                             return Response({"response": "badwavefile"}, status=403)
