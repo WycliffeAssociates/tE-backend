@@ -230,6 +230,18 @@ class Chapter(models.Model):
                     for take in takes:
                         if take.user.name not in chap_dic["contributors"]:
                             chap_dic["contributors"].append(take.user.name)
+
+                # Get comments
+                chap_dic["comments"] = []
+                for cmt in chapter.comments.all():
+                    dic2 = {}
+                    dic2["comment"] = model_to_dict(cmt, fields=["location","date_modified"])
+                    # Include author of comment
+                    try:
+                        dic2["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+                    except:
+                        pass
+                    chap_dic["comments"].append(dic2)
                 
                 chaps.append(chap_dic)
             
@@ -331,7 +343,7 @@ class Take(models.Model):
             #for cmt in Comment.objects.filter(content_type=take.id).values():
             for cmt in take.comments.all():
                 dic2 = {}
-                dic2["comment"] = model_to_dict(cmt, fields=["location","date"])
+                dic2["comment"] = model_to_dict(cmt, fields=["location","date_modified"])
                 # Include author of comment
                 try:
                     dic2["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
