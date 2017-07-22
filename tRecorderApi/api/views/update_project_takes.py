@@ -1,10 +1,10 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
 import json
-from helpers import getTakesByProject, updateTakesByProject
+from api.models import Take
 from rest_framework.response import Response
 
-class UpdateProjectView(views.APIView):
+class UpdateProjectTakesView(views.APIView):
     """This class handles the http POST requests."""
     parser_classes = (JSONParser,)
 
@@ -15,7 +15,7 @@ class UpdateProjectView(views.APIView):
             return Response({"response": "not_enough_parameters"}, status=400)
 
         try:
-            result = updateTakesByProject(data)
+            result = Take.updateTakesByProject(data)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
 

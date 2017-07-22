@@ -7,7 +7,8 @@ import os
 from tinytag import TinyTag
 from rest_framework.response import Response
 import json
-from helpers import getBookByCode, getLanguageByCode, prepareDataToSave, highPassFilter
+from helpers import highPassFilter
+from api.models import Book, Language, Take
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -39,11 +40,10 @@ class FileUploadView(views.APIView):
                     for f in files:
                         is_empty_zip = False
                         abpath = os.path.join(root, os.path.basename(f))
-                        # abpath = os.path.abspath(os.path.join(root, f))
                         try:
                             meta = TinyTag.get(abpath)
-                        except LookupError:
-                            return Response({"response": "badwavefile"}, status=403)
+                        except LookupError as e:
+                            return Response({"error": "bad_wave_file"}, status=400)
                         
                         if meta and meta.artist:
                             a = meta.artist
@@ -53,10 +53,10 @@ class FileUploadView(views.APIView):
 
                             if bookcode != pls['slug']:
                                 bookcode = pls['slug']
-                                bookname = getBookByCode(bookcode)
+                                bookname = Book.getBookByCode(bookcode)
                             if langcode != pls['language']:
                                 langcode = pls['language']
-                                langname = getLanguageByCode(langcode)
+                                langname = Language.getLanguageByCode(langcode)
 
                             data = {
                                 "langname": langname,
@@ -65,15 +65,15 @@ class FileUploadView(views.APIView):
                                 }
                             
                             #highPassFilter(abpath)
-                            prepareDataToSave(pls, abpath, data)
+                            Take.prepareDataToSave(pls, abpath, data)
                         else:
-                            return Response({"response": "badwavefile"}, status=403)
+                            return Response({"error": "bad_wave_file"}, status=400)
                 
                 if is_empty_zip:
-                    return Response({"response": "badzipfile"}, status=403)
+                    return Response({"error": "bad_zip_file"}, status=400)
                 return Response({"response": "ok"}, status=200)
 
             except zipfile.BadZipfile:
-                return Response({"response": "badzipfile"}, status=403)
+                return Response({"error": "bad_zip_file"}, status=400)
         else:
             return Response(status=404)

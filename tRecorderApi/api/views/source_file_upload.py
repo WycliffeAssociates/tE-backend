@@ -8,7 +8,8 @@ import json
 import shutil
 from rest_framework.response import Response
 from tinytag import TinyTag
-from helpers import getBookByCode, getLanguageByCode, prepareDataToSave, highPassFilter
+from helpers import highPassFilter
+from api.models import Language, Book, Take
 
 class UploadSourceFileView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -48,10 +49,7 @@ class UploadSourceFileView(views.APIView):
             for root, dirs, files in os.walk(tempFolder):
                 for f in files:
                     abpath = os.path.join(root, os.path.basename(f))
-                    try:
-                        meta = TinyTag.get(abpath)
-                    except LookupError:
-                        return Response({"response": "badwavefile"}, status=403)
+                    meta = TinyTag.get(abpath)
 
                     if meta and meta.artist:
                         a = meta.artist
@@ -61,10 +59,10 @@ class UploadSourceFileView(views.APIView):
 
                         if bookcode != pls['slug']:
                             bookcode = pls['slug']
-                            bookname = getBookByCode(bookcode)
+                            bookname = Book.getBookByCode(bookcode)
                         if langcode != pls['language']:
                             langcode = pls['language']
-                            langname = getLanguageByCode(langcode)
+                            langname = Language.getLanguageByCode(langcode)
 
                         data = {
                             "langname": langname,
@@ -73,14 +71,14 @@ class UploadSourceFileView(views.APIView):
                         }
 
                         #highPassFilter(abpath)
-                        saved = prepareDataToSave(pls, abpath, data, True)
+                        saved = Take.prepareDataToSave(pls, abpath, data, True)
                         if "language" in saved and "language" not in response:
                             response["language"] = saved["language"]
                         if "book" in saved and "book" not in response:
                             response["book"] = saved["book"]
                     else:
-                        return Response({"response": "badwavefile"}, status=403)
+                        return Response({"error": "bad_wave_file"}, status=400)
             return Response(response, status=200)
-        except subprocess.CalledProcessError:
+        except Exception as e:
             shutil.rmtree(tempFolder)
-            return Response({"response": "badtrfile"}, status=403)
+            return Response({"error": str(e)}, status=400)

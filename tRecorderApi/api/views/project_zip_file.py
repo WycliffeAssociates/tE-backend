@@ -1,6 +1,5 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-from helpers import getTakesByProject
 import time
 import os
 import uuid
@@ -10,6 +9,7 @@ from pydub import AudioSegment
 import zipfile
 from rest_framework.response import Response
 from django.http import HttpResponse
+from api.models import Take
 
 class ProjectZipFilesView(views.APIView):
     parser_classes = (JSONParser,)
@@ -17,7 +17,6 @@ class ProjectZipFilesView(views.APIView):
     def post(self, request):
         data = request.data
         new_data = {}
-        wavfiles = []
 
         # filter the database with the given parameters
         if "language" in data:
@@ -29,8 +28,8 @@ class ProjectZipFilesView(views.APIView):
 
         if 'language' in new_data and 'version' in new_data and 'book' in new_data:
             new_data["is_source"] = False
-            new_data["is_export"] = True
-            lst = getTakesByProject(new_data)
+            new_data["is_publish"] = True
+            lst = Take.getTakesByProject(new_data)
 
             if len(lst) > 0:
                 filesInZip = []
@@ -43,7 +42,7 @@ class ProjectZipFilesView(views.APIView):
                     "_" + new_data["book"]
 
                 if not os.path.exists(root_folder):
-                        os.makedirs(root_folder)
+                    os.makedirs(root_folder)
 
                 # create list for locations
                 locations = []
@@ -61,7 +60,7 @@ class ProjectZipFilesView(views.APIView):
                     loc["dst"] = chapter_folder
                     locations.append(loc)
 
-                # use shutil to copy the wav files to a new file
+                # use shutil to copy the wav files to a new folder
                 for loc in locations:
                     shutil.copy2(loc["src"], loc["dst"])
 
@@ -88,13 +87,12 @@ class ProjectZipFilesView(views.APIView):
                 # delete the newly created wave and mp3 files
                 shutil.rmtree(root_folder)
 
-                zip_file = open('media/export/' + project_name + '.zip', 'rb')
-                response = HttpResponse(zip_file, content_type='application/zip')
-                response['Content-Disposition'] = 'attachment; filename=file.zip'
-                zip_file.close()
-                #return Response(lst, status=200)
+                with open('media/export/' + project_name + '.zip', 'rb') as zip_file:
+                    response = HttpResponse(zip_file, content_type='application/zip')
+                    response['Content-Disposition'] = 'attachment; filename='+project_name+'.zip'
+                
                 return response
             else:
-                return Response({"response":"nofiles"}, status=403)
+                return Response({"error":"no_files"}, status=400)
         else:
-            return Response({"response":"notenoughparameters"}, status=403)
+            return Response({"error":"not_enough_parameters"}, status=400)

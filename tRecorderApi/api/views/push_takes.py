@@ -6,18 +6,18 @@ from django.http import HttpResponse
 from rest_framework import views
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+from api.models import Take
+from helpers import getFileName, md5Hash, getFilePath
 
-from helpers import getTakesByProject, getFileName, md5Hash, getFilePath
 
-
-class PushCommentsTakesView(views.APIView):
+class PushTakesView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = request.data
         if all(k in data["project"] for k in ('language', 'version', 'book')):
             data["project"]["is_source"] = False
-            takes = getTakesByProject(data["project"])
+            takes = Take.getTakesByProject(data["project"])
             takes_name_and_locations = []
             response_array = {
                 "en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav": "6d6f8d635297adb9b8e83f38e0634er4",
@@ -33,20 +33,11 @@ class PushCommentsTakesView(views.APIView):
                 "en-x-demo2_ulb_b42_mrk_c07_v27-28_t02.wav": "81cd316c41b9c7d6ad3bc8b4d3d1b5c2",
                 "en-x-demo2_ulb_b42_mrk_c07_v29-30_t02.wav": "db3ce227b34a54bfaddaca42c2d33c6e",
                 # "chapter.wav": "0a4af2fc1f922b083ab84ce695c30904",
-                "en-x-demo2_ulb_b42_mrk_c07_v01_t05_c01.wav": "6be47559aeb09c0526fe5c9bf415d726",
+                # "en-x-demo2_ulb_b42_mrk_c07_v01_t05.wav": "6be47559aeb09c0526fe5c9bf415d726",
                 # "en-x-demo2_ulb_b42_mrk_c07_v06-07_t04.wav": "f2ebbcc59319b16b67f07b055ed5cc9b",
                 # "en-x-demo2_ulb_b42_mrk_c07_v08-10_t04.wav": "f92d2bc9d8611b3dc7a8d720a71f0873"
             }
             for take in takes:
-                comments = take['comments']
-                for comment in comments:
-                    comment_location = comment['comment']['location']
-                    comment_file_name = getFileName(comment_location)
-                    comment_file_hash = md5Hash(comment_location)
-                    if comment_file_name not in response_array:
-                        takes_name_and_locations.append(comment_location)
-                    elif comment_file_hash != response_array[comment_file_name]:
-                        takes_name_and_locations.append(comment_location)
                 location = take['take']['location']
                 file_name = getFileName(location)
                 file_hash = md5Hash(location)
@@ -62,4 +53,4 @@ class PushCommentsTakesView(views.APIView):
             response['Content-Disposition'] = 'attachment; filename=file.zip'
             return response
         else:
-            return Response({"Response": "Please provide language,version,book and chpater"}, status=403)
+            return Response({"error": "not_enough_parameters"}, status=400)
