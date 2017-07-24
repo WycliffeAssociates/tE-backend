@@ -359,7 +359,7 @@ class Take(models.Model):
 
             dic["take"] = model_to_dict(take, fields=[
                 "location","duration","rating",
-                "date_modified","markers"
+                "date_modified","markers","id"
             ])
             dic["take"]["anthology"] = take.chunk.chapter.project.anthology
             dic["take"]["version"] = take.chunk.chapter.project.version
