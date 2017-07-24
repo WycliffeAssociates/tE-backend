@@ -341,7 +341,7 @@ class Take(models.Model):
     duration = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
     is_publish = models.BooleanField(default=False)
-    markers = models.TextField(null=True, blank=True)   
+    markers = models.TextField(null=True, blank=True)
     date_modified = models.DateTimeField(auto_now=True)
     chunk = models.ForeignKey(Chunk, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
