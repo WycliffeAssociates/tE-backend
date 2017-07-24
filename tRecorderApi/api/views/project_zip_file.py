@@ -51,7 +51,7 @@ class ProjectZipFilesView(views.APIView):
                         os.sep + i["take"]["version"] + \
                         os.sep + i["book"]["slug"] + \
                         os.sep + str(i["take"]["chapter"])
-                    
+
                     if not os.path.exists(chapter_folder):
                         os.makedirs(chapter_folder)
 
@@ -90,7 +90,7 @@ class ProjectZipFilesView(views.APIView):
                 with open('media/export/' + project_name + '.zip', 'rb') as zip_file:
                     response = HttpResponse(zip_file, content_type='application/zip')
                     response['Content-Disposition'] = 'attachment; filename='+project_name+'.zip'
-                
+
                 return response
             else:
                 return Response({"error":"no_files"}, status=400)
