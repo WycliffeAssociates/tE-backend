@@ -13,7 +13,7 @@ my_file = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 class ExcludedFileViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=my_file, chapter=5, is_export=True, is_source=False, id=1, language_id=1,
+        self.take_object = Take(location=my_file, is_export=True, is_source=False, id=1, language_id=1,
                                 book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
@@ -28,7 +28,7 @@ class ExcludedFileViewTestCases(TestCase):
         self.user_object.save()
         self.comment_object.save()
         self.take_object.save()
-        response = self.client.post(view_set_url, {'chapter': 5}, format='json')
+        response = self.client.post(view_set_url, {'location': my_file}, format='json')
         result = str(response.data)  # convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # testing that we get the correct status response from the API
@@ -41,13 +41,13 @@ class ExcludedFileViewTestCases(TestCase):
         self.comment_object.delete()
         self.take_object.delete()
 
-    def integration_test_that_duplicate_wav_files_are_excluded_test(self):  ####go back, TDD####
+    def integration_test_that_duplicate_wav_files_are_excluded_test(self):
         """Verify that hash function MD5 returns duplicate wav files"""
         # upload zip file that will be unzipped
         self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': 'en-x-demo2_ulb_mrk.zip'}, format = 'zip')
         # post request to return list of wav files with same hash?
-        self.response = self.client.post(base_url + 'exclude_files', {'version': 'ulb', 'chapter': '7'}, format='wav')
-        # some duplicate file name(s) below with version ulb and chapter 7, depends on how response is returned
+        self.response = self.client.post(base_url + 'exclude_files', {'version': 'ulb', 'location': my_file}, format='wav')
+        # some duplicate file name(s) below with version ulb and the same location, depends on how response is returned
         self.assertIn('chapter.wav', self.response)
 
     def tearDown(self):

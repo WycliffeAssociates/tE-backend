@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from enum import Enum
 from django.forms.models import model_to_dict
 import urllib2
 import pickle

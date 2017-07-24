@@ -9,7 +9,7 @@ view_url = 'http://127.0.0.1:8000/api/all_project/'
 class AllProjectViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(chapter=5, version='ESV', is_export=True, is_source=False, id=1, language_id=1,
+        self.take_object = Take(version='ESV', is_export=True, is_source=False, id=1, language_id=1,
                                 book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='Mark', slug='en', booknum=5, id=1)

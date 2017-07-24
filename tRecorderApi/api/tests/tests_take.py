@@ -10,8 +10,8 @@ class IntegrationTakeTestCases(TestCase):
     def setUp(self):
         """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location': 'test_location', 'chapter': 5, 'is_export': True, 'is_source': False}
-        self.take_object = Take(location='test_location', chapter=5, is_export=True, is_source=False, id=1,
+        self.take_data = {'location': 'test_location', 'is_export': True, 'is_source': False}
+        self.take_object = Take(location='test_location', is_export=True, is_source=False, id=1,
                                 language_id=1, book_id=1, user_id=1)
 
     def test_api_can_create_take_object(self):

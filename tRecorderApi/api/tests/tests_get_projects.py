@@ -13,7 +13,7 @@ class GetProjectsTestCases(TestCase):
     
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=my_file, chapter=5, is_export=True, is_source=False, id=1, language_id=1,
+        self.take_object = Take(location=my_file, is_export=True, is_source=False, id=1, language_id=1,
                                 book_id=1, user_id=1)
         self.language_object = Language(slug='en-x-demo', name='english', id=1)
         self.book_object = Book(name='english', booknum=5, id=1)
@@ -27,13 +27,13 @@ class GetProjectsTestCases(TestCase):
         self.book_object.save()
         self.user_object.save()
         self.take_object.save()
-        response = self.client.post(view_url, {'chapter': 5},
+        response = self.client.post(view_url, {'location': my_file},
                                     format='json')
-        # telling the API that I want all takes that have chapter 5 of a book recorded
+        # telling the API that I want all takes that are saved on the specified location
         result = str(response.data)  # convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
         self.assertNotEqual(0, len(response.data))  # testing that api does not return nothing
-        self.assertIn("'chapter': 5",
+        self.assertIn("'is_source': False",
                       result)  # test that the term we searched for is in the data returned from the post request
         # freeing up the temporary database
         self.take_object.delete()
@@ -47,9 +47,9 @@ class GetProjectsTestCases(TestCase):
         self.book_object.save()
         self.user_object.save()
         self.take_object.save()
-        response = self.client.post(view_url, {'chapter': 6},
+        response = self.client.post(view_url, {'location': my_file},
                                     format='json')
-        # telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
+        # telling the API that I want all takes that has my_file as a location, which there shoul be none of
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
         self.assertEqual(0, len(response.data))
         self.assertEqual(response.data, [])
@@ -92,7 +92,7 @@ class GetProjectsTestCases(TestCase):
          self.book_object.save()
          self.user_object.save()
          self.take_object.save()
-         response = self.client.post(view_url, {'chapter' : 6}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
+         response = self.client.post(view_url, {'location' : "/bad_location"}, format='json') #telling the API that I want all takes that have chapter 6 of a book recorded, which there shoul be none of
          self.assertEqual(response.status_code, status.HTTP_200_OK) #verifying that that we succesfully post to the API
          self.assertEqual(0, len(response.data))
          self.assertEqual(response.data, [])
