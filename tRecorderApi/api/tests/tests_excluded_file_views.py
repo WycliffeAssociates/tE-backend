@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from api.models import Take, Language, Book, User, Comment
+from api.models import Language, Book, User, Comment, Take, Chunk, Project, Chapter
 import os
 from sys import platform
 
@@ -13,12 +13,14 @@ my_file = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 class ExcludedFileViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=my_file, is_export=True, is_source=False, id=1, language_id=1,
-                                book_id=1, user_id=1)
-        self.language_object = Language(slug='en-x-demo', name='english', id=1)
-        self.book_object = Book(name='english', booknum=5, id=1)
-        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
-        self.comment_object = Comment(location='/test-location/', id=1)
+        self.take_object = Take(location=my_file, is_publish = False, duration = 0, markers = True, rating = 2)
+        self.language_object = Language(slug='en-x-demo', name='english')
+        self.book_object = Book(name='english', booknum=5, slug = 'slug')
+        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
+        self.comment_object = Comment(location='/test-location/')
+        self.chunk_object = Chunk(startv = 0, endv = 3)
+        self.project_object = Project (is_source = False, is_publish = False, version = 'ulb', anthology = 'nt')
+        self.chapter_object = Chapter(number = 1, checked_level = 1, is_publish = False)
 
     def test_post_method_for_excluded_file_view_set(self):
         """Unit Testing the method for handling POST requests to the API at the Excluded File View URL"""

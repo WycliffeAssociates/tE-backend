@@ -13,8 +13,8 @@ class SourceFileUploadViewTestCases(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=my_file, is_export=True, is_source=False, id=1, language_id=1,
-                                book_id=1, user_id=1)
+        self.take_object = Take(location=my_file, is_publish=False, duration=0, markers=True, rating=2)
+        self.take_data = {'location': my_file}
 
     def test_that_uploading_tr_file_with_wav_file_returns_200_OK(self):
         with open('en-x-demo2_ulb.tr', 'rb') as test_tr:

@@ -11,7 +11,7 @@ class IntegrationLanguageTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.lang_data = {'lang': 'english', 'code': 'abc'}
-        self.language_object = Language(slug='en-x-demo', name='english', id=1)
+        self.language_object = Language(slug='en-x-demo', name='english')
 
     def test_api_can_create_lang_object(self):
         """Test the API has lang creation capability:
