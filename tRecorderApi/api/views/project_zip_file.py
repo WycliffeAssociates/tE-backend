@@ -28,7 +28,7 @@ class ProjectZipFilesView(views.APIView):
 
         if 'language' in new_data and 'version' in new_data and 'book' in new_data:
             new_data["is_source"] = False
-            new_data["is_publish"] = True
+            #new_data["is_publish"] = True
             lst = Take.getTakesByProject(new_data)
 
             if len(lst) > 0:
