@@ -116,10 +116,11 @@ class Project(models.Model):
     version = models.CharField(max_length=3, blank=True)
     mode = models.CharField(max_length=10, blank=True)
     anthology = models.CharField(max_length=2, blank=True)
+    is_source = models.BooleanField(default=False)
+    is_publish = models.BooleanField(default=False)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True, blank=True)
     source_language = models.ForeignKey(Language, related_name="language_source", null=True, blank=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True)
-    is_source = models.BooleanField(default=False)
 
     @staticmethod
     def getProjects(data):
@@ -141,6 +142,7 @@ class Project(models.Model):
             
             dic["id"] = project.id
             dic["version"] = project.version
+            dic["is_publish"] = project.is_publish
 
             # Get contributors        
             dic["contributors"] = []
@@ -193,8 +195,8 @@ class Project(models.Model):
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     is_publish = models.BooleanField(default=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     comments = GenericRelation(Comment)
 
     @staticmethod
@@ -288,6 +290,7 @@ class Take(models.Model):
     location = models.CharField(max_length=250)
     duration = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
+    is_publish = models.BooleanField(default=False)
     markers = models.TextField(null=True, blank=True)   
     date_modified = models.DateTimeField(auto_now=True)
     chunk = models.ForeignKey(Chunk, on_delete=models.CASCADE, null=True, blank=True)
@@ -359,7 +362,8 @@ class Take(models.Model):
 
             dic["take"] = model_to_dict(take, fields=[
                 "location","duration","rating",
-                "date_modified","markers"
+                "date_modified","markers","id",
+                "is_publish"
             ])
             dic["take"]["anthology"] = take.chunk.chapter.project.anthology
             dic["take"]["version"] = take.chunk.chapter.project.version
