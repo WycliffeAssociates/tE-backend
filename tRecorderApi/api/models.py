@@ -303,7 +303,16 @@ class Chapter(models.Model):
                     fields=["booknum","slug","name"])
             except:
                 dic["language"] = {}
-
+            #Get Project ID
+            try:
+                dic["project_id"] = project.id
+            except:
+                dic["project_id"] = {}
+            #Get is_publish
+            try:
+                dic["is_publish"] = project.is_publish
+            except:
+                dic["is_publish"] = {}
         return dic
 
     class Meta:
