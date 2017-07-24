@@ -222,6 +222,7 @@ class Chapter(models.Model):
                 chap_dic["chapter"] = chapter.number
                 chap_dic["checked_level"] = chapter.checked_level
                 chap_dic["is_publish"] = chapter.is_publish
+                #contains information about all chunks in a book
                 chunkInfo = []
                 for dirpath, dirnames, files in os.walk(os.path.abspath('chunks/')):
                     if dirpath[-3:] == bkname:
@@ -230,16 +231,24 @@ class Chapter(models.Model):
                             sus = json.loads(f.read())
                             chunkInfo = sus
                         break
+                #contains info about relevant chapter
                 chunkstuff = []
                 chapnum = chapter.number
                 for chunk in chunkInfo:
                     if chunk["id"][:2] == str("%02d"%chapnum):
                         chunkstuff.append(chunk)
-                print(len(chunkstuff))
                 chunks = chapter.chunk_set.all()
-                chunks = list(chunks)
-                percentComplete = int(round(len(chunks)/(len(chunkstuff)))) * 100
-                chap_dic["percent_complete"] = percentComplete
+                numtakes = list(chunks)
+                if mode == "chunk":
+                    percentComplete = int(round(len(numtakes)/(len(chunkstuff)))) * 100
+                    chap_dic["percent_complete"] = percentComplete
+                else:
+                    versetotal = 0
+                    for i in chunkstuff:
+                        if int(i["lastvs"]) > versetotal:
+                            versetotal = int(i["lastvs"])
+                    percentComplete = int(round(len(numtakes)/versetotal)) * 100
+                    chap_dic["percent_complete"] = percentComplete
 
                 # Get contributors
                 chap_dic["contributors"] = []
