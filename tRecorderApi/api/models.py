@@ -143,16 +143,31 @@ class Project(models.Model):
 
             # Get contributors
             dic["contributors"] = []
+            availChunks = 0
             chapters = project.chapter_set.all()
             for chapter in chapters:
+                availChunks += 1
                 chunks = chapter.chunk_set.all()
                 for chunk in chunks:
+                    availChunks += 1
                     takes = chunk.take_set.all()
                     for take in takes:
                         if take.user.name not in dic["contributors"]:
                             dic["contributors"].append(take.user.name)
-
-            dic["completed"] = 75
+            print(availChunks)
+            mode = project.mode
+            bkname = project.book.slug
+            chunkInfo = []
+            for dirpath, dirnames, files in os.walk(os.path.abspath('chunks/')):
+                if dirpath[-3:] == bkname:
+                    for fname in os.listdir(dirpath):
+                        f = open(os.path.join(dirpath, fname), "r")
+                        sus = json.loads(f.read())
+                        chunkInfo = sus
+                    break
+            totalChunk = float(len(chunkInfo))
+            completed = int(round((availChunks/totalChunk) * 100))
+            dic["completed"] = completed
 
             # Get language
             try:
@@ -238,14 +253,14 @@ class Chapter(models.Model):
                 chunks = chapter.chunk_set.all()
                 numtakes = list(chunks)
                 if mode == "chunk":
-                    percentComplete = int(round(len(numtakes)/(len(chunkstuff)))) * 100
+                    percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
                     chap_dic["percent_complete"] = percentComplete
                 else:
                     versetotal = 0
                     for i in chunkstuff:
                         if int(i["lastvs"]) > versetotal:
                             versetotal = int(i["lastvs"])
-                    percentComplete = int(round(len(numtakes)/versetotal)) * 100
+                    percentComplete = int(round((len(numtakes)/versetotal) * 100))
                     chap_dic["percent_complete"] = percentComplete
 
                 # Get contributors
