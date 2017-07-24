@@ -45,8 +45,8 @@ class CommentViewSet(viewsets.ModelViewSet):
             os.makedirs("media/dump/comments")
 
         comment = blob2base64Decode(comment)
-        audio_file = open(comment_location + '.webm', 'wb')
-        audio_file.write(comment)
+        with open(comment_location + '.webm', 'wb') as audio_file:
+            audio_file.write(comment)
         
         sound = pydub.AudioSegment.from_file(comment_location + '.webm')
         sound.export(comment_location + ".mp3", format='mp3')
