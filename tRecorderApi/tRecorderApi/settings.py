@@ -28,7 +28,7 @@ SECRET_KEY = '&9e^=922_&wi-bw@bbe$id#r$7hb(im03nrow5w@tgg8##hfd('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.19.145.91', '172.19.145.88', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.96.21', '172.19.145.91', '172.19.145.88', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    #'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,5 +133,5 @@ USE_TZ = True
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
-# MEDIA_ROOT = 'media'
-# MEDIA_URL = '/media/'
+#MEDIA_ROOT = 'media'
+#MEDIA_URL = '/media/'
