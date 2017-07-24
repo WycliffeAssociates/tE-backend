@@ -4,16 +4,11 @@ import json
 from api.models import Take
 from rest_framework.response import Response
 from operator import itemgetter
+from api.models import Project
 
 class getVersionsView(views.APIView):
     parser_classes = (JSONParser,)
 
-    def post(self, request):
-        data = json.loads(request.body)
-        allTakes = Take.objects.all().values()
-        allTakes = allTakes.filter(is_source = False)
-        versions = []
-        for take in allTakes:
-            if take["version"] not in versions:
-                versions.append(take["version"])
-        return Response(versions, status = 200)
+    def get(self, request):
+        lst = Project.getVersionsByProject()
+        return Response(lst, status = 200)

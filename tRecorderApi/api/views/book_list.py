@@ -4,18 +4,11 @@ import json
 from api.models import Take, Language, Book
 from rest_framework.response import Response
 from operator import itemgetter
+from api.models import Book
 
 class getBooksView(views.APIView):
     parser_classes = (JSONParser,)
 
-    def post(self, request):
-        data = json.loads(request.body)
-        allTakes = Take.objects.all().values()
-        allTakes = allTakes.filter(is_source = False)
-        books = []
-        for take in allTakes:
-            bo_oks = Book.objects.filter(id = take["book_id"]).values()
-            bo_oks = list(bo_oks)
-            if bo_oks[0] not in books:
-                books.append(bo_oks[0])
-        return Response(books, status = 200)
+    def get(self, request):
+        lst = Book.getBooksList()
+        return Response(lst, status = 200)
