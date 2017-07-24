@@ -8,11 +8,10 @@ my_file = 'media/dump'
 
 class IntegrationTakeTestCases(TestCase):
     def setUp(self):
-        """Set up environment for api view test suite"""
         self.client = APIClient()
-        self.take_data = {'location': 'test_location', 'chapter': 5, 'is_export': True, 'is_source': False}
-        self.take_object = Take(location='test_location', chapter=5, is_export=True, is_source=False, id=1,
-                                language_id=1, book_id=1, user_id=1)
+        self.take_object = Take(location=my_file, is_publish=False, duration=3, markers=True, rating=2)
+        self.take_data = {'location' : my_file, 'duration' : 3}
+
 
     def test_api_can_create_take_object(self):
         """Test the API has take creation capability:

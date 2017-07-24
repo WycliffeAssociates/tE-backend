@@ -11,7 +11,7 @@ my_file = 'media/dump'
 class IntegrationCommentTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.comment_object = Comment.objects.create(location='/test-location/', id=1)
+        self.comment_object = Comment(location='/test-location/')
         self.comment_data = {'location': 'test_location'}
         self.commentVS = CommentViewSet()
 
