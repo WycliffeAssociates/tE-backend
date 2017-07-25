@@ -4,29 +4,37 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 view_url = 'http://127.0.0.1:8000/api/all_projects/'
-
+base_url = 'http://127.0.0.1:8000/api/'
 
 class AllProjectViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location = 'my_file', is_publish = False, duration = 0, markers = True, rating = 2)
         self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='english', booknum=5, slug = 'slug')
-        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
-        self.comment_object = Comment(location='/test-location/', content_type_id = 1, object_id = 1)
-        self.chunk_object = Chunk(startv = 0, endv = 3)
-        self.project_object = Project (is_source = False, is_publish = False, version = 'ulb', anthology = 'nt')
-        self.chapter_object = Chapter(number = 1, checked_level = 1, is_publish = False)
+        self.book_object = Book(name='mark', booknum=5, slug='mrk')
+        self.project_object = Project(version='ulb', mode='chunk',
+                                      anthology='nt', is_source=False, language=self.language_object,
+                                      book=self.book_object)
+        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False, project=self.project_object)
+        self.chunk_object = Chunk(startv=0, endv=3, chapter=self.chapter_object)
+        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
+        self.take_object = Take(location='my_file', is_publish=True, date_modified = "2017-07-25T15:20:50.169000Z",
+                                duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
+        self.project_data = {"version": "ulb", "mode": "chunk", "anthology": "nt"}
 
     def test_post_request_for_all_projects_view(self):
         """Testing that sending a POST request to the All Project View returns a list of projects"""
         self.language_object.save()
         self.book_object.save()
+        self.project_object.save()
+        self.chapter_object.save()
+        self.chunk_object.save()
         self.user_object.save()
         self.take_object.save()
-        response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertNotEqual(0, len(response.data))  # checking that the response contains data
-        self.take_object.delete()
-        self.user_object.delete()
+        self.client.post(base_url + 'projects/', self.project_data, format='json')
+        self.response = self.client.post(view_url,{"language": "en-x-demo"}, format='json')
+        self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+        print self.response.data
+        self.assertNotEqual(0, len(self.response.data))  # checking that the response contains data
         self.book_object.delete()
+        self.language_object.delete()
+        self.project_object.delete()

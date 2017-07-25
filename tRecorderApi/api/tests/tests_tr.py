@@ -12,23 +12,23 @@ class TRTestCases(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=tr_filepath, is_publish=False, duration=0, markers=True, rating=2)
         self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='english', booknum=5, slug='slug')
+        self.book_object = Book(name='mark', booknum=5, slug='mrk')
+        self.project_object = Project(version='ulb', mode='chunk',
+                                      anthology='nt', is_source=False, language=self.language_object,
+                                      book=self.book_object)
+        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False, project=self.project_object)
+        self.chunk_object = Chunk(startv=0, endv=3, chapter=self.chapter_object)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
-        self.comment_object = Comment(location='/test-location/', content_type_id = 1, object_id = 1 )
-        self.chunk_object = Chunk(startv=0, endv=3)
-        self.project_object = Project(is_source=False, is_publish=False, version='ulb', anthology='nt')
-        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False)
+        self.take_object = Take(location='tr_path', is_publish=True,
+                                duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
+        self.comment_object = Comment(location='/test-location/',
+                                      content_object=self.take_object, user=self.user_object)
 
     def test_that_tR_file_was_returned_in_response_from_wav_files(self):
         """Verify that files are ready for exporting in a folder with file extension tR only"""
-        self.take_object.save()
-        self.language_object.save()
-        # from SourceFileView class
-        # upload zip maybe?
         self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': 'en-x-demo2_ulb_mrk.zip'})
-        self.response = self.client.post(base_url + 'get_source', {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'},
+        self.response = self.client.post(base_url + 'get_source', {'language': 'en-x-demo', 'version': 'ulb'},
                                          format='json')
         # just checking for existence of .tr file extension
         self.assertIn('en-x-demo2_ulb.tr', os.listdir(tr_path))
@@ -37,10 +37,12 @@ class TRTestCases(TestCase):
 
     def test_that_tR_is_in_correct_directory(self):
         """Verify that tR was created in correct directory"""
-        self.book_object.save()
-        self.user_object.save()
-        self.comment_object.save()
         self.language_object.save()
+        self.book_object.save()
+        self.project_object.save()
+        self.chapter_object.save()
+        self.chunk_object.save()
+        self.user_object.save()
         self.take_object.save()
         self.response = self.client.post(base_url + 'get_source/', {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'},
                                          format='json')
@@ -50,7 +52,6 @@ class TRTestCases(TestCase):
         self.language_object.delete()
         self.book_object.delete()
         self.user_object.delete()
-        self.comment_object.delete()
 
     def tearDown(self):
          if platform == "darwin":  # OSX

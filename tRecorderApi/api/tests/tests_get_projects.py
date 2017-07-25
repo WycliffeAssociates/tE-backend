@@ -12,14 +12,14 @@ class GetProjectsTestCases(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.take_object = Take(location=my_file, is_publish = False, duration = 0, markers = True, rating = 2)
         self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='english', booknum=5, slug = 'slug')
+        self.book_object = Book(name='english', booknum=5, slug='slug')
+        self.project_object = Project(version='ulb', mode='audio', anthology='nt', is_source=False)
+        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False)
+        self.chunk_object = Chunk(startv=0, endv=3)
+        self.take_object = Take(location=my_file, is_publish=False, duration=0, markers=True, rating=2)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
-        self.comment_object = Comment(location='/test-location/', content_type_id = 1, object_id = 1)
-        self.chunk_object = Chunk(startv = 0, endv = 3)
-        self.project_object = Project (is_source = False, is_publish = False, version = 'ulb', anthology = 'nt')
-        self.chapter_object = Chapter(number = 1, checked_level = 1, is_publish = False)
+        self.comment_object = Comment(location='/test-location/', content_type_id=1, object_id=1)
 
     def test_that_we_can_get_projects(self):
         """Testing that submitting a POST request through key search returns a JSON object"""
