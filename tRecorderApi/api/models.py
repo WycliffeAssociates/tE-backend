@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms.models import model_to_dict
+from django.utils.timezone import now
 import urllib2
 import pickle
 import json
@@ -98,7 +99,7 @@ class User(models.Model):
 
 class Comment(models.Model):   
     location = models.CharField(max_length=250)
-    date_modified = models.DateTimeField(auto_now=True)
+    date_modified = models.DateTimeField(default=now)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -213,6 +214,9 @@ class Chapter(models.Model):
         for project in projects:
             # Get chapters
             
+            latest_take = Take.objects.filter(chunk__chapter__project=project) \
+                .latest("date_modified")
+
             chaps = []
             chapters = project.chapter_set.all()
             for chapter in chapters:
@@ -221,6 +225,7 @@ class Chapter(models.Model):
                 chap_dic["chapter"] = chapter.number
                 chap_dic["checked_level"] = chapter.checked_level
                 chap_dic["is_publish"] = chapter.is_publish
+                chap_dic["date_modified"] = latest_take.date_modified
                 chap_dic["percent_complete"] = 75
                 
                 # Get contributors
@@ -291,7 +296,7 @@ class Take(models.Model):
     rating = models.IntegerField(default=0)
     is_publish = models.BooleanField(default=False)
     markers = models.TextField(null=True, blank=True)   
-    date_modified = models.DateTimeField(auto_now=True)
+    date_modified = models.DateTimeField(default=now)
     chunk = models.ForeignKey(Chunk, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     comments = GenericRelation(Comment)
@@ -315,7 +320,7 @@ class Take(models.Model):
         if "is_source" in data:
             filter["chunk__chapter__project__is_source"] = data["is_source"]
         if "is_publish" in data:
-            filter["chunk__chapter__is_publish"] = data["is_publish"]
+            filter["is_publish"] = data["is_publish"]
 
         res = takes.filter(**filter)
         
