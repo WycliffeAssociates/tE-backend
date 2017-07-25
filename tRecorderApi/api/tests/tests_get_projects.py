@@ -5,7 +5,7 @@ from rest_framework import status
 import os
 from sys import platform
 
-view_url = 'http://127.0.0.1:8000/api/get_project/'
+view_url = 'http://127.0.0.1:8000/api/get_project_takes/'
 my_file = 'media/dump'
 
 class GetProjectsTestCases(TestCase):
@@ -16,7 +16,7 @@ class GetProjectsTestCases(TestCase):
         self.language_object = Language(slug='en-x-demo', name='english')
         self.book_object = Book(name='english', booknum=5, slug = 'slug')
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
-        self.comment_object = Comment(location='/test-location/', content_id = 1, object_id = 1)
+        self.comment_object = Comment(location='/test-location/', content_type_id = 1, object_id = 1)
         self.chunk_object = Chunk(startv = 0, endv = 3)
         self.project_object = Project (is_source = False, is_publish = False, version = 'ulb', anthology = 'nt')
         self.chapter_object = Chapter(number = 1, checked_level = 1, is_publish = False)
@@ -33,7 +33,6 @@ class GetProjectsTestCases(TestCase):
         # telling the API that I want all takes that are saved on the specified location
         result = str(response.data)  # convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
-        self.assertNotEqual(0, len(response.data))  # testing that api does not return nothing
         self.assertIn("'is_source': False",
                       result)  # test that the term we searched for is in the data returned from the post request
         # freeing up the temporary database
@@ -42,7 +41,7 @@ class GetProjectsTestCases(TestCase):
         self.book_object.delete()
 
     def test_that_we_can_get_no_projects_from_api(self):
-        """Testing that getting a projec that does not exist from key value returns no object"""
+        """Testing that getting a project that does not exist from key value returns no object"""
         # saving objects in temporary database so they can be read by the API
         self.language_object.save()
         self.book_object.save()
@@ -50,7 +49,7 @@ class GetProjectsTestCases(TestCase):
         self.take_object.save()
         response = self.client.post(view_url, {'location': my_file},
                                     format='json')
-        # telling the API that I want all takes that has my_file as a location, which there shoul be none of
+        # telling the API that I want all takes that has my_file as a location, which there should be none of
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
         self.assertEqual(0, len(response.data))
         self.assertEqual(response.data, [])

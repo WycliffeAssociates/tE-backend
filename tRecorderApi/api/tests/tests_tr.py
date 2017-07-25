@@ -5,7 +5,7 @@ from api.models import *
 from sys import platform
 
 base_url = 'http://127.0.0.1:8000/api/'
-tr_path = 'media/tmp/'
+tr_path = 'media/temp/'
 tr_filepath = 'en-x-demo2_ulb.tr'
 
 class TRTestCases(TestCase):
@@ -31,7 +31,7 @@ class TRTestCases(TestCase):
         self.response = self.client.post(base_url + 'get_source', {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'},
                                          format='json')
         # just checking for existence of .tr file extension
-        self.assertIn('en-x-demo_ESV.tr', os.listdir(tr_path))
+        self.assertIn('en-x-demo2_ulb.tr', os.listdir(tr_path))
         self.take_object.delete()
         self.language_object.delete()
 

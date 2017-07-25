@@ -3,7 +3,7 @@ from api.models import Take, Language, Book, User, Comment, Chunk, Chapter, Proj
 from rest_framework.test import APIClient
 from rest_framework import status
 
-view_url = 'http://127.0.0.1:8000/api/all_project/'
+view_url = 'http://127.0.0.1:8000/api/all_projects/'
 
 
 class AllProjectViewTestCases(TestCase):

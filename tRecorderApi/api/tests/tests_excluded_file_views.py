@@ -30,7 +30,7 @@ class ExcludedFileViewTestCases(TestCase):
         self.user_object.save()
         self.comment_object.save()
         self.take_object.save()
-        response = self.client.post(view_set_url, {'location': my_file}, format='json')
+        response = self.client.post(view_set_url, {'location': my_file, 'take': {'duration':0, 'markers': 0}}, format='json')
         result = str(response.data)  # convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # testing that we get the correct status response from the API

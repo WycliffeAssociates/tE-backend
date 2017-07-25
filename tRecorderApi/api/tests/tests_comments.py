@@ -13,7 +13,7 @@ class IntegrationCommentTests(TestCase):
         self.client = APIClient()
         self.comment_object = Comment(location='/test-location/',
                                       object_id = 1, content_type_id = 1)
-        self.comment_data = {'location': 'test_location', 'object_id' : 1, }
+        self.comment_data = {'location': 'test_location', 'object_id' : 1, 'content_type_id': 1 }
         self.commentVS = CommentViewSet()
 
     def test_api_can_create_comment_object(self):
@@ -28,7 +28,7 @@ class IntegrationCommentTests(TestCase):
         Sending User Object To API and
         Expecting HTTP Success Message Returned"""
         self.comment_object.save()
-        response = self.client.put(base_url + 'comments/1/', {'location': '/new-location/'}, format='json')
+        response = self.client.put(base_url + 'comments/1/', {self.comment_data}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.comment_object.delete()  # delete object from temporary database
         self.assertEqual(0, len(Comment.objects.filter(id=1)))
