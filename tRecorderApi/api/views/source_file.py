@@ -25,7 +25,8 @@ class SourceFileView(views.APIView):
         data = request.data
 
         if 'language' in data and 'version' in data:
-            data["is_source"] = True
+            #data["is_source"] = True
+            data["is_publish"] = True
             takes = Take.getTakesByProject(data)
             if len(takes) > 0:
                 uuid_name = str(time.time()) + str(uuid.uuid4())
