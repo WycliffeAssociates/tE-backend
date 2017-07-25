@@ -146,9 +146,12 @@ class Project(models.Model):
             # Get contributors
             dic["contributors"] = []
             availChunks = 0
+            checklvl = 10
             chapters = project.chapter_set.all()
             for chapter in chapters:
                 availChunks += 1
+                if chapter.checked_level < checklvl:
+                    checklvl = chapter.checked_level
                 chunks = chapter.chunk_set.all()
                 for chunk in chunks:
                     availChunks += 1
@@ -156,7 +159,7 @@ class Project(models.Model):
                     for take in takes:
                         if take.user.name not in dic["contributors"]:
                             dic["contributors"].append(take.user.name)
-            print(availChunks)
+            dic["checked_level"] = checklvl
             mode = project.mode
             bkname = project.book.slug
             chunkInfo = []
