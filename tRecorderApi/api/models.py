@@ -643,6 +643,22 @@ class Take(models.Model):
         return lst
 
     @staticmethod
+    def stitchSource(data):
+        list = []
+        filter = {}
+        takes = Take.objects.all()
+        #filter["chunk__chapter__project__language__slug"] = data["language"]
+        #filter["chunk__chapter__project__version"] = data["version"]
+        #filter["chunk__chapter__project__book__slug"] = data["book"]
+        #filter["chunk__chapter__number"] = data["chapter"]
+        #filter["chunk__chapter__project__is_source"] = data["is_source"]
+
+        res = takes.filter(**filter)
+        return res
+
+
+
+    @staticmethod
     def updateTakesByProject(data):
         lst = []
         filter = {}
