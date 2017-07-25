@@ -132,6 +132,8 @@ class Project(models.Model):
             filter["version"] = data["version"]
         if "book" in data:
             filter["book__slug"] = data["book"]
+        if "is_publish" in data:
+            filter["is_publish"] = data["is_publish"]
 
         filter["is_source"] = False
         projects = Project.objects.filter(**filter)
