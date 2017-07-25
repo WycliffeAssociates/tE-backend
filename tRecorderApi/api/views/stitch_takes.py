@@ -33,7 +33,8 @@ class SourceStitchView(views.APIView):
             stitch_folder = 'media/source'
             if not os.path.exists(stitch_folder):
                 os.makedirs(stitch_folder)
-            stitchedSource.export("./media/source/output.mp3", format="mp3")
+            project_name = str(data["language"]) + "_" + str(data["book"]) + "_" + str(data["version"]) + "_" + str(data["chapter"])
+            stitchedSource.export("./media/source/" + project_name + ".mp3", format="mp3")
 
             return Response(loclst, status = 200)
 
