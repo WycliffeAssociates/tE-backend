@@ -166,7 +166,7 @@ class Project(models.Model):
             mode = project.mode
             bkname = project.book.slug
             chunkInfo = []
-            for dirpath, dirnames, files in os.walk(os.path.abspath('chunks/')):
+            for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
                 if dirpath[-3:] == bkname:
                     for fname in os.listdir(dirpath):
                         f = open(os.path.join(dirpath, fname), "r")
@@ -237,7 +237,7 @@ class Chapter(models.Model):
             mode = project.mode
             bkname = project.book.slug
 
-            
+
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
 
@@ -253,7 +253,7 @@ class Chapter(models.Model):
 
                 #contains information about all chunks in a book
                 chunkInfo = []
-                for dirpath, dirnames, files in os.walk(os.path.abspath('chunks/')):
+                for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
                     if dirpath[-3:] == bkname:
                         for fname in os.listdir(dirpath):
                             f = open(os.path.join(dirpath, fname), "r")
@@ -282,7 +282,7 @@ class Chapter(models.Model):
 
                 chap_dic["date_modified"] = latest_take.date_modified
 
-                
+
                 # Get contributors
                 chap_dic["contributors"] = []
                 chunks = chapter.chunk_set.all()
@@ -359,7 +359,7 @@ class Take(models.Model):
     duration = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
     is_publish = models.BooleanField(default=False)
-    markers = models.TextField(null=True, blank=True)   
+    markers = models.TextField(null=True, blank=True)
     date_modified = models.DateTimeField(default=now)
 
     chunk = models.ForeignKey(Chunk, on_delete=models.CASCADE, null=True, blank=True)
