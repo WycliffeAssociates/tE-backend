@@ -146,8 +146,11 @@ class Project(models.Model):
             dic["version"] = project.version
             dic["is_publish"] = project.is_publish
 
+            latest_take = Take.objects.filter(chunk__chapter__project=project) \
+                .latest("date_modified")
             # Get contributors
             dic["contributors"] = []
+            dic["date_modified"] = latest_take.date_modified
             availChunks = 0
             checklvl = 10
             chapters = project.chapter_set.all()
