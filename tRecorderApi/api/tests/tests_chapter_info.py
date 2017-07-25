@@ -14,7 +14,7 @@ class ProjectChapterInfoViewTestCases(TestCase):
         self.language_object = Language(slug='en-x-demo', name='english')
         self.book_object = Book(name='english', booknum=5, slug = 'slug')
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
-        self.comment_object = Comment(location='/test-location/')
+        self.comment_object = Comment(location='/test-location/', content_type = 1, object_id = 1 )
         self.chunk_object = Chunk(startv = 0, endv = 3)
         self.project_object = Project (is_source = False, is_publish = False, version = 'ulb', anthology = 'nt')
         self.chapter_object = Chapter(number = 1, checked_level = 1, is_publish = False)

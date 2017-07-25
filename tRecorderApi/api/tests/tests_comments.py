@@ -1,5 +1,5 @@
 from django.test import TestCase
-from api.models import Comment
+from api.models import Comment, Project, Take, User
 from api.views import CommentViewSet
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -11,8 +11,9 @@ my_file = 'media/dump'
 class IntegrationCommentTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.comment_object = Comment(location='/test-location/')
-        self.comment_data = {'location': 'test_location'}
+        self.comment_object = Comment(location='/test-location/',
+                                      object_id = 1, content_type_id = 1)
+        self.comment_data = {'location': 'test_location', 'object_id' : 1, }
         self.commentVS = CommentViewSet()
 
     def test_api_can_create_comment_object(self):
