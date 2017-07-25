@@ -76,6 +76,9 @@
         }, function(response) {
             document.getElementById("getexport_loader").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb_mrk.zip')
+        }, function(error) {
+            document.getElementById("getexport_loader").style.display = "none";
+            console.log(error);
         })
     }, false);
 
@@ -88,6 +91,9 @@
         }, function(response) {
             document.getElementById("getsource_loader").style.display = "none";
             saveAs(response, 'en-x-demo2_ulb.tr')
+        }, function(error) {
+            document.getElementById("getsource_loader").style.display = "none";
+            console.log(error);
         })
     }, false);
 
@@ -103,19 +109,27 @@
             "files_list": {}
         }, function(response) {
             loader.style.display = "none";
-            console.log(loader.style.display);
             saveAs(response, 'en-x-demo2_ulb_mrk.zip')
+        }, function(error) {
+            loader.style.display = "none";
+            console.log(error);
         })
     }, false);
 
-    function jspost(url, data, success) {
+    function jspost(url, data, success, error) {
         var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
         xmlhttp.open("POST", url);
         xmlhttp.responseType = "blob"
 
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE) {
-                success(this.response);
+                if (this.status === 200) {
+                    success(this.response);
+                } else {
+                    error(this.response);
+                    console.log(this.responseText);
+                }
+
             }
         }
 
