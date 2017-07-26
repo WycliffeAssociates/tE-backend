@@ -16,16 +16,17 @@ class ProjectZipFileViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='genesis', booknum=5, slug='gen')
+        self.book_object = Book(name='mark', booknum=5, slug='mrk')
         self.project_object = Project(version='ulb', mode='chunk',
-                                      anthology='nt', is_source=False, language = self.language_object, book = self.book_object)
-        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False, project = self.project_object)
-        self.chunk_object = Chunk(startv=0, endv=3, chapter = self.chapter_object)
+                                      anthology='nt', is_source=False, language=self.language_object,
+                                      book=self.book_object)
+        self.chapter_object = Chapter(number=1, checked_level=1, project=self.project_object)
+        self.chunk_object = Chunk(startv=0, endv=3, chapter=self.chapter_object)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
         self.take_object = Take(location=my_file, is_publish=True,
-                                duration=0, markers=True, rating=2, chunk = self.chunk_object, user = self.user_object)
+                                duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
         self.comment_object = Comment(location='/test-location/',
-                                      content_object = self.take_object, user = self.user_object)
+                                      content_object=self.take_object, user=self.user_object)
         self.take_data = {
             "id": 789878987,
             "location": "my_file",
@@ -35,6 +36,7 @@ class ProjectZipFileViewTestCases(TestCase):
             "markers": "marked",
             "date_modified": "2017-07-26T12:29:02.828000Z"}
 
+    #throws error
     def test_post_request_for_project_zip_file_view(self):
         """POST request for Project Zip File view expects a wav file as input, and will return a zip file"""
         self.language_object.save()
@@ -45,7 +47,7 @@ class ProjectZipFileViewTestCases(TestCase):
         self.user_object.save()
         self.take_object.save()
         old_folder_size = len(os.listdir('media/export'))  # find the total number of files in the media/export folder
-        self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book': 'gen'}, format='json')
+        self.response = self.client.post(view_url, {"language": "en-x-demo","version": "ulb", "book":"mrk"}, format='json')
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)  # making sure that we return the correct status code
         new_folder_size = len(os.listdir('media/export'))  # new zip file should have been added to media/export folder
         self.assertNotEqual(old_folder_size, new_folder_size)  # check that a new file exists in media/export
@@ -80,6 +82,7 @@ class ProjectZipFileViewTestCases(TestCase):
                                     format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    #throws error, can't see takes for some reason
     def test_that_we_get_200_when_enough_parameters_and_takes_in_ProjectZipFile(self):
         """Testing that submitting a POST request will return a project zip file"""
         # saving objects in temporary database so they can be read by the API
@@ -91,6 +94,7 @@ class ProjectZipFileViewTestCases(TestCase):
         self.user_object.save()
         self.take_object.save()
         self.client.post(base_url + 'takes/', self.take_data, format='json')
+        print Take.objects.all()
         self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book': 'gen'},
                                          format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)

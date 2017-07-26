@@ -53,10 +53,11 @@ class GetProjectsTestCases(TestCase):
         self.chunk_object.save()
         self.user_object.save()
         self.take_object.save()
-        response = self.client.post(view_url, {'location': my_file},
+        print Take.objects.all()
+        self.response = self.client.post(view_url, {'location': my_file},
                                     format='json')
         # getting 400 error not enough parameters returned
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # verifying that that we succesfully post to the API
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)  # verifying that that we succesfully post to the API
         self.take_object.delete()
         self.user_object.delete()
         self.book_object.delete()

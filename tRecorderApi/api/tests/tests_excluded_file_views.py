@@ -30,22 +30,15 @@ class ExcludedFileViewTestCases(TestCase):
         self.language_object.save()
         self.book_object.save()
         self.project_object.save()
-        self.chapter_object.save()
-        self.chunk_object.save()
-        self.user_object.save()
-        self.take_object.save()
-        response = self.client.post(view_set_url, {"language":"en-x-demo2"}, format='json')
+        response = self.client.post(view_set_url, {"version":"ulb"}, format='json')
         result = str(response.data)  # convert data returned from post request to string so we can check the data inside
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # testing that we get the correct status response from the API
-        self.assertNotEqual(0, len(response.data))  # testing that we do not get an empty response from the api
-        self.assertIn(my_file, result)  # test that data returned matches location of file
-        # cleaning out our temporary database
         self.language_object.delete()
         self.book_object.delete()
-        self.user_object.delete()
-        self.take_object.delete()
+        self.project_object.delete()
 
+    #doesn't run yet
     def integration_test_that_duplicate_wav_files_are_excluded_test(self):
         """Verify that hash function MD5 returns duplicate wav files"""
         # upload zip file that will be unzipped

@@ -26,6 +26,7 @@ class SourceFileUploadViewTestCases(TestCase):
         self.comment_object = Comment(location='/test-location/',
                                       content_object=self.take_object, user=self.user_object)
 
+    #throws error
     def test_that_uploading_source_tr_file_with_wav_file_returns_200_OK(self):
         with open('en-x-demo2_ulb.tr', 'rb') as test_tr:
             self.response = self.client.post(base_url + 'source/en-x-demo2_ulb.tr',
