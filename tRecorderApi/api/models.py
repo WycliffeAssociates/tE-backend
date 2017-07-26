@@ -439,7 +439,7 @@ class Chunk(models.Model):
             chunk_dic["takes"] = takes_list
 
             chunk_dic2 = model_to_dict(chunk, fields=[
-                "startv", "endv"
+                "startv", "endv", "id"
             ])
 
             chunk_dic = dict(chunk_dic.items() + chunk_dic2.items())
