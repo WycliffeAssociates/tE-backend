@@ -13,28 +13,29 @@ my_file = "en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav"
 class ExcludedFileViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='english', booknum=5, slug='slug')
-        self.project_object = Project(version='ulb', mode='audio', anthology='nt', is_source=False)
-        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False)
-        self.chunk_object = Chunk(startv=0, endv=3)
-        self.take_object = Take(location=my_file, is_publish=False, duration=0, markers=True, rating=2)
+        self.language_object = Language(slug='en-x-demo2', name='english')
+        self.book_object = Book(name='mark', booknum=5, slug='mrk')
+        self.project_object = Project(version='ulb', mode='chunk',
+                                      anthology='nt', is_source=False, language=self.language_object,
+                                      book=self.book_object)
+        self.chapter_object = Chapter(number=1, checked_level=1, is_publish=False, project=self.project_object)
+        self.chunk_object = Chunk(startv=1, endv=3, chapter=self.chapter_object)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
-        self.comment_object = Comment(location='/test-location/', content_type_id=1, object_id=1)
+        self.take_object = Take(location=my_file, is_publish=True,
+                                duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
 
     def test_post_method_for_excluded_file_view_set(self):
         """Unit Testing the method for handling POST requests to the API at the Excluded File View URL"""
         # populating our temporary database
         self.language_object.save()
         self.book_object.save()
-        self.comment_object.save()
         self.project_object.save()
         self.chapter_object.save()
         self.chunk_object.save()
+        self.user_object.save()
         self.take_object.save()
-
-        response = self.client.post(view_set_url, {"language":"eng"}, format='json')
-        result = str(response.data)  # convert data returned from post request to string so we can checkthe data inside
+        response = self.client.post(view_set_url, {"language":"en-x-demo2"}, format='json')
+        result = str(response.data)  # convert data returned from post request to string so we can check the data inside
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # testing that we get the correct status response from the API
         self.assertNotEqual(0, len(response.data))  # testing that we do not get an empty response from the api
@@ -43,7 +44,6 @@ class ExcludedFileViewTestCases(TestCase):
         self.language_object.delete()
         self.book_object.delete()
         self.user_object.delete()
-        self.comment_object.delete()
         self.take_object.delete()
 
     def integration_test_that_duplicate_wav_files_are_excluded_test(self):

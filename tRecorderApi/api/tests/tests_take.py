@@ -9,8 +9,8 @@ my_file = 'media/dump'
 class IntegrationTakeTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.language_object = Language(slug='en-x-demo', name='english')
-        self.book_object = Book(name='genesis', booknum=5, slug='gen')
+        self.language_object = Language(slug='en-x-demo2', name='english')
+        self.book_object = Book(name='mark', booknum=5, slug='mrk')
         self.project_object = Project(version='ulb', mode='chunk',
                                       anthology='nt', is_source=False, language=self.language_object,
                                       book=self.book_object)
@@ -18,7 +18,15 @@ class IntegrationTakeTestCases(TestCase):
         self.chunk_object = Chunk(startv=0, endv=3, chapter=self.chapter_object)
         self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
         self.take_object = Take(location=my_file, is_publish=True,
-                                duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
+                                duration=0, markers="markers", rating=2, chunk=self.chunk_object, user=self.user_object)
+        self.take_data = {
+            "id": 22,
+            "location": "my_file",
+            "duration": 3,
+            "rating": 3,
+            "is_publish": True,
+            "markers": "marked",
+            "date_modified": "2017-07-26T12:29:02.828000Z"}
 
     def test_api_can_create_take_object(self):
         """Test the API has take creation capability:
@@ -30,8 +38,8 @@ class IntegrationTakeTestCases(TestCase):
         self.chapter_object.save()
         self.chunk_object.save()
         self.user_object.save()
-        #self.response = self.client.post(base_url + 'takes/', self.take_data, format='json')  # send POST to API
-        #self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+        self.response = self.client.post(base_url + 'takes/', self.take_data, format='json')  # send POST to API
+        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
     def test_api_can_update_take_object(self):
         """Test that the API can update a take object:
@@ -44,10 +52,10 @@ class IntegrationTakeTestCases(TestCase):
         self.chunk_object.save()
         self.user_object.save()
         self.take_object.save()
-        self.response = self.client.patch(base_url + 'takes/1/', {'rating': 1}, format='json')
+        self.response = self.client.put(base_url + 'takes/1/', {"duration": 1}, format='json')
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
         self.take_object.delete()
-        self.assertEqual(0, len(Take.objects.filter(duration=3)))
+        self.assertEqual(0, len(Take.objects.filter(duration=1)))
 
     def test_get_take_request_returns_success(self):
         """Testing API can handle GET requests for Take objects"""

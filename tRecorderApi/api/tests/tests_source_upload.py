@@ -26,10 +26,10 @@ class SourceFileUploadViewTestCases(TestCase):
         self.comment_object = Comment(location='/test-location/',
                                       content_object=self.take_object, user=self.user_object)
 
-    def test_that_uploading_tr_file_with_wav_file_returns_200_OK(self):
+    def test_that_uploading_source_tr_file_with_wav_file_returns_200_OK(self):
         with open('en-x-demo2_ulb.tr', 'rb') as test_tr:
-            self.response = self.client.post(base_url + 'source/tr', {'Media type': '*/*', 'Content': test_tr },
-                                                 format='multipart')
+            self.response = self.client.post(base_url + 'source/en-x-demo2_ulb.tr',
+                                             {'Media type': '*/*', 'Content': test_tr}, format='multipart')
             self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def test_that_we_get_400_error_when_not_enough_parameters_are_uploaded_in_SourceFile(self):

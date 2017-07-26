@@ -7,6 +7,7 @@ from sys import platform
 import os.path
 
 view_url = 'http://127.0.0.1:8000/api/zip_files/'
+base_url = 'http://127.0.0.1:8000/api/'
 upload_url = 'http://127.0.0.1:8000/api/upload/zip'
 my_file = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
@@ -25,6 +26,14 @@ class ProjectZipFileViewTestCases(TestCase):
                                 duration=0, markers=True, rating=2, chunk = self.chunk_object, user = self.user_object)
         self.comment_object = Comment(location='/test-location/',
                                       content_object = self.take_object, user = self.user_object)
+        self.take_data = {
+            "id": 789878987,
+            "location": "my_file",
+            "duration": 3,
+            "rating": 3,
+            "is_publish": True,
+            "markers": "marked",
+            "date_modified": "2017-07-26T12:29:02.828000Z"}
 
     def test_post_request_for_project_zip_file_view(self):
         """POST request for Project Zip File view expects a wav file as input, and will return a zip file"""
@@ -58,7 +67,7 @@ class ProjectZipFileViewTestCases(TestCase):
                                     format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_that_we_get_200_when_enough_parameters_in_ProjectZipFile(self):
+    def test_that_we_get_400_when_enough_parameters_but_no_takes_in_ProjectZipFile(self):
         """Testing that submitting a POST request through book key search returns an object"""
         # saving objects in temporary database so they can be read by the API
         self.language_object.save()
@@ -67,10 +76,25 @@ class ProjectZipFileViewTestCases(TestCase):
         self.chapter_object.save()
         self.chunk_object.save()
         self.user_object.save()
-        self.take_object.save()
         self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book':'gen'},
                                     format='json')  # telling the API that I want all takes that are in book English
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_that_we_get_200_when_enough_parameters_and_takes_in_ProjectZipFile(self):
+        """Testing that submitting a POST request will return a project zip file"""
+        # saving objects in temporary database so they can be read by the API
+        self.language_object.save()
+        self.book_object.save()
+        self.project_object.save()
+        self.chapter_object.save()
+        self.chunk_object.save()
+        self.user_object.save()
+        self.take_object.save()
+        self.client.post(base_url + 'takes/', self.take_data, format='json')
+        self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book': 'gen'},
+                                         format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+
 
     def tearDown(self):
         if platform == "darwin":  # OSX

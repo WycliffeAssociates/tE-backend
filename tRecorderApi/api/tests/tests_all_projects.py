@@ -4,12 +4,11 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 view_url = 'http://127.0.0.1:8000/api/all_projects/'
-base_url = 'http://127.0.0.1:8000/api/'
 
 class AllProjectViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.language_object = Language(slug='en-x-demo', name='english')
+        self.language_object = Language(slug='en-x-demo2', name='english')
         self.book_object = Book(name='mark', booknum=5, slug='mrk')
         self.project_object = Project(version='ulb', mode='chunk',
                                       anthology='nt', is_source=False, language=self.language_object,
@@ -21,6 +20,7 @@ class AllProjectViewTestCases(TestCase):
                                 duration=0, markers=True, rating=2, chunk=self.chunk_object, user=self.user_object)
         self.project_data = {"version": "ulb", "mode": "chunk", "anthology": "nt"}
 
+
     def test_post_request_for_all_projects_view(self):
         """Testing that sending a POST request to the All Project View returns a list of projects"""
         self.language_object.save()
@@ -30,11 +30,14 @@ class AllProjectViewTestCases(TestCase):
         self.chunk_object.save()
         self.user_object.save()
         self.take_object.save()
-        self.client.post(base_url + 'projects/', self.project_data, format='json')
-        self.response = self.client.post(view_url,{"language": "en-x-demo"}, format='json')
+        self.response = self.client.post(view_url,{"language":"en-x-demo2"}, format='json')
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
-        print self.response.data
-        self.assertNotEqual(0, len(self.response.data))  # checking that the response contains data
+        #check that response contains data
+        self.assertNotEqual(0,len(str(self.response)))
         self.book_object.delete()
         self.language_object.delete()
         self.project_object.delete()
+        self.chapter_object.delete()
+        self.chunk_object.delete()
+        self.user_object.delete()
+        self.take_object.delete()

@@ -10,7 +10,7 @@ my_file = 'media/dump'
 class IntegrationLanguageTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.lang_data = {'lang': 'english', 'code': 'abc'}
+        self.lang_data = {'name': 'english', 'slug': 'abc'}
         self.language_object = Language(slug='en-x-demo', name='english')
 
     def test_api_can_create_lang_object(self):
@@ -25,7 +25,7 @@ class IntegrationLanguageTests(TestCase):
         Sending Language Object To API and
         Expecting HTTP Success Message Returned"""
         self.language_object.save()
-        response = self.client.put(base_url + 'languages/1/', {'code': 'ex-demo'}, format='json')
+        response = self.client.put(base_url + 'languages/1/', {'slug': 'ex-demo'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.language_object.delete()
         self.assertEqual(0, len(Language.objects.filter(id=1)))

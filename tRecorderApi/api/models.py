@@ -353,6 +353,9 @@ class Chunk(models.Model):
         data_dic = {}
         chunks_list = []
         filter = {}
+        chunky = Chunk.objects.all()
+        print "before filters"
+        print len(chunky)
 
         if "language" in data:
             filter["chapter__project__language__slug"] = data["language"]
@@ -370,6 +373,8 @@ class Chunk(models.Model):
             filter["chapter__project__is_source"] = data["is_source"]
 
         chunks = Chunk.objects.filter(**filter)
+        print "after filters"
+        print len(chunky)
 
         data_dic["chunks"] = []
 
