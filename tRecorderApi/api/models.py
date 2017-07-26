@@ -18,8 +18,9 @@ class Language(models.Model):
         lst = []
         projects = Project.objects.filter(is_source=False)
         for project in projects:
-            lst.append(model_to_dict(project.language))
-
+            if project.version and project.language and project.book:
+                lst.append(model_to_dict(project.language))
+        
         # distinct list
         lst = list({v['id']:v for v in lst}.values())
         return lst
@@ -61,8 +62,9 @@ class Book(models.Model):
         lst = []
         projects = Project.objects.filter(is_source=False)
         for project in projects:
-            lst.append(model_to_dict(project.book))
-
+            if project.version and project.language and project.book:
+                lst.append(model_to_dict(project.book))
+        
         # distinct list
         lst = list({v['id']:v for v in lst}.values())
         return lst
@@ -140,6 +142,9 @@ class Project(models.Model):
         projects = Project.objects.filter(**filter)
 
         for project in projects:
+            if not project.version or not project.language or not project.book:
+                continue
+
             dic = {}
 
             dic["id"] = project.id
@@ -163,8 +168,12 @@ class Project(models.Model):
                     availChunks += 1
                     takes = chunk.take_set.all()
                     for take in takes:
-                        if take.user.name not in dic["contributors"]:
-                            dic["contributors"].append(take.user.name)
+                        try:
+                            if take.user.name not in dic["contributors"]:
+                                dic["contributors"].append(take.user.name)
+                        except:
+                            pass
+            
             dic["checked_level"] = checklvl
             mode = project.mode
             bkname = project.book.slug
@@ -203,8 +212,9 @@ class Project(models.Model):
         lst = []
         projects = Project.objects.filter(is_source=False)
         for project in projects:
-            lst.append(project.version)
-
+            if project.version and project.language and project.book:
+                lst.append(project.version)
+        
         # distinct list
         lst = list(set(lst))
         return lst
@@ -236,10 +246,12 @@ class Chapter(models.Model):
 
         for project in projects:
             # Get chapters
+            
+            if not project.version or not project.language or not project.book:
+                continue
 
             mode = project.mode
             bkname = project.book.slug
-
 
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
@@ -292,8 +304,11 @@ class Chapter(models.Model):
                 for chunk in chunks:
                     takes = chunk.take_set.all()
                     for take in takes:
-                        if take.user.name not in chap_dic["contributors"]:
-                            chap_dic["contributors"].append(take.user.name)
+                        try:
+                            if take.user.name not in chap_dic["contributors"]:
+                                chap_dic["contributors"].append(take.user.name)
+                        except:
+                            pass
 
                 # Get comments
                 chap_dic["comments"] = []
@@ -664,6 +679,8 @@ class Take(models.Model):
         filter = {}
         fields = data["fields"]
 
+        if "project" in data["filter"]:
+            filter["chunk__chapter__project"] = data["filter"]["project"]
         if "language" in data["filter"]:
             filter["chunk__chapter__project__language__slug"] = data["filter"]["language"]
         if "version" in data["filter"]:
