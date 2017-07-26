@@ -99,7 +99,7 @@ class User(models.Model):
     def __unicode__(self):
         return self.name
 
-class Comment(models.Model):   
+class Comment(models.Model):
     location = models.CharField(max_length=250)
     date_modified = models.DateTimeField(default=now)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -135,6 +135,8 @@ class Project(models.Model):
             filter["version"] = data["version"]
         if "book" in data:
             filter["book__slug"] = data["book"]
+        if "is_publish" in data:
+            filter["is_publish"] = data["is_publish"]
 
         filter["is_source"] = False
         projects = Project.objects.filter(**filter)
@@ -144,17 +146,26 @@ class Project(models.Model):
                 continue
 
             dic = {}
-            
+
             dic["id"] = project.id
             dic["version"] = project.version
             dic["is_publish"] = project.is_publish
 
-            # Get contributors        
+            latest_take = Take.objects.filter(chunk__chapter__project=project) \
+                .latest("date_modified")
+            # Get contributors
             dic["contributors"] = []
+            dic["date_modified"] = latest_take.date_modified
+            availChunks = 0
+            checklvl = 10
             chapters = project.chapter_set.all()
             for chapter in chapters:
+                availChunks += 1
+                if chapter.checked_level < checklvl:
+                    checklvl = chapter.checked_level
                 chunks = chapter.chunk_set.all()
                 for chunk in chunks:
+                    availChunks += 1
                     takes = chunk.take_set.all()
                     for take in takes:
                         try:
@@ -162,18 +173,32 @@ class Project(models.Model):
                                 dic["contributors"].append(take.user.name)
                         except:
                             pass
-            dic["completed"] = 75
+            
+            dic["checked_level"] = checklvl
+            mode = project.mode
+            bkname = project.book.slug
+            chunkInfo = []
+            for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
+                if dirpath[-3:] == bkname:
+                    for fname in os.listdir(dirpath):
+                        f = open(os.path.join(dirpath, fname), "r")
+                        sus = json.loads(f.read())
+                        chunkInfo = sus
+                    break
+            totalChunk = float(len(chunkInfo))
+            completed = int(round((availChunks/totalChunk) * 100))
+            dic["completed"] = completed
 
             # Get language
             try:
-                dic["language"] = model_to_dict(project.language, 
+                dic["language"] = model_to_dict(project.language,
                     fields=["slug","name"])
             except:
                 pass
 
             # Get book
             try:
-                dic["book"] = model_to_dict(project.book, 
+                dic["book"] = model_to_dict(project.book,
                     fields=["booknum","slug","name"])
             except:
                 pass
@@ -211,7 +236,7 @@ class Chapter(models.Model):
     def getChaptersByProject(data):
         dic = {}
         filter = {}
-    
+
         filter["language__slug"] = data["language"]
         filter["version"] = data["version"]
         filter["book__slug"] = data["book"]
@@ -225,8 +250,12 @@ class Chapter(models.Model):
             if not project.version or not project.language or not project.book:
                 continue
 
+            mode = project.mode
+            bkname = project.book.slug
+
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
+
 
             chaps = []
             chapters = project.chapter_set.all()
@@ -236,9 +265,39 @@ class Chapter(models.Model):
                 chap_dic["chapter"] = chapter.number
                 chap_dic["checked_level"] = chapter.checked_level
                 chap_dic["is_publish"] = chapter.is_publish
+
+                #contains information about all chunks in a book
+                chunkInfo = []
+                for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
+                    if dirpath[-3:] == bkname:
+                        for fname in os.listdir(dirpath):
+                            f = open(os.path.join(dirpath, fname), "r")
+                            sus = json.loads(f.read())
+                            chunkInfo = sus
+                        break
+                #contains info about relevant chapter
+                chunkstuff = []
+                chapnum = chapter.number
+                for chunk in chunkInfo:
+                    if chunk["id"][:2] == str("%02d"%chapnum):
+                        chunkstuff.append(chunk)
+                chunks = chapter.chunk_set.all()
+                numtakes = list(chunks)
+                if mode == "chunk":
+                    percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
+                    chap_dic["percent_complete"] = percentComplete
+                else:
+                    versetotal = 0
+                    for i in chunkstuff:
+                        if int(i["lastvs"]) > versetotal:
+                            versetotal = int(i["lastvs"])
+                    percentComplete = int(round((len(numtakes)/versetotal) * 100))
+                    chap_dic["percent_complete"] = percentComplete
+
+
                 chap_dic["date_modified"] = latest_take.date_modified
-                chap_dic["percent_complete"] = 75
-                
+
+
                 # Get contributors
                 chap_dic["contributors"] = []
                 chunks = chapter.chunk_set.all()
@@ -262,25 +321,34 @@ class Chapter(models.Model):
                     except:
                         pass
                     chap_dic["comments"].append(dic2)
-                
+
                 chaps.append(chap_dic)
-            
+
             dic["chapters"] = chaps
-            
+
             # Get language
             try:
-                dic["language"] = model_to_dict(project.language, 
+                dic["language"] = model_to_dict(project.language,
                     fields=["slug","name"])
             except:
                 dic["language"] = {}
 
             # Get book
             try:
-                dic["book"] = model_to_dict(project.book, 
+                dic["book"] = model_to_dict(project.book,
                     fields=["booknum","slug","name"])
             except:
                 dic["language"] = {}
-
+            #Get Project ID
+            try:
+                dic["project_id"] = project.id
+            except:
+                dic["project_id"] = {}
+            #Get is_publish
+            try:
+                dic["is_publish"] = project.is_publish
+            except:
+                dic["is_publish"] = {}
         return dic
 
     class Meta:
@@ -322,18 +390,18 @@ class Chunk(models.Model):
 
         for chunk in chunks:
             chunk_dic = {}
-            
+
             # Include language data
             try:
                 if "language" not in data_dic:
-                    data_dic["language"] = model_to_dict(chunk.chapter.project.language, 
+                    data_dic["language"] = model_to_dict(chunk.chapter.project.language,
                         fields=["slug","name"])
             except:
                 pass
             # Include book data
             try:
                 if "book" not in data_dic:
-                    data_dic["book"] = model_to_dict(chunk.chapter.project.book, 
+                    data_dic["book"] = model_to_dict(chunk.chapter.project.book,
                         fields=["booknum","slug","name"])
             except:
                 pass
@@ -341,8 +409,8 @@ class Chunk(models.Model):
             # Include project data
             try:
                 if "project" not in data_dic:
-                    data_dic["project"] = model_to_dict(chunk.chapter.project, 
-                        fields=["id","is_publish", "is_source", 
+                    data_dic["project"] = model_to_dict(chunk.chapter.project,
+                        fields=["id","is_publish", "is_source",
                             "version", "mode", "anthology"])
             except:
                 pass
@@ -350,8 +418,8 @@ class Chunk(models.Model):
             # Include chapter data
             try:
                 if "chapter" not in data_dic:
-                    data_dic["chapter"] = model_to_dict(chunk.chapter, 
-                        fields=["id","is_publish", "number", 
+                    data_dic["chapter"] = model_to_dict(chunk.chapter,
+                        fields=["id","is_publish", "number",
                             "checked_level", "comments"])
 
                     # Include comments for chapter
@@ -385,7 +453,7 @@ class Chunk(models.Model):
             if source_language and chunk.chapter.project.book:
                 source_dic = {}
                 source_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
-                
+
                 source_take = Take.objects \
                     .filter(chunk__chapter__project__language__slug=source_dic["language"]["slug"]) \
                     .filter(chunk__chapter__project__version=data_dic["project"]["version"]) \
@@ -414,9 +482,9 @@ class Chunk(models.Model):
                 if "is_publish" in data:
                     if take.is_publish != data["is_publish"]:
                         continue
-                
+
                 take_dic = {}
-                
+
                 # Include author of file
                 try:
                     take_dic["user"] = model_to_dict(take.user, fields=["name","agreed","picture"])
@@ -435,7 +503,7 @@ class Chunk(models.Model):
                     except:
                         pass
                     take_dic["comments"].append(comm_dic)
-                
+
                 # Parse markers
                 if take.markers:
                     take.markers = json.loads(take.markers)
@@ -466,8 +534,8 @@ class Chunk(models.Model):
 
     def __unicode__(self):
         return '{}:{}-{}'.format(
-            self.chapter.number, 
-            self.startv, 
+            self.chapter.number,
+            self.startv,
             self.endv)
 
 class Take(models.Model):
@@ -475,8 +543,9 @@ class Take(models.Model):
     duration = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
     is_publish = models.BooleanField(default=False)
-    markers = models.TextField(null=True, blank=True)   
+    markers = models.TextField(null=True, blank=True)
     date_modified = models.DateTimeField(default=now)
+
     chunk = models.ForeignKey(Chunk, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     comments = GenericRelation(Comment)
@@ -503,18 +572,18 @@ class Take(models.Model):
             filter["is_publish"] = data["is_publish"]
 
         res = takes.filter(**filter)
-        
+
         for take in res:
             dic = {}
             # Include language name
             try:
-                dic["language"] = model_to_dict(take.chunk.chapter.project.language, 
+                dic["language"] = model_to_dict(take.chunk.chapter.project.language,
                     fields=["slug","name"])
             except:
                 pass
             # Include book name
             try:
-                dic["book"] = model_to_dict(take.chunk.chapter.project.book, 
+                dic["book"] = model_to_dict(take.chunk.chapter.project.book,
                     fields=["booknum","slug","name"])
             except:
                 pass
@@ -523,7 +592,7 @@ class Take(models.Model):
                 dic["user"] = model_to_dict(take.user, fields=["name","agreed","picture"])
             except:
                 pass
-                
+
 
             # Include comments
             dic["comments"] = []
@@ -562,7 +631,7 @@ class Take(models.Model):
             if source_language and take.chunk.chapter.project.book:
                 s_dic = {}
                 s_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
-                
+
                 s_take = Take.objects \
                     .filter(chunk__chapter__project__language__slug=s_dic["language"]["slug"]) \
                     .filter(chunk__chapter__project__version=dic["take"]["version"]) \
@@ -587,6 +656,22 @@ class Take(models.Model):
 
             lst.append(dic)
         return lst
+
+    @staticmethod
+    def stitchSource(data):
+        list = []
+        filter = {}
+        chunks = Chunk.objects.all()
+        filter["chapter__project__language__slug"] = data["language"]
+        filter["chapter__project__version"] = data["version"]
+        filter["chapter__project__book__slug"] = data["book"]
+        filter["chapter__number"] = data["chapter"]
+        filter["chapter__project__is_source"] = data["is_source"]
+
+        res = chunks.filter(**filter)
+        return res.values()
+
+
 
     @staticmethod
     def updateTakesByProject(data):
@@ -616,12 +701,12 @@ class Take(models.Model):
     @staticmethod
     def prepareDataToSave(meta, abpath, data, is_source=False):
         dic = {}
-    
+
         # Create Language in database if it's not there
         language, l_created = Language.objects.get_or_create(
             slug=meta["language"],
             defaults={
-                'slug': meta['language'], 
+                'slug': meta['language'],
                 'name': data['langname']},
         )
         dic["language"] = model_to_dict(language)
@@ -630,8 +715,8 @@ class Take(models.Model):
         book, b_created = Book.objects.get_or_create(
             slug=meta["slug"],
             defaults={
-                'slug': meta['slug'], 
-                'booknum': meta['book_number'], 
+                'slug': meta['slug'],
+                'booknum': meta['book_number'],
                 'name': data['bookname']},
         )
         dic["book"] = model_to_dict(book)
@@ -645,8 +730,8 @@ class Take(models.Model):
             book=book,
             is_source=is_source,
             defaults={
-                'version': meta['version'], 
-                'mode': meta['mode'], 
+                'version': meta['version'],
+                'mode': meta['mode'],
                 'anthology': meta['anthology'],
                 'language': language,
                 'book': book,
@@ -659,7 +744,7 @@ class Take(models.Model):
             project=project,
             number=meta['chapter'],
             defaults={
-                'number': meta['chapter'], 
+                'number': meta['chapter'],
                 'checked_level': 0,  #TODO get checked_level from tR
                 'project': project},
         )
@@ -671,7 +756,7 @@ class Take(models.Model):
             startv=meta['startv'],
             endv=meta['endv'],
             defaults={
-                'startv': meta['startv'], 
+                'startv': meta['startv'],
                 'endv': meta['endv'],
                 'chapter': chapter},
         )
