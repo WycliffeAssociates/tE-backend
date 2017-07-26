@@ -21,7 +21,7 @@ class SourceFileView(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
-        #if not os.path.exists('media/tmp/'+lang+'_'+ver+'.tr'):
+        #if not os.path.exists('media/temp/'+lang+'_'+ver+'.tr'):
         data = request.data
 
         if 'language' in data and 'version' in data:
@@ -30,7 +30,7 @@ class SourceFileView(views.APIView):
             takes = Take.getTakesByProject(data)
             if len(takes) > 0:
                 uuid_name = str(time.time()) + str(uuid.uuid4())
-                root_folder = 'media/tmp/' + uuid_name
+                root_folder = 'media/temp/' + uuid_name
                 project_folder = root_folder + '/' + data['language'] + '/' + data['version']
                 
                 try:
@@ -67,7 +67,7 @@ class SourceFileView(views.APIView):
                     subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder],
                                     stdout=FNULL, stderr=subprocess.STDOUT)
                     FNULL.close()
-                    os.rename(root_folder+'.tr', 'media/tmp/'+data['language']+'_'+data['version']+'.tr')
+                    os.rename(root_folder+'.tr', 'media/temp/'+data['language']+'_'+data['version']+'.tr')
                     shutil.rmtree(root_folder)
                 except Exception as e:
                     return Response({"error": str(e)}, status=400)
@@ -76,7 +76,7 @@ class SourceFileView(views.APIView):
         else:
             return Response({"response": "not_enough_parameters"}, status=400)
 
-        with open('media/tmp/' + data['language'] + '_' + data['version'] + '.tr', 'rb') as source_file:
+        with open('media/temp/' + data['language'] + '_' + data['version'] + '.tr', 'rb') as source_file:
             response = HttpResponse(files.File(source_file), content_type='application/zip')
             response['Content-Disposition'] = 'attachment; filename="%s"' % (
             data['language'] + '_' + data['version'] + '.tr')

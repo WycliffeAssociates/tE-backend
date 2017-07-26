@@ -64,8 +64,8 @@ class TRTestCases(TestCase):
 
     def tearDown(self):
          if platform == "darwin":  # OSX
-             os.system('rm -rf ' + 'media/tmp')  # cleaning out all files generated during tests
-             os.system('mkdir ' + 'media/tmp')
+             os.system('rm -rf ' + 'media/temp')  # cleaning out all files generated during tests
+             os.system('mkdir ' + 'media/temp')
          elif platform == "win32":  # Windows
              os.system('rmdir /s /q ' + "media/temp")  # cleaning out all files generated during tests
              os.system('mkdir ' + "media/temp")
