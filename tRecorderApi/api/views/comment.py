@@ -52,13 +52,19 @@ class CommentViewSet(viewsets.ModelViewSet):
         sound.export(comment_location + ".mp3", format='mp3')
         os.remove(comment_location + ".webm")
 
-        Comment(
+        c = Comment.objects.create(
             location = comment_location + ".mp3",
             content_object = q_obj,
             user = q_user
-        ).save()
+        )
+        c.save()
+        
+        dic = {
+            "location": comment_location + ".mp3",
+            "id": c.pk
+        }
 
-        return Response({"location": comment_location + ".mp3"}, status=status.HTTP_200_OK)
+        return Response(dic, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
         instance = self.get_object()

@@ -37,6 +37,8 @@
         <a href="/api/push_takes">Push Takes</a> <br><br>
         <a href="/api/exclude_files">Exclude Files</a> <br><br>
         <a href="/api/stitch_takes">Stitch Source</a> <br><br>
+        <button id="browseButton">Select files</button>
+        <button id="pause-upload-btn">Pause uploading</button>
     </div>
     <div style="clear:both"></div>
     <hr>
@@ -139,3 +141,61 @@
     }
 </script>
 <script src="/static/FileSaver.min.js"></script>
+<script src="/static/resumable.js"></script>
+<script>
+    (function() {
+        var r = new Resumable({
+            target: '/api/resumable_upload/file/',
+        });
+
+        r.assignBrowse(document.getElementById('browseButton'));
+
+        document.getElementById("pause-upload-btn").addEventListener("click", function(event) {
+            if (r.files.length > 0) {
+                if (r.isUploading()) {
+                    return r.pause();
+                }
+                return r.upload();
+            }
+        }, false);
+
+        r.on('fileSuccess', function(file) {
+            console.debug('fileSuccess', file);
+        });
+        r.on('fileProgress', function(file) {
+            console.debug('fileProgress', file);
+        });
+        r.on('fileAdded', function(file, event) {
+            console.debug('fileAdded', event);
+            r.upload();
+        });
+        r.on('filesAdded', function(array) {
+            r.upload();
+            console.debug('filesAdded', array);
+        });
+        r.on('fileRetry', function(file) {
+            console.debug('fileRetry', file);
+        });
+        r.on('fileError', function(file, message) {
+            console.debug('fileError', file, message);
+        });
+        r.on('uploadStart', function() {
+            console.debug('uploadStart');
+        });
+        r.on('complete', function() {
+            console.debug('complete');
+        });
+        r.on('progress', function() {
+            console.debug('progress');
+        });
+        r.on('error', function(message, file) {
+            console.debug('error', message, file);
+        });
+        r.on('pause', function() {
+            console.debug('pause');
+        });
+        r.on('cancel', function() {
+            console.debug('cancel');
+        });
+    })();
+</script>
