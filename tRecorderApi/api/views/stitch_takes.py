@@ -25,7 +25,6 @@ class SourceStitchView(views.APIView):
 
             stitchedSource = AudioSegment.from_mp3(loclst[0])
             loclst.pop(0)
-            print(type(stitchedSource))
             for item in loclst:
                 sound1 = stitchedSource
                 sound2 = AudioSegment.from_mp3(item)
@@ -36,8 +35,8 @@ class SourceStitchView(views.APIView):
             project_name = str(data["language"]) + "_" + str(data["book"]) + "_" + str(data["version"]) + "_" + str(data["chapter"])
             stitchedSource.export("./media/source/" + project_name + ".mp3", format="mp3")
 
-            return Response(loclst, status = 200)
+            return Response({"Success"}, status = 200)
 
         else:
             return Response({"error": "not_enough_parameters"}, status=400)
-        return Response(lst, status = 200)
+        return Response({"Success"}, status = 200)
