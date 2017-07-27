@@ -26,7 +26,7 @@ class ProjectChapterInfoViewTestCases(TestCase):
 
     def test_post_request_for_project_chapter_info_view(self):
         """Testing POST request where we include metadata from a take to search for all chapters and get the data for those chapters back"""
-        response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ESV', 'book': 'en'}, format='json')
+        response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book': 'mrk'}, format='json')
         result = str(response.data)  # converting response data to string so we can view what's in the data
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # checking that we get the correct response back from api

@@ -6,9 +6,9 @@ from sys import platform
 from django.conf import settings
 
 base_url = 'http://127.0.0.1:8000/api/'
-tr_path = settings.BASE_DIR + '/media/temp'
+tr_path = settings.BASE_DIR + '/media/tmp'
 tr_filepath = settings.BASE_DIR + '/en-x-demo2_ulb.tr'
-location_wav = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
+location_wav = '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 class TRTestCases(TestCase):
 
@@ -32,7 +32,7 @@ class TRTestCases(TestCase):
         self.response = self.client.post(base_url + 'get_source', {'language': 'en-x-demo', 'version': 'ulb'},
                                          format='json')
         # just checking for existence of .tr file extension
-        self.assertIn('en-x-demo2_ulb.tr', os.listdir(tr_path))
+        self.assertIn('en-x-demo_ulb_mrk.tr', os.listdir(tr_path))
 
     def test_that_tR_is_in_correct_directory(self):
         """Verify that tR was created in correct directory"""
@@ -45,11 +45,12 @@ class TRTestCases(TestCase):
     def tearDown(self):
          if platform == "darwin":  # OSX
              pass
-            # os.system('rm -rf ' + 'media/temp')  # cleaning out all files generated during tests
-            # os.system('mkdir ' + 'media/temp')
+            #os.system('rm -rf ' + settings.BASE_DIR + '/media/tmp')  # cleaning out all files generated during tests
+            #os.system('mkdir ' + settings.BASE_DIR + '/media/tmp')
          elif platform == "win32":  # Windows
-             os.system('rmdir /s /q ' + "media/temp")  # cleaning out all files generated during tests
-             os.system('mkdir ' + "media/temp")
+             pass
+             #os.system('rmdir /s /q ' + settings.BASE_DIR + "/media/tmp")  # cleaning out all files generated during tests
+             #os.system('mkdir ' + settings.BASE_DIR + "/media/tmp")
          self.take.delete()
          self.user.delete()
          self.chunk.delete()
