@@ -78,7 +78,7 @@
             "book": "mrk"
         }, function(response) {
             document.getElementById("getexport_loader").style.display = "none";
-            saveAs(response, 'en-x-demo2_ulb_mrk.zip')
+            saveData(response, 'en-x-demo2_ulb_mrk.zip');
         }, function(error) {
             document.getElementById("getexport_loader").style.display = "none";
             console.log(error);
@@ -90,10 +90,10 @@
         jspost("/api/get_source/", {
             "language": "en-x-demo2",
             "version": "ulb",
-            "is_source": false
+            "book": "mrk"
         }, function(response) {
             document.getElementById("getsource_loader").style.display = "none";
-            saveAs(response, 'en-x-demo2_ulb.tr')
+            saveData(response, 'en-x-demo2_ulb.tr');
         }, function(error) {
             document.getElementById("getsource_loader").style.display = "none";
             console.log(error);
@@ -112,7 +112,7 @@
             "files_list": {}
         }, function(response) {
             loader.style.display = "none";
-            saveAs(response, 'en-x-demo2_ulb_mrk.zip')
+            saveData(response, 'en-x-demo2_ulb_mrk.zip');
         }, function(error) {
             loader.style.display = "none";
             console.log(error);
@@ -139,8 +139,23 @@
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify(data));
     }
+
+    var saveData = (function() {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        return function(data, fileName) {
+            var blob = new Blob([data], {
+                    type: "octet/stream"
+                }),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    }());
 </script>
-<script src="/static/FileSaver.min.js"></script>
 <script src="/static/resumable.js"></script>
 <script>
     (function() {
