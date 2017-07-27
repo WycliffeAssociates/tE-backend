@@ -16,6 +16,8 @@ class UploadSourceFileView(views.APIView):
 
     def post(self, request, filename, format='tr'):
         if request.method == 'POST' and request.data['upload']:
+            # TODO remove this functionality
+            
             response = {}
             uuid_name = str(time.time()) + str(uuid.uuid4())
             tempFolder = "media" + os.sep + "dump" + os.sep + uuid_name + os.sep

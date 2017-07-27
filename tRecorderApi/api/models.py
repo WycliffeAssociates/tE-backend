@@ -381,8 +381,8 @@ class Chunk(models.Model):
             filter["startv"] = data["startv"]
         if "endv" in data:
             filter["endv"] = data["endv"]
-        if "is_source" in data:
-            filter["chapter__project__is_source"] = data["is_source"]
+        #if "is_source" in data:
+        #    filter["chapter__project__is_source"] = data["is_source"]
 
         chunks = Chunk.objects.filter(**filter)
 
@@ -410,8 +410,8 @@ class Chunk(models.Model):
             try:
                 if "project" not in data_dic:
                     data_dic["project"] = model_to_dict(chunk.chapter.project,
-                        fields=["id","is_publish", "is_source",
-                            "version", "mode", "anthology"])
+                        fields=["id","is_publish", "version",
+                            "mode", "anthology"])
             except:
                 pass
 
@@ -448,8 +448,8 @@ class Chunk(models.Model):
                     pass
                 chunk_dic["comments"].append(comm_dic)
 
-            # Include source file if any
-            source_language = chunk.chapter.project.source_language
+            # Include source file if any / TODO remove source from code and db
+            """source_language = chunk.chapter.project.source_language
             if source_language and chunk.chapter.project.book:
                 source_dic = {}
                 source_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
@@ -474,7 +474,7 @@ class Chunk(models.Model):
                         "markers","location","id"
                     ])
                     source_dic["take"]["version"] = source_take.chunk.chapter.project.version
-                    chunk_dic["source"] = source_dic
+                    chunk_dic["source"] = source_dic"""
 
             # Include takes
             takes_list = []
@@ -625,9 +625,8 @@ class Take(models.Model):
             dic["take"]["startv"] = take.chunk.startv
             dic["take"]["endv"] = take.chunk.endv
 
-            # Include source file if any
-            #if take["is_source"] is False:
-            source_language = take.chunk.chapter.project.source_language
+            # Include source file if any / TODO remove source from code and db
+            """source_language = take.chunk.chapter.project.source_language
             if source_language and take.chunk.chapter.project.book:
                 s_dic = {}
                 s_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
@@ -652,7 +651,7 @@ class Take(models.Model):
                         "markers","location"
                     ])
                     s_dic["take"]["version"] = s_take.chunk.chapter.project.version
-                    dic["source"] = s_dic
+                    dic["source"] = s_dic"""
 
             lst.append(dic)
         return lst
@@ -661,17 +660,14 @@ class Take(models.Model):
     def stitchSource(data):
         list = []
         filter = {}
-        chunks = Chunk.objects.all()
         filter["chapter__project__language__slug"] = data["language"]
         filter["chapter__project__version"] = data["version"]
         filter["chapter__project__book__slug"] = data["book"]
         filter["chapter__number"] = data["chapter"]
         filter["chapter__project__is_source"] = data["is_source"]
 
-        res = chunks.filter(**filter)
+        res = Chunk.objects.filter(**filter)
         return res.values()
-
-
 
     @staticmethod
     def updateTakesByProject(data):
@@ -691,8 +687,8 @@ class Take(models.Model):
             filter["chunk__chapter__number"] = data["filter"]["chapter"]
         if "startv" in data["filter"]:
             filter["chunk__startv"] = data["filter"]["startv"]
-        if "is_source" in data["filter"]:
-            filter["chunk__chapter__project__is_source"] = data["filter"]["is_source"]
+        #if "is_source" in data["filter"]:
+        #    filter["chunk__chapter__project__is_source"] = data["filter"]["is_source"]
         if "is_publish" in data["filter"]:
             filter["chunk__chapter__is_publish"] = data["filter"]["is_publish"]
 
@@ -768,6 +764,7 @@ class Take(models.Model):
         # then check if it exists in database
         # if it exists then update it's data
         # otherwise create new record
+        # TODO remove source files functionality
         if (is_source):
             defaults = {
                 'location': abpath,
