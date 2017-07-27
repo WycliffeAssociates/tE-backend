@@ -72,57 +72,69 @@
 <script>
     document.getElementById("getexport").addEventListener("click", function(event) {
         document.getElementById("getexport_loader").style.display = "inline-block";
+        type = "json"
         jspost("/api/zip_files/", {
-            "language": "en-x-demo2",
-            "version": "ulb",
-            "book": "mrk"
-        }, function(response) {
-            document.getElementById("getexport_loader").style.display = "none";
-            saveData(response, 'en-x-demo2_ulb_mrk.zip');
-        }, function(error) {
-            document.getElementById("getexport_loader").style.display = "none";
-            console.log(error);
-        })
+                "language": "en-x-demo2",
+                "version": "ulb",
+                "book": "mrk"
+            },
+            type,
+            function(response) {
+                document.getElementById("getexport_loader").style.display = "none";
+                saveData("/" + response.location, 'en-x-demo2_ulb_mrk.zip', type);
+            },
+            function(error) {
+                document.getElementById("getexport_loader").style.display = "none";
+                console.log(error);
+            })
     }, false);
 
     document.getElementById("getsource").addEventListener("click", function(event) {
         document.getElementById("getsource_loader").style.display = "inline-block";
+        type = "json"
         jspost("/api/get_source/", {
-            "language": "en-x-demo2",
-            "version": "ulb",
-            "book": "mrk"
-        }, function(response) {
-            document.getElementById("getsource_loader").style.display = "none";
-            saveData(response, 'en-x-demo2_ulb.tr');
-        }, function(error) {
-            document.getElementById("getsource_loader").style.display = "none";
-            console.log(error);
-        })
+                "language": "en-x-demo2",
+                "version": "ulb",
+                "book": "mrk"
+            },
+            type,
+            function(response) {
+                document.getElementById("getsource_loader").style.display = "none";
+                saveData("/" + response.location, 'en-x-demo2_ulb.tr', type);
+            },
+            function(error) {
+                document.getElementById("getsource_loader").style.display = "none";
+                console.log(error);
+            })
     }, false);
 
     document.getElementById("getzip").addEventListener("click", function(event) {
         loader = document.getElementById("getzip_loader");
         loader.style.display = "inline-block"
+        type = "blob"
         jspost("/api/push_takes/", {
-            "project": {
-                "language": "en-x-demo2",
-                "version": "ulb",
-                "book": "mrk"
+                "project": {
+                    "language": "en-x-demo2",
+                    "version": "ulb",
+                    "book": "mrk"
+                },
+                "files_list": {}
             },
-            "files_list": {}
-        }, function(response) {
-            loader.style.display = "none";
-            saveData(response, 'en-x-demo2_ulb_mrk.zip');
-        }, function(error) {
-            loader.style.display = "none";
-            console.log(error);
-        })
+            type,
+            function(response) {
+                loader.style.display = "none";
+                saveData(response, 'en-x-demo2_ulb_mrk.zip', type);
+            },
+            function(error) {
+                loader.style.display = "none";
+                console.log(error);
+            })
     }, false);
 
-    function jspost(url, data, success, error) {
+    function jspost(url, data, type, success, error) {
         var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
         xmlhttp.open("POST", url);
-        xmlhttp.responseType = "blob"
+        xmlhttp.responseType = type
 
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE) {
@@ -132,7 +144,6 @@
                     error(this.response);
                     console.log(this.responseText);
                 }
-
             }
         }
 
@@ -144,11 +155,16 @@
         var a = document.createElement("a");
         document.body.appendChild(a);
         a.style = "display: none";
-        return function(data, fileName) {
-            var blob = new Blob([data], {
-                    type: "octet/stream"
-                }),
-                url = window.URL.createObjectURL(blob);
+        return function(data, fileName, type) {
+            if (type == "blob") {
+                var blob = new Blob([data], {
+                        type: "octet/stream"
+                    }),
+                    url = window.URL.createObjectURL(blob);
+            } else {
+                url = data
+            }
+
             a.href = url;
             a.download = fileName;
             a.click();

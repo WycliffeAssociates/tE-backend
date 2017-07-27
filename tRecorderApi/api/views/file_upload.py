@@ -7,8 +7,10 @@ import os
 from tinytag import TinyTag
 from rest_framework.response import Response
 import json
-from helpers import highPassFilter
+from helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
+from django.conf import settings
+import re
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -21,7 +23,7 @@ class FileUploadView(views.APIView):
             # unzip files
             try:
                 zip = zipfile.ZipFile(upload)
-                folder_name = 'media/dump/' + uuid_name
+                folder_name = os.path.join(settings.BASE_DIR, 'media/dump/' + uuid_name)
 
                 zip.extractall(folder_name)
                 zip.close()
@@ -40,6 +42,7 @@ class FileUploadView(views.APIView):
                     for f in files:
                         is_empty_zip = False
                         abpath = os.path.join(root, os.path.basename(f))
+                        relpath = getRelativePath(abpath)
                         try:
                             meta = TinyTag.get(abpath)
                         except LookupError as e:
@@ -65,7 +68,7 @@ class FileUploadView(views.APIView):
                                 }
                             
                             #highPassFilter(abpath)
-                            Take.prepareDataToSave(pls, abpath, data)
+                            Take.prepareDataToSave(pls, relpath, data)
                         else:
                             return Response({"error": "bad_wave_file"}, status=400)
                 

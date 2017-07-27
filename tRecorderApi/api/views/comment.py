@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from api.serializers import CommentSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, JSONParser
-from helpers import getFilePath
+from helpers import getRelativePath
 from django.forms.models import model_to_dict
 from api.models import Take, User, Chapter, Chunk
 import os
@@ -12,6 +12,7 @@ import base64
 import pydub
 import uuid
 import time
+from django.conf import settings
 
 class CommentViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
@@ -48,13 +49,15 @@ class CommentViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
         uuid_name = str(time.time()) + str(uuid.uuid4())
-        comment_location = "media/dump/comments/" + uuid_name
+        comments_folder = os.path.join(settings.BASE_DIR, "media/dump/comments")
+        comment_location = os.path.join(comments_folder, uuid_name)
+        relpath = getRelativePath(comment_location)
 
-        if not os.path.exists("media/dump/comments"):
-            os.makedirs("media/dump/comments")
+        if not os.path.exists(comments_folder):
+            os.makedirs(comments_folder)
         
         try:
-            comment = blob2base64Decode(comment)
+            comment = self.blob2base64Decode(comment)
             with open(comment_location + '.webm', 'wb') as audio_file:
                 audio_file.write(comment)
 
@@ -67,14 +70,14 @@ class CommentViewSet(viewsets.ModelViewSet):
             return Response({"error": "bad_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
         c = Comment.objects.create(
-            location = comment_location + ".mp3",
+            location = relpath + ".mp3",
             content_object = q_obj,
             user = q_user
         )
         c.save()
         
         dic = {
-            "location": comment_location + ".mp3",
+            "location": relpath + ".mp3",
             "id": c.pk
         }
 
@@ -89,5 +92,5 @@ class CommentViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_200_OK)
 
-def blob2base64Decode(str):
-    return base64.decodestring(re.sub(r'^(.*base64,)', '', str))
+    def blob2base64Decode(self, str):
+        return base64.decodestring(re.sub(r'^(.*base64,)', '', str))
