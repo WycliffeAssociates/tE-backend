@@ -1,5 +1,5 @@
 from rest_framework import views, status
-from rest_framework.parsers import JSONParser, MultiPartParser
+from rest_framework.parsers import MultiPartParser
 import time
 import uuid
 import zipfile
