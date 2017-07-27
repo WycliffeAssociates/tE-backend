@@ -15,6 +15,7 @@ from tinytag import TinyTag
 import urllib2
 import pickle
 from api.models import Take
+from django.conf import settings
 
 
 class SourceFileView(views.APIView):
@@ -28,11 +29,12 @@ class SourceFileView(views.APIView):
             #data["is_source"] = True
             data["is_publish"] = True
             takes = Take.getTakesByProject(data)
+            print len(takes)
             if len(takes) > 0:
                 uuid_name = str(time.time()) + str(uuid.uuid4())
-                root_folder = 'media/temp/' + uuid_name
+                root_folder = settings.BASE_DIR + '/media/temp/' + uuid_name
                 project_folder = root_folder + '/' + data['language'] + '/' + data['version']
-                
+
                 try:
                     for take in takes:
                         chapter_folder = project_folder + '/' + take['book']['slug'] + '/' + str(
@@ -42,7 +44,7 @@ class SourceFileView(views.APIView):
                         shutil.copy2(take['take']['location'], chapter_folder)
                         file_name = os.path.basename(take['take']['location'])
                         file_path = chapter_folder + '/' + file_name
-                        
+
                         if file_path.endswith('.wav'):
                             file_path_mp3 = file_path.replace('.wav', '.mp3')
 
@@ -67,9 +69,11 @@ class SourceFileView(views.APIView):
                     subprocess.call(['java', '-jar', 'aoh/aoh.jar', '-c', '-tr', root_folder],
                                     stdout=FNULL, stderr=subprocess.STDOUT)
                     FNULL.close()
-                    os.rename(root_folder+'.tr', 'media/temp/'+data['language']+'_'+data['version']+'.tr')
+                    wav_file_folder=root_folder+'/'+data['language']+'_'+data['version']+'.tr'
+                    os.rename(wav_file_folder, 'media/temp/'+data['language']+'_'+data['version']+'.tr')
                     shutil.rmtree(root_folder)
                 except Exception as e:
+                    print e
                     return Response({"error": str(e)}, status=400)
             else:
                 return Response({"response": "no_source_files"}, status=400)

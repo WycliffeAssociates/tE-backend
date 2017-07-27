@@ -71,7 +71,7 @@ class Book(models.Model):
 
     @staticmethod
     def getBookByCode(code):
-        with open('books.json') as books_file:
+        with open('8woc2017backend/tRecorderApi/books.json') as books_file:
             books = json.load(books_file)
 
         bn = ""
@@ -655,6 +655,7 @@ class Take(models.Model):
                     dic["source"] = s_dic
 
             lst.append(dic)
+            print len(lst)
         return lst
 
     @staticmethod

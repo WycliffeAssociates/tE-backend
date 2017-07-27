@@ -4,10 +4,11 @@ from rest_framework import status
 from api.models import Language, Book, User, Comment, Take, Chunk, Project, Chapter
 import os
 from sys import platform
+from django.conf import settings
 
 base_url = 'http://127.0.0.1:8000/api/'
 view_set_url = 'http://127.0.0.1:8000/api/exclude_files/'
-my_file = "en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav"
+my_file = settings.BASE_DIR + "/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav"
 
 
 class ExcludedFileViewTestCases(TestCase):

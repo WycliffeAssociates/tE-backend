@@ -3,9 +3,10 @@ from api.models import Comment, Project, Take, User, Book, Language, Chunk, Chap
 from api.views import CommentViewSet
 from rest_framework.test import APIClient
 from rest_framework import status
+from django.conf import settings
 
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = 'media/dump'
+my_file = settings.BASE_DIR + 'media/dump'
 
 
 class IntegrationCommentTests(TestCase):
