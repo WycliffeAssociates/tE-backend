@@ -471,7 +471,7 @@ class Chunk(models.Model):
                         source_take.markers = {}
 
                     source_dic["take"] = model_to_dict(source_take, fields=[
-                        "markers","location"
+                        "markers","location","id"
                     ])
                     source_dic["take"]["version"] = source_take.chunk.chapter.project.version
                     chunk_dic["source"] = source_dic

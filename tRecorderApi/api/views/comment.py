@@ -22,43 +22,63 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         
-        comment = request.data["comment"]
-        user = request.data["user"]
-        obj = request.data["object"]
-        obj_type = request.data["type"]
+        data = request.data
 
-        if obj_type == 'chapter':
-            q_obj = Chapter.objects.get(pk=obj)
-        elif obj_type == 'chunk':
-            q_obj = Chunk.objects.get(pk=obj)
-        elif obj_type == 'take':
-            q_obj = Take.objects.get(pk=obj)
-        else:
-            return Response({"error": "wrong_object"}, status=status.HTTP_400_BAD_REQUEST)
+        if "comment" not in data or "user" not in data  \
+            or "object" not in data or "type" not in data:
+            return Response({"error": "not_enough_parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
-        q_user = User.objects.get(pk=user)
+        comment = data["comment"]
+        user = data["user"]
+        obj = data["object"]
+        obj_type = data["type"]
+
+        try:
+            if obj_type == 'chapter':
+                q_obj = Chapter.objects.get(pk=obj)
+            elif obj_type == 'chunk':
+                q_obj = Chunk.objects.get(pk=obj)
+            elif obj_type == 'take':
+                q_obj = Take.objects.get(pk=obj)
+            else:
+                raise ValueError("bad_object")
+
+            q_user = User.objects.get(pk=user)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
         uuid_name = str(time.time()) + str(uuid.uuid4())
         comment_location = "media/dump/comments/" + uuid_name
 
         if not os.path.exists("media/dump/comments"):
             os.makedirs("media/dump/comments")
-
-        comment = blob2base64Decode(comment)
-        with open(comment_location + '.webm', 'wb') as audio_file:
-            audio_file.write(comment)
         
-        sound = pydub.AudioSegment.from_file(comment_location + '.webm')
-        sound.export(comment_location + ".mp3", format='mp3')
-        os.remove(comment_location + ".webm")
+        try:
+            comment = blob2base64Decode(comment)
+            with open(comment_location + '.webm', 'wb') as audio_file:
+                audio_file.write(comment)
 
-        Comment(
+            sound = pydub.AudioSegment.from_file(comment_location + '.webm')
+            sound.export(comment_location + ".mp3", format='mp3')
+            os.remove(comment_location + ".webm")
+        except:
+            if os.path.isfile(comment_location + '.webm'):
+                os.remove(comment_location + '.webm')
+            return Response({"error": "bad_audio"}, status=status.HTTP_400_BAD_REQUEST)
+
+        c = Comment.objects.create(
             location = comment_location + ".mp3",
             content_object = q_obj,
             user = q_user
-        ).save()
+        )
+        c.save()
+        
+        dic = {
+            "location": comment_location + ".mp3",
+            "id": c.pk
+        }
 
-        return Response({"location": comment_location + ".mp3"}, status=status.HTTP_200_OK)
+        return Response(dic, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
