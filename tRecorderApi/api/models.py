@@ -270,40 +270,40 @@ class Chapter(models.Model):
 
                 # contains information about all chunks in a book
                 chunkInfo = []
-                for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
+                for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks')):
                     if dirpath[-3:] == bkname:
                         for fname in os.listdir(dirpath):
                             f = open(os.path.join(dirpath, fname), "r")
                             sus = json.loads(f.read())
                             chunkInfo = sus
                         break
+                
                 # contains info about relevant chapter
                 chunkstuff = []
                 chapnum = chapter.number
                 for chunk in chunkInfo:
                     if chunk["id"][:2] == str("%02d" % chapnum):
                         chunkstuff.append(chunk)
-                chunks = chapter.chunk_set.all()
 
                 percentComplete = 0
+                chunks = chapter.chunk_set.all()
 
-                if len(chunks) > 0:
-                    numtakes = list(chunks)
+                if len(chunkstuff) > 0:
                     if mode == "chunk":
-                        percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
+                        percentComplete = int(round(len(chunks)/(len(chunkstuff))* 100))
                     else:
                         versetotal = 0
                         for i in chunkstuff:
                             if int(i["lastvs"]) > versetotal:
                                 versetotal = int(i["lastvs"])
-                        percentComplete = int(round((len(numtakes)/versetotal) * 100))
+                        if versetotal > 0:
+                            percentComplete = int(round((len(chunks)/versetotal) * 100))
 
                 chap_dic["percent_complete"] = percentComplete
                 chap_dic["date_modified"] = latest_take.date_modified
 
                 # Get contributors
                 chap_dic["contributors"] = []
-                chunks = chapter.chunk_set.all()
                 for chunk in chunks:
                     takes = chunk.take_set.all()
                     for take in takes:
