@@ -1,13 +1,14 @@
 import StringIO
 import zipfile
-
 from django.core import files
 from django.http import HttpResponse
 from rest_framework import views
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from api.models import Chunk
-from helpers import getFileName, md5Hash, getFilePath
+from helpers import getFileName, md5Hash, getFilePath, getRelativePath
+from django.conf import settings
+import os
 
 
 class PushTakesView(views.APIView):
@@ -16,8 +17,6 @@ class PushTakesView(views.APIView):
     def post(self, request):
         data = request.data
         if all(k in data["project"] for k in ('language', 'version', 'book')):
-            data["project"]["is_source"] = False
-            
             takes_name_and_locations = []
             response_array = {
                 "en-x-demo2_ulb_b42_mrk_c07_v31-32_t03.wav": "6d6f8d635297adb9b8e83f38e0634er4",
@@ -41,7 +40,7 @@ class PushTakesView(views.APIView):
             project = Chunk.getChunksWithTakesByProject(data["project"])
             for chunk in project["chunks"]:
                 for take in chunk['takes']:
-                    location = take['take']['location']
+                    location = os.path.join(settings.BASE_DIR, take['take']['location'])
                     file_name = getFileName(location)
                     file_hash = md5Hash(location)
                     if file_name not in response_array:
@@ -52,7 +51,7 @@ class PushTakesView(views.APIView):
             mf = StringIO.StringIO()
             with zipfile.ZipFile(mf, 'w') as zipped_f:
                 for audio in takes_name_and_locations:
-                    zipped_f.write(audio, getFilePath(audio))
+                    zipped_f.write(audio, getFilePath(getRelativePath(audio)))
             response = HttpResponse(mf.getvalue(), content_type='application/zip')
             response['Content-Disposition'] = 'attachment; filename=file.zip'
             return response

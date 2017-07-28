@@ -11,11 +11,12 @@ import json
 import re
 from helpers import highPassFilter
 from api.models import Book, Language, Take
+from django.conf import settings
 
 class ResumableFileUploadView(views.APIView):
     parser_classes = (MultiPartParser,)
 
-    tempFolder = "media/tmp/"
+    tempFolder = os.path.join(settings.BASE_DIR, "media/tmp/")
     isUploadComplete = False
 
     def post(self, request, filename, format='zip'):

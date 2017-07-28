@@ -10,6 +10,8 @@ import zipfile
 from rest_framework.response import Response
 from django.http import HttpResponse
 from api.models import Chunk
+from django.conf import settings
+from helpers import getRelativePath
 
 class ProjectZipFilesView(views.APIView):
     parser_classes = (JSONParser,)
@@ -37,11 +39,12 @@ class ProjectZipFilesView(views.APIView):
         if len(project["chunks"]) > 0:
             filesInZip = []
             uuid_name = str(time.time()) + str(uuid.uuid4())
-            root_folder = 'media/export/' + uuid_name
+            root_folder = os.path.join(settings.BASE_DIR, 'media/export', uuid_name)
             chapter_folder = ""
             project_name = project['language']["slug"] + \
                 "_" + project['project']['version'] + \
                 "_" + project['book']['slug']
+            project_file = os.path.join(settings.BASE_DIR, 'media/export', project_name + ".zip")
 
             if not os.path.exists(root_folder):
                 os.makedirs(root_folder)
@@ -59,7 +62,7 @@ class ProjectZipFilesView(views.APIView):
                         os.makedirs(chapter_folder)
 
                     loc = {}
-                    loc["src"] = take["take"]["location"]
+                    loc["src"] = os.path.join(settings.BASE_DIR, take["take"]["location"])
                     loc["dst"] = chapter_folder
                     locations.append(loc)
 
@@ -83,17 +86,13 @@ class ProjectZipFilesView(views.APIView):
                         filesInZip.append(filePath)
 
             # Creating zip file
-            with zipfile.ZipFile('media/export/' + project_name + '.zip', 'w') as zipped_f:
+            with zipfile.ZipFile(project_file, 'w') as zipped_f:
                 for members in filesInZip:
                     zipped_f.write(members, members.replace(root_folder,""))
 
             # delete the newly created wave and mp3 files
             shutil.rmtree(root_folder)
 
-            with open('media/export/' + project_name + '.zip', 'rb') as zip_file:
-                response = HttpResponse(zip_file, content_type='application/zip')
-                response['Content-Disposition'] = 'attachment; filename='+project_name+'.zip'
-
-            return response
+            return Response({"location": getRelativePath(project_file)}, status=200)
         else:
             return Response({"error":"no_files"}, status=400)
