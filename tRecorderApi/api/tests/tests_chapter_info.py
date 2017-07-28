@@ -31,7 +31,7 @@ class ProjectChapterInfoViewTestCases(TestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)  # checking that we get the correct response back from api
         self.assertNotEqual(0, len(response.data))  # checking that the response contains data
-        self.assertIn("'chapter': 5",
+        self.assertIn("'language': {'slug': u'en-x-demo', 'name': u'english'}",
                       result)  # test that the term we searched for is in the data returned from the post request
 
     def tearDown(self):
