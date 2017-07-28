@@ -8,8 +8,9 @@ import json
 import shutil
 from rest_framework.response import Response
 from tinytag import TinyTag
-from helpers import highPassFilter
+from helpers import highPassFilter, getRelativePath
 from api.models import Language, Book, Take
+from django.conf import settings
 
 class UploadSourceFileView(views.APIView):
     parser_classes = (MultiPartParser,)
@@ -20,21 +21,21 @@ class UploadSourceFileView(views.APIView):
             
             response = {}
             uuid_name = str(time.time()) + str(uuid.uuid4())
-            tempFolder = "media" + os.sep + "dump" + os.sep + uuid_name + os.sep
+            tempFolder = os.path.join(settings.BASE_DIR, "media/dump/" + uuid_name)
             if not os.path.exists(tempFolder):
                 os.makedirs(tempFolder)
                 data = request.data['upload']
-                with open(tempFolder + os.sep + "source.tr", 'w') as temp_file:
+                with open(os.path.join(tempFolder, "source.tr"), 'w') as temp_file:
                     for line in data:
                         temp_file.write(line)
         try:
             FNULL = open(os.devnull, 'w')
             subprocess.check_output(
-                ['java', '-jar', 'aoh/aoh.jar', '-x', tempFolder + os.sep + "source.tr"],
+                ['java', '-jar', os.path.join(settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
                 stderr=subprocess.STDOUT
             )
 
-            os.remove(tempFolder + os.sep + "source.tr")
+            os.remove(os.path.join(tempFolder, "source.tr"))
             FNULL.close()
             
             bookname = ''
@@ -45,6 +46,7 @@ class UploadSourceFileView(views.APIView):
             for root, dirs, files in os.walk(tempFolder):
                 for f in files:
                     abpath = os.path.join(root, os.path.basename(f))
+                    relpath = getRelativePath(abpath)
                     meta = TinyTag.get(abpath)
 
                     if meta and meta.artist:
@@ -67,7 +69,7 @@ class UploadSourceFileView(views.APIView):
                         }
 
                         #highPassFilter(abpath)
-                        saved = Take.prepareDataToSave(pls, abpath, data, True)
+                        saved = Take.prepareDataToSave(pls, relpath, data, True)
                         if "language" in saved and "language" not in response:
                             response["language"] = saved["language"]
                         if "book" in saved and "book" not in response:
