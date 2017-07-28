@@ -18,7 +18,6 @@ def md5Hash(fname):
     except:
         return ""
 
-
 def getFileName(location):
     return location.split(os.sep)[-1]
 

@@ -4,14 +4,13 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = 'media/dump'
 
 
 class IntegrationBookTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.book_data = {'code': 'ex', 'name': 'english', 'booknum': 5}
-        self.book_object = Book(name='english', booknum=5, id=1)
+        self.book_data = {'slug': 'ex', 'name': 'english', 'booknum': 5}
+        self.book_object = Book(name='english', booknum=5, slug = 'slug')
 
     def test_api_can_create_book_object(self):
         """Test the API has book creation capability:

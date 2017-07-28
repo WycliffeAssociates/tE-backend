@@ -4,13 +4,12 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = 'media/dump'
 
 class IntegrationUserTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user_data = {'name': 'tester', 'agreed': True, 'picture': 'test.pic'}
-        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg', id=1)
+        self.user_object = User(name='testy', agreed=True, picture='mypic.jpg')
 
     def test_that_api_can_create_user_object(self):
         """Test the API has user creation capability:

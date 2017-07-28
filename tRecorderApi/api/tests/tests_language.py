@@ -4,14 +4,13 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = 'media/dump'
 
 
 class IntegrationLanguageTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.lang_data = {'lang': 'english', 'code': 'abc'}
-        self.language_object = Language(slug='en-x-demo', name='english', id=1)
+        self.lang_data = {'name': 'english', 'slug': 'abc'}
+        self.language_object = Language(slug='en-x-demo', name='english')
 
     def test_api_can_create_lang_object(self):
         """Test the API has lang creation capability:
@@ -25,7 +24,7 @@ class IntegrationLanguageTests(TestCase):
         Sending Language Object To API and
         Expecting HTTP Success Message Returned"""
         self.language_object.save()
-        response = self.client.put(base_url + 'languages/1/', {'code': 'ex-demo'}, format='json')
+        response = self.client.put(base_url + 'languages/1/', {'slug': 'ex-demo'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.language_object.delete()
         self.assertEqual(0, len(Language.objects.filter(id=1)))

@@ -20,9 +20,9 @@ class Language(models.Model):
         for project in projects:
             if project.version and project.language and project.book:
                 lst.append(model_to_dict(project.language))
-        
+
         # distinct list
-        lst = list({v['id']:v for v in lst}.values())
+        lst = list({v['id']: v for v in lst}.values())
         return lst
 
     @staticmethod
@@ -64,9 +64,9 @@ class Book(models.Model):
         for project in projects:
             if project.version and project.language and project.book:
                 lst.append(model_to_dict(project.book))
-        
+
         # distinct list
-        lst = list({v['id']:v for v in lst}.values())
+        lst = list({v['id']: v for v in lst}.values())
         return lst
 
     @staticmethod
@@ -99,6 +99,7 @@ class User(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Comment(models.Model):
     location = models.CharField(max_length=250)
     date_modified = models.DateTimeField(default=now)
@@ -113,6 +114,7 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.location
+
 
 class Project(models.Model):
     version = models.CharField(max_length=3, blank=True)
@@ -173,7 +175,7 @@ class Project(models.Model):
                                 dic["contributors"].append(take.user.name)
                         except:
                             pass
-            
+
             dic["checked_level"] = checklvl
             mode = project.mode
             bkname = project.book.slug
@@ -186,20 +188,20 @@ class Project(models.Model):
                         chunkInfo = sus
                     break
             totalChunk = float(len(chunkInfo))
-            completed = int(round((availChunks/totalChunk) * 100))
+            completed = int(round((availChunks / totalChunk) * 100))
             dic["completed"] = completed
 
             # Get language
             try:
                 dic["language"] = model_to_dict(project.language,
-                    fields=["slug","name"])
+                                                fields=["slug", "name"])
             except:
                 pass
 
             # Get book
             try:
                 dic["book"] = model_to_dict(project.book,
-                    fields=["booknum","slug","name"])
+                                            fields=["booknum", "slug", "name"])
             except:
                 pass
 
@@ -214,16 +216,17 @@ class Project(models.Model):
         for project in projects:
             if project.version and project.language and project.book:
                 lst.append(project.version)
-        
+
         # distinct list
         lst = list(set(lst))
         return lst
 
     class Meta:
-        ordering = ["language","version","book"]
+        ordering = ["language", "version", "book"]
 
     def __unicode__(self):
         return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
+
 
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
@@ -246,7 +249,7 @@ class Chapter(models.Model):
 
         for project in projects:
             # Get chapters
-            
+
             if not project.version or not project.language or not project.book:
                 continue
 
@@ -265,7 +268,7 @@ class Chapter(models.Model):
                 chap_dic["checked_level"] = chapter.checked_level
                 chap_dic["is_publish"] = chapter.is_publish
 
-                #contains information about all chunks in a book
+                # contains information about all chunks in a book
                 chunkInfo = []
                 for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
                     if dirpath[-3:] == bkname:
@@ -274,13 +277,14 @@ class Chapter(models.Model):
                             sus = json.loads(f.read())
                             chunkInfo = sus
                         break
-                #contains info about relevant chapter
+                # contains info about relevant chapter
                 chunkstuff = []
                 chapnum = chapter.number
                 for chunk in chunkInfo:
-                    if chunk["id"][:2] == str("%02d"%chapnum):
+                    if chunk["id"][:2] == str("%02d" % chapnum):
                         chunkstuff.append(chunk)
                 chunks = chapter.chunk_set.all()
+
                 percentComplete = 0
 
                 if len(chunks) > 0:
@@ -296,7 +300,6 @@ class Chapter(models.Model):
 
                 chap_dic["percent_complete"] = percentComplete
                 chap_dic["date_modified"] = latest_take.date_modified
-
 
                 # Get contributors
                 chap_dic["contributors"] = []
@@ -314,10 +317,10 @@ class Chapter(models.Model):
                 chap_dic["comments"] = []
                 for cmt in chapter.comments.all():
                     dic2 = {}
-                    dic2["comment"] = model_to_dict(cmt, fields=["location","date_modified"])
+                    dic2["comment"] = model_to_dict(cmt, fields=["location", "date_modified"])
                     # Include author of comment
                     try:
-                        dic2["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+                        dic2["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
                     except:
                         pass
                     chap_dic["comments"].append(dic2)
@@ -329,22 +332,22 @@ class Chapter(models.Model):
             # Get language
             try:
                 dic["language"] = model_to_dict(project.language,
-                    fields=["slug","name"])
+                                                fields=["slug", "name"])
             except:
                 dic["language"] = {}
 
             # Get book
             try:
                 dic["book"] = model_to_dict(project.book,
-                    fields=["booknum","slug","name"])
+                                            fields=["booknum", "slug", "name"])
             except:
                 dic["language"] = {}
-            #Get Project ID
+            # Get Project ID
             try:
                 dic["project_id"] = project.id
             except:
                 dic["project_id"] = {}
-            #Get is_publish
+            # Get is_publish
             try:
                 dic["is_publish"] = project.is_publish
             except:
@@ -356,6 +359,7 @@ class Chapter(models.Model):
 
     def __unicode__(self):
         return '{}'.format(self.number)
+
 
 class Chunk(models.Model):
     startv = models.IntegerField(default=0)
@@ -397,14 +401,14 @@ class Chunk(models.Model):
             try:
                 if "language" not in data_dic:
                     data_dic["language"] = model_to_dict(chunk.chapter.project.language,
-                        fields=["slug","name"])
+                                                         fields=["slug", "name"])
             except:
                 pass
             # Include book data
             try:
                 if "book" not in data_dic:
                     data_dic["book"] = model_to_dict(chunk.chapter.project.book,
-                        fields=["booknum","slug","name"])
+                                                     fields=["booknum", "slug", "name"])
             except:
                 pass
 
@@ -421,17 +425,17 @@ class Chunk(models.Model):
             try:
                 if "chapter" not in data_dic:
                     data_dic["chapter"] = model_to_dict(chunk.chapter,
-                        fields=["id","is_publish", "number",
-                            "checked_level", "comments"])
+                                                        fields=["id", "is_publish", "number",
+                                                                "checked_level", "comments"])
 
                     # Include comments for chapter
                     data_dic["chapter"]["comments"] = []
                     for cmt in chunk.chapter.comments.all():
                         comm_dic = {}
-                        comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location","date_modified"])
+                        comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
                         # Include author of comment
                         try:
-                            comm_dic["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+                            comm_dic["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
                         except:
                             pass
                         data_dic["chapter"]["comments"].append(comm_dic)
@@ -442,10 +446,10 @@ class Chunk(models.Model):
             chunk_dic["comments"] = []
             for cmt in chunk.comments.all():
                 comm_dic = {}
-                comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location","date_modified"])
+                comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
                 # Include author of comment
                 try:
-                    comm_dic["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+                    comm_dic["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
                 except:
                     pass
                 chunk_dic["comments"].append(comm_dic)
@@ -489,19 +493,19 @@ class Chunk(models.Model):
 
                 # Include author of file
                 try:
-                    take_dic["user"] = model_to_dict(take.user, fields=["name","agreed","picture"])
+                    take_dic["user"] = model_to_dict(take.user, fields=["name", "agreed", "picture"])
                 except:
                     pass
 
                 # Include comments for chunks
                 take_dic["comments"] = []
-                #for cmt in Comment.objects.filter(content_type=take.id).values():
+                # for cmt in Comment.objects.filter(content_type=take.id).values():
                 for cmt in take.comments.all():
                     comm_dic = {}
-                    comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location","date_modified"])
+                    comm_dic["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
                     # Include author of comment
                     try:
-                        comm_dic["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
+                        comm_dic["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
                     except:
                         pass
                     take_dic["comments"].append(comm_dic)
@@ -513,8 +517,8 @@ class Chunk(models.Model):
                     take.markers = {}
 
                 take_dic["take"] = model_to_dict(take, fields=[
-                    "location","duration","rating",
-                    "date_modified","markers","id",
+                    "location", "duration", "rating",
+                    "date_modified", "markers", "id",
                     "is_publish"
                 ])
 
@@ -540,6 +544,7 @@ class Chunk(models.Model):
             self.startv,
             self.endv)
 
+
 class Take(models.Model):
     location = models.CharField(max_length=250)
     duration = models.IntegerField(default=0)
@@ -560,7 +565,7 @@ class Take(models.Model):
         filter["chapter__project__version"] = data["version"]
         filter["chapter__project__book__slug"] = data["book"]
         filter["chapter__number"] = data["chapter"]
-        
+
         res = Chunk.objects.filter(**filter)
         return res
 
@@ -634,7 +639,7 @@ class Take(models.Model):
             number=meta['chapter'],
             defaults={
                 'number': meta['chapter'],
-                'checked_level': 0,  #TODO get checked_level from tR
+                'checked_level': 0,  # TODO get checked_level from tR
                 'project': project},
         )
         dic["chapter"] = model_to_dict(chapter)
