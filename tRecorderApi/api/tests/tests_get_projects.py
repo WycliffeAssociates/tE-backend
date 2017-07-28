@@ -8,8 +8,8 @@ from django.conf import settings
 
 view_url = 'http://127.0.0.1:8000/api/get_project_takes/'
 base_url = 'http://127.0.0.1:8000/api/'
-my_file = settings.BASE_DIR + 'media/dump'
-location_wav = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
+my_file = settings.BASE_DIR + '/media/dump'
+location_wav = settings.BASE_DIR + '/en-x-demo_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
 class GetProjectsTestCases(TestCase):
@@ -26,7 +26,7 @@ class GetProjectsTestCases(TestCase):
         self.user = User.objects.create(name='testy', agreed=True, picture='mypic.jpg')
         self.take = Take.objects.create(location=location_wav, is_publish=True,
                                    duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk, user=self.user)
-        self.project_takes_data = {"language": "en-x-demo2", "version": "ulb", "book": "mrk", "chapter": 1}
+        self.project_takes_data = {"language": "en-x-demo", "version": "ulb", "book": "mrk", "chapter": 1}
 
     def test_that_we_can_get_projects(self):
         """Testing that submitting a POST request through key search returns a JSON object"""
@@ -36,7 +36,7 @@ class GetProjectsTestCases(TestCase):
         # telling the API that I want all takes that are saved on the specified location
         result = str(self.response.data)  # convert data returned from post request to string so we can checkthe data inside
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
-        self.assertIn("en-x-demo2",
+        self.assertIn("en-x-demo",
                       result)  # test that the term we searched for is in the data returned from the post request
 
     def test_that_we_can_get_no_projects_from_api(self):
