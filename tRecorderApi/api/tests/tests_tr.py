@@ -9,7 +9,7 @@ import time
 base_url = 'http://127.0.0.1:8000/api/'
 tr_path = settings.BASE_DIR + '/media/tmp'
 tr_filepath = settings.BASE_DIR + '/en-x-demo2_ulb.tr'
-location_wav = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
+location_wav = 'en-x-demo2_ulb_b42_mrk_c06_v04-06_t08.wav'
 
 class TRTestCases(TestCase):
 

@@ -51,8 +51,8 @@ class ExcludedFileViewTestCases(TestCase):
 
     def tearDown(self):
         if platform == "darwin":  # OSX
-            os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
-            os.system('mkdir ' + 'media/export')
+            os.system('rm -rf ' + settings.BASE_DIR + '/media/export')  # cleaning out all files generated during tests
+            os.system('mkdir ' + settings.BASE_DIR + '/media/export')
         elif platform == "win32":  # Windows
-            os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
-            os.system('mkdir ' + 'media\export')
+            os.system('rmdir /s /q ' + settings.BASE_DIR + '\media\export')  # cleaning out all files generated during tests
+            os.system('mkdir ' + settings.BASE_DIR + '\media\export')
