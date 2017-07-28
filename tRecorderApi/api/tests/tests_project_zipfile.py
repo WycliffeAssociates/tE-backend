@@ -10,7 +10,7 @@ from django.conf import settings
 view_url = 'http://127.0.0.1:8000/api/zip_files/'
 base_url = 'http://127.0.0.1:8000/api/'
 upload_url = 'http://127.0.0.1:8000/api/upload/zip'
-my_file = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
+my_file = settings.BASE_DIR + '/en-x-demo_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
 class ProjectZipFileViewTestCases(TestCase):
@@ -43,7 +43,7 @@ class ProjectZipFileViewTestCases(TestCase):
         """POST request for Project Zip File view expects a wav file as input, and will return a zip file"""
 
         old_folder_size = len(os.listdir('media/export'))  # find the total number of files in the media/export folder
-        self.response = self.client.post(view_url, {"language": "en-x-demo2","version": "ulb", "book":"mrk"}, format='json')
+        self.response = self.client.post(view_url, {"language": "en-x-demo","version": "ulb", "book":"mrk"}, format='json')
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)  # making sure that we return the correct status code
         new_folder_size = len(os.listdir('media/export'))  # new zip file should have been added to media/export folder
         self.assertNotEqual(old_folder_size, new_folder_size)  # check that a new file exists in media/export
