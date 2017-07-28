@@ -256,7 +256,6 @@ class Chapter(models.Model):
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
 
-
             chaps = []
             chapters = project.chapter_set.all()
             for chapter in chapters:
@@ -282,19 +281,20 @@ class Chapter(models.Model):
                     if chunk["id"][:2] == str("%02d"%chapnum):
                         chunkstuff.append(chunk)
                 chunks = chapter.chunk_set.all()
-                numtakes = list(chunks)
-                if mode == "chunk":
-                    percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
-                    chap_dic["percent_complete"] = percentComplete
-                else:
-                    versetotal = 0
-                    for i in chunkstuff:
-                        if int(i["lastvs"]) > versetotal:
-                            versetotal = int(i["lastvs"])
-                    percentComplete = int(round((len(numtakes)/versetotal) * 100))
-                    chap_dic["percent_complete"] = percentComplete
+                percentComplete = 0
 
+                if len(chunks) > 0:
+                    numtakes = list(chunks)
+                    if mode == "chunk":
+                        percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
+                    else:
+                        versetotal = 0
+                        for i in chunkstuff:
+                            if int(i["lastvs"]) > versetotal:
+                                versetotal = int(i["lastvs"])
+                        percentComplete = int(round((len(numtakes)/versetotal) * 100))
 
+                chap_dic["percent_complete"] = percentComplete
                 chap_dic["date_modified"] = latest_take.date_modified
 
 
@@ -369,20 +369,22 @@ class Chunk(models.Model):
         chunks_list = []
         filter = {}
 
+        if "project" in data:
+            filter["chapter__project"] = data["project"]
         if "language" in data:
             filter["chapter__project__language__slug"] = data["language"]
         if "version" in data:
             filter["chapter__project__version"] = data["version"]
         if "book" in data:
             filter["chapter__project__book__slug"] = data["book"]
+        if "mode" in data:
+            filter["chapter__project__mode"] = data["mode"]
         if "chapter" in data:
             filter["chapter__number"] = data["chapter"]
         if "startv" in data:
             filter["startv"] = data["startv"]
         if "endv" in data:
             filter["endv"] = data["endv"]
-        if "is_source" in data:
-            filter["chapter__project__is_source"] = data["is_source"]
 
         chunks = Chunk.objects.filter(**filter)
 
@@ -410,8 +412,8 @@ class Chunk(models.Model):
             try:
                 if "project" not in data_dic:
                     data_dic["project"] = model_to_dict(chunk.chapter.project,
-                        fields=["id","is_publish", "is_source",
-                            "version", "mode", "anthology"])
+                        fields=["id","is_publish", "version",
+                            "mode", "anthology"])
             except:
                 pass
 
@@ -448,8 +450,8 @@ class Chunk(models.Model):
                     pass
                 chunk_dic["comments"].append(comm_dic)
 
-            # Include source file if any
-            source_language = chunk.chapter.project.source_language
+            # Include source file if any / TODO remove source from code and db
+            """source_language = chunk.chapter.project.source_language
             if source_language and chunk.chapter.project.book:
                 source_dic = {}
                 source_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
@@ -471,10 +473,10 @@ class Chunk(models.Model):
                         source_take.markers = {}
 
                     source_dic["take"] = model_to_dict(source_take, fields=[
-                        "markers","location"
+                        "markers","location","id"
                     ])
                     source_dic["take"]["version"] = source_take.chunk.chapter.project.version
-                    chunk_dic["source"] = source_dic
+                    chunk_dic["source"] = source_dic"""
 
             # Include takes
             takes_list = []
@@ -551,127 +553,16 @@ class Take(models.Model):
     comments = GenericRelation(Comment)
 
     @staticmethod
-    def getTakesByProject(data):
-        lst = []
-        filter = {}
-        takes = Take.objects.all()
-
-        if "language" in data:
-            filter["chunk__chapter__project__language__slug"] = data["language"]
-        if "version" in data:
-            filter["chunk__chapter__project__version"] = data["version"]
-        if "book" in data:
-            filter["chunk__chapter__project__book__slug"] = data["book"]
-        if "chapter" in data:
-            filter["chunk__chapter__number"] = data["chapter"]
-        if "startv" in data:
-            filter["chunk__startv"] = data["startv"]
-        if "is_source" in data:
-            filter["chunk__chapter__project__is_source"] = data["is_source"]
-        if "is_publish" in data:
-            filter["is_publish"] = data["is_publish"]
-
-        res = takes.filter(**filter)
-
-        for take in res:
-            dic = {}
-            # Include language name
-            try:
-                dic["language"] = model_to_dict(take.chunk.chapter.project.language,
-                    fields=["slug","name"])
-            except:
-                pass
-            # Include book name
-            try:
-                dic["book"] = model_to_dict(take.chunk.chapter.project.book,
-                    fields=["booknum","slug","name"])
-            except:
-                pass
-            # Include author of file
-            try:
-                dic["user"] = model_to_dict(take.user, fields=["name","agreed","picture"])
-            except:
-                pass
-
-
-            # Include comments
-            dic["comments"] = []
-            #for cmt in Comment.objects.filter(content_type=take.id).values():
-            for cmt in take.comments.all():
-                dic2 = {}
-                dic2["comment"] = model_to_dict(cmt, fields=["location","date_modified"])
-                # Include author of comment
-                try:
-                    dic2["user"] = model_to_dict(cmt.user, fields=["name","agreed","picture"])
-                except:
-                    pass
-                dic["comments"].append(dic2)
-
-            # Parse markers
-            if take.markers:
-                take.markers = json.loads(take.markers)
-            else:
-                take.markers = {}
-
-            dic["take"] = model_to_dict(take, fields=[
-                "location","duration","rating",
-                "date_modified","markers","id",
-                "is_publish"
-            ])
-            dic["take"]["anthology"] = take.chunk.chapter.project.anthology
-            dic["take"]["version"] = take.chunk.chapter.project.version
-            dic["take"]["chapter"] = take.chunk.chapter.number
-            dic["take"]["mode"] = take.chunk.chapter.project.mode
-            dic["take"]["startv"] = take.chunk.startv
-            dic["take"]["endv"] = take.chunk.endv
-
-            # Include source file if any
-            #if take["is_source"] is False:
-            source_language = take.chunk.chapter.project.source_language
-            if source_language and take.chunk.chapter.project.book:
-                s_dic = {}
-                s_dic["language"] = model_to_dict(source_language, fields=["slug","name"])
-
-                s_take = Take.objects \
-                    .filter(chunk__chapter__project__language__slug=s_dic["language"]["slug"]) \
-                    .filter(chunk__chapter__project__version=dic["take"]["version"]) \
-                    .filter(chunk__chapter__project__book__slug=dic["book"]["slug"]) \
-                    .filter(chunk__chapter__project__mode=dic["take"]["mode"]) \
-                    .filter(chunk__chapter__number=dic["take"]["chapter"]) \
-                    .filter(chunk__startv=dic["take"]["startv"]) \
-                    .filter(chunk__endv=dic["take"]["endv"]) \
-                    .filter(chunk__chapter__project__is_source=True) \
-                    .first()
-                if s_take:
-                    if s_take.markers:
-                        s_take.markers = json.loads(s_take.markers)
-                    else:
-                        s_take.markers = {}
-
-                    s_dic["take"] = model_to_dict(s_take, fields=[
-                        "markers","location"
-                    ])
-                    s_dic["take"]["version"] = s_take.chunk.chapter.project.version
-                    dic["source"] = s_dic
-
-            lst.append(dic)
-        return lst
-
-    @staticmethod
     def stitchSource(data):
         list = []
         filter = {}
-        chunks = Chunk.objects.all()
         filter["chapter__project__language__slug"] = data["language"]
         filter["chapter__project__version"] = data["version"]
         filter["chapter__project__book__slug"] = data["book"]
         filter["chapter__number"] = data["chapter"]
-        filter["chapter__project__is_source"] = data["is_source"]
-
-        res = chunks.filter(**filter)
-        return res.values()
-
-
+        
+        res = Chunk.objects.filter(**filter)
+        return res
 
     @staticmethod
     def updateTakesByProject(data):
@@ -691,15 +582,13 @@ class Take(models.Model):
             filter["chunk__chapter__number"] = data["filter"]["chapter"]
         if "startv" in data["filter"]:
             filter["chunk__startv"] = data["filter"]["startv"]
-        if "is_source" in data["filter"]:
-            filter["chunk__chapter__project__is_source"] = data["filter"]["is_source"]
         if "is_publish" in data["filter"]:
             filter["chunk__chapter__is_publish"] = data["filter"]["is_publish"]
 
         return Take.objects.filter(**filter).update(**fields)
 
     @staticmethod
-    def prepareDataToSave(meta, abpath, data, is_source=False):
+    def prepareDataToSave(meta, relpath, data, is_source=False):
         dic = {}
 
         # Create Language in database if it's not there
@@ -768,9 +657,10 @@ class Take(models.Model):
         # then check if it exists in database
         # if it exists then update it's data
         # otherwise create new record
+        # TODO remove source files functionality
         if (is_source):
             defaults = {
-                'location': abpath,
+                'location': relpath,
                 'duration': data['duration'],
                 'rating': 0,  # TODO get rating from tR
                 'markers': markers,
@@ -792,7 +682,7 @@ class Take(models.Model):
                 obj = Take(**new_values)
                 obj.save()
         else:
-            take = Take(location=abpath,
+            take = Take(location=relpath,
                         duration=data['duration'],
                         rating=0,  # TODO get rating from tR
                         markers=markers,
