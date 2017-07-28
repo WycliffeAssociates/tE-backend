@@ -4,11 +4,12 @@ import os
 from api.models import *
 from sys import platform
 from django.conf import settings
+import time
 
 base_url = 'http://127.0.0.1:8000/api/'
 tr_path = settings.BASE_DIR + '/media/tmp'
 tr_filepath = settings.BASE_DIR + '/en-x-demo2_ulb.tr'
-location_wav = '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
+location_wav = 'en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 class TRTestCases(TestCase):
 
@@ -31,8 +32,10 @@ class TRTestCases(TestCase):
         self.client.post(base_url + 'upload/zip', {'Media type': '*/*', 'Content': 'en-x-demo2_ulb_mrk.zip'})
         self.response = self.client.post(base_url + 'get_source', {'language': 'en-x-demo', 'version': 'ulb'},
                                          format='json')
-        # just checking for existence of .tr file extension
-        self.assertIn('en-x-demo_ulb_mrk.tr', os.listdir(tr_path))
+        # verify that tr file now exists
+        # unexpected behavior where my assert runs before tr file is created
+        # but examination of the file structure does verify that tr file is created even when test fails
+        self.assertTrue(os.path.exists(tr_path + '/en-x-demo_ulb_mrk.tr'))
 
     def test_that_tR_is_in_correct_directory(self):
         """Verify that tR was created in correct directory"""
