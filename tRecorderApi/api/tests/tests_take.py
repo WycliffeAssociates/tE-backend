@@ -21,7 +21,7 @@ class IntegrationTakeTestCases(TestCase):
         self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
         self.user = User.objects.create(name='testy', agreed=True, picture='mypic.jpg')
         self.take = Take.objects.create(location=location_wav, is_publish=True,
-                                   duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk, user=self.user)
+                                   duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk, user=self.user, id=1)
         self.take_data = {
             "id": 22,
             "location": "my_file",
@@ -30,6 +30,15 @@ class IntegrationTakeTestCases(TestCase):
             "is_publish": True,
             "markers": "marked",
             "date_modified": "2017-07-26T12:29:02.828000Z"}
+
+        self.new_take_data = {
+            "location" : location_wav,
+            "duration" : 1,
+            "markers" : "{\"test\" : \"true\"}",
+            "is_publish" : True,
+            "rating" : 2,
+            "date_modified": "2017-07-26T12:29:02.828000Z"
+        }
 
     def test_api_can_create_take_object(self):
         """Test the API has take creation capability:
@@ -42,9 +51,12 @@ class IntegrationTakeTestCases(TestCase):
         """Test that the API can update a take object:
         Sending Take Object To API and
         Expecting HTTP Success Message Returned"""
-        self.response = self.client.put(base_url + 'takes/1/', {"duration": 1}, format='json')
+        self.client.post(base_url + 'takes/', self.take_data, format='json')
+        old_count = len(Take.objects.filter(duration=1))
+        self.response = self.client.put(base_url + 'takes/1/', self.new_take_data, format='json')
+        new_count = len(Take.objects.filter(duration=1))
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
-        self.assertEqual(0, len(Take.objects.filter(duration=1)))
+        self.assertGreaterEqual(1, new_count - old_count)
 
     def test_get_take_request_returns_success(self):
         """Testing API can handle GET requests for Take objects"""
