@@ -7,6 +7,7 @@ import urllib2
 import pickle
 import json
 import os
+from django.conf import settings
 
 
 class Language(models.Model):
@@ -71,7 +72,7 @@ class Book(models.Model):
 
     @staticmethod
     def getBookByCode(code):
-        with open('books.json') as books_file:
+        with open(settings.BASE_DIR + '/books.json') as books_file:
             books = json.load(books_file)
 
         bn = ""

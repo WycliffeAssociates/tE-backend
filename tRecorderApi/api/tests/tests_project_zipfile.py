@@ -10,13 +10,13 @@ from django.conf import settings
 view_url = 'http://127.0.0.1:8000/api/zip_files/'
 base_url = 'http://127.0.0.1:8000/api/'
 upload_url = 'http://127.0.0.1:8000/api/upload/zip'
-my_file = settings.BASE_DIR + '/en-x-demo_ulb_b42_mrk_c06_v01-03_t11.wav'
+my_file = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v04-06_t08.wav'
 
 
 class ProjectZipFileViewTestCases(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.lang = Language.objects.create(slug='en-x-demo', name='english')
+        self.lang = Language.objects.create(slug='en-x-demo2', name='english')
         self.book = Book.objects.create(name='mark', booknum=5, slug='mrk')
         self.proj = Project.objects.create(version='ulb', mode='chunk',
                                            anthology='nt', is_source=False, language=self.lang,
@@ -42,10 +42,10 @@ class ProjectZipFileViewTestCases(TestCase):
     def test_post_request_for_project_zip_file_view(self):
         """POST request for Project Zip File view expects a wav file as input, and will return a zip file"""
 
-        old_folder_size = len(os.listdir('media/export'))  # find the total number of files in the media/export folder
-        self.response = self.client.post(view_url, {"language": "en-x-demo","version": "ulb", "book":"mrk"}, format='json')
+        old_folder_size = len(os.listdir(settings.BASE_DIR + '/media/export'))  # find the total number of files in the media/export folder
+        self.response = self.client.post(view_url, {"language": "en-x-demo2","version": "ulb", "book":"mrk"}, format='json')
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)  # making sure that we return the correct status code
-        new_folder_size = len(os.listdir('media/export'))  # new zip file should have been added to media/export folder
+        new_folder_size = len(os.listdir(settings.BASE_DIR + '/media/export'))  # new zip file should have been added to media/export folder
         self.assertNotEqual(old_folder_size, new_folder_size)  # check that a new file exists in media/export
 
     def test_posting_file_to_api_returns_success_response(self):
@@ -58,7 +58,7 @@ class ProjectZipFileViewTestCases(TestCase):
     def test_that_we_get_403_error_when_not_enough_parameters_in_ProjectZipFile(self):
         """Testing that submitting a POST request through book key search returns an object"""
         # saving objects in temporary database so they can be read by the API
-        self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb'},
+        self.response = self.client.post(view_url, {'language': 'en-x-demo2', 'version': 'ulb'},
                                     format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -66,28 +66,31 @@ class ProjectZipFileViewTestCases(TestCase):
         """Testing that submitting a POST request through book key search returns an object"""
         # saving objects in temporary database so they can be read by the API
 
-        self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book':'gen'},
+        self.response = self.client.post(view_url, {'language': 'en-x-demo2', 'version': 'ulb', 'book':'gen'},
                                     format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
 
     #throws error, can't see takes for some reason
     def test_that_we_get_200_when_enough_parameters_and_takes_in_ProjectZipFile(self):
         """Testing that submitting a POST request will return a project zip file"""
-        # saving objects in temporary database so they can be read by the API
 
         self.client.post(base_url + 'takes/', self.take_data, format='json')
-        self.response = self.client.post(view_url, {'language': 'en-x-demo', 'version': 'ulb', 'book': 'gen'},
+        self.response = self.client.post(view_url, {'language': 'en-x-demo2', 'version': 'ulb', 'book': 'mrk'},
                                          format='json')  # telling the API that I want all takes that are in book English
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
 
     def tearDown(self):
         if platform == "darwin":  # OSX
-            os.system('rm -rf ' + 'media/export')  # cleaning out all files generated during tests
-            os.system('mkdir ' + 'media/export')
+            os.system('rm -rf ' + settings.BASE_DIR + '/media/dump')  # cleaning out all files generated during tests
+            os.system('mkdir ' + settings.BASE_DIR + '/media/dump')
+            os.system('rm -rf ' + settings.BASE_DIR + '/media/export')
+            os.system('mkdir ' + settings.BASE_DIR + '/media/export')
         elif platform == "win32":  # Windows
-            os.system('rmdir /s /q ' + 'media\export')  # cleaning out all files generated during tests
-            os.system('mkdir ' + 'media\export')
+            os.system('rmdir /s /q ' + settings.BASE_DIR + '/media/dump')  # cleaning out all files generated during tests
+            os.system('mkdir ' + settings.BASE_DIR + '/media/dump')
+            os.system('rmdir /s /q ' + settings.BASE_DIR + '/media/export')
+            os.system('mkdir ' + settings.BASE_DIR + '/media/export')
         self.take.delete()
         self.user.delete()
         self.chunk.delete()
