@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from api.serializers import CommentSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, JSONParser
-from helpers import getFilePath
+from helpers import getRelativePath
 from django.forms.models import model_to_dict
 from api.models import Take, User, Chapter, Chunk
 import os
@@ -12,6 +12,7 @@ import base64
 import pydub
 import uuid
 import time
+from django.conf import settings
 
 class CommentViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
@@ -22,43 +23,65 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         
-        comment = request.data["comment"]
-        user = request.data["user"]
-        obj = request.data["object"]
-        obj_type = request.data["type"]
+        data = request.data
 
-        if obj_type == 'chapter':
-            q_obj = Chapter.objects.get(pk=obj)
-        elif obj_type == 'chunk':
-            q_obj = Chunk.objects.get(pk=obj)
-        elif obj_type == 'take':
-            q_obj = Take.objects.get(pk=obj)
-        else:
-            return Response({"error": "wrong_object"}, status=status.HTTP_400_BAD_REQUEST)
+        if "comment" not in data or "user" not in data  \
+            or "object" not in data or "type" not in data:
+            return Response({"error": "not_enough_parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
-        q_user = User.objects.get(pk=user)
+        comment = data["comment"]
+        user = data["user"]
+        obj = data["object"]
+        obj_type = data["type"]
+
+        try:
+            if obj_type == 'chapter':
+                q_obj = Chapter.objects.get(pk=obj)
+            elif obj_type == 'chunk':
+                q_obj = Chunk.objects.get(pk=obj)
+            elif obj_type == 'take':
+                q_obj = Take.objects.get(pk=obj)
+            else:
+                raise ValueError("bad_object")
+
+            q_user = User.objects.get(pk=user)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
         uuid_name = str(time.time()) + str(uuid.uuid4())
-        comment_location = "media/dump/comments/" + uuid_name
+        comments_folder = os.path.join(settings.BASE_DIR, "media/dump/comments")
+        comment_location = os.path.join(comments_folder, uuid_name)
+        relpath = getRelativePath(comment_location)
 
-        if not os.path.exists("media/dump/comments"):
-            os.makedirs("media/dump/comments")
-
-        comment = blob2base64Decode(comment)
-        with open(comment_location + '.webm', 'wb') as audio_file:
-            audio_file.write(comment)
+        if not os.path.exists(comments_folder):
+            os.makedirs(comments_folder)
         
-        sound = pydub.AudioSegment.from_file(comment_location + '.webm')
-        sound.export(comment_location + ".mp3", format='mp3')
-        os.remove(comment_location + ".webm")
+        try:
+            comment = self.blob2base64Decode(comment)
+            with open(comment_location + '.webm', 'wb') as audio_file:
+                audio_file.write(comment)
 
-        Comment(
-            location = comment_location + ".mp3",
+            sound = pydub.AudioSegment.from_file(comment_location + '.webm')
+            sound.export(comment_location + ".mp3", format='mp3')
+            os.remove(comment_location + ".webm")
+        except:
+            if os.path.isfile(comment_location + '.webm'):
+                os.remove(comment_location + '.webm')
+            return Response({"error": "bad_audio"}, status=status.HTTP_400_BAD_REQUEST)
+
+        c = Comment.objects.create(
+            location = relpath + ".mp3",
             content_object = q_obj,
             user = q_user
-        ).save()
+        )
+        c.save()
+        
+        dic = {
+            "location": relpath + ".mp3",
+            "id": c.pk
+        }
 
-        return Response({"location": comment_location + ".mp3"}, status=status.HTTP_200_OK)
+        return Response(dic, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
@@ -69,5 +92,5 @@ class CommentViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_200_OK)
 
-def blob2base64Decode(str):
-    return base64.decodestring(re.sub(r'^(.*base64,)', '', str))
+    def blob2base64Decode(self, str):
+        return base64.decodestring(re.sub(r'^(.*base64,)', '', str))

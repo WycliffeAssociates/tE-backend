@@ -284,18 +284,21 @@ class Chapter(models.Model):
                     if chunk["id"][:2] == str("%02d" % chapnum):
                         chunkstuff.append(chunk)
                 chunks = chapter.chunk_set.all()
-                numtakes = list(chunks)
-                if mode == "chunk":
-                    percentComplete = int(round(len(numtakes) / (len(chunkstuff)) * 100))
-                    chap_dic["percent_complete"] = percentComplete
-                else:
-                    versetotal = 0
-                    for i in chunkstuff:
-                        if int(i["lastvs"]) > versetotal:
-                            versetotal = int(i["lastvs"])
-                    percentComplete = int(round((len(numtakes) / versetotal) * 100))
-                    chap_dic["percent_complete"] = percentComplete
 
+                percentComplete = 0
+
+                if len(chunks) > 0:
+                    numtakes = list(chunks)
+                    if mode == "chunk":
+                        percentComplete = int(round(len(numtakes)/(len(chunkstuff))* 100))
+                    else:
+                        versetotal = 0
+                        for i in chunkstuff:
+                            if int(i["lastvs"]) > versetotal:
+                                versetotal = int(i["lastvs"])
+                        percentComplete = int(round((len(numtakes)/versetotal) * 100))
+
+                chap_dic["percent_complete"] = percentComplete
                 chap_dic["date_modified"] = latest_take.date_modified
 
                 # Get contributors
@@ -413,8 +416,8 @@ class Chunk(models.Model):
             try:
                 if "project" not in data_dic:
                     data_dic["project"] = model_to_dict(chunk.chapter.project,
-                                                        fields=["id", "is_publish", "version",
-                                                                "mode", "anthology"])
+                        fields=["id","is_publish", "version",
+                            "mode", "anthology"])
             except:
                 pass
 
@@ -562,10 +565,9 @@ class Take(models.Model):
         filter["chapter__project__version"] = data["version"]
         filter["chapter__project__book__slug"] = data["book"]
         filter["chapter__number"] = data["chapter"]
-        filter["chapter__project__is_source"] = data["is_source"]
 
         res = Chunk.objects.filter(**filter)
-        return res.values()
+        return res
 
     @staticmethod
     def updateTakesByProject(data):
@@ -591,7 +593,7 @@ class Take(models.Model):
         return Take.objects.filter(**filter).update(**fields)
 
     @staticmethod
-    def prepareDataToSave(meta, abpath, data, is_source=False):
+    def prepareDataToSave(meta, relpath, data, is_source=False):
         dic = {}
 
         # Create Language in database if it's not there
@@ -663,7 +665,7 @@ class Take(models.Model):
         # TODO remove source files functionality
         if (is_source):
             defaults = {
-                'location': abpath,
+                'location': relpath,
                 'duration': data['duration'],
                 'rating': 0,  # TODO get rating from tR
                 'markers': markers,
@@ -685,7 +687,7 @@ class Take(models.Model):
                 obj = Take(**new_values)
                 obj.save()
         else:
-            take = Take(location=abpath,
+            take = Take(location=relpath,
                         duration=data['duration'],
                         rating=0,  # TODO get rating from tR
                         markers=markers,

@@ -1,5 +1,5 @@
 from rest_framework import views, status
-from rest_framework.parsers import JSONParser, FileUploadParser
+from rest_framework.parsers import MultiPartParser
 import time
 import os
 import uuid
@@ -12,25 +12,21 @@ from helpers import highPassFilter
 from api.models import Language, Book, Take
 
 class UploadSourceFileView(views.APIView):
-    parser_classes = (FileUploadParser,)
+    parser_classes = (MultiPartParser,)
 
     def post(self, request, filename, format='tr'):
-        if request.method == 'POST' and request.data['file']:
+        if request.method == 'POST' and request.data['upload']:
+            # TODO remove this functionality
+            
             response = {}
-            #response["takes"] = []
             uuid_name = str(time.time()) + str(uuid.uuid4())
             tempFolder = "media" + os.sep + "dump" + os.sep + uuid_name + os.sep
             if not os.path.exists(tempFolder):
                 os.makedirs(tempFolder)
-                data = request.data['file']
+                data = request.data['upload']
                 with open(tempFolder + os.sep + "source.tr", 'w') as temp_file:
-                    i = 0
-                    # remove first 4 lines from the file which are content-type info
-                    # TODO find the better way to get body of the file
                     for line in data:
-                        if i > 3:
-                            temp_file.write(line)
-                        i += 1
+                        temp_file.write(line)
         try:
             FNULL = open(os.devnull, 'w')
             subprocess.check_output(

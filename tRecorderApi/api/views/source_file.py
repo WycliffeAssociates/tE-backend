@@ -42,7 +42,7 @@ class SourceFileView(views.APIView):
         project = Chunk.getChunksWithTakesByProject(new_data)
         if len(project["chunks"]) > 0:
             uuid_name = str(time.time()) + str(uuid.uuid4())
-            root_folder = settings.BASE_DIR + '/media/tmp/' + uuid_name
+            root_folder = os.path.join(settings.BASE_DIR, 'media/tmp/' + uuid_name)
             filename = project['language']["slug"] + '_' + project['project']['version'] + '_' + project['book']['slug']
             project_folder = root_folder + '/' + project['language']["slug"] + '/' + project['project'][
                 'version'] + '/' + project['book']['slug']
@@ -54,7 +54,7 @@ class SourceFileView(views.APIView):
                             project['chapter']['number']).zfill(2)
                         if not os.path.exists(chapter_folder):
                             os.makedirs(chapter_folder)
-                        shutil.copy2(settings.BASE_DIR + take['take']['location'], chapter_folder)
+                        shutil.copy2(os.path.join(settings.BASE_DIR, take['take']['location']), chapter_folder)
                         file_name = os.path.basename(take['take']['location'])
                         file_path = chapter_folder + '/' + file_name
 
@@ -79,21 +79,15 @@ class SourceFileView(views.APIView):
                             os.remove(file_path)
 
                 FNULL = open(os.devnull, 'w')
-                subprocess.call(['java', '-jar', settings.BASE_DIR + '/aoh/aoh.jar', '-c', '-tr', root_folder],
+                subprocess.call(['java', '-jar', os.path.join(settings.BASE_DIR, 'aoh/aoh.jar'), '-c', '-tr', root_folder],
                                 stdout=FNULL, stderr=subprocess.STDOUT)
                 FNULL.close()
                 os.rename(root_folder + '.tr',
-                          settings.BASE_DIR + '/media/tmp/' + filename + '.tr')
+                          os.path.join(settings.BASE_DIR, 'media/tmp/' + filename + '.tr'))
                 shutil.rmtree(root_folder)
             except Exception as e:
                 return Response({"error": str(e)}, status=400)
         else:
             return Response({"response": "no_source_files"}, status=400)
 
-        with open(settings.BASE_DIR + '/media/tmp/' + filename + '.tr', 'rb') as source_file:
-            response = HttpResponse(files.File(source_file), content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename="%s"' % (
-                filename + '.tr')
-
-        return response
-
+        return Response({"location": 'media/tmp/' + filename + '.tr'}, status=200)
