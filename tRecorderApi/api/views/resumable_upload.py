@@ -39,6 +39,7 @@ class ResumableFileUploadView(views.APIView):
             if self.isFileUploadComplete(identifier, filename, chunkSize, totalSize):
                 self.isUploadComplete = True;
                 self.createFileAndDeleteTmp(identifier, filename)
+                return Response({"response":"ok"}, status=200)
 
             return Response(status=200)
 
