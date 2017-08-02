@@ -38,7 +38,8 @@
         <a href="/api/exclude_files">Exclude Files</a> <br><br>
         <a href="/api/stitch_takes">Stitch Source</a> <br><br>
         <button id="browseButton">Select files</button>
-        <button id="pause-upload-btn">Pause uploading</button>
+        <button id="pause-upload-btn">Pause/Resume</button>
+        <span id="progr"></span>
     </div>
     <div style="clear:both"></div>
     <hr>
@@ -215,10 +216,11 @@
         });
         r.on('complete', function() {
             console.debug('complete');
-            alert("Upload Complete")
+            document.getElementById("progr").innerHTML = "Upload Complete"
         });
         r.on('progress', function() {
             console.debug('progress');
+            document.getElementById("progr").innerHTML = Math.round(this.progress()*100)+"%"
         });
         r.on('error', function(message, file) {
             console.debug('error', message, file);
