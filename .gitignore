@@ -238,10 +238,9 @@ tRecorderApi/media/dump/**/*.rels
 tRecorderApi/media/dump/**/*.docx
 tRecorderApi/media/dump/**/*.docs
 tRecorderApi/media/dump/**/*.doc
+tRecorderApi/media/tmp/*
 tRecorderApi/sample.docx
 tRecorderApi/aoh
 tRecorderApi/config.py
 tRecorderApi/static/rest_framework
 tRecorderApi/static/admin
-#tRecorderApi/static/FileSaver.min.js
-#tRecorderApi/static/loader.gif

@@ -42,8 +42,9 @@
         <a href="/api/exclude_files">Exclude Files</a> <br><br>
         <a href="/api/stitch_takes">Stitch Source</a> <br><br>
         <button id="browseButton">Select files</button>
-        <button id="pause-upload-btn">Pause/Resume</button>
+        <button id="pause-upload-btn">Pause</button>
         <span id="progr"></span>
+        <div id="response"></div>
     </div>
     <div style="clear:both"></div>
     <hr>
@@ -201,13 +202,14 @@
 
         r.on('fileSuccess', function(file) {
             //console.debug('fileSuccess', file);
-            document.getElementById("progr").innerHTML = "Upload Successfull";
+            document.getElementById("response").innerHTML = "Upload Successfull";
         });
         r.on('fileProgress', function(file) {
             //console.debug('fileProgress', file);
         });
         r.on('fileAdded', function(file, event) {
             //console.debug('fileAdded', event);
+            document.getElementById("response").innerHTML = ""
             r.upload();
         });
         r.on('filesAdded', function(array) {
@@ -222,6 +224,7 @@
         });
         r.on('uploadStart', function() {
             //console.debug('uploadStart');
+            document.getElementById("pause-upload-btn").innerHTML = "Pause"
         });
         r.on('complete', function() {
             //console.debug('complete');
@@ -233,10 +236,11 @@
         r.on('error', function(message, file) {
             console.debug(message);
             response = JSON.parse(message)
-            document.getElementById("progr").innerHTML = "Upload Error: " + response.error;
+            document.getElementById("response").innerHTML = "Upload Error: " + response.error;
         });
         r.on('pause', function() {
             //console.debug('pause');
+            document.getElementById("pause-upload-btn").innerHTML = "Resume"
         });
         r.on('cancel', function() {
             //console.debug('cancel');
