@@ -15,7 +15,7 @@ from django.conf import settings
 
 class ResumableFileUploadView(views.APIView):
     parser_classes = (MultiPartParser,)
-
+    
     tempFolder = os.path.join(settings.BASE_DIR, "media/tmp/")
     isUploadComplete = False
 
@@ -26,50 +26,53 @@ class ResumableFileUploadView(views.APIView):
             filename = request.POST.get('resumableFilename')
             chunkNumber = request.POST.get('resumableChunkNumber')
             chunkSize = int(request.POST.get('resumableChunkSize'))
+            currentChunkSize = int(request.POST.get('resumableCurrentChunkSize'))
             totalSize = int(request.POST.get('resumableTotalSize'))
+            totalChunks = int(request.POST.get('resumableTotalChunks'))
 
             if not self.isChunkUploaded(identifier, filename, chunkNumber):
+                chunkPath = self.tempFolder + identifier + "/" + filename + ".part" + chunkNumber
                 if not os.path.exists(self.tempFolder + identifier):
                     os.makedirs(self.tempFolder + identifier)
 
-                with open(self.tempFolder + identifier + "/" + filename + ".part" + chunkNumber, 'w') as temp_file:
+                with open(chunkPath, 'w') as temp_file:
                     for line in upload:
                         temp_file.write(line)
+
+                # check if the size of uploaded chunk is correct
+                if os.path.isfile(chunkPath):
+                    uplChunkSize = os.path.getsize(chunkPath)
+                    print 'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
+                    if int(currentChunkSize) != int(uplChunkSize):
+                        return Response({"error": "chunk_not_uploaded"}, status=204)
+
             
-            if self.isFileUploadComplete(identifier, filename, chunkSize, totalSize):
+            if self.isFileUploadComplete(identifier, filename, totalChunks):
                 self.isUploadComplete = True;
-                self.createFileAndDeleteTmp(identifier, filename)
-                return Response({"response":"ok"}, status=200)
-
+                filefolder = self.createFileAndDeleteTmp(identifier, filename)
+                filepath = os.path.join(filefolder, filename)
+                
+                # check if the size of uloaded file is correct
+                if os.path.isfile(filepath):
+                    uplFileSize = os.path.getsize(filepath)
+                    print 'File: {} = {}'.format(totalSize, uplFileSize)
+                    
+                    if int(totalSize) != int(uplFileSize):
+                        shutil.rmtree(filefolder)
+                        return Response({"error": "file_is_corrupted"}, status=500)
+                    
             return Response(status=200)
-
-    def get(self, request, filename, format='zip'):
-        identifier = request.GET.get('resumableIdentifier')
-        filename = request.GET.get('resumableFilename')
-        chunkNumber = int(request.GET.get('resumableChunkNumber'))
-
-        if self.isChunkUploaded(identifier, filename, chunkNumber):
-            return Response(status=200)
-
-        return Response(status=404)
 
     def isChunkUploaded(self, identifier, filename, chunkNumber):
+        #print filename + ".part" + str(chunkNumber)
         if os.path.isfile(self.tempFolder + identifier + "/" + filename + ".part" + str(chunkNumber)):
             return True
         
         return False
 
-    def isFileUploadComplete(self, identifier, filename, chunkSize, totalSize):
-        if chunkSize <= 0:
-            return False
-        
-        remainder = totalSize % chunkSize
-        if remainder != 0:
-            remainder = 1 
-        numOfChunks = (totalSize / chunkSize) + remainder
-        
-        for x in range(1, numOfChunks):
-            if not self.isChunkUploaded(identifier, filename, x):
+    def isFileUploadComplete(self, identifier, filename, totalChunks):
+        for x in range(totalChunks):
+            if not self.isChunkUploaded(identifier, filename, x+1):
                 return False
 
         return True;
@@ -84,21 +87,48 @@ class ResumableFileUploadView(views.APIView):
         
         self.sort_nicely(chunkFiles)
 
-        filepath = self.tempFolder + filename
+        uuid_name = str(time.time()) + str(uuid.uuid4())
+        filepath = os.path.join(self.tempFolder, uuid_name, filename)
+        if not os.path.exists(os.path.join(self.tempFolder, uuid_name)):
+            os.makedirs(os.path.join(self.tempFolder, uuid_name))
+        
         if self.createFileFromChunks(chunkFiles, filepath):
-            shutil.rmtree(folder)
             self.uploadComplete = True
+
+        self.deleteTempFolder(identifier)
+
+        return os.path.join(self.tempFolder, uuid_name)
 
     def createFileFromChunks(self, chunkFiles, destFile):
         with open(destFile, "wb") as final_file:
             for chunkFile in chunkFiles:
-                with open(chunkFile, "rb") as chunk:
-                    final_file.write(chunk.read())
-
+                try:
+                    with open(chunkFile, "rb") as chunk:
+                        final_file.write(chunk.read())
+                except:
+                    pass
+                
         return os.path.isfile(destFile)
+
+    def deleteTempFolder(self, identifier):
+        try:
+            shutil.rmtree(self.tempFolder + identifier)
+        except:
+            pass
 
     def sort_nicely(self, l):
         """ Sort the given list in the way that humans expect."""
         convert = lambda text: int(text) if text.isdigit() else text
         alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
         l.sort( key=alphanum_key )
+
+
+    def get(self, request, filename, format='zip'):
+        identifier = request.GET.get('resumableIdentifier')
+        filename = request.GET.get('resumableFilename')
+        chunkNumber = int(request.GET.get('resumableChunkNumber'))
+
+        if self.isChunkUploaded(identifier, filename, chunkNumber):
+            return Response(status=200)
+
+        return Response(status=204)
