@@ -9,7 +9,7 @@ from tinytag import TinyTag
 from rest_framework.response import Response
 import json
 import re
-from helpers import highPassFilter
+from helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
 
@@ -60,6 +60,8 @@ class ResumableFileUploadView(views.APIView):
                     if int(totalSize) != int(uplFileSize):
                         shutil.rmtree(filefolder)
                         return Response({"error": "file_is_corrupted"}, status=500)
+                    else:
+                        return Response({"location": getRelativePath(filepath)}, status=200)
                     
             return Response(status=200)
 
