@@ -185,8 +185,9 @@
             target: '/api/resumable_upload/file/',
             fileType: ['zip'],
             maxFiles: 1,
-            forceChunkSize: true,
-            chunkSize: 5*1024*1024
+            forceChunkSize: false,
+            chunkSize: 1*1024*1024,
+            simultaneousUploads: 6
         });
 
         r.assignBrowse(document.getElementById('browseButton'));
