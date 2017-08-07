@@ -1,3 +1,7 @@
+<head>
+    <title>Translation Recorder API</title>
+</head>
+
 <div style="width: 600px; margin: 0 auto">
     <br>
     <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
@@ -178,6 +182,10 @@
     (function() {
         var r = new Resumable({
             target: '/api/resumable_upload/file/',
+            fileType: ['zip'],
+            maxFiles: 1,
+            forceChunkSize: true,
+            chunkSize: 5*1024*1024
         });
 
         r.assignBrowse(document.getElementById('browseButton'));
@@ -192,44 +200,46 @@
         }, false);
 
         r.on('fileSuccess', function(file) {
-            console.debug('fileSuccess', file);
+            //console.debug('fileSuccess', file);
+            document.getElementById("progr").innerHTML = "Upload Successfull";
         });
         r.on('fileProgress', function(file) {
-            console.debug('fileProgress', file);
+            //console.debug('fileProgress', file);
         });
         r.on('fileAdded', function(file, event) {
-            console.debug('fileAdded', event);
+            //console.debug('fileAdded', event);
             r.upload();
         });
         r.on('filesAdded', function(array) {
             r.upload();
-            console.debug('filesAdded', array);
+            //console.debug('filesAdded', array);
         });
         r.on('fileRetry', function(file) {
             console.debug('fileRetry', file);
         });
         r.on('fileError', function(file, message) {
-            console.debug('fileError', file, message);
+            //console.debug(message);
         });
         r.on('uploadStart', function() {
-            console.debug('uploadStart');
+            //console.debug('uploadStart');
         });
         r.on('complete', function() {
-            console.debug('complete');
-            document.getElementById("progr").innerHTML = "Upload Complete"
+            //console.debug('complete');
         });
         r.on('progress', function() {
-            console.debug('progress');
+            //console.debug('progress');
             document.getElementById("progr").innerHTML = Math.round(this.progress()*100)+"%"
         });
         r.on('error', function(message, file) {
-            console.debug('error', message, file);
+            console.debug(message);
+            response = JSON.parse(message)
+            document.getElementById("progr").innerHTML = "Upload Error: " + response.error;
         });
         r.on('pause', function() {
-            console.debug('pause');
+            //console.debug('pause');
         });
         r.on('cancel', function() {
-            console.debug('cancel');
+            //console.debug('cancel');
         });
     })();
 </script>

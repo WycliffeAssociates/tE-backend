@@ -67,7 +67,7 @@ class FileUploadView(views.APIView):
                                 "duration": meta.duration
                                 }
                             
-                            #highPassFilter(abpath)
+                            highPassFilter(abpath)
                             Take.prepareDataToSave(pls, relpath, data)
                         else:
                             return Response({"error": "bad_wave_file"}, status=400)
