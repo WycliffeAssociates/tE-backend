@@ -229,10 +229,16 @@
         });
         r.on('complete', function() {
             //console.debug('complete');
+            document.getElementById("pause-upload-btn").disabled = false
         });
         r.on('progress', function() {
             //console.debug('progress');
-            document.getElementById("progr").innerHTML = Math.round(this.progress()*100)+"%"
+            var progress = Math.round(this.progress()*100)
+            document.getElementById("progr").innerHTML = progress+"%"
+            // Disable pause after 99% to avoid weird behavior
+            if (progress >= 99) {
+                document.getElementById("pause-upload-btn").disabled = true
+            }
         });
         r.on('error', function(message, file) {
             console.debug(message);
