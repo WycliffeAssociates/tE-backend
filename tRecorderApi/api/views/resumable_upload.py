@@ -16,8 +16,8 @@ from django.conf import settings
 class ResumableFileUploadView(views.APIView):
     parser_classes = (MultiPartParser,)
     
-    tempFolder = os.path.join(settings.BASE_DIR, "media/tmp/")
-    isUploadComplete = False
+    tempFolder = os.path.join(settings.BASE_DIR, 'media/tmp/')
+    filePath = ''
 
     def post(self, request, filename, format='zip'):
         if request.method == 'POST' and request.data['file']:
@@ -38,68 +38,86 @@ class ResumableFileUploadView(views.APIView):
                 with open(chunkPath, 'w') as temp_file:
                     for line in upload:
                         temp_file.write(line)
+                    
 
                 # check if the size of uploaded chunk is correct
                 if os.path.isfile(chunkPath):
                     uplChunkSize = os.path.getsize(chunkPath)
                     print 'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
                     if int(currentChunkSize) != int(uplChunkSize):
-                        return Response({"error": "chunk_not_uploaded"}, status=204)
+                        # reupload chunk
+                        return Response(status=204)
+                    
+                    with open(os.path.join(self.tempFolder, identifier, 'progress'), 'a') as progress:
+                        progress.write(chunkNumber+'\n')
 
-            
-            if self.isFileUploadComplete(identifier, filename, totalChunks):
-                self.isUploadComplete = True;
-                filefolder = self.createFileAndDeleteTmp(identifier, filename)
-                filepath = os.path.join(filefolder, filename)
-                
-                # check if the size of uloaded file is correct
-                if os.path.isfile(filepath):
-                    uplFileSize = os.path.getsize(filepath)
-                    print 'File: {} = {}'.format(totalSize, uplFileSize)
+            if self.isFileUploadComplete(identifier, totalChunks):
+                if self.createFileAndDeleteTmp(identifier, filename):
+                    fileLocation = os.path.join(self.filePath, filename)
                     
-                    if int(totalSize) != int(uplFileSize):
-                        shutil.rmtree(filefolder)
-                        return Response({"error": "file_is_corrupted"}, status=500)
+                    # check if the size of uloaded file is correct
+                    if os.path.isfile(fileLocation):
+                        uplFileSize = os.path.getsize(fileLocation)
+                        print 'File: {} = {}'.format(totalSize, uplFileSize)
+                        
+                        if int(totalSize) != int(uplFileSize):
+                            shutil.rmtree(self.filePath)
+                            return Response({"error": "file_is_corrupted"}, status=500)
+                        else:
+                            print 'Chunk #{} of {}'.format(chunkNumber, totalChunks) 
+                            return Response({"location": getRelativePath(fileLocation)}, status=200)
                     else:
-                        return Response({"location": getRelativePath(filepath)}, status=200)
-                    
+                        return Response({"error": "file_not_uploaded"}, status=500)
+
             return Response(status=200)
 
     def isChunkUploaded(self, identifier, filename, chunkNumber):
-        #print filename + ".part" + str(chunkNumber)
         if os.path.isfile(self.tempFolder + identifier + "/" + filename + ".part" + str(chunkNumber)):
             return True
         
         return False
 
-    def isFileUploadComplete(self, identifier, filename, totalChunks):
-        for x in range(totalChunks):
+    def isFileUploadComplete(self, identifier, totalChunks):
+        lines = []
+        with open(os.path.join(self.tempFolder, identifier, 'progress'), 'r') as f:
+            lines = f.read().splitlines()
+        
+        return len(lines) == totalChunks
+        
+        # another approach
+        """for x in range(totalChunks):
             if not self.isChunkUploaded(identifier, filename, x+1):
                 return False
 
-        return True;
+        return True;"""
 
     def createFileAndDeleteTmp(self, identifier, filename):
         folder = self.tempFolder + identifier
+        uuid_name = str(time.time()) + str(uuid.uuid4())
+        fileLocation = os.path.join(self.tempFolder, uuid_name, filename)
+        
+        if os.path.isfile(fileLocation):
+            return False
+
         chunkFiles = []
         for root, dirs, files in os.walk(folder):
             for f in files:
+                if f == 'progress':
+                    continue
+
                 abpath = os.path.join(root, os.path.basename(f))
                 chunkFiles.append(abpath)
         
         self.sort_nicely(chunkFiles)
 
-        uuid_name = str(time.time()) + str(uuid.uuid4())
-        filepath = os.path.join(self.tempFolder, uuid_name, filename)
         if not os.path.exists(os.path.join(self.tempFolder, uuid_name)):
             os.makedirs(os.path.join(self.tempFolder, uuid_name))
         
-        if self.createFileFromChunks(chunkFiles, filepath):
-            self.uploadComplete = True
-
+        self.createFileFromChunks(chunkFiles, fileLocation)
         self.deleteTempFolder(identifier)
+        self.filePath = os.path.join(self.tempFolder, uuid_name)
 
-        return os.path.join(self.tempFolder, uuid_name)
+        return True
 
     def createFileFromChunks(self, chunkFiles, destFile):
         with open(destFile, "wb") as final_file:
