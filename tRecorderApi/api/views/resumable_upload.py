@@ -12,6 +12,7 @@ import re
 from helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
+from file_upload import FileUploadView
 
 class ResumableFileUploadView(views.APIView):
     parser_classes = (MultiPartParser,)
@@ -23,17 +24,19 @@ class ResumableFileUploadView(views.APIView):
         if request.method == 'POST' and request.data['file']:
             upload = request.data["file"]
             identifier = request.POST.get('resumableIdentifier')
-            filename = request.POST.get('resumableFilename')
+            file_name = request.POST.get('resumableFilename')
             chunkNumber = request.POST.get('resumableChunkNumber')
             chunkSize = int(request.POST.get('resumableChunkSize'))
             currentChunkSize = int(request.POST.get('resumableCurrentChunkSize'))
             totalSize = int(request.POST.get('resumableTotalSize'))
             totalChunks = int(request.POST.get('resumableTotalChunks'))
 
-            if not self.isChunkUploaded(identifier, filename, chunkNumber):
-                chunkPath = self.tempFolder + identifier + "/" + filename + ".part" + chunkNumber
-                if not os.path.exists(self.tempFolder + identifier):
+            if not self.isChunkUploaded(identifier, file_name, chunkNumber):
+                chunkPath = self.tempFolder + identifier + "/" + file_name + ".part" + chunkNumber
+                try:
                     os.makedirs(self.tempFolder + identifier)
+                except:
+                    pass
 
                 with open(chunkPath, 'w') as temp_file:
                     for line in upload:
@@ -52,8 +55,8 @@ class ResumableFileUploadView(views.APIView):
                         progress.write(chunkNumber+'\n')
 
             if self.isFileUploadComplete(identifier, totalChunks):
-                if self.createFileAndDeleteTmp(identifier, filename):
-                    fileLocation = os.path.join(self.filePath, filename)
+                if self.createFileAndDeleteTmp(identifier, file_name):
+                    fileLocation = os.path.join(self.filePath, file_name)
                     
                     # check if the size of uloaded file is correct
                     if os.path.isfile(fileLocation):
@@ -61,11 +64,19 @@ class ResumableFileUploadView(views.APIView):
                         print 'File: {} = {}'.format(totalSize, uplFileSize)
                         
                         if int(totalSize) != int(uplFileSize):
-                            shutil.rmtree(self.filePath)
+                            shutil.rmtree(self.filePath, ignore_errors=True)
                             return Response({"error": "file_is_corrupted"}, status=500)
                         else:
                             print 'Chunk #{} of {}'.format(chunkNumber, totalChunks) 
-                            return Response({"location": getRelativePath(fileLocation)}, status=200)
+                            
+                            status = 200
+                            response = {}
+                            if filename == "project":
+                                response = FileUploadView.processFile(self.filePath, file_name)
+                                if 'error' in response:
+                                    status = 500
+                            
+                            return Response(response, status=status)
                     else:
                         return Response({"error": "file_not_uploaded"}, status=500)
 
@@ -114,7 +125,7 @@ class ResumableFileUploadView(views.APIView):
             os.makedirs(os.path.join(self.tempFolder, uuid_name))
         
         self.createFileFromChunks(chunkFiles, fileLocation)
-        self.deleteTempFolder(identifier)
+        shutil.rmtree(self.tempFolder + identifier, ignore_errors=True)
         self.filePath = os.path.join(self.tempFolder, uuid_name)
 
         return True
@@ -128,13 +139,7 @@ class ResumableFileUploadView(views.APIView):
                 except:
                     pass
                 
-        return os.path.isfile(destFile)
-
-    def deleteTempFolder(self, identifier):
-        try:
-            shutil.rmtree(self.tempFolder + identifier)
-        except:
-            pass
+        return os.path.isfile(destFile) 
 
     def sort_nicely(self, l):
         """ Sort the given list in the way that humans expect."""

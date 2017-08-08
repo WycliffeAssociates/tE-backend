@@ -3,16 +3,27 @@
 </head>
 
 <div style="width: 600px; margin: 0 auto">
+    <strong>Normal Upload:</strong>
     <br>
     <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
         <input type="file" name="upload" /> {% csrf_token %}
         <input type="submit" value="Upload Zip" />
     </form>
-    <br>
+    <!--
     <form action="/api/source/tr" method="post" enctype="multipart/form-data">
         <input type="file" name="upload" /> {% csrf_token %}
         <input type="submit" value="Upload Source (.tr)" />
     </form>
+    <br>
+    -->
+    <div>
+        <strong>Resumable Upload:</strong>
+        <br>
+        <button id="browseButton">Select file</button>
+        <button id="pause-upload-btn">Pause</button>
+        <span id="progr"></span>
+        <div id="response"></div>
+    </div>
 
     {% if lasttake %}
     <hr>
@@ -41,10 +52,6 @@
         <a href="/api/push_takes">Push Takes</a> <br><br>
         <a href="/api/exclude_files">Exclude Files</a> <br><br>
         <a href="/api/stitch_takes">Stitch Source</a> <br><br>
-        <button id="browseButton">Select files</button>
-        <button id="pause-upload-btn">Pause</button>
-        <span id="progr"></span>
-        <div id="response"></div>
     </div>
     <div style="clear:both"></div>
     <hr>
@@ -75,6 +82,7 @@
     {% endif %}
 </div>
 
+{% if lasttake %}
 <script>
     document.getElementById("getexport").addEventListener("click", function(event) {
         document.getElementById("getexport_loader").style.display = "inline-block";
@@ -178,11 +186,13 @@
         };
     }());
 </script>
+{% endif %}
+
 <script src="/static/resumable.js"></script>
 <script>
     (function() {
         var r = new Resumable({
-            target: '/api/resumable_upload/file/',
+            target: '/api/resumable_upload/project/',
             fileType: ['zip'],
             maxFiles: 1,
             forceChunkSize: false,
@@ -230,6 +240,7 @@
         r.on('complete', function() {
             //console.debug('complete');
             document.getElementById("pause-upload-btn").disabled = false
+            document.getElementById("progr").innerHTML = ''
         });
         r.on('progress', function() {
             //console.debug('progress');
@@ -238,6 +249,7 @@
             // Disable pause after 99% to avoid weird behavior
             if (progress >= 99) {
                 document.getElementById("pause-upload-btn").disabled = true
+                document.getElementById("progr").innerHTML = 'Processing file...'
             }
         });
         r.on('error', function(message, file) {
