@@ -46,10 +46,13 @@ class SourceFileView(views.APIView):
             filename = project['language']["slug"] + '_' + project['project']['version'] + '_' + project['book']['slug']
             project_folder = root_folder + '/' + project['language']["slug"] + '/' + project['project'][
                 'version'] + '/' + project['book']['slug']
+            hasTakes = False
 
             try:
                 for chunk in project["chunks"]:
                     for take in chunk["takes"]:
+                        hasTakes = True
+                        
                         chapter_folder = project_folder + '/' + str(
                             project['chapter']['number']).zfill(2)
                         if not os.path.exists(chapter_folder):
@@ -77,6 +80,9 @@ class SourceFileView(views.APIView):
                             sound = pydub.AudioSegment.from_wav(file_path)
                             sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
                             os.remove(file_path)
+
+                if not hasTakes:
+                    return Response({"response": "no_source_files"}, status=400)
 
                 FNULL = open(os.devnull, 'w')
                 subprocess.call(['java', '-jar', os.path.join(settings.BASE_DIR, 'aoh/aoh.jar'), '-c', '-tr', root_folder],

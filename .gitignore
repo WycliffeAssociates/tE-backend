@@ -244,3 +244,4 @@ tRecorderApi/aoh
 tRecorderApi/config.py
 tRecorderApi/static/rest_framework
 tRecorderApi/static/admin
+tRecorderApi/Release.key
