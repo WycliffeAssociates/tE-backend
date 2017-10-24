@@ -5,7 +5,6 @@ from .comment import Comment
 from .language import Language
 from .project import Project
 from .take import Take
-from .user import User
 from .anthology import Anthology
 from .version import Version
 from .mode import Mode

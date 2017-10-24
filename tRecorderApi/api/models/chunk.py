@@ -1,8 +1,4 @@
-import json
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from django.forms.models import model_to_dict
-from .chapter import Chapter
 
 
 class Chunk(models.Model):
@@ -12,7 +8,6 @@ class Chunk(models.Model):
         "Chapter",
         on_delete=models.CASCADE
     )
-    comments = models.ForeignKey("Comment", blank="True")
 
     class Meta:
         ordering = ["startv"]

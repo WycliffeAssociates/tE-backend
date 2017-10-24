@@ -4,12 +4,11 @@ from django.db import models
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
-    is_publish = models.BooleanField(default=False)
+    published = models.BooleanField(default=False)
     project = models.ForeignKey(
         "Project",
         on_delete=models.CASCADE
     )
-    comments = models.ForeignKey("Comment", blank=True)
 
     class Meta:
         ordering = ["number"]
