@@ -1,8 +1,9 @@
 from django.db import models
 
+
 class Language(models.Model):
-    slug = models.CharField(unique=True)
-    name = models.CharField()
+    slug = models.CharField(unique=True, max_length=50)
+    name = models.CharField(max_length=255)
 
     @staticmethod
     def get_language(slug):
