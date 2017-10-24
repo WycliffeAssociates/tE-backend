@@ -4,21 +4,28 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils.timezone import now
+from .chunk import Chunk
+from .language import Language
+from .book import Book
 
 
 class Take(models.Model):
-    location = models.CharField(max_length=250)
+    location = models.CharField(max_length=255)
     duration = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
-    is_publish = models.BooleanField(default=False)
-    markers = models.TextField(null=True, blank=True)
+    published = models.BooleanField(default=False)
+    markers = models.TextField(blank=True)
     date_modified = models.DateTimeField(default=now)
+    chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, blank=True)
+    comments = models.ForeignKey(
+        "Comment",
+        on_delete=models.CASCADE,
+        blank=True
+    )
 
-    chunk = models.ForeignKey(
-        "Chunk", on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(
-        "User", on_delete=models.CASCADE, null=True, blank=True)
-    comments = GenericRelation(Comment)
+    class Meta:
+        ordering = ["chunk"]
 
     @staticmethod
     def stitchSource(data):
@@ -31,29 +38,6 @@ class Take(models.Model):
 
         res = Chunk.objects.filter(**filter)
         return res
-
-    @staticmethod
-    def updateTakesByProject(data):
-        lst = []
-        filter = {}
-        fields = data["fields"]
-
-        if "project" in data["filter"]:
-            filter["chunk__chapter__project"] = data["filter"]["project"]
-        if "language" in data["filter"]:
-            filter["chunk__chapter__project__language__slug"] = data["filter"]["language"]
-        if "version" in data["filter"]:
-            filter["chunk__chapter__project__version"] = data["filter"]["version"]
-        if "book" in data["filter"]:
-            filter["chunk__chapter__project__book__slug"] = data["filter"]["book"]
-        if "chapter" in data["filter"]:
-            filter["chunk__chapter__number"] = data["filter"]["chapter"]
-        if "startv" in data["filter"]:
-            filter["chunk__startv"] = data["filter"]["startv"]
-        if "is_publish" in data["filter"]:
-            filter["chunk__chapter__is_publish"] = data["filter"]["is_publish"]
-
-        return Take.objects.filter(**filter).update(**fields)
 
     @staticmethod
     def prepareDataToSave(meta, relpath, data, is_source=False):
@@ -159,9 +143,5 @@ class Take(models.Model):
             take.save()
         return dic
 
-    class Meta:
-        ordering = ["chunk"]
-        app_label = "api"
-
-    def __unicode__(self):
+    def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
