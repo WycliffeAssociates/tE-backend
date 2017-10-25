@@ -14,7 +14,7 @@ class Book(models.Model):
         return book
 
     @staticmethod
-    def getBooksList():
+    def get_books_list():
         bookList = Book.objects.all()
         return bookList
 

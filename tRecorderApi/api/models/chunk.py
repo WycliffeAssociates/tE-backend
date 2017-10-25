@@ -1,4 +1,5 @@
 from django.db import models
+from.chapter import Chapter
 
 
 class Chunk(models.Model):

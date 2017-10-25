@@ -5,12 +5,14 @@ import json
 from rest_framework.response import Response
 from api.models import Project
 
+
 class AllProjectsView(views.APIView):
     parser_classes = (JSONParser,)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         data = request.data
-        
+
         projects = Project.getProjects(data)
 
-        return Response(projects, status = 200)
+        return Response(projects, status=200)

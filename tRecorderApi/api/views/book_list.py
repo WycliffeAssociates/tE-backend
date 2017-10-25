@@ -6,9 +6,11 @@ from rest_framework.response import Response
 from operator import itemgetter
 from api.models import Book
 
+
 class getBooksView(views.APIView):
     parser_classes = (JSONParser,)
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         lst = Book.getBooksList()
-        return Response(lst, status = 200)
+        return Response(lst, status=200)
