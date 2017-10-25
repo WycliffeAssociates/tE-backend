@@ -13,6 +13,11 @@ class Book(models.Model):
         book = Book.objects.filter(anthology__slug__iexact=anthology_slug)
         return book
 
+    @staticmethod
+    def getBooksList():
+        bookList = Book.objects.all()
+        return bookList
+
     class Meta:
         ordering = ["number"]
         unique_together = ("anthology", "slug")
