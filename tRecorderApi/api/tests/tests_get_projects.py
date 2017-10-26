@@ -1,13 +1,7 @@
 from django.test import TestCase
-from ..models import Project
-# from ..models import Take, Language, Book, Comment, Chunk, Project, Chapter
 from rest_framework.test import APIClient
-from rest_framework import status
-import os
-from sys import platform
+from ..models import Project
 from django.conf import settings
-from django.db.models import Min
-
 
 view_url = 'http://127.0.0.1:8000/api/get_project_takes/'
 base_url = 'http://127.0.0.1:8000/api/'
@@ -20,16 +14,16 @@ class GetProjectsTestCases(TestCase):
         self.client = APIClient()
         # self.lang = Language.objects.create(slug='en-x-demo', name='english')
         # self.book = Book.objects.create(name='mark', booknum=5, slug='mrk')
-        # self.proj = Project.objects.create(version='ulb', mode='chunk',
-        #                                    anthology='nt', is_source=False, language=self.lang,
-        #                                    book=self.book)
+        #self.proj = Project.objects.create(version__slug='ulb', mode__name='chunk',
+        #                                   anthology__slug='nt', is_source=False, language__slug='en',
+        #                                   book__slug="mrk")
         # self.chap = Chapter.objects.create(number=1, checked_level=1, is_publish=False, project=self.proj)
         # self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
         # self.user = User.objects.create(name='testy', agreed=True, picture='mypic.jpg')
         # self.take = Take.objects.create(location=location_wav, is_publish=True,
         # duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk,
         # user=self.user)
-        ##self.project_takes_data = {"language": "en-x-demo2", "version": "ulb", "book": "mrk", "chapter": 1}
+        # self.project_takes_data = {"language": "en-x-demo2", "version": "ulb", "book": "mrk", "chapter": 1}
 
     # def test_that_we_can_get_projects(self):
     #     """Testing that submitting a POST request through key search returns a JSON object"""
@@ -68,7 +62,7 @@ class GetProjectsTestCases(TestCase):
     #     self.book.delete()
     #     self.lang.delete()
 
-    def get_projects(self):
-        print("ayyyy")
-       # get_min_checked_level = Project.objects.filter().values_list()
-       # print(get_min_checked_level)
+    def test_get_projects(self):
+        get_min_checked_level = self.proj.objects.filter()
+        print(get_min_checked_level)
+        assert True
