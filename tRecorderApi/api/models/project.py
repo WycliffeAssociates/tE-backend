@@ -2,6 +2,7 @@ import json
 import os
 from django.db import models
 from django.forms.models import model_to_dict
+from django.db.models import Min
 
 
 class Project(models.Model):
@@ -24,76 +25,81 @@ class Project(models.Model):
     # def __str__(self):
     #     return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
 
-        @staticmethod
-        def getProjects(language, book, anthology, version, published):
-            project_list = []
-            project_filter = {}
-
-            if language is not None:
-                project_filter["language__slug"] =language
-            if version is not None:
-                project_filter["version__slug"] = version
-            if book is not None:
-                project_filter["book__slug"] = book
-            if published is not None:
-                project_filter["published"] = published
-            if anthology is not None:
-                project_filter["anthology__slug"] = anthology
-
-
-            #filter projects based on the project being requested
-            projects = Project.objects.filter(**project_filter)
-
-            for project in projects:
-                dic = {"id": project.id,
-                       "published": project.published
-                       }
-
-                latest_take = Take.objects.filter(chunk__chapter__project=project) \
-                    .latest("date_modified")
-                # Get contributors
-                dic["contributors"] = []
-                dic["date_modified"] = latest_take.date_modified
-                availChunks = 0
-                checklvl = 10
-                chapters = project.chapter_set.all()
-                for chapter in chapters:
-                    if chapter.checked_level < checklvl:
-                        checklvl = chapter.checked_level
-                    chunks = chapter.chunk_set.all()
-                    for chunk in chunks:
-                        availChunks += 1
-                        takes = chunk.take_set.all()
-                        for take in takes:
-                            try:
-                                if take.user.name not in dic["contributors"]:
-                                    dic["contributors"].append(take.user.name)
-                            except:
-                                pass
-
-                dic["checked_level"] = checklvl
-                bkname = project.book.slug
-                chunkInfo = []
-                for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
-                    if dirpath[-3:] == bkname:
-                        for fname in os.listdir(dirpath):
-                            f = open(os.path.join(dirpath, fname), "r")
-                            sus = json.loads(f.read())
-                            chunkInfo = sus
-                        break
-                totalChunk = float(len(chunkInfo))
-                completed = int(round((availChunks / totalChunk) * 100))
-                dic["completed"] = completed
-
-                dic["language"] = model_to_dict(project.language,
-                                                    fields=["slug", "name"])
-
-                dic["book"] = model_to_dict(project.book,
-                                                fields=["booknum", "slug", "name"])
-
-                project_list.append(dic)
-
-            return project_list
+    # @staticmethod
+    # def getProjects(language, book, anthology, version, published):
+    #     project_list = []
+    #     project_filter = {}
+    #
+    #     if language is not None:
+    #         project_filter["language__slug"] =language
+    #     if version is not None:
+    #         project_filter["version__slug"] = version
+    #     if book is not None:
+    #         project_filter["book__slug"] = book
+    #     if published is not None:
+    #         project_filter["published"] = published
+    #     if anthology is not None:
+    #         project_filter["anthology__slug"] = anthology
+    #
+    #
+    #     #filter projects based on the project being requested
+    #     projects = Project.objects.filter(**project_filter)
+    #
+    #     for project in projects:
+    #         dic = {"id": project.id,
+    #                "published": project.published
+    #                }
+    #
+    #
+    #         latest_take = Take.objects.filter(chunk__chapter__project=project) \
+    #             .latest("date_modified")
+    #         # Get contributors
+    #         dic["contributors"] = []
+    #         dic["date_modified"] = latest_take.date_modified
+    #         availChunks = 0
+    #         checklvl = 10
+    #         checking_lvl = project.objects.filter() \
+    #             .values_list('chapter').annotate(Min('check_level')) \
+    #             .order_by('check_level')[0]
+    #
+    #         chapters = project.chapter_set.all()
+    #         for chapter in chapters:
+    #             if chapter.checked_level < checklvl:
+    #                 checklvl = chapter.checked_level
+    #             chunks = chapter.chunk_set.all()
+    #             for chunk in chunks:
+    #                 availChunks += 1
+    #                 takes = chunk.take_set.all()
+    #                 for take in takes:
+    #                     try:
+    #                         if take.user.name not in dic["contributors"]:
+    #                             dic["contributors"].append(take.user.name)
+    #                     except:
+    #                         pass
+    #
+    #         dic["checked_level"] = checklvl
+    #         book_name_slug = project.book.slug
+    #         chunkInfo = []
+    #         for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
+    #             if dirpath[-3:] == book_name_slug:
+    #                 for fname in os.listdir(dirpath):
+    #                     f = open(os.path.join(dirpath, fname), "r")
+    #                     sus = json.loads(f.read())
+    #                     chunkInfo = sus
+    #                 break
+    #         totalChunk = float(len(chunkInfo))
+    #         completed = int(round((availChunks / totalChunk) * 100))
+    #         dic["completed"] = completed
+    #
+    #         dic["language"] = model_to_dict(project.language,
+    #                                             fields=["slug", "name"])
+    #
+    #         dic["book"] = model_to_dict(project.book,
+    #                                         fields=["booknum", "slug", "name"])
+    #
+    #         project_list.append(dic)
+    #
+    #     return project_list
 
         # @staticmethod
         # def getVersionsByProject():
