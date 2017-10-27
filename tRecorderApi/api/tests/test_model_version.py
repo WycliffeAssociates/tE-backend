@@ -35,6 +35,10 @@ class TestVersionModel(TestCase):
         result=Version.get_versions()
         self.assertEquals(result[0].slug,'ulb')
 
+    def test_get_versions_with_parameter(self):
+        result=Version.get_version('ulb')
+        self.assertEquals(result[0].slug,'ulb')
+
     def test_slug_is_unique(self):
         with self.assertRaises(IntegrityError):
              Version.objects.create(slug='ulb',name='Unlocked Literal Bible')

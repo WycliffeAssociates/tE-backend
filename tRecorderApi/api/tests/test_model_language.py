@@ -30,6 +30,10 @@ class TestLanguageModel(TestCase):
         name_max_length=language._meta.get_field('name').max_length
         self.assertEquals(name_max_length,255)
 
+    def test_get_language_with_parameter(self):
+        result=Language.get_languages('en')
+        self.assertEqual(result[0].slug,'en')
+
     def test_get_language_without_parameter(self):
         result=Language.get_language()
         self.assertEqual(result[0].slug,'en')

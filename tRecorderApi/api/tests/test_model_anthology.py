@@ -34,6 +34,10 @@ class TestAnthologyModel(TestCase):
         result=Anthology.get_anthologies()
         self.assertEqual(result[0].slug,'bs')
 
+    def test_get_version_with_parameter(self):
+        result=Anthology.get_anthologies("bs")
+        self.assertEqual(result[0].slug,'bs')    
+
     def test_slug_is_unique(self):
          with self.assertRaises(IntegrityError):
               Anthology.objects.create(slug='bs',name='Bible Story')
