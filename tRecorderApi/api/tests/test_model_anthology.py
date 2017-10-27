@@ -1,6 +1,7 @@
-from api.models import Anthology
 from django.test import TestCase
 from django.db import IntegrityError
+
+from api.models import Anthology
 
 class TestAnthologyModel(TestCase):
     
