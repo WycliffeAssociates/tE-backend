@@ -10,11 +10,11 @@ class Project(models.Model):
     mode = models.ForeignKey("Mode", on_delete=models.CASCADE)
     anthology = models.ForeignKey("Anthology")
     language = models.ForeignKey("Language")
-    source_language = models.ForeignKey(
-        "Language",
-        related_name="language_source",
-        blank=True
-    )
+    # source_language = models.ForeignKey(
+    #     "Language",
+    #     related_name="language_source",
+    #     blank=True
+    # )
     book = models.ForeignKey("Book")
     published = models.BooleanField(default=False)
 
