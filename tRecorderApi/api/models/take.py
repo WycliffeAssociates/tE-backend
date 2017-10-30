@@ -15,20 +15,20 @@ class Take(models.Model):
     class Meta:
         ordering = ["chunk"]
 
-    # def __str__(self):
-    #     return '{} ({})'.format(self.chunk, self.id)
+    def __str__(self):
+        return '{} ({})'.format(self.chunk, self.id)
 
-    @staticmethod
-    def stitchSource(data):
-        list = []
-        filter = {}
-        filter["chapter__project__language__slug"] = data["language"]
-        filter["chapter__project__version"] = data["version"]
-        filter["chapter__project__book__slug"] = data["book"]
-        filter["chapter__number"] = data["chapter"]
-
-        res = Chunk.objects.filter(**filter)
-        return res
+    # @staticmethod
+    # def stitchSource(data):
+    #     list = []
+    #     filter = {}
+    #     filter["chapter__project__language__slug"] = data["language"]
+    #     filter["chapter__project__version"] = data["version"]
+    #     filter["chapter__project__book__slug"] = data["book"]
+    #     filter["chapter__number"] = data["chapter"]
+    #
+    #     res = Chunk.objects.filter(**filter)
+    #     return res
 
     # @staticmethod
     # def prepareDataToSave(meta, relpath, data, is_source=False):

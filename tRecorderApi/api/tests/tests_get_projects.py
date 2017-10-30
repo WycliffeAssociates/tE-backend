@@ -21,6 +21,7 @@ class GetProjectsTestCases(TestCase):
         self.proj = Project.objects.create(version=self.version, mode=self.mode,
                                            anthology=self.anthology, language=self.lang,
                                            book=self.book)
+        self.proj.save()
         self.chap = Chapter.objects.create(number=1, checked_level=1, published=False, project=self.proj)
         self.chap2 = Chapter.objects.create(number=2, checked_level=2, published=False, project=self.proj)
         self.chap3 = Chapter.objects.create(number=3, checked_level=3, published=False, project=self.proj)
@@ -45,6 +46,7 @@ class GetProjectsTestCases(TestCase):
         self.take = Take.objects.create(location=location_wav, published=True,
                                         duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk4
                                         )
+        self.take.save()
 
         self.project_takes_data = {"language": "en-x-demo2", "version": "ulb", "book": "mrk", "chapter": 1}
 
@@ -57,46 +59,23 @@ class GetProjectsTestCases(TestCase):
         chunks_done = Chapter.objects.all().values_list('chunk').count()
         self.assertEqual(chunks_done, 6)
 
-    @staticmethod
-    def test_build_dict():
-        projects = Project.objects.all()
+    def test_keys_in_project(self):
+        projects = Project.get_projects(None, None, None, None, None)
         project_list = []
-        for project in projects:
-            dic = {"id": project.id,
-                   "published": project.published,
-                   "contributors": [],
-                   "version": {
-                       "slug": project.version.slug,
-                       "name": project.version.name
-                   },
-                   "anthology": {
-                       "slug": project.anthology.slug,
-                       "name": project.anthology.name
-                   },
-                   "language": {
-                       "slug": project.language.slug,
-                       "name": project.language.name
-                   },
-                   "book": {
-                       "slug": project.book.slug,
-                       "name": project.book.name,
-                       "number": project.book.number
-                   }
-                   }
-            latest_take = Take.objects.filter(chunk__chapter__project=project) \
-                .latest("date_modified")
+        for pr in projects:
+            self.assertIn("id", pr)
+            self.assertIn("published", pr)
+            self.assertIn("contributors", pr)
+            self.assertIn("date_modified", pr)
+            self.assertIn("completed", pr)
+            self.assertIn("checked_level", pr)
+            self.assertIn("language", pr)
+            self.assertIn("book", pr)
+            self.assertIn("version", pr)
+            self.assertIn("anthology", pr)
 
-            dic["date_modified"] = latest_take.date_modified
-
-            min_check_level = Chapter.objects.all().values_list('checked_level') \
-                .order_by('checked_level')[0][0]
-
-            chunks_done = Chapter.objects.all().values_list('chunk').count()
-            takes = Take.objects.filter(chunk__chapter__project=project)
-
-            dic["checked_level"] = min_check_level
-            fake_total_chunks = 10
-            completed = int(round((chunks_done / fake_total_chunks) * 100))
-            dic["completed"] = completed
-
-            project_list.append(dic)
+    def test_get_percentage_function(self):
+        chunks_done = 30
+        total_chunks = 100
+        percentage = Project.get_percentage_completed(chunks_done, total_chunks)
+        self.assertEqual(percentage, 30)
