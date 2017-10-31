@@ -60,7 +60,10 @@ class GetProjectsTestCases(TestCase):
         self.assertEqual(chunks_done, 6)
 
     def test_keys_in_project(self):
-        projects = Project.get_projects(None)
+
+        get_projects = Project.objects.all()
+
+        projects = Project.get_projects(get_projects)
         project_list = []
         for pr in projects:
             self.assertIn("id", pr)
