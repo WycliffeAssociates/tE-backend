@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from .views import language
+from .views import language,version,anthology
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
@@ -25,7 +25,8 @@ urlpatterns = [
     # url(r'^all_projects/$', views.AllProjectsView.as_view()),
     # url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),
     url(r'^get_langs/$', language.GetLanguages.as_view()),
-    # url(r'^get_versions/$', views.getVersionsView.as_view()),
+    url(r'^get_versions/$', version.GetVersions.as_view()),
+    url(r'^get_anthologies/$',anthology.GetAnthologies.as_view()),
     # url(r'^get_books/$', views.getBooksView.as_view()),
     # url(r'^push_takes/$', views.PushTakesView.as_view()),
     # url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
