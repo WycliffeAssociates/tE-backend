@@ -1,5 +1,5 @@
 from api.models import Take
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, views
 from api.serializers import TakeSerializer
 from rest_framework.response import Response
 import os
@@ -55,3 +55,11 @@ class TakeViewSet(viewsets.ModelViewSet):
         take["endv"] = instance.chunk.endv
 
         return Response(take)
+
+class GetTakes(views.APIView):
+    def post(self, request):
+        data = request.data
+        if "chunk_id" in data:
+            return Response(TakeSerializer(Take.get_takes(data["chunk_id"]), many=True).data, status=200)
+        else:
+            return Response(data=None, status=400)

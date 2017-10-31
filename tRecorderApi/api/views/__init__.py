@@ -1,7 +1,8 @@
 #from index import *
-from .project import ProjectViewSet
 # from chapter import ChapterViewSet
-# from chunk import ChunkViewSet
+from .chunk import *
+from .take import *
+from .comment import *
 # from language import LanguageViewSet
 # from book import BookViewSet
 # from take import TakeViewSet

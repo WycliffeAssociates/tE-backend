@@ -177,3 +177,71 @@ response:
         ...
     ]
 }
+
+
+get_project_takes should be broken into the following:
+api/get_chunks
+api/get_takes
+api/get_comments
+
+api/get_chunks
+-------------------------------------------------------------------------------
+request:
+{
+    "book_slug": book_slug,
+    "language_slug": language_slug,
+    "version_slug": version_slug,
+    "chapter_number" : chapter_number
+}
+
+or
+
+{
+    "project_id" : project_id
+    "chapter_number" : chapter_number
+}
+
+or
+
+ {
+     "chapter_id" : chapter_id
+ }
+
+response:
+[
+    {
+        "endv": integer,
+        "startv": integer,
+        "id": integer
+    },
+    ...
+]
+
+api/get_takes:
+request:
+{
+    "chunk_id" : chunk_id
+}
+
+response:
+[
+    {
+        "rating": integer,
+        "published": boolean,
+        "date_modified": timestamp,
+        "markers": {
+            "label": integer
+        },
+        "location": path_string,
+        "duration": integer,
+        "id": integer
+    },
+    ...
+]
+
+api/get_comments
+-------------------------------------------------------------------------------
+request5555555555:
+{
+
+}
