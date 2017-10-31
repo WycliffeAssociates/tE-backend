@@ -27,24 +27,8 @@ class Project(models.Model):
         return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
 
     @staticmethod
-    def get_projects(language, book, anthology, version, published):
+    def get_projects(projects):
         project_list = []
-        project_filter = {}
-
-        if language is not None:
-            project_filter["language__slug"] = language
-        if version is not None:
-            project_filter["version__slug"] = version
-        if book is not None:
-            project_filter["book__slug"] = book
-        if published is not None:
-            project_filter["published"] = published
-        if anthology is not None:
-            project_filter["anthology__slug"] = anthology
-
-        # filter projects based on the project being requested
-        projects = Project.objects.filter(**project_filter)
-
         for project in projects:
             dic = {"id": project.id,
                    "published": project.published,
