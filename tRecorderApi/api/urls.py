@@ -1,13 +1,13 @@
 from django.conf.urls import url
 from rest_framework import routers
-import api.views
+from .views import book
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
 # router.register(r'chapters', views.ChapterViewSet)
 # router.register(r'chunks', views.ChunkViewSet)
 # router.register(r'languages', views.LanguageViewSet)
-# router.register(r'books', views.BookViewSet)
+router.register(r'books', book.BookViewSet)
 # router.register(r'users', views.UserViewSet)
 # router.register(r'takes', views.TakeViewSet)
 # router.register(r'comments', views.CommentViewSet)
@@ -29,6 +29,7 @@ urlpatterns = [
     # url(r'^get_books/$', views.getBooksView.as_view()),
     # url(r'^push_takes/$', views.PushTakesView.as_view()),
     # url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
+    url(r'^get_books/$', book.GetBooksView.as_view())
 ]
 
 urlpatterns += router.urls
