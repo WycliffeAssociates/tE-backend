@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from .views import language,version,anthology
+from .views import language,version,anthology,zip_project_files
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
@@ -20,7 +20,7 @@ urlpatterns = [
     # url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
     # url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
     # url(r'^get_source/$', views.SourceFileView.as_view()),
-    # url(r'^zip_files/$', views.ProjectZipFilesView.as_view()),
+    #url(r'^zip_project_files/$', zip_project_files.ZipProjectFiles.as_view()),
     # url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     # url(r'^all_projects/$', views.AllProjectsView.as_view()),
     # url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),

@@ -1,24 +1,25 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser
-import time
 import os
-import uuid
 import shutil
-from tinytag import TinyTag
-from pydub import AudioSegment
+import time
+import uuid
 import zipfile
-from rest_framework.response import Response
-from django.http import HttpResponse
+
 from api.models import Chunk
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import getRelativePath
+from pydub import AudioSegment
+from rest_framework import views
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
 
-class ProjectZipFilesView(views.APIView):
+
+class ZipProjectFiles(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
-        data = request.data
 
+        data = request.data
+        #TODO:Discuss what this check is doing
         if "project" not in data:
             if 'language' not in data or 'version' not in data \
                 or "book" not in data:
@@ -75,7 +76,6 @@ class ProjectZipFilesView(views.APIView):
                 for file in files:
                     # store the absolute path which is is it's subdir and where the os step is
                     filePath = subdir + os.sep + file
-
                     if filePath.endswith(".wav"):
                         # Add to array so it can be added to the archive
                         sound = AudioSegment.from_wav(filePath)
@@ -92,7 +92,6 @@ class ProjectZipFilesView(views.APIView):
 
             # delete the newly created wave and mp3 files
             shutil.rmtree(root_folder)
-
             return Response({"location": getRelativePath(project_file)}, status=200)
         else:
             return Response({"error":"no_files"}, status=400)
