@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from .views import book, book_list
+from .views import book
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
@@ -29,7 +29,7 @@ urlpatterns = [
     # url(r'^get_books/$', views.getBooksView.as_view()),
     # url(r'^push_takes/$', views.PushTakesView.as_view()),
     # url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
-    url(r'^get_books/$', book_list.getBooksView.as_view())
+    url(r'^get_books/$', book.GetBooksView.as_view())
 ]
 
 urlpatterns += router.urls
