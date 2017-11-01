@@ -6,7 +6,7 @@ from .comment import *
 # from language import LanguageViewSet
 # from book import BookViewSet
 # from take import TakeViewSet
-# from comment import CommentViewSet
+from .comment import CommentViewSet
 # from file_upload import *
 # from get_project_takes import *
 # from source_file import *

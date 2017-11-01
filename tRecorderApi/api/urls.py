@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from api.views import GetChunk, GetTakes, GetComments
+from api.views import GetChunk, GetTakes, GetComments, CommentViewSet
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
@@ -10,7 +10,7 @@ router = routers.DefaultRouter()
 # router.register(r'books', views.BookViewSet)
 # router.register(r'users', views.UserViewSet)
 # router.register(r'takes', views.TakeViewSet)
-# router.register(r'comments', views.CommentViewSet)
+router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
     # url(r'^$', views.index, name='index'),
