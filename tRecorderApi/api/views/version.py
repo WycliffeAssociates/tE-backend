@@ -18,11 +18,11 @@ class GetVersions(APIView):
             versions = Version.objects.all()
 
         for version in versions:
-            lang = {
+            versn = {
                 "slug": version.slug,
                 "name": version.name
             }
-            version_response.append(lang)
+            version_response.append(versn)
         if len(version_response)!=0:
             return Response(version_response, status=200)
         else:
