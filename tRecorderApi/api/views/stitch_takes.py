@@ -6,10 +6,11 @@ import json
 from rest_framework.response import Response
 import os
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import getRelativePath
 
 class SourceStitchView(views.APIView):
     parser_classes = (JSONParser,)
+
     def post(self, request):
         data = request.data
         if "language" in data and "version" in data and "book" in data and "chapter" in data:

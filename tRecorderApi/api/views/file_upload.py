@@ -1,17 +1,18 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser, FileUploadParser
+import json
+import os
+import shutil
 import time
 import uuid
 import zipfile
-import os
-from tinytag import TinyTag
-from rest_framework.response import Response
-import json
-from helpers import highPassFilter, getRelativePath
+
 from api.models import Book, Language, Take
 from django.conf import settings
-import re
-import shutil
+from helpers import highPassFilter, getRelativePath
+from rest_framework import views
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from tinytag import TinyTag
+
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
@@ -39,8 +40,9 @@ class FileUploadView(views.APIView):
                 langcode = ''
 
                 is_empty_zip = True # for testing if zip file is empty
-
+                #TODO:dirs is not used
                 for root, dirs, files in os.walk(folder_name):
+                    #TODO:change variable f into file
                     for f in files:
                         is_empty_zip = False
                         abpath = os.path.join(root, os.path.basename(f))
@@ -51,9 +53,11 @@ class FileUploadView(views.APIView):
                             return Response({"error": "bad_wave_file"}, status=400)
                         
                         if meta and meta.artist:
+                            #TODO:find a proper name for a
                             a = meta.artist
                             lastindex = a.rfind("}") + 1
                             substr = a[:lastindex]
+                            #TODO:find a proper name for pls
                             pls = json.loads(substr)
 
                             if bookcode != pls['slug']:
@@ -104,7 +108,7 @@ class FileUploadView(views.APIView):
             langcode = ''
 
             is_empty_zip = True # for testing if zip file is empty
-
+            # TODO:dirs is not used
             for root, dirs, files in os.walk(folder_name):
                 for f in files:
                     is_empty_zip = False

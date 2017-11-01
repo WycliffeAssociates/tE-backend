@@ -177,3 +177,30 @@ response:
         ...
     ]
 }
+
+api/zip_files
+----------------------------------------------------------------------------
+request:{
+"language":language, //optional
+"version":version,//optional
+"book":book//optional
+}
+
+response:{
+"location":project_location
+}
+
+Note: change name to zip_project_files
+
+api/stitch_takes
+----------------------------------------------------------------------------
+request:{
+"language":language,
+"book":book,
+"version":version,
+"chapter":chapter
+}
+
+response:{
+"location":location_to_takes_mp3
+}
