@@ -5,7 +5,7 @@ import time
 import uuid
 
 from django.conf import settings
-from file_upload import FileUploadView
+from .file_upload import FileUploadView
 from rest_framework import views
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -24,17 +24,18 @@ class ResumableFileUploadView(views.APIView):
             file_name = request.POST.get('resumableFilename')
             chunkNumber = request.POST.get('resumableChunkNumber')
             chunkSize = int(request.POST.get('resumableChunkSize'))
-            currentChunkSize = int(request.POST.get('resumableCurrentChunkSize'))
+            currentChunkSize = int(
+                request.POST.get('resumableCurrentChunkSize'))
             totalSize = int(request.POST.get('resumableTotalSize'))
             totalChunks = int(request.POST.get('resumableTotalChunks'))
 
             if not self.isChunkUploaded(identifier, file_name, chunkNumber):
-                chunkPath = self.tempFolder + identifier + "/" + file_name + ".part" + chunkNumber
+                chunkPath = self.tempFolder + identifier + \
+                    "/" + file_name + ".part" + chunkNumber
                 try:
                     os.makedirs(self.tempFolder + identifier)
                 except:
                     pass
-
                 with open(chunkPath, 'w') as temp_file:
                     for line in upload:
                         temp_file.write(line)
@@ -43,7 +44,8 @@ class ResumableFileUploadView(views.APIView):
                 if os.path.isfile(chunkPath):
                     uplChunkSize = os.path.getsize(chunkPath)
                     print
-                    'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
+                    'Chunk #{}: {} = {}'.format(
+                        chunkNumber, currentChunkSize, uplChunkSize)
                     if int(currentChunkSize) != int(uplChunkSize):
                         # reupload chunk
                         return Response(status=204)
@@ -71,7 +73,8 @@ class ResumableFileUploadView(views.APIView):
                             status = 200
                             response = {}
                             if filename == "project":
-                                response = FileUploadView.processFile(self.filePath, file_name)
+                                response = FileUploadView.processFile(
+                                    self.filePath, file_name)
                                 if 'error' in response:
                                     status = 500
 
@@ -143,7 +146,8 @@ class ResumableFileUploadView(views.APIView):
     def sort_nicely(self, l):
         """ Sort the given list in the way that humans expect."""
         convert = lambda text: int(text) if text.isdigit() else text
-        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        alphanum_key = lambda key: [convert(c)
+                                    for c in re.split('([0-9]+)', key)]
         l.sort(key=alphanum_key)
 
     def get(self, request, filename, format='zip'):
@@ -155,3 +159,4 @@ class ResumableFileUploadView(views.APIView):
             return Response(status=200)
 
         return Response(status=204)
+# code flow

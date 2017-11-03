@@ -7,7 +7,7 @@ import zipfile
 
 from api.models import Book, Language, Take
 from django.conf import settings
-from helpers import highPassFilter, getRelativePath
+from .helpers import highPassFilter, getRelativePath
 from rest_framework import views
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
@@ -26,12 +26,14 @@ class FileUploadView(views.APIView):
             # unzip files
             try:
                 zip = zipfile.ZipFile(upload)
-                folder_name = os.path.join(settings.BASE_DIR, 'media/dump/' + uuid_name)
+                folder_name = os.path.join(
+                    settings.BASE_DIR, 'media/dump/' + uuid_name)
 
                 zip.extractall(folder_name)
                 zip.close()
 
-                # extract metadata / get the apsolute path to the file to be stored
+                # extract metadata / get the apsolute path to the file to be
+                # stored
 
                 # Cache language and book to re-use later
                 bookname = ''
@@ -39,10 +41,10 @@ class FileUploadView(views.APIView):
                 langname = ''
                 langcode = ''
 
-                is_empty_zip = True # for testing if zip file is empty
-                #TODO:dirs is not used
+                is_empty_zip = True  # for testing if zip file is empty
+                # TODO:dirs is not used
                 for root, dirs, files in os.walk(folder_name):
-                    #TODO:change variable f into file
+                    # TODO:change variable f into file
                     for f in files:
                         is_empty_zip = False
                         abpath = os.path.join(root, os.path.basename(f))
@@ -51,13 +53,13 @@ class FileUploadView(views.APIView):
                             meta = TinyTag.get(abpath)
                         except LookupError as e:
                             return Response({"error": "bad_wave_file"}, status=400)
-                        
+
                         if meta and meta.artist:
-                            #TODO:find a proper name for a
+                            # TODO:find a proper name for a
                             a = meta.artist
                             lastindex = a.rfind("}") + 1
                             substr = a[:lastindex]
-                            #TODO:find a proper name for pls
+                            # TODO:find a proper name for pls
                             pls = json.loads(substr)
 
                             if bookcode != pls['slug']:
@@ -71,13 +73,13 @@ class FileUploadView(views.APIView):
                                 "langname": langname,
                                 "bookname": bookname,
                                 "duration": meta.duration
-                                }
-                            
+                            }
+
                             highPassFilter(abpath)
                             Take.prepareDataToSave(pls, relpath, data)
                         else:
                             return Response({"error": "bad_wave_file"}, status=400)
-                
+
                 if is_empty_zip:
                     return Response({"error": "bad_zip_file"}, status=400)
                 return Response({"response": "ok"}, status=200)
@@ -95,7 +97,8 @@ class FileUploadView(views.APIView):
             location = os.path.join(folderPath, filePath)
             uuid_name = str(time.time()) + str(uuid.uuid4())
             zip = zipfile.ZipFile(location)
-            folder_name = os.path.join(settings.BASE_DIR, 'media/dump/' + uuid_name)
+            folder_name = os.path.join(
+                settings.BASE_DIR, 'media/dump/' + uuid_name)
 
             zip.extractall(folder_name)
             zip.close()
@@ -107,7 +110,7 @@ class FileUploadView(views.APIView):
             langname = ''
             langcode = ''
 
-            is_empty_zip = True # for testing if zip file is empty
+            is_empty_zip = True  # for testing if zip file is empty
             # TODO:dirs is not used
             for root, dirs, files in os.walk(folder_name):
                 for f in files:
@@ -118,7 +121,7 @@ class FileUploadView(views.APIView):
                         meta = TinyTag.get(abpath)
                     except LookupError as e:
                         return {"error": "bad_wave_file"}
-                    
+
                     if meta and meta.artist:
                         a = meta.artist
                         lastindex = a.rfind("}") + 1
@@ -136,16 +139,16 @@ class FileUploadView(views.APIView):
                             "langname": langname,
                             "bookname": bookname,
                             "duration": meta.duration
-                            }
-                        
+                        }
+
                         highPassFilter(abpath)
                         Take.prepareDataToSave(pls, relpath, data)
                     else:
                         return {"error": "bad_wave_file"}
-            
+
             if is_empty_zip:
                 return {"error": "bad_zip_file"}
-            
+
             return {"response": "ok"}
 
         except zipfile.BadZipfile:

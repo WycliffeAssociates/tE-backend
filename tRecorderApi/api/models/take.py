@@ -33,7 +33,7 @@ class Take(models.Model):
     # def prepareDataToSave(meta, relpath, data, is_source=False):
     #     dic = {}
 
-    #     # Create Language in database if it's not there
+    # Create Language in database if it's not there
     #     language, l_created = Language.objects.get_or_create(
     #         slug=meta["language"],
     #         defaults={
@@ -42,7 +42,7 @@ class Take(models.Model):
     #     )
     #     dic["language"] = model_to_dict(language)
 
-    #     # Create Book in database if it's not there
+    # Create Book in database if it's not there
     #     book, b_created = Book.objects.get_or_create(
     #         slug=meta["slug"],
     #         defaults={
@@ -52,7 +52,7 @@ class Take(models.Model):
     #     )
     #     dic["book"] = model_to_dict(book)
 
-    #     # Create Project in database if it's not there
+    # Create Project in database if it's not there
     #     project, p_created = Project.objects.get_or_create(
     #         version=meta["version"],
     #         mode=meta["mode"],
@@ -70,18 +70,18 @@ class Take(models.Model):
     #     )
     #     dic["project"] = model_to_dict(project)
 
-    #     # Create Chapter in database if it's not there
+    # Create Chapter in database if it's not there
     #     chapter, cr_created = Chapter.objects.get_or_create(
     #         project=project,
     #         number=meta['chapter'],
     #         defaults={
     #             'number': meta['chapter'],
-    #             'checked_level': 0,  # TODO get checked_level from tR
+    # 'checked_level': 0,  # TODO get checked_level from tR
     #             'project': project},
     #     )
     #     dic["chapter"] = model_to_dict(chapter)
 
-    #     # Create Chunk in database if it's not there
+    # Create Chunk in database if it's not there
     #     chunk, ck_created = Chunk.objects.get_or_create(
     #         chapter=chapter,
     #         startv=meta['startv'],
@@ -95,16 +95,16 @@ class Take(models.Model):
 
     #     markers = json.dumps(meta['markers'])
 
-    #     # If the take came from .tr file (Source audio)
-    #     # then check if it exists in database
-    #     # if it exists then update it's data
-    #     # otherwise create new record
-    #     # TODO remove source files functionality
+    # If the take came from .tr file (Source audio)
+    # then check if it exists in database
+    # if it exists then update it's data
+    # otherwise create new record
+    # TODO remove source files functionality
     #     if (is_source):
     #         defaults = {
     #             'location': relpath,
     #             'duration': data['duration'],
-    #             'rating': 0,  # TODO get rating from tR
+    # 'rating': 0,  # TODO get rating from tR
     #             'markers': markers,
     #         }
     #         try:
@@ -126,9 +126,9 @@ class Take(models.Model):
     #     else:
     #         take = Take(location=relpath,
     #                     duration=data['duration'],
-    #                     rating=0,  # TODO get rating from tR
+    # rating=0,  # TODO get rating from tR
     #                     markers=markers,
     #                     user_id=1,
-    #                     chunk=chunk)  # TODO get author of file and save it to Take model
+    # chunk=chunk)  # TODO get author of file and save it to Take model
     #         take.save()
     #     return dic
