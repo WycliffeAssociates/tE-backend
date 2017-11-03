@@ -1,13 +1,14 @@
 from django.conf.urls import url
 from rest_framework import routers
 from api.views import GetChunks, GetTakes, GetComments, CommentViewSet, TakeViewSet, AnthologyViewSet
+from .views import book
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
 # router.register(r'chapters', views.ChapterViewSet)
 # router.register(r'chunks', views.ChunkViewSet)
 # router.register(r'languages', views.LanguageViewSet)
-# router.register(r'books', views.BookViewSet)
+router.register(r'books', book.BookViewSet)
 # router.register(r'users', views.UserViewSet)
 router.register(r'takes', TakeViewSet)
 router.register(r'comments', CommentViewSet)
@@ -33,7 +34,7 @@ urlpatterns = [
     url(r'^get_chunks/$', GetChunks.as_view()),
     url(r'^get_takes/$', GetTakes.as_view()),
     url(r'^get_comments/$', GetComments.as_view())
-    
+    url(r'^get_books/$', book.GetBooksView.as_view())
 ]
 
 urlpatterns += router.urls

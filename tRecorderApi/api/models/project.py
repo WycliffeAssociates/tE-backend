@@ -21,7 +21,7 @@ class Project(models.Model):
 
     class Meta:
         ordering = ["language", "version", "book"]
-        unique_together = (("version", "anthology", "language", "mode"),)
+        unique_together = (("version", "anthology", "language", "mode", "book"),)
 
     def __str__(self):
         return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
