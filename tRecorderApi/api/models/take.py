@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.contenttypes.fields import GenericRelation
-from .comment import Comment
+#from .comment import Comment
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -11,7 +11,7 @@ class Take(models.Model):
     markers = models.TextField(blank=True)
     date_modified = models.DateTimeField(default=now)
     chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE)
-    comment = GenericRelation(Comment)
+    comment = GenericRelation("Comment")
 
     class Meta:
         ordering = ["chunk"]

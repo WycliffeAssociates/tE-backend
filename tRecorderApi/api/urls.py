@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from api.views import GetChunk, GetTakes, GetComments, CommentViewSet
+from api.views import GetChunks, GetTakes, GetComments, CommentViewSet, TakeViewSet, AnthologyViewSet
 
 router = routers.DefaultRouter()
 # router.register(r'projects', views.ProjectViewSet)
@@ -9,8 +9,9 @@ router = routers.DefaultRouter()
 # router.register(r'languages', views.LanguageViewSet)
 # router.register(r'books', views.BookViewSet)
 # router.register(r'users', views.UserViewSet)
-# router.register(r'takes', views.TakeViewSet)
+router.register(r'takes', TakeViewSet)
 router.register(r'comments', CommentViewSet)
+router.register(r'anthologies', AnthologyViewSet)
 
 urlpatterns = [
     # url(r'^$', views.index, name='index'),
@@ -29,7 +30,7 @@ urlpatterns = [
     # url(r'^get_books/$', views.getBooksView.as_view()),
     # url(r'^push_takes/$', views.PushTakesView.as_view()),
     # url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
-    url(r'^get_chunks/$', GetChunk.as_view()),
+    url(r'^get_chunks/$', GetChunks.as_view()),
     url(r'^get_takes/$', GetTakes.as_view()),
     url(r'^get_comments/$', GetComments.as_view())
     

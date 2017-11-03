@@ -1,6 +1,6 @@
 from django.db import models
 from .chapter import Chapter
-from .comment import Comment
+#from .comment import Comment
 from django.contrib.contenttypes.fields import GenericRelation
 
 class Chunk(models.Model):
@@ -10,7 +10,7 @@ class Chunk(models.Model):
         "Chapter",
         on_delete=models.CASCADE
     )
-    comments = GenericRelation(Comment)
+    comments = GenericRelation("Comment")
 
     class Meta:
         ordering = ["startv"]

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
-from .comment import Comment
+#from .comment import Comment
 
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
@@ -10,7 +10,7 @@ class Chapter(models.Model):
         "Project",
         on_delete=models.CASCADE
     )
-    comments = GenericRelation(Comment)
+    comments = GenericRelation("Comment")
 
 
     class Meta:

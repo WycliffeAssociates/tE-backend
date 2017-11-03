@@ -47,12 +47,12 @@ class TakeViewSet(viewsets.ModelViewSet):
             "date_modified","markers","id",
             "is_publish"
         ])
-        take["anthology"] = instance.chunk.chapter.project.anthology
-        take["version"] = instance.chunk.chapter.project.version
-        take["chapter"] = instance.chunk.chapter.number
-        take["mode"] = instance.chunk.chapter.project.mode
-        take["startv"] = instance.chunk.startv
-        take["endv"] = instance.chunk.endv
+        # take["anthology"] = instance.chunk.chapter.project.anthology.id
+        # take["version"] = instance.chunk.chapter.project.version
+        # take["chapter"] = instance.chunk.chapter.number
+        # take["mode"] = instance.chunk.chapter.project.mode
+        # take["startv"] = instance.chunk.startv
+        # take["endv"] = instance.chunk.endv
 
         return Response(take)
 
@@ -60,6 +60,8 @@ class GetTakes(views.APIView):
     def post(self, request):
         data = request.data
         if "chunk_id" in data:
-            return Response(TakeSerializer(Take.get_takes(data["chunk_id"]), many=True).data, status=200)
+            takes = Take.get_takes(data["chunk_id"])
+            serialized_takes = TakeSerializer(takes, many=True).data
+            return Response(serialized_takes, status=status.HTTP_200_OK)
         else:
-            return Response(data=None, status=400)
+            return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
