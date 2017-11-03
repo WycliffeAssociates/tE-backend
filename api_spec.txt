@@ -181,9 +181,9 @@ response:
 api/zip_files
 ----------------------------------------------------------------------------
 request:{
-"language":language, //optional
+"language":language_slug, //optional
 "version":version,//optional
-"book":book//optional
+"book":book_slug//optional
 }
 
 response:{
