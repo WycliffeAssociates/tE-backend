@@ -80,3 +80,55 @@ class UploadSourceFileView(views.APIView):
         except Exception as e:
             shutil.rmtree(tempFolder)
             return Response({"error": str(e)}, status=400)
+
+
+            # code flow
+
+    """
+def post(request):
+
+    // dealing with file system   
+    1. Create a temporary folder path 
+    2. check if the path exists
+    3. if it does not exist make direction
+    4. open the file in the temporary direction
+    5. open os.devnull -- (not sure what this is doing)
+    6. create a path
+    7. remove file path using os.remove 
+    8. loop in the temporary folder
+    9. get absolute and relative path
+
+    
+    // code flow
+    1.0 check if it is a post request if not return and exception error
+    1.1 create dictionary response 
+    1. create unique name uuid_name
+    2. create a temporary file path
+    3. it the path does not exist we create a direction
+    4. get the data and open it in the temp folder
+    5. FNUll = open os.devnull -- (not sure what this is doing)
+    6. check the output file
+    7. remove path with the temporary folder 
+    8. close FNULL 
+    9. loop through the files, 
+    10. get absolute path
+    11. get relative path
+    12. get metadata
+    13. if there is metadata and meta artist split data by } if not return response error bad wave file
+    14. create a json object
+    15. from the json object create bookcode
+    16. get the bookcode from book
+    17. from json object create language code
+    18. get the language code from book
+    19. create a dictionary with language name book name and duration
+    20. saved = pass the json object, the relative path, the dictionary and a True to a function 
+        in Take called prepareDataToSave
+    21. check if language is in saved and not in response: if this is true response["language"] = saved["language"]
+    22. check if book is in saved and not in response: if this is true response["book"] = saved["book"]     
+    23. return (response, status= 200)
+    
+
+
+
+
+    """
