@@ -4,7 +4,7 @@ from .views import(
     book, language,
     version, anthology,
     zip_project_files, index,
-    resumable_upload
+    resumable_upload, source_file
 )
 
 router = routers.DefaultRouter()
@@ -27,7 +27,7 @@ urlpatterns = [
     # url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
     # url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
     # url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
-    # url(r'^get_source/$', views.SourceFileView.as_view()),
+    url(r'^get_source/$', source_file.SourceFileView.as_view()),
     url(r'^zip_project_files/$', zip_project_files.ZipProjectFiles.as_view()),
     # url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     # url(r'^all_projects/$', views.AllProjectsView.as_view()),

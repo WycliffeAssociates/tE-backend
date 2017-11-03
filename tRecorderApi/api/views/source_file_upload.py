@@ -22,7 +22,8 @@ class UploadSourceFileView(views.APIView):
             # TODO: remove this functionality
             response = {}
             uuid_name = str(time.time()) + str(uuid.uuid4())
-            tempFolder = os.path.join(settings.BASE_DIR, "media/dump/" + uuid_name)
+            tempFolder = os.path.join(
+                settings.BASE_DIR, "media/dump/" + uuid_name)
             if not os.path.exists(tempFolder):
                 os.makedirs(tempFolder)
                 data = request.data['upload']
@@ -32,13 +33,14 @@ class UploadSourceFileView(views.APIView):
         try:
             FNULL = open(os.devnull, 'w')
             subprocess.check_output(
-                ['java', '-jar', os.path.join(settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
+                ['java', '-jar', os.path.join(
+                    settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
                 stderr=subprocess.STDOUT
             )
 
             os.remove(os.path.join(tempFolder, "source.tr"))
             FNULL.close()
-            
+
             bookname = ''
             bookcode = ''
             langname = ''
@@ -69,8 +71,9 @@ class UploadSourceFileView(views.APIView):
                             "duration": meta.duration
                         }
 
-                        #highPassFilter(abpath)
-                        saved = Take.prepareDataToSave(pls, relpath, data, True)
+                        # highPassFilter(abpath)
+                        saved = Take.prepareDataToSave(
+                            pls, relpath, data, True)
                         if "language" in saved and "language" not in response:
                             response["language"] = saved["language"]
                         if "book" in saved and "book" not in response:

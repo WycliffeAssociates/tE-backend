@@ -42,19 +42,25 @@ class SourceFileView(views.APIView):
         project = Chunk.getChunksWithTakesByProject(new_data)
         if len(project["chunks"]) > 0:
             uuid_name = str(time.time()) + str(uuid.uuid4())
-            root_folder = os.path.join(settings.BASE_DIR, 'media/tmp/' + uuid_name)
-            filename = project['language']["slug"] + '_' + project['project']['version'] + '_' + project['book']['slug']
+            root_folder = os.path.join(
+                settings.BASE_DIR, 'media/tmp/' + uuid_name)
+            filename = project['language']["slug"] + '_' + project[
+                'project']['version'] + '_' + project['book']['slug']
             project_folder = root_folder + '/' + project['language']["slug"] + '/' + project['project'][
                 'version'] + '/' + project['book']['slug']
 
             try:
                 for chunk in project["chunks"]:
                     for take in chunk["takes"]:
+
                         chapter_folder = project_folder + '/' + str(
                             project['chapter']['number']).zfill(2)
                         if not os.path.exists(chapter_folder):
                             os.makedirs(chapter_folder)
-                        shutil.copy2(os.path.join(settings.BASE_DIR, take['take']['location']), chapter_folder)
+
+                        shutil.copy2(os.path.join(
+                            settings.BASE_DIR, take['take']['location']),
+                            chapter_folder)
                         file_name = os.path.basename(take['take']['location'])
                         file_path = chapter_folder + '/' + file_name
 
@@ -75,11 +81,14 @@ class SourceFileView(views.APIView):
                             }
 
                             sound = pydub.AudioSegment.from_wav(file_path)
-                            sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
+                            sound.export(file_path_mp3,
+                                         format='mp3', tags={'artist': json.dumps(meta)})
                             os.remove(file_path)
 
                 FNULL = open(os.devnull, 'w')
-                subprocess.call(['java', '-jar', os.path.join(settings.BASE_DIR, 'aoh/aoh.jar'), '-c', '-tr', root_folder],
+                subprocess.call(
+                    ['java', '-jar', os.path.join(
+                        settings.BASE_DIR, 'aoh/aoh.jar'), '-c', '-tr', root_folder],
                                 stdout=FNULL, stderr=subprocess.STDOUT)
                 FNULL.close()
                 os.rename(root_folder + '.tr',
@@ -91,3 +100,35 @@ class SourceFileView(views.APIView):
             return Response({"response": "no_source_files"}, status=400)
 
         return Response({"location": 'media/tmp/' + filename + '.tr'}, status=200)
+
+# code flow
+"""
+# checks if project in data
+# checks if one of language,version,book is not in data
+# returns Response("not_enough_parameters"), if any of the check is true
+# create empty object(new_data)
+# checks if data has project, if true sets project to new_data
+# sets language,version,book,is_published=True to new_data object
+
+//database
+#Gets chunks
+
+
+#checks the size of the chunk is >0
+#if false,no_source_files
+#constructs temp folder and filename
+#loops through project to get chunks
+#loops through chunk to get takes
+#constructs chapter_folder, if does not exists,creates it
+#copy take files to chapter_folder
+#stores file_name and file_path in respective variables
+#checks the extension of file,if ends with .wav repaces with .mp3
+#constructs meta data
+#writes meta data to file
+#removes file
+
+
+#uses java lib to bundle into tr file
+#renames the folder to .tr
+#returns location to .tr file
+"""

@@ -159,4 +159,3 @@ class ResumableFileUploadView(views.APIView):
             return Response(status=200)
 
         return Response(status=204)
-# code flow
