@@ -33,7 +33,7 @@ urlpatterns = [
     # url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
     url(r'^get_chunks/$', GetChunks.as_view()),
     url(r'^get_takes/$', GetTakes.as_view()),
-    url(r'^get_comments/$', GetComments.as_view())
+    url(r'^get_comments/$', GetComments.as_view()),
     url(r'^get_books/$', book.GetBooksView.as_view())
 ]
 
