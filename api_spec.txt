@@ -177,3 +177,60 @@ response:
         ...
     ]
 }
+
+api/zip_files
+----------------------------------------------------------------------------
+request:{
+"language":language_slug, //optional
+"version":version,//optional
+"book":book_slug//optional
+}
+
+response:{
+"location":project_location
+}
+
+Note: change name to zip_project_files
+
+api/stitch_takes
+----------------------------------------------------------------------------
+request:{
+"language":language,
+"book":book,
+"version":version,
+"chapter":chapter
+}
+
+response:{
+"location":location_to_takes_mp3
+}
+
+api/resumable_upload
+-------------------------------------------------------------------------------------
+request:{
+    "file":file
+    "resumableIdentifier":resumableIdentifier,
+    "resumableFilename":resumableFilename,
+    "resumableChunkNumber":resumableChunkNumber,
+    "resumableChunkSize":resumableChunkSize,
+    "resumableCurrentChunkSize":resumableCurrentChunkSize,
+    "resumableTotalSize":resumableTotalSize,
+    "resumableTotalChunks":resumableTotalChunks
+}
+
+response:{
+    status:200
+}
+
+api/get_source
+
+request:{
+    "project":projectId,
+    "language":language_slug,
+    "version":version_slug,
+    "book":book_slug
+}
+
+response:{
+    "location":".tr_file_location"
+}
