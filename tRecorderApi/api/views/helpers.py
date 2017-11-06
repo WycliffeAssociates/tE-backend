@@ -34,3 +34,22 @@ def highPassFilter(location):
 def getRelativePath(location):
     reg = re.search('(media\/.*)$', location)
     return reg.group(1)
+
+
+def zip_files_root_directory():
+    uuid_name = str(time.time()) + str(uuid.uuid4())
+    project_root_directory = os.path.join(
+        settings.BASE_DIR, 'media/export', uuid_name)
+    if not os.path.exists(project_root_directory):
+        return os.makedirs(project_root_directory)
+    return project_root_directory
+
+
+def remove_file_tree(project_root_directory):
+    shutil.rmtree(project_root_directory)
+
+
+def path(directory, project_name=None, file_extension=None):
+    return os.path.join(settings.BASE_DIR,
+                        directory,
+                        project_name + file_extension)
