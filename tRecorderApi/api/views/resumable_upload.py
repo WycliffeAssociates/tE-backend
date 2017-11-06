@@ -188,7 +188,27 @@ class ResumableFileUploadView(views.APIView):
        
 def is chunkUploaded:
    // dealing with file system
-       1. check if a location contains a file                  (os.path.isfile)
+       1. check if a location contains a file                        (os.path.isfile)
  
-def is fileCompleted               
+def is fileUploadCompleted
+   // dealing with file system
+       1. create a file path                                         (os.path.join)
+       
+def createFileAndDeleteTmp:
+   // dealing with file system
+       1. create a file path                                         (os.path.join)
+       2. check if the file path contains a file             
+       3. generate the file names in a directory tree by walking     (os.walk())
+          the tree either top-down or bottom-up.
+       4. create a file path                                         (os.path.join)
+       5. check if the path exists                                   (os.path.exists) (os.path.join)
+       6. if path does not exist create direction and path           (os.makedirs) (os.path.join)
+       7. create file path                                           (os.path.join)
+       
+def createFileFromChunks
+   // dealing with file system
+       1. check if a path contains a file                                   (os.path.isfile)
+         
+             
     """
+
