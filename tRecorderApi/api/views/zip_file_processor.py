@@ -10,7 +10,6 @@ from .helpers import (zip_files_root_directory, remove_file_tree)
 def zip_it(data):
     project_to_find = {}
     if 'language' in data and 'version' in data and 'book' in data:
-
         project = Chunk.getChunksWithTakesByProject(data)
 
         if(len(project['chunks']) > 0):

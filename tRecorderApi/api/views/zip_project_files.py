@@ -1,7 +1,7 @@
 from rest_framework import views
 from rest_framework.parsers import JSONParser
 
-from .zip_file_processor import process
+from .zip_file_processor import zip_it
 
 
 class ZipProjectFiles(views.APIView):
