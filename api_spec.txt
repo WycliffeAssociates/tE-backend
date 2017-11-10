@@ -178,59 +178,70 @@ response:
     ]
 }
 
-api/zip_files
-----------------------------------------------------------------------------
-request:{
-"language":language_slug, //optional
-"version":version,//optional
-"book":book_slug//optional
+
+get_project_takes should be broken into the following:
+api/get_chunks
+api/get_takes
+api/get_comments
+
+api/get_chunks
+-------------------------------------------------------------------------------
+request:
+{
+    "book_slug": book_slug,
+    "language_slug": language_slug,
+    "version_slug": version_slug,
+    "chapter_number" : chapter_number
 }
 
-response:{
-"location":project_location
+or
+
+{
+    "project_id" : project_id
+    "chapter_number" : chapter_number
 }
 
-Note: change name to zip_project_files
+or
 
-api/stitch_takes
-----------------------------------------------------------------------------
-request:{
-"language":language,
-"book":book,
-"version":version,
-"chapter":chapter
+ {
+     "chapter_id" : chapter_id
+ }
+
+response:
+[
+    {
+        "endv": integer,
+        "startv": integer,
+        "id": integer
+    },
+    ...
+]
+
+api/get_takes:
+request:
+{
+    "chunk_id" : chunk_id
 }
 
-response:{
-"location":location_to_takes_mp3
-}
+response:
+[
+    {
+        "rating": integer,
+        "published": boolean,
+        "date_modified": timestamp,
+        "markers": {
+            "label": integer
+        },
+        "location": path_string,
+        "duration": integer,
+        "id": integer
+    },
+    ...
+]
 
-api/resumable_upload
--------------------------------------------------------------------------------------
-request:{
-    "file":file
-    "resumableIdentifier":resumableIdentifier,
-    "resumableFilename":resumableFilename,
-    "resumableChunkNumber":resumableChunkNumber,
-    "resumableChunkSize":resumableChunkSize,
-    "resumableCurrentChunkSize":resumableCurrentChunkSize,
-    "resumableTotalSize":resumableTotalSize,
-    "resumableTotalChunks":resumableTotalChunks
-}
+api/get_comments
+-------------------------------------------------------------------------------
+request:
+{
 
-response:{
-    status:200
-}
-
-api/get_source
-
-request:{
-    "project":projectId,
-    "language":language_slug,
-    "version":version_slug,
-    "book":book_slug
-}
-
-response:{
-    "location":".tr_file_location"
 }
