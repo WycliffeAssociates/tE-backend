@@ -1,15 +1,57 @@
-from rest_framework import views
+import os
+
+from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from django.conf import settings
 
-from .zip_file_processor import zip_it
+from api.file_transfer.AudioUtility import AudioUtility
+from api.file_transfer.FileUtility import FileUtility
+from api.file_transfer.ZipIt import ZipIt
+from api.file_transfer.Download import Download
+
+from api.models import Chunk
 
 
-class ZipProjectFiles(views.APIView):
+class ZipProjectFiles(APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = request.data
-        zip_it(data)
+        project_to_find = {}
+        if 'language' in data and 'version' in data and 'book' in data:
+            project_to_find['language'] = data['language']
+            project_to_find['version'] = data['version']
+            project_to_find['book'] = data['book']
+
+            project = Chunk.getChunksWithTakesByProject(project_to_find)
+
+            if len(project['chunks']) > 0:
+                zip_it = Download(ZipIt(), AudioUtility(), FileUtility())
+                location_list = self.location_list(project, zip.file_utility.rootDir('media/export'))
+                zip_it.download(project_to_find, location_list)
+
+        return Response(status=200)
+
+    def location_list(self, project, root_directory):
+        chapter_directory = ""
+        locations = []
+        for chunk in project["chunks"]:
+            for take in chunk['takes']:
+                chapter_directory = root_directory
+                + os.sep + project['language']["slug"]
+                + os.sep + project['project']['version']
+                + os.sep + project['book']['slug'] + os.sep
+                + str(project['chapter']['number'])
+
+                if not os.path.exists(chapter_directory):
+                    os.makedirs(chapter_directory)
+                location = {}
+                location["src"] = os.path.join(
+                    settings.BASE_DIR, take["take"]["locationation"])
+                location["dst"] = chapter_directory
+                locations.append(location)
+        return locations
 
         # code flow
         """

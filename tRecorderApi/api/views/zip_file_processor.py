@@ -8,7 +8,6 @@ from .helpers import (zip_files_root_directory, remove_file_tree)
 
 
 def zip_it(data):
-    project_to_find = {}
     if 'language' in data and 'version' in data and 'book' in data:
         project = Chunk.getChunksWithTakesByProject(data)
 
@@ -16,14 +15,15 @@ def zip_it(data):
 
             project_root_directory = zip_files_root_directory()
 
-            project_zip_file_path = self.project_zip_file_destination(
+            project_zip_file_destination = self.project_zip_file_path(
                 project)
 
             locations = self.take_location_list(
                 project, project_root_directory)
 
             self.copy_files_from_src_to_dest(locations)
-            self.zip_project(project_root_directory, project_zip_file_path)
+            self.zip_project(
+                project_root_directory, project_zip_file_destination)
         else:
             return Response({"error": "no_files"}, status=400)
     else:
