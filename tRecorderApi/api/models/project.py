@@ -9,7 +9,8 @@ class Project(models.Model):
     source_language = models.ForeignKey(
         "Language",
         related_name="language_source",
-        blank=True
+        blank=True,
+        null=True
     )
     book = models.ForeignKey("Book")
     published = models.BooleanField(default=False)

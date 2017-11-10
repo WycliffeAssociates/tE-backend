@@ -1,6 +1,13 @@
 from api.models import Anthology
+from rest_framework import viewsets
+from api.serializers import AnthologySerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+class AnthologyViewSet(viewsets.ModelViewSet):
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
+    queryset = Anthology.objects.all()
+    serializer_class = AnthologySerializer
 
 class GetAnthologies(APIView):
 
