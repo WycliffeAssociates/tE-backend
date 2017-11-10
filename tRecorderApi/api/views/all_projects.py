@@ -10,7 +10,6 @@ class AllProjectsView(views.APIView):
 
     def post(self, request):
         data = request.data
-
         projects = Project.getProjects(data)
 
         return Response(projects, status=200)
