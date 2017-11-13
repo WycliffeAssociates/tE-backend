@@ -1,16 +1,16 @@
+import datetime
+import json
 import os
 
-from rest_framework.views import APIView
-from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
-from django.conf import settings
-
 from api.file_transfer.AudioUtility import AudioUtility
+from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
 from api.file_transfer.ZipIt import ZipIt
-from api.file_transfer.Download import Download
-
 from api.models import Chunk
+from django.conf import settings
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class ZipProjectFiles(APIView):
@@ -18,20 +18,26 @@ class ZipProjectFiles(APIView):
 
     def post(self, request):
         data = request.data
+        # project_to_find = self.chunk_list(data)
+        project_to_find = {
+            "language": "en-x-demo2",
+            "version": "ulb",
+            "book": "mrk"
+        }
+        chunk_list = self.fake_data()
+        if len(chunk_list['chunks']) > 0:
+            zip_it = Download(ZipIt(), AudioUtility(), FileUtility())
+            location_list = self.location_list(chunk_list, zip.file_utility.rootDir('media/export'))
+            zip_it.download(project_to_find, location_list)
+        return Response(status=200)
+
+    def chunk_list(self, data):
         project_to_find = {}
         if 'language' in data and 'version' in data and 'book' in data:
             project_to_find['language'] = data['language']
             project_to_find['version'] = data['version']
             project_to_find['book'] = data['book']
-
-            project = Chunk.getChunksWithTakesByProject(project_to_find)
-
-            if len(project['chunks']) > 0:
-                zip_it = Download(ZipIt(), AudioUtility(), FileUtility())
-                location_list = self.location_list(project, zip.file_utility.rootDir('media/export'))
-                zip_it.download(project_to_find, location_list)
-
-        return Response(status=200)
+        return project_to_find, Chunk.getChunksWithTakesByProject(project_to_find)
 
     def location_list(self, project, root_directory):
         chapter_directory = ""
@@ -52,6 +58,8 @@ class ZipProjectFiles(APIView):
                 location["dst"] = chapter_directory
                 locations.append(location)
         return locations
+
+
 
         # code flow
         """
