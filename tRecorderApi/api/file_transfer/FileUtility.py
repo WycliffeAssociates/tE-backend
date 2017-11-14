@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import time
 import uuid
@@ -27,6 +28,10 @@ class FileUtility:
     def take_location(self, take_location):
         return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                             take_location)
+
+    def relative_path(self, location):
+        reg = re.search('(media\/.*)$', location)
+        return reg.group(1)
 
     def copy_files_from_src_to_dest(self, location_list):
 

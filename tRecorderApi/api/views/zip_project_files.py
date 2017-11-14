@@ -38,7 +38,7 @@ class ZipProjectFiles(APIView):
 
             zipped_file_location = zip_it.download(project_name, location_list, root_dir)
 
-        return Response({"location": zipped_file_location}, status=200)
+        return Response({"location": zip_it.file_utility.relative_path(zipped_file_location)}, status=200)
 
     def chunk_list(self, data):
         project_to_find = {}
