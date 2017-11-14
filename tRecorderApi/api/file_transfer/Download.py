@@ -12,4 +12,4 @@ class Download(FileTransfer):
 
         project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
 
-        self.archive_project.archive(root_dir, project_file, converted_list)
+        return self.archive_project.archive(root_dir, project_file, converted_list,self.file_utility.remove_dir)

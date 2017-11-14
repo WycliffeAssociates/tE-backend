@@ -1,12 +1,10 @@
 import datetime
-import os
 
 from api.file_transfer.AudioUtility import AudioUtility
 from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
 from api.file_transfer.ZipIt import ZipIt
 from api.models import Chunk
-from django.conf import settings
 from pytz import UTC
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
@@ -35,11 +33,12 @@ class ZipProjectFiles(APIView):
 
             root_dir = zip_it.file_utility.rootDir(['media', 'export'])
 
-            location_list = self.location_list(chunk_list, root_dir)
+            location_list = self.location_list(root_dir, chunk_list, zip_it.file_utility.createPath,
+                                               zip_it.file_utility.take_location)
 
-            zip_it.download(project_name, location_list, root_dir)
+            zipped_file_location = zip_it.download(project_name, location_list, root_dir)
 
-        return Response(status=200)
+        return Response({"location": zipped_file_location}, status=200)
 
     def chunk_list(self, data):
         project_to_find = {}
@@ -195,28 +194,19 @@ class ZipProjectFiles(APIView):
                                                                          'number': 7}, 'language': {
             'slug': u'en-x-demo2', 'name': u'English demo2'}}
 
-    def location_list(self, project, root_directory):
+    def location_list(self, root_dir, chunk_list, chapter_dir, take_location):
         chapter_directory = ""
         locations = []
-        for chunk in project["chunks"]:
+        for chunk in chunk_list["chunks"]:
             for take in chunk['takes']:
-                lang = project['language']["slug"]
-                version = project['project']['version']
-                book = project['book']['slug']
-                number = str(project['chapter']['number'])
-                chapter_directory = os.path.join(root_directory, project['language']["slug"],
-                                                 project['project']['version'], project['book']['slug'],
-                                                 str(project['chapter']['number']))
-
-                if not os.path.exists(chapter_directory):
-                    os.makedirs(chapter_directory)
-
+                lang = chunk_list['language']["slug"]
+                version = chunk_list['project']['version']
+                book = chunk_list['book']['slug']
+                number = str(chunk_list['chapter']['number'])
                 location = {}
-                location["src"] = os.path.join(
-                    settings.BASE_DIR, take["take"]["location"])
-                location["dst"] = chapter_directory
+                location["src"] = take_location(take["take"]["location"])
+                location["dst"] = chapter_dir(root_dir, lang, version, book, str(number))
                 locations.append(location)
-
         return locations
 
     # code flow
