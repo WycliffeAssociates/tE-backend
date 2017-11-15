@@ -1,15 +1,16 @@
 import datetime
-
-from api.file_transfer.AudioUtility import AudioUtility
-from api.file_transfer.Download import Download
-from api.file_transfer.FileUtility import FileUtility
-from api.file_transfer.ZipIt import ZipIt
-from api.models import Chunk
 from pytz import UTC
+
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.file_transfer.ArchiveIt import ArchiveIt
+from api.file_transfer.AudioUtility import AudioUtility
+from api.file_transfer.Download import Download
+from api.file_transfer.FileUtility import FileUtility
+
+from api.models import Chunk
 
 class ZipProjectFiles(APIView):
     parser_classes = (JSONParser,)
@@ -29,7 +30,7 @@ class ZipProjectFiles(APIView):
                            "_" + chunk_list['project']['version'] + \
                            "_" + chunk_list['book']['slug']
 
-            zip_it = Download(ZipIt(), AudioUtility(), FileUtility())
+            zip_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
 
             root_dir = zip_it.file_utility.root_dir(['media', 'export'])
 
@@ -50,7 +51,6 @@ class ZipProjectFiles(APIView):
             return project_to_find, Chunk.getChunksWithTakesByProject(project_to_find)
         else:
             return Response({"error", "not_enough_parameters"}, status=400)
-
 
     def fake_chunk_list(self):
         return {'chunks':

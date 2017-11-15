@@ -1,19 +1,16 @@
 import datetime
-import os
-import subprocess
 
+from api.file_transfer.ArchiveIt import ArchiveIt
 from api.file_transfer.AudioUtility import AudioUtility
 from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
-from api.file_transfer.ZipIt import ZipIt
-from django.conf import settings
 from pytz import UTC
 from rest_framework import views
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
 
-class SourceFileView(views.APIView):
+class TrProjectFiles(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
@@ -21,7 +18,7 @@ class SourceFileView(views.APIView):
         # project = Chunk.getChunksWithTakesByProject(new_data)
         chunk_list = self.fake_data()
         if len(chunk_list["chunks"]) > 0:
-            tr_it = Download(ZipIt(), AudioUtility(), FileUtility())
+            tr_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
 
             root_folder = tr_it.file_utility.root_dir(['media', 'tmp'])
 

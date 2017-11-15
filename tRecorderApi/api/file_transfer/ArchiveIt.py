@@ -3,7 +3,7 @@ import zipfile
 from .ArchiveProject import ArchiveProject
 
 
-class ZipIt(ArchiveProject):
+class ArchiveIt(ArchiveProject):
     def archive(self, root_dir, project_file, files_in_zip, remove_dir):
         with zipfile.ZipFile(project_file, 'w') as zipped_f:
             for file in files_in_zip:
