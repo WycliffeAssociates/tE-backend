@@ -31,14 +31,15 @@ class ZipProjectFiles(APIView):
 
             zip_it = Download(ZipIt(), AudioUtility(), FileUtility())
 
-            root_dir = zip_it.file_utility.rootDir(['media', 'export'])
+            root_dir = zip_it.file_utility.root_dir(['media', 'export'])
 
-            location_list = self.location_list(root_dir, chunk_list, zip_it.file_utility.createPath,
+            location_list = self.location_list(root_dir, chunk_list, zip_it.file_utility.create_path,
                                                zip_it.file_utility.take_location)
 
             zipped_file_location = zip_it.download(project_name, location_list, root_dir)
-
-        return Response({"location": zip_it.file_utility.relative_path(zipped_file_location)}, status=200)
+            return Response({"location": zip_it.file_utility.relative_path(zipped_file_location)}, status=200)
+        else:
+            return Response({"error": "no_files"}, status=400)
 
     def chunk_list(self, data):
         project_to_find = {}
@@ -46,7 +47,10 @@ class ZipProjectFiles(APIView):
             project_to_find['language'] = data['language']
             project_to_find['version'] = data['version']
             project_to_find['book'] = data['book']
-        return project_to_find, Chunk.getChunksWithTakesByProject(project_to_find)
+            return project_to_find, Chunk.getChunksWithTakesByProject(project_to_find)
+        else:
+            return Response({"error", "not_enough_parameters"}, status=400)
+
 
     def fake_chunk_list(self):
         return {'chunks':

@@ -1,3 +1,4 @@
+import json
 import os
 
 from pydub import AudioSegment
@@ -24,3 +25,7 @@ class AudioUtility:
                 else:
                     converted_mp3_list.append(filename)
         return converted_mp3_list
+
+    def write_meta(self, file_path, file_path_mp3, meta):
+        sound = AudioSegment.from_wav(file_path)
+        sound.export(file_path_mp3, format='mp3', tags={'artist': json.dumps(meta)})
