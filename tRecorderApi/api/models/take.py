@@ -112,7 +112,6 @@ class Take(models.Model):
             },
         )
 
-
         # Create Chapter in database if it's not there
         chapter_obj, cr_created = Chapter.objects.get_or_create(
             project=project_obj,
@@ -122,7 +121,6 @@ class Take(models.Model):
                 'checked_level': 0,  # TODO get checked_level from tR
                 'project': project_obj},
         )
-
 
         # Create Chunk in database if it's not there
         chunk_obj, ck_created = Chunk.objects.get_or_create(

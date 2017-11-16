@@ -32,7 +32,7 @@ class UploadSourceFileView(views.APIView):
                         temp_file.write(line)
         try:
             FNULL = open(os.devnull, 'w')
-            subprocess.check_output(
+            out = subprocess.check_output(
                 ['java', '-jar', os.path.join(
                     settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
                 stderr=subprocess.STDOUT

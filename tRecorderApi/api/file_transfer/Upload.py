@@ -9,9 +9,9 @@ class Upload(FileTransfer):
 
     def upload(self, file):
         directory = self.file_utility.rootDir(['media','dump'])
-        resp, stat = self.archive_project.extract(file, directory)
+        resp, stat, ext = self.archive_project.extract(file, directory)   #returns response, status, and file extension
         if resp == 'ok':
-            resp, stat = self.file_utility.processUploadedTakes(directory, self.takeDatabase)
+            resp, stat = self.file_utility.processUploadedTakes(directory, self.takeDatabase, ext)
 
         return resp, stat
 

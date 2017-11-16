@@ -1,6 +1,6 @@
 from pydub import AudioSegment
 from tinytag import TinyTag
-from api.models import Take
+import subprocess
 import os
 import time
 import re
@@ -9,8 +9,7 @@ import json
 import urllib.error, urllib.request
 import pickle
 import urllib3
-
-
+import shutil
 
 
 class FileUtility:
@@ -25,7 +24,7 @@ class FileUtility:
     def rootDir(self, rootDirOf):
         directory = ''
         for dir in rootDirOf:
-            directory += dir + "/"
+            directory += dir + '/'
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
@@ -39,21 +38,26 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def processUploadedTakes(self, directory, Take):
-        data = {}
+    def processUploadedTakes(self, directory, Take, ext):
+        if ext == 'tr':
+            os.remove(os.path.join(directory, "source.tr"))
+
         for root, dirs, files in os.walk(directory):
-                for f in files:
-                    abpath = os.path.join(root, os.path.basename(f))
-                    relpath = self.getRelativePath(abpath)
-                    try:
-                        meta = TinyTag.get(abpath)  # get metadata for every file
-                    except LookupError as e:
-                        return {'error': 'bad_wave_file'}, 400
+            for f in files:
+                abpath = os.path.join(root, os.path.basename(f))
+                relpath = self.getRelativePath(abpath)
+                try:
+                    meta = TinyTag.get(abpath)  # get metadata for every file
+                except LookupError as e:
+                    return {'error': 'bad_wave_file'}, 400
 
-                    data, pls = self.createObjectFromMeta(meta)
-                    # highPassFilter(abpath)
+                data, pls = self.createObjectFromMeta(meta)
+                # highPassFilter(abpath)
+                is_source_file = False
+                if ext == "tr":
+                    is_source_file = True
 
-                    Take.saveTakesToDB(pls, relpath, data)
+                Take.saveTakesToDB(pls, relpath, data, is_source_file)
 
         return 'ok', 200
 
@@ -113,3 +117,27 @@ class FileUtility:
                 break
         return bn
 
+    @staticmethod
+    def processTrFile(file, directory):
+        with open(os.path.join(directory, "source.tr"), 'wb') as temp_file:
+            for line in file:
+                temp_file.write(line)
+            try:
+                FNULL = open(os.devnull, 'wb')
+                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+                path = os.path.join(base_dir, 'aoh/aoh.jar')
+                file_path = os.path.join(os.path.join(directory, "source.tr"))
+
+                subprocess.check_output(
+                    ['java', '-jar', os.path.join(base_dir, 'aoh/aoh.jar'), '-x', file_path],
+                    stderr=subprocess.STDOUT
+                )
+                FNULL.close()
+                #os.remove(os.path.join(directory, "source.tr"))
+
+                return 'ok', 200
+
+            except Exception as e:
+            #shutil.rmtree(directory)
+                return str(e), 400
