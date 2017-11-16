@@ -149,7 +149,7 @@ class Take(models.Model):
             }
             try:
                 obj = Take.objects.get(
-                    chunk=chunk,
+                    chunk=chunk_obj,
                 )
                 if os.path.exists(obj.location):
                     os.remove(obj.location)
@@ -158,17 +158,17 @@ class Take(models.Model):
                 obj.save()
             except Take.DoesNotExist:
                 new_values = {
-                    'chunk': chunk,
+                    'chunk': chunk_obj,
                 }
                 new_values.update(defaults)
                 obj = Take(**new_values)
                 obj.save()
             else:
                         take = Take(location=relpath,
+                        chunk= chunk_obj,
                         duration=data['duration'],
                         rating=0,  # TODO get rating from tR
                         markers=markers,
-                        user_id=1,
                         )  # TODO get author of file and save it to Take model
-            take.save()
+                        take.save()
 
