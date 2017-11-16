@@ -52,6 +52,8 @@ class FileUtility:
                     return {'error': 'bad_wave_file'}, 400
 
                 data, pls = self.createObjectFromMeta(meta)
+                if data == 'bad zip':
+                    return data, pls
                 # highPassFilter(abpath)
                 is_source_file = False
                 if ext == "tr":
@@ -80,7 +82,7 @@ class FileUtility:
             }
             return data, pls
         except Exception as e:
-            return "bad zip file", 400
+            return 'bad zip', 400
 
     @staticmethod
     def getRelativePath(location):
