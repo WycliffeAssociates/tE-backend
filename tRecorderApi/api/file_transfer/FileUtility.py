@@ -62,22 +62,25 @@ class FileUtility:
         return 'ok', 200
 
     def createObjectFromMeta(self, meta):
-        a = meta.artist
-        lastindex = a.rfind("}") + 1
-        substr = a[:lastindex]
-        pls = json.loads(substr)
+        try:
+            a = meta.artist
+            lastindex = a.rfind("}") + 1
+            substr = a[:lastindex]
+            pls = json.loads(substr)
 
-        bookcode = pls['slug']
-        bookname = self.getBookByCode(bookcode)
-        langcode = pls['language']
-        langname = self.getLanguageByCode(langcode)
+            bookcode = pls['slug']
+            bookname = self.getBookByCode(bookcode)
+            langcode = pls['language']
+            langname = self.getLanguageByCode(langcode)
 
-        data = {
-            "langname": langname,
-            "bookname": bookname,
-            "duration": meta.duration
-        }
-        return data, pls
+            data = {
+                "langname": langname,
+                "bookname": bookname,
+                "duration": meta.duration
+            }
+            return data, pls
+        except Exception as e:
+            return "bad zip file", 400
 
     @staticmethod
     def getRelativePath(location):
