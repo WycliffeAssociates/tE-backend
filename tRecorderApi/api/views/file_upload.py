@@ -16,6 +16,7 @@ class FileUploadView(views.APIView):
         """ Normal upload """
         if request.data["upload"]:
             arch_project = ZipIt()
+            check= request.data
             file_to_upload = request.data["upload"]
             ext = file_to_upload.name.rsplit('.', 1)[-1]
             if ext == "tr":        #check if it is a .tr source file
