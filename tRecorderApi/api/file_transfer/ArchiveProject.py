@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
 
-#interface
 class ArchiveProject(metaclass=ABCMeta):
 
     @abstractmethod
@@ -11,3 +10,4 @@ class ArchiveProject(metaclass=ABCMeta):
     @abstractmethod
     def extract(file, directory):
         pass
+

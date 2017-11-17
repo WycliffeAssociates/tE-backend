@@ -37,7 +37,6 @@ class UploadSourceFileView(views.APIView):
                     settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
                 stderr=subprocess.STDOUT
             )
-
             os.remove(os.path.join(tempFolder, "source.tr"))
             FNULL.close()
 

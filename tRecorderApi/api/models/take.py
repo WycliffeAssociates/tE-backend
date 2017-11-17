@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.contenttypes.fields import GenericRelation
@@ -14,6 +15,8 @@ Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
 
+
+# from .comment import Comment
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -176,3 +179,7 @@ class Take(models.Model):
 
         except Exception as e:
             return str(e), 400
+
+    def by_project_id(id):
+        return Take.objects.filter(chunk__chapter__project=id)
+

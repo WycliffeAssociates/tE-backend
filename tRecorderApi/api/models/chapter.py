@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 #from .comment import Comment
