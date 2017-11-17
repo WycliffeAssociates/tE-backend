@@ -168,14 +168,14 @@ class Take(models.Model):
                     new_values.update(defaults)
                     obj = Take(**new_values)
                     obj.save()
-                else:
-                            take = Take(location=relpath,
-                            chunk= chunk_obj,
-                            duration=take_data['duration'],
-                            rating=0,  # TODO get rating from tR
-                            markers=markers,
-                            )  # TODO get author of file and save it to Take model
-                            take.save()
+            else:
+                    take = Take(location=relpath,
+                    chunk= chunk_obj,
+                    duration=take_data['duration'],
+                    rating=0,  # TODO get rating from tR
+                    markers=markers,
+                    )  # TODO get author of file and save it to Take model
+                    take.save()
 
         except Exception as e:
             return str(e), 400

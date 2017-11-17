@@ -47,15 +47,15 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                data, take_info = self.createObjectFromMeta(meta)
-                if data == 'bad zip':
-                    return data, take_info
+                meta_data, take_info = self.createObjectFromMeta(meta)
+                if meta_data == 'bad meta':
+                    return meta_data, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
                 if ext == 'tr':
                     is_source_file = True
 
-                Take.saveTakesToDB(take_info, relpath, data, is_source_file)
+                Take.saveTakesToDB(take_info, relpath, meta_data, is_source_file)
 
         return 'ok', 200
 
@@ -78,7 +78,7 @@ class FileUtility:
             }
             return lng_book_dur, take_info
         except Exception as e:
-            return 'bad zip', 400
+            return 'bad meta', 400
 
     @staticmethod
     def getRelativePath(location):
