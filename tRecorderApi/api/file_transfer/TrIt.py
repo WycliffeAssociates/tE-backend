@@ -10,5 +10,5 @@ class TrIt(ArchiveProject):
     def extract(self, file, directory):
         fl = FileUtility()
         resp, stat = fl.processTrFile(file, directory)
-        return resp, stat, "tr"
+        return resp, stat
 

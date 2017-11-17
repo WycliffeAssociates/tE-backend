@@ -5,17 +5,17 @@
 <div style="width: 600px; margin: 0 auto">
     <strong>Normal Upload:</strong>
     <br>
-    <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
+    <form action="/api/upload/file" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="upload" />
-        <button type="submit"> Upload Zip</button>
+        <button type="submit"> Upload Zip or Tr</button>
     </form>
 
-    <form action="/api/upload/tr" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="upload" />
-        <button type="submit"> Upload Tr</button>
-    </form>
+    <!--<form action="/api/upload/tr" method="post" enctype="multipart/form-data">-->
+        <!--{% csrf_token %}-->
+        <!--<input type="file" name="upload" />-->
+        <!--<button type="submit"> Upload Tr</button>-->
+    <!--</form>-->
     <!--
     <form action="/api/source/tr" method="post" enctype="multipart/form-data">
         <input type="file" name="upload" /> {% csrf_token %}

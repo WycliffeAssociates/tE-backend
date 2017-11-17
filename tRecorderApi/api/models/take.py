@@ -14,6 +14,7 @@ Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
 
+
 class Take(models.Model):
     location = models.CharField(max_length=255)
     duration = models.IntegerField(default=0)
@@ -46,129 +47,132 @@ class Take(models.Model):
         return ls
 
     @staticmethod
-    def saveTakesToDB(meta, relpath, data, published=False):
-        # Create Language in database if it's not there
-        language_obj, l_created = Language.objects.get_or_create(
-            slug=meta["language"],
-            defaults={
-                'slug': meta['language'],
-                'name': data['langname']},
-        )
-        #check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
-        anthology_obj, a_created = Anthology.objects.get_or_create(
-            slug=meta["anthology"],
-            defaults={
-                'slug': meta['anthology'],
-                'name': ''                  #TODO add name after it is included in meta
-            }
-        )
-
-        # Create Book in database if it's not there
-        book_obj, b_created = Book.objects.get_or_create(
-            slug=meta["slug"],
-            defaults={
-                'slug': meta['slug'],
-                'number': meta['book_number'],
-                'name': data['bookname'],
-                'anthology': anthology_obj
-            },
-
-        )
-        # Create version in database if it does not exist
-        version_obj, v_created = Version.objects.get_or_create(
-            slug=meta["version"],
-            defaults={
-                'slug': meta['version'],  #TODO add name and unit after it is included in meta
-                'name': ''
-
-            }
-        )
-
-        # Create mode in database if it does not exist
-        mode_obj, m_created = Mode.objects.get_or_create(
-            name=meta["mode"],
-            defaults={
-                'slug': '',            #TODO add slug after it is included in meta
-                'name': meta['mode']
-            }
-        )
-
-        # Create Project in database if it's not there
-        project_obj, p_created = Project.objects.get_or_create(
-            version=version_obj,
-            mode=mode_obj,
-            anthology=anthology_obj,
-            language=language_obj,
-            book=book_obj,
-            published=published,
-            defaults={
-                'version': version_obj,
-                'mode': mode_obj,
-                'anthology': anthology_obj,
-                'language': language_obj,
-                'book': book_obj,
-                'published': published,
-                'source_language': language_obj #TODO create source language
-            },
-        )
-
-        # Create Chapter in database if it's not there
-        chapter_obj, cr_created = Chapter.objects.get_or_create(
-            project=project_obj,
-            number=meta['chapter'],
-            defaults={
-                'number': meta['chapter'],
-                'checked_level': 0,  # TODO get checked_level from tR
-                'project': project_obj},
-        )
-
-        # Create Chunk in database if it's not there
-        chunk_obj, ck_created = Chunk.objects.get_or_create(
-            chapter=chapter_obj,
-            startv=meta['startv'],
-            endv=meta['endv'],
-            defaults={
-                'startv': meta['startv'],
-                'endv': meta['endv'],
-                'chapter': chapter_obj},
-        )
-
-        markers = json.dumps(meta['markers'])
-
-        # If the take came from .tr file (Source audio)
-        # then check if it exists in database
-        # if it exists then update its data
-        # otherwise create new record
-        # TODO remove source files functionality
-        if published:
-            defaults = {
-                'location': relpath,
-                'duration': data['duration'],
-                'rating': 0,  # TODO get rating from tR
-                'markers': markers,
-            }
-            try:
-                obj = Take.objects.get(
-                    chunk=chunk_obj,
-                )
-                if os.path.exists(obj.location):
-                    os.remove(obj.location)
-                for key, value in defaults.items():
-                    setattr(obj, key, value)
-                obj.save()
-            except Take.DoesNotExist:
-                new_values = {
-                    'chunk': chunk_obj,
+    def saveTakesToDB(meta, relpath, take_data, published=False):
+        try:
+            # Create Language in database if it's not there
+            language_obj, l_created = Language.objects.get_or_create(
+                slug=meta["language"],
+                defaults={
+                    'slug': meta['language'],
+                    'name': take_data['langname']},
+            )
+            #check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
+            anthology_obj, a_created = Anthology.objects.get_or_create(
+                slug=meta["anthology"],
+                defaults={
+                    'slug': meta['anthology'],
+                    'name': ''                  #TODO add name after it is included in meta
                 }
-                new_values.update(defaults)
-                obj = Take(**new_values)
-                obj.save()
-            else:
-                        take = Take(location=relpath,
-                        chunk= chunk_obj,
-                        duration=data['duration'],
-                        rating=0,  # TODO get rating from tR
-                        markers=markers,
-                        )  # TODO get author of file and save it to Take model
-                        take.save()
+            )
 
+            # Create Book in database if it's not there
+            book_obj, b_created = Book.objects.get_or_create(
+                slug=meta["slug"],
+                defaults={
+                    'slug': meta['slug'],
+                    'number': meta['book_number'],
+                    'name': take_data['bookname'],
+                    'anthology': anthology_obj
+                },
+
+            )
+            # Create version in database if it does not exist
+            version_obj, v_created = Version.objects.get_or_create(
+                slug=meta["version"],
+                defaults={
+                    'slug': meta['version'],  #TODO add name and unit after it is included in meta
+                    'name': ''
+
+                }
+            )
+
+            # Create mode in database if it does not exist
+            mode_obj, m_created = Mode.objects.get_or_create(
+                name=meta["mode"],
+                defaults={
+                    'slug': '',            #TODO add slug after it is included in meta
+                    'name': meta['mode']
+                }
+            )
+
+            # Create Project in database if it's not there
+            project_obj, p_created = Project.objects.get_or_create(
+                version=version_obj,
+                mode=mode_obj,
+                anthology=anthology_obj,
+                language=language_obj,
+                book=book_obj,
+                published=published,
+                defaults={
+                    'version': version_obj,
+                    'mode': mode_obj,
+                    'anthology': anthology_obj,
+                    'language': language_obj,
+                    'book': book_obj,
+                    'published': published,
+                    'source_language': language_obj #TODO create source language
+                },
+            )
+
+            # Create Chapter in database if it's not there
+            chapter_obj, cr_created = Chapter.objects.get_or_create(
+                project=project_obj,
+                number=meta['chapter'],
+                defaults={
+                    'number': meta['chapter'],
+                    'checked_level': 0,  # TODO get checked_level from tR
+                    'project': project_obj},
+            )
+
+            # Create Chunk in database if it's not there
+            chunk_obj, ck_created = Chunk.objects.get_or_create(
+                chapter=chapter_obj,
+                startv=meta['startv'],
+                endv=meta['endv'],
+                defaults={
+                    'startv': meta['startv'],
+                    'endv': meta['endv'],
+                    'chapter': chapter_obj},
+            )
+
+            markers = json.dumps(meta['markers'])
+
+            # If the take came from .tr file (Source audio)
+            # then check if it exists in database
+            # if it exists then update its data
+            # otherwise create new record
+            # TODO remove source files functionality
+            if published:
+                defaults = {
+                    'location': relpath,
+                    'duration': take_data['duration'],
+                    'rating': 0,  # TODO get rating from tR
+                    'markers': markers,
+                }
+                try:
+                    obj = Take.objects.get(
+                        chunk=chunk_obj,
+                    )
+                    if os.path.exists(obj.location):
+                        os.remove(obj.location)
+                    for key, value in defaults.items():
+                        setattr(obj, key, value)
+                    obj.save()
+                except Take.DoesNotExist:
+                    new_values = {
+                        'chunk': chunk_obj,
+                    }
+                    new_values.update(defaults)
+                    obj = Take(**new_values)
+                    obj.save()
+                else:
+                            take = Take(location=relpath,
+                            chunk= chunk_obj,
+                            duration=take_data['duration'],
+                            rating=0,  # TODO get rating from tR
+                            markers=markers,
+                            )  # TODO get author of file and save it to Take model
+                            take.save()
+
+        except Exception as e:
+            return str(e), 400

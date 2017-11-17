@@ -13,8 +13,8 @@ class ZipIt(ArchiveProject):
             zip_file = zipfile.ZipFile(file)
             zip_file.extractall(directory)
             zip_file.close()
-            return 'ok', 200, "zip"
+            return 'ok', 200
 
         except zipfile.BadZipfile:
-                return "bad_zip_file", 400
+                return "bad zip file", 400
 

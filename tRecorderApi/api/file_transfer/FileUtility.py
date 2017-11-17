@@ -51,15 +51,15 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                data, pls = self.createObjectFromMeta(meta)
+                data, take_info = self.createObjectFromMeta(meta)
                 if data == 'bad zip':
-                    return data, pls
+                    return data, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
-                if ext == "tr":
+                if ext == 'tr':
                     is_source_file = True
 
-                Take.saveTakesToDB(pls, relpath, data, is_source_file)
+                Take.saveTakesToDB(take_info, relpath, data, is_source_file)
 
         return 'ok', 200
 
@@ -68,19 +68,19 @@ class FileUtility:
             a = meta.artist
             lastindex = a.rfind("}") + 1
             substr = a[:lastindex]
-            pls = json.loads(substr)
+            take_info = json.loads(substr)
 
-            bookcode = pls['slug']
+            bookcode = take_info['slug']
             bookname = self.getBookByCode(bookcode)
-            langcode = pls['language']
+            langcode = take_info['language']
             langname = self.getLanguageByCode(langcode)
 
-            data = {
+            lng_book_dur = {
                 "langname": langname,
                 "bookname": bookname,
                 "duration": meta.duration
             }
-            return data, pls
+            return lng_book_dur, take_info
         except Exception as e:
             return 'bad zip', 400
 
@@ -139,10 +139,9 @@ class FileUtility:
                     stderr=subprocess.STDOUT
                 )
                 FNULL.close()
-                #os.remove(os.path.join(directory, "source.tr"))
 
                 return 'ok', 200
 
             except Exception as e:
-            #shutil.rmtree(directory)
+                shutil.rmtree(directory)
                 return str(e), 400

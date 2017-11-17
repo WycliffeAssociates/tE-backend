@@ -16,14 +16,13 @@ class FileUploadView(views.APIView):
         """ Normal upload """
         if request.data["upload"]:
             arch_project = ZipIt()
-            check= request.data
             file_to_upload = request.data["upload"]
-            ext = file_to_upload.name.rsplit('.', 1)[-1]
-            if ext == "tr":        #check if it is a .tr source file
+            ext = file_to_upload.name.rsplit('.', 1)[-1]   #get file extension
+            if ext == "tr":
                 arch_project = TrIt()
 
             up = Upload(arch_project, None, FileUtility(), Take)
-            resp, stat = up.upload(file_to_upload)
+            resp, stat = up.upload(file_to_upload, ext)
             return Response({"response": resp}, status=stat)
         else:
             return Response({"response": "no file"}, status=200)
