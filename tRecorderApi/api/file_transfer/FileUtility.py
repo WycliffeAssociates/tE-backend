@@ -82,7 +82,7 @@ class FileUtility:
             }
             return lng_book_dur, take_info
         except Exception as e:
-            return 'bad zip', 400
+            return 'bad meta data', 400
 
     @staticmethod
     def getRelativePath(location):
