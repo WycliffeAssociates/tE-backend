@@ -1,30 +1,27 @@
 import datetime
-from pytz import UTC
-
-from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from api.file_transfer.ArchiveIt import ArchiveIt
 from api.file_transfer.AudioUtility import AudioUtility
 from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
+from api.models import Project
+from api.models import Take
+from pytz import UTC
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.models import Chunk
 
 class ZipProjectFiles(APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
         data = request.data
-        # project_to_find = self.chunk_list(data)
-        project_to_find = {
-            "language": "en-x-demo2",
-            "version": "ulb",
-            "book": "mrk"
-        }
 
-        chunk_list = self.fake_chunk_list()
+        project_to_find, chunk_list = self.chunk_list(data)
+
+        if not chunk_list:
+            return Response({"error", "not_enough_parameters"}, status=400)
         if len(chunk_list['chunks']) > 0:
             project_name = chunk_list['language']["slug"] + \
                            "_" + chunk_list['project']['version'] + \
@@ -48,9 +45,15 @@ class ZipProjectFiles(APIView):
             project_to_find['language'] = data['language']
             project_to_find['version'] = data['version']
             project_to_find['book'] = data['book']
-            return project_to_find, Chunk.getChunksWithTakesByProject(project_to_find)
+            try:
+                project_id = Project.project_id(data)
+                take_list = Take.by_project_id(project_id)
+                return project_to_find, take_list
+            except Exception as e:
+                return e
+                # return project_to_find, self.fake_chunk_list()
         else:
-            return Response({"error", "not_enough_parameters"}, status=400)
+            return project_to_find, []
 
     def fake_chunk_list(self):
         return {'chunks':

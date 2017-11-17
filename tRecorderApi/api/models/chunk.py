@@ -30,7 +30,7 @@ class Chunk(models.Model):
             if "chapter_id" in data:
                 chunk_filter["id"] = data["chapter_id"]
                 return chunk_filter
-            
+
             if "project_id" in data:
                 chunk_filter["chapter__project__id"] = data["project_id"]
             if "chapter_number" in data:

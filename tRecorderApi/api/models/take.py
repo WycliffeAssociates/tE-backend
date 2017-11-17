@@ -1,7 +1,9 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-from django.contrib.contenttypes.fields import GenericRelation
-#from .comment import Comment
+
+
+# from .comment import Comment
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -33,3 +35,7 @@ class Take(models.Model):
             }
             ls.append(tk)
         return ls
+
+    @staticmethod
+    def by_project_id(id):
+        return Take.objects.filter(chunk__chapter__project=id)

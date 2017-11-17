@@ -22,6 +22,16 @@ class Project(models.Model):
     def __str__(self):
         return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
 
+    @staticmethod
+    def project_id(data):
+        filter = {}
+        filter["language__slug__iexact"] = data["language"]
+        filter["version__slug__iexact"] = data["version"]
+        filter["book__slug__iexact"] = data["book"]
+        project = Project.objects.filter(**filter)[0]
+        return project
+
+
         # @staticmethod
         # def getProjects(data):
         #     project_list = []
