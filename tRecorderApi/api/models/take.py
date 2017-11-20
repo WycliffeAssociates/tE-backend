@@ -50,41 +50,41 @@ class Take(models.Model):
         return ls
 
     @staticmethod
-    def saveTakesToDB(meta, relpath, take_data, published=False):
+    def saveTakesToDB(meta, relpath, take_data, manifest, published=False ):
         try:
             # Create Language in database if it's not there
             language_obj, l_created = Language.objects.get_or_create(
-                slug=meta["language"],
+                slug=manifest["language"]["slug"],
                 defaults={
-                    'slug': meta['language'],
-                    'name': take_data['langname']},
+                    'slug': manifest["language"]["slug"],
+                    'name': manifest["language"]["name"]},
             )
             #check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
             anthology_obj, a_created = Anthology.objects.get_or_create(
-                slug=meta["anthology"],
+                slug=manifest["anthology"]["slug"],
                 defaults={
-                    'slug': meta['anthology'],
-                    'name': ''                  #TODO add name after it is included in meta
+                    'slug': manifest["anthology"]["slug"],
+                    'name': manifest["anthology"]["name"]
                 }
             )
 
             # Create Book in database if it's not there
             book_obj, b_created = Book.objects.get_or_create(
-                slug=meta["slug"],
+                slug=manifest["book"]["slug"],
                 defaults={
-                    'slug': meta['slug'],
-                    'number': meta['book_number'],
-                    'name': take_data['bookname'],
+                    'slug': manifest["book"]['slug'],
+                    'number': manifest["book"]['number'],
+                    'name': manifest["book"]['name'],
                     'anthology': anthology_obj
                 },
 
             )
             # Create version in database if it does not exist
             version_obj, v_created = Version.objects.get_or_create(
-                slug=meta["version"],
+                slug=manifest["version"]["slug"],
                 defaults={
-                    'slug': meta['version'],  #TODO add name and unit after it is included in meta
-                    'name': ''
+                    'slug': manifest["version"]["slug"],  #TODO add name and unit after it is included in meta
+                    'name': manifest["version"]["name"]
 
                 }
             )
@@ -93,8 +93,8 @@ class Take(models.Model):
             mode_obj, m_created = Mode.objects.get_or_create(
                 name=meta["mode"],
                 defaults={
-                    'slug': '',            #TODO add slug after it is included in meta
-                    'name': meta['mode']
+                    'slug': manifest["mode"]["slug"],
+                    'name': manifest["version"]["name"]
                 }
             )
 

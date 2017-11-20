@@ -35,15 +35,13 @@ class FileUtility:
     def processUploadedTakes(self, directory, Take, ext):
         if ext == 'tr':
             os.remove(os.path.join(directory, "source.tr"))
-
+        manifest = ''
         for root, dirs, files in os.walk(directory):
             for f in files:
-                manifest = ''
-                if f == "manifest.json":  # TODO create a json object
-                    with open(f) as json_data:
-                        manifest = json.load(json_data)
-                    continue
                 abpath = os.path.join(root, os.path.basename(f))
+                if f == "manifest.json":  # TODO create a json objec t
+                    manifest = json.load(open(abpath))
+                    continue
                 relpath = self.getRelativePath(abpath)
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
@@ -58,7 +56,7 @@ class FileUtility:
                 if ext == 'tr':
                     is_source_file = True
 
-                Take.saveTakesToDB(take_info, relpath, meta_data, is_source_file)
+                Take.saveTakesToDB(take_info, relpath, meta_data, manifest, is_source_file)
 
         return 'ok', 200
 
