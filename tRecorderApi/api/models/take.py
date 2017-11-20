@@ -3,13 +3,12 @@ from django.db import models
 from django.utils.timezone import now
 
 from django.contrib.contenttypes.fields import GenericRelation
-from ..models import book, language, chunk, project, anthology, version, chapter, mode
+from ..models import book, language, project, chunk, anthology, version, chapter, mode
 import os
 import json
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
-Project = project.Project
 Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
