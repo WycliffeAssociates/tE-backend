@@ -5,7 +5,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ..models import book, language, chunk, project, anthology, version, chapter, mode
 import os
 import json
-#from .comment import Comment
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
@@ -16,7 +15,7 @@ Chapter = chapter.Chapter
 Mode = mode.Mode
 
 
-# from .comment import Comment
+
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -118,15 +117,19 @@ class Take(models.Model):
                 },
             )
 
+            manifest_chapter = int(meta['chapter']) - 1
+            checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
+
             # Create Chapter in database if it's not there
             chapter_obj, cr_created = Chapter.objects.get_or_create(
                 project=project_obj,
                 number=meta['chapter'],
                 defaults={
                     'number': meta['chapter'],
-                    'checked_level': 0,  # TODO get checked_level from tR
+                    'checked_level': checked_level,
                     'project': project_obj},
             )
+
 
             # Create Chunk in database if it's not there
             chunk_obj, ck_created = Chunk.objects.get_or_create(
