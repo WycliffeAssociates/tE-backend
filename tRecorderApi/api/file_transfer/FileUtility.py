@@ -14,7 +14,6 @@ from tinytag import TinyTag
 
 
 class FileUtility:
-
     @staticmethod
     def root_dir(root_dir_of):
         directory = ''
@@ -29,7 +28,6 @@ class FileUtility:
             os.makedirs(root_directory)
         return root_directory
 
-
     def copy_files_from_src_to_dest(self, location_list):
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
@@ -40,6 +38,11 @@ class FileUtility:
 
         for root, dirs, files in os.walk(directory):
             for f in files:
+                manifest = ''
+                if f == "manifest.json":  # TODO create a json object
+                    with open(f) as json_data:
+                        manifest = json.load(json_data)
+                    continue
                 abpath = os.path.join(root, os.path.basename(f))
                 relpath = self.getRelativePath(abpath)
                 try:
@@ -66,7 +69,7 @@ class FileUtility:
             substr = a[:lastindex]
             take_info = json.loads(substr)
 
-            bookcode = take_info['slug']
+            bookcode = take_info['book']
             bookname = self.getBookByCode(bookcode)
             langcode = take_info['language']
             langname = self.getLanguageByCode(langcode)
@@ -201,4 +204,3 @@ class FileUtility:
                 base_dir, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
             stdout=FNULL, stderr=subprocess.STDOUT)
         FNULL.close()
-
