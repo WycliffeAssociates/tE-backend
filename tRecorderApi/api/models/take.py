@@ -90,11 +90,12 @@ class Take(models.Model):
             )
 
             # Create mode in database if it does not exist
-            mode_obj, m_created = Mode.objects.get_or_create(
-                name=meta["mode"],
+            mode_obj, m_created = Mode.objects.get_or_create(   #TODO check with joe unique constraint
+                name=manifest["mode"]['name'],
+                slug=manifest["mode"]['slug'],
                 defaults={
                     'slug': manifest["mode"]["slug"],
-                    'name': manifest["version"]["name"]
+                    'name': manifest["mode"]["name"]
                 }
             )
 
