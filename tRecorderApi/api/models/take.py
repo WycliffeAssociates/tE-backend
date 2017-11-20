@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
+
 from django.contrib.contenttypes.fields import GenericRelation
 from ..models import book, language, chunk, project, anthology, version, chapter, mode
 import os
@@ -13,8 +14,6 @@ Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
-
-
 
 
 class Take(models.Model):
@@ -32,6 +31,7 @@ class Take(models.Model):
 
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
+
 
     def get_takes(chunk_id):
         takes = Take.objects.filter(id=chunk_id)

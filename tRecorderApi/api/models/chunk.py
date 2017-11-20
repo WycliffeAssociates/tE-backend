@@ -1,7 +1,8 @@
 from django.db import models
 from .chapter import Chapter
-#from .comment import Comment
+
 from django.contrib.contenttypes.fields import GenericRelation
+
 
 class Chunk(models.Model):
     startv = models.IntegerField(default=0)
