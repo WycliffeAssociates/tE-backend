@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from django.contrib.contenttypes.fields import GenericRelation
-#from .comment import Comment
+
 
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
@@ -12,7 +11,6 @@ class Chapter(models.Model):
         on_delete=models.CASCADE
     )
     comments = GenericRelation("Comment")
-
 
     class Meta:
         ordering = ["number"]

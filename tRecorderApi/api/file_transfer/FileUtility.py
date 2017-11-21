@@ -18,7 +18,7 @@ class FileUtility:
     def root_dir(root_dir_of):
         directory = ''
         for dir in root_dir_of:
-            directory += dir + '/'
+            directory += dir + os.sep
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
@@ -144,7 +144,7 @@ class FileUtility:
                 return str(e), 400
 
     def create_path(self, root_dir, lang_slug, version, book_slug, chapter_number):
-        path = os.path.join(root_dir, lang_slug, version, book_slug, chapter_number)
+        path = os.path.join(root_dir, lang_slug, version, book_slug, chapter_number).replace("\\","/")
 
         if not os.path.exists(path):
             os.makedirs(path)

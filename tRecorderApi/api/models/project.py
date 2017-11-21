@@ -25,11 +25,11 @@ class Project(models.Model):
     @staticmethod
     def project_id(data):
         filter = {}
-        filter["language__slug__iexact"] = data["language"]
-        filter["version__slug__iexact"] = data["version"]
-        filter["book__slug__iexact"] = data["book"]
+        filter["language__slug__iexact"] = data["language_slug"]
+        filter["version__slug__iexact"] = data["version_slug"]
+        filter["book__slug__iexact"] = data["book_slug"]
         project = Project.objects.filter(**filter)[0]
-        return project
+        return project.id
 
 
         # @staticmethod
