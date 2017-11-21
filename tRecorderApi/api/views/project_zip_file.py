@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from api.models import Chunk
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import getRelativePath
 
 class ProjectZipFilesView(views.APIView):
     parser_classes = (JSONParser,)

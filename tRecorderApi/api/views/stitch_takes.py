@@ -6,7 +6,7 @@ import json
 from rest_framework.response import Response
 import os
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import getRelativePath
 
 class SourceStitchView(views.APIView):
     parser_classes = (JSONParser,)

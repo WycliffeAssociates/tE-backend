@@ -7,7 +7,7 @@ import os
 from tinytag import TinyTag
 from rest_framework.response import Response
 import json
-from helpers import highPassFilter, getRelativePath
+from .helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
 import re

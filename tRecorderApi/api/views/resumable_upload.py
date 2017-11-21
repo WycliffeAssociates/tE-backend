@@ -9,7 +9,7 @@ from tinytag import TinyTag
 from rest_framework.response import Response
 import json
 import re
-from helpers import highPassFilter, getRelativePath
+from .helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
 
@@ -43,7 +43,7 @@ class ResumableFileUploadView(views.APIView):
                 # check if the size of uploaded chunk is correct
                 if os.path.isfile(chunkPath):
                     uplChunkSize = os.path.getsize(chunkPath)
-                    print 'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
+
                     if int(currentChunkSize) != int(uplChunkSize):
                         # reupload chunk
                         return Response(status=204)
@@ -58,13 +58,13 @@ class ResumableFileUploadView(views.APIView):
                     # check if the size of uloaded file is correct
                     if os.path.isfile(fileLocation):
                         uplFileSize = os.path.getsize(fileLocation)
-                        print 'File: {} = {}'.format(totalSize, uplFileSize)
+
                         
                         if int(totalSize) != int(uplFileSize):
                             shutil.rmtree(self.filePath)
                             return Response({"error": "file_is_corrupted"}, status=500)
                         else:
-                            print 'Chunk #{} of {}'.format(chunkNumber, totalChunks) 
+
                             return Response({"location": getRelativePath(fileLocation)}, status=200)
                     else:
                         return Response({"error": "file_not_uploaded"}, status=500)
