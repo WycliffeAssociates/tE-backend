@@ -1,9 +1,8 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-
 from django.contrib.contenttypes.fields import GenericRelation
-from ..models import book, language, project, chunk, anthology, version, chapter, mode
+from ..models import book, language, chunk, anthology, version, chapter, mode, project
 import os
 import json
 Language = language.Language
@@ -13,6 +12,8 @@ Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
+Project = project.Project
+
 
 
 class Take(models.Model):

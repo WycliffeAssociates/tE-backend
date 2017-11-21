@@ -39,7 +39,7 @@ class FileUtility:
         for root, dirs, files in os.walk(directory):
             for f in files:
                 abpath = os.path.join(root, os.path.basename(f))
-                if f == "manifest.json":  # TODO create a json objec t
+                if f == "manifest.json":  # TODO create a json object
                     manifest = json.load(open(abpath))
                     continue
                 relpath = self.getRelativePath(abpath)
