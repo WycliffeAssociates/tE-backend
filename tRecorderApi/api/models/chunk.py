@@ -60,121 +60,128 @@ class Chunk(models.Model):
 
     @staticmethod
     def fetch_data(chunk_filter):
-        return Chunk.objects.filter(**chunk_filter)
+        if chunk_filter:
+            return Chunk.objects.filter(**chunk_filter)
 
     @staticmethod
     def with_takes_by_project(data):
         data_dict = {}
         chunks_filter = Chunk.create_chunk_filter(data)
-        chunks = Chunk.fetch_data(chunks_filter)
+        if chunks_filter:
 
-        data_dict["chunks"] = []
+            chunks = Chunk.fetch_data(chunks_filter)
 
-        for chunk in chunks:
-            chunk_dict = {}
+            data_dict["chunks"] = []
 
-            # Include language data
-            try:
-                if "language" not in data_dict:
-                    data_dict["language"] = model_to_dict(chunk.chapter.project.language,
-                                                          fields=["slug", "name"])
-            except:
-                pass
-            # Include book data
-            try:
-                if "book" not in data_dict:
-                    data_dict["book"] = model_to_dict(chunk.chapter.project.book, fields=["booknum", "slug", "name"])
-            except:
-                pass
+            for chunk in chunks:
+                chunk_dict = {}
 
-            # Include project data
-            try:
-                if "project" not in data_dict:
-                    data_dict["project"] = model_to_dict(chunk.chapter.project,
-                                                         fields=["id", "is_publish", "version", "mode", "anthology"])
-            except:
-                pass
+                # Include language data
+                try:
+                    if "language" not in data_dict:
+                        data_dict["language"] = model_to_dict(chunk.chapter.project.language,
+                                                              fields=["slug", "name"])
+                except:
+                    pass
+                # Include book data
+                try:
+                    if "book" not in data_dict:
+                        data_dict["book"] = model_to_dict(chunk.chapter.project.book, fields=["number", "slug", "name"])
+                except:
+                    pass
 
-            # Include chapter data
-            try:
-                if "chapter" not in data_dict:
-                    data_dict["chapter"] = model_to_dict(chunk.chapter,
-                                                         fields=["id", "is_publish", "number", "checked_level",
-                                                                 "comment"])
+                # Include project data
+                try:
+                    if "project" not in data_dict:
+                        data_dict["project"] = model_to_dict(chunk.chapter.project,
+                                                             fields=["id", "published", "version", "mode", "anthology"])
+                except:
+                    pass
 
-                    # Include comment for chapter
-                    data_dict["chapter"]["comment"] = []
-                    if chunk.chapter.comment:
-                        for cmt in chunk.chapter.comment.all():
+                # Include chapter data
+                try:
+                    if "chapter" not in data_dict:
+                        data_dict["chapter"] = model_to_dict(chunk.chapter,
+                                                             fields=["id", "published", "number", "checked_level",
+                                                                     "comments"])
+
+                        # Include comment for chapter
+                        data_dict["chapter"]["comment"] = []
+                        if chunk.chapter.comments:
+                            for cmt in chunk.chapter.comments.all():
+                                comm_dict = {}
+                                comm_dict["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
+                                # Include author of comment
+                                try:
+                                    comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
+                                except Exception as e:
+                                    print(e)
+                                    pass
+                                data_dict["chapter"]["comment"].append(comm_dict)
+                except Exception as e:
+                    print(e)
+                    pass
+
+                # Include comment for chunk
+                chunk_dict["comments"] = []
+                if chunk.comments:
+                    comments = chunk.comments.all()
+                    if comments:
+                        for cmt in comments():
                             comm_dict = {}
                             comm_dict["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
-                        # Include author of comment
-                        try:
-                            comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
-                        except:
-                            pass
-                        data_dict["chapter"]["comment"].append(comm_dict)
-            except:
-                pass
+                            # Include author of comment
+                            try:
+                                comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
+                            except:
+                                pass
+                            chunk_dict["comments"].append(comm_dict)
 
-            # Include comment for chunk
-            chunk_dict["comments"] = []
-            if chunk.comments:
-                comments = chunk.comments.all()
-                if comments:
-                    for cmt in comments():
-                        comm_dict = {}
-                        comm_dict["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
-                        # Include author of comment
-                        try:
-                            comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
-                        except:
-                            pass
-                        chunk_dict["comments"].append(comm_dict)
+                # Include takes
+                takes_list = []
+                for take in chunk.take_set.all():
+                    if "published" in data:
+                        if take.published != bool(data["published"]):
+                            continue
 
-            # Include takes
-            takes_list = []
-            for take in chunk.take_set.all():
-                if "published" in data:
-                    if take.published != data["published"]:
-                        continue
+                    take_dict = {}
 
-                take_dict = {}
+                    # Include comment for chunks
+                    take_dict["comment"] = []
+                    if take.comment:
+                        for cmt in take.comment.all():
+                            comm_dict = {}
+                            comm_dict["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
+                            # Include author of comment
+                            try:
+                                comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
+                            except:
+                                pass
+                            take_dict["comment"].append(comm_dict)
 
-                # Include comment for chunks
-                take_dict["comment"] = []
-                if take.comment:
-                    for cmt in take.comment.all():
-                        comm_dict = {}
-                        comm_dict["comment"] = model_to_dict(cmt, fields=["id", "location", "date_modified"])
-                        # Include author of comment
-                        try:
-                            comm_dict["user"] = model_to_dict(cmt.user, fields=["name", "agreed", "picture"])
-                        except:
-                            pass
-                        take_dict["comment"].append(comm_dict)
+                        # Parse markers
+                        if take.markers:
+                            take.markers = json.loads(take.markers)
+                        else:
+                            take.markers = {}
 
-                    # Parse markers
-                    if take.markers:
-                        take.markers = json.loads(take.markers)
-                    else:
-                        take.markers = {}
+                    take_dict["take"] = model_to_dict(take, fields=[
+                        "location", "duration", "rating",
+                        "markers", "id",
+                        "published"
+                    ])
 
-                take_dict["take"] = model_to_dict(take, fields=[
-                    "location", "duration", "rating",
-                    "date_modified", "markers", "id",
-                    "is_publish"
+                    takes_list.append(take_dict)
+
+                chunk_dict["takes"] = takes_list
+
+                chunk_dict2 = model_to_dict(chunk, fields=[
+                    "startv", "endv", "id"
                 ])
 
-                takes_list.append(take_dict)
+                chunk_dict = {**chunk_dict, **chunk_dict2}
 
-            chunk_dict["takes"] = takes_list
-
-            chunk_dict2 = model_to_dict(chunk, fields=[
-                "startv", "endv", "id"
-            ])
-
-            chunk_dict = dict(list(chunk_dict.items()) + list(chunk_dict2.items()))
-
-            data_dict["chunks"].append(chunk_dict)
-        return data_dict
+                data_dict["chunks"].append(chunk_dict)
+            return data_dict
+        else:
+            return None

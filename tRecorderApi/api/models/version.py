@@ -8,6 +8,7 @@ class Version(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
     def slug_by_version_id(id):
-        version= Version.objects.filter(id=id).values('slug')[0]
+        version = Version.objects.filter(id=id).values('slug')[0]
         return version['slug']

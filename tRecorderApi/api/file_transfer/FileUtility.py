@@ -153,8 +153,8 @@ class FileUtility:
     def create_folder_path(self, root_dir, lang, version, book):
         return os.path.join(root_dir, lang, version, book)
 
-    def create_chapter_path(self, root_dir, chapter_number):
-        path = os.path.join(root_dir, chapter_number)
+    def create_chapter_path(self, root_dir, lang,version,book,chapter_number):
+        path = os.path.join(self.create_folder_path(root_dir,lang, version, book), chapter_number)
         if not os.path.exists(path):
             os.makedirs(path)
         return path
