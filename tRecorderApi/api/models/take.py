@@ -1,19 +1,21 @@
+import json
+import json
+import os
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-from django.contrib.contenttypes.fields import GenericRelation
+
 from ..models import book, language, chunk, anthology, version, chapter, mode, project
-import os
-import json
+
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
-Anthology= anthology.Anthology
+Anthology = anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
 Project = project.Project
-
 
 
 class Take(models.Model):
@@ -32,7 +34,6 @@ class Take(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
 
-
     def get_takes(chunk_id):
         takes = Take.objects.filter(id=chunk_id)
         ls = []
@@ -49,7 +50,7 @@ class Take(models.Model):
         return ls
 
     @staticmethod
-    def saveTakesToDB(meta, relpath, take_data, manifest, published=False ):
+    def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
         try:
             # Create Language in database if it's not there
             language_obj, l_created = Language.objects.get_or_create(
@@ -58,7 +59,7 @@ class Take(models.Model):
                     'slug': manifest["language"]["slug"],
                     'name': manifest["language"]["name"]},
             )
-            #check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
+            # check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
             anthology_obj, a_created = Anthology.objects.get_or_create(
                 slug=manifest["anthology"]["slug"],
                 defaults={
@@ -82,14 +83,14 @@ class Take(models.Model):
             version_obj, v_created = Version.objects.get_or_create(
                 slug=manifest["version"]["slug"],
                 defaults={
-                    'slug': manifest["version"]["slug"],  #TODO add name and unit after it is included in meta
+                    'slug': manifest["version"]["slug"],  # TODO add name and unit after it is included in meta
                     'name': manifest["version"]["name"]
 
                 }
             )
 
             # Create mode in database if it does not exist
-            mode_obj, m_created = Mode.objects.get_or_create(   #TODO check with joe unique constraint
+            mode_obj, m_created = Mode.objects.get_or_create(  # TODO check with joe unique constraint
                 name=manifest["mode"]['name'],
                 slug=manifest["mode"]['slug'],
                 defaults={
@@ -113,7 +114,7 @@ class Take(models.Model):
                     'language': language_obj,
                     'book': book_obj,
                     'published': published,
-                    'source_language': language_obj #TODO create source language
+                    'source_language': language_obj  # TODO create source language
                 },
             )
 
@@ -129,7 +130,6 @@ class Take(models.Model):
                     'checked_level': checked_level,
                     'project': project_obj},
             )
-
 
             # Create Chunk in database if it's not there
             chunk_obj, ck_created = Chunk.objects.get_or_create(
@@ -173,17 +173,16 @@ class Take(models.Model):
                     obj = Take(**new_values)
                     obj.save()
             else:
-                    take = Take(location=relpath,
-                    chunk= chunk_obj,
-                    duration=take_data['duration'],
-                    rating=0,  # TODO get rating from tR
-                    markers=markers,
-                    )  # TODO get author of file and save it to Take model
-                    take.save()
+                take = Take(location=relpath,
+                            chunk=chunk_obj,
+                            duration=take_data['duration'],
+                            rating=0,  # TODO get rating from tR
+                            markers=markers,
+                            )  # TODO get author of file and save it to Take model
+                take.save()
 
         except Exception as e:
             return str(e), 400
 
     def by_project_id(id):
         return Take.objects.filter(chunk__chapter__project=id)
-

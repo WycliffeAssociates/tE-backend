@@ -1,6 +1,8 @@
 import json
 import os
+
 from django.db import models
+
 from .chapter import Chapter
 
 
@@ -50,6 +52,7 @@ class Project(models.Model):
                        "number": project.book.number
                    }
                    }
+            from .take import Take
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
 
