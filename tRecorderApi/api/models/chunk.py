@@ -6,6 +6,8 @@ from django.forms.models import model_to_dict
 
 from .chapter import Chapter
 
+from django.contrib.contenttypes.fields import GenericRelation
+
 
 class Chunk(models.Model):
     startv = models.IntegerField(default=0)

@@ -7,7 +7,7 @@ import uuid
 
 from api.models import Language, Book, Take
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import getRelativePath
 from rest_framework import views
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response

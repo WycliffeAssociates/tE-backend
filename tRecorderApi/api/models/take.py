@@ -2,21 +2,19 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.contenttypes.fields import GenericRelation
-from ..models import book, language, chunk, project, anthology, version, chapter, mode
+from ..models import book, language, chunk, anthology, version, chapter, mode, project
 import os
 import json
-#from .comment import Comment
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
-Project = project.Project
 Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
+Project = project.Project
 
 
-# from .comment import Comment
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -33,6 +31,7 @@ class Take(models.Model):
 
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
+
 
     def get_takes(chunk_id):
         takes = Take.objects.filter(id=chunk_id)
@@ -90,11 +89,12 @@ class Take(models.Model):
             )
 
             # Create mode in database if it does not exist
-            mode_obj, m_created = Mode.objects.get_or_create(
-                name=meta["mode"],
+            mode_obj, m_created = Mode.objects.get_or_create(   #TODO check with joe unique constraint
+                name=manifest["mode"]['name'],
+                slug=manifest["mode"]['slug'],
                 defaults={
                     'slug': manifest["mode"]["slug"],
-                    'name': manifest["version"]["name"]
+                    'name': manifest["mode"]["name"]
                 }
             )
 
@@ -117,15 +117,19 @@ class Take(models.Model):
                 },
             )
 
+            manifest_chapter = int(meta['chapter']) - 1
+            checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
+
             # Create Chapter in database if it's not there
             chapter_obj, cr_created = Chapter.objects.get_or_create(
                 project=project_obj,
                 number=meta['chapter'],
                 defaults={
                     'number': meta['chapter'],
-                    'checked_level': 0,  # TODO get checked_level from tR
+                    'checked_level': checked_level,
                     'project': project_obj},
             )
+
 
             # Create Chunk in database if it's not there
             chunk_obj, ck_created = Chunk.objects.get_or_create(

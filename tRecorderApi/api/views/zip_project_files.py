@@ -4,12 +4,21 @@ from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
 from api.models import Chunk
 from api.models import Version
+import os
+import shutil
+import time
+import uuid
+import zipfile
+from api.models import Chunk
+from django.conf import settings
+from .helpers import getRelativePath
+from pydub import AudioSegment
+from rest_framework import views
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
-class ZipProjectFiles(APIView):
+class ZipProjectFiles(views.APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
