@@ -23,8 +23,8 @@ class ZipProjectFiles(views.APIView):
 
     def post(self, request):
         data = request.data
-        if "version_slug" not in data and "book_slug" not in data and "language_slug" not in data:
-                return Response({"error", "not_enough_parameters"}, status=400)
+        if "project_id" not in data:
+            return Response({"error", "Invalid parameter"}, status=400)
         else:
             chunk_list = Chunk.with_takes_by_project(data)
             if len(chunk_list['chunks']) > 0:
@@ -62,7 +62,8 @@ class ZipProjectFiles(views.APIView):
                 locations.append(location)
         return locations
 
- # code flow
+
+# code flow
 """
 //dealing with data received
 1.Check project is in the data
