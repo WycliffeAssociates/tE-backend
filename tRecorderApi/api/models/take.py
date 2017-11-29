@@ -90,7 +90,7 @@ class Take(models.Model):
             )
 
             # Create mode in database if it does not exist
-            mode_obj, m_created = Mode.objects.get_or_create(  # TODO check with joe unique constraint
+            mode_obj, m_created = Mode.objects.get_or_create(
                 name=manifest["mode"]['name'],
                 slug=manifest["mode"]['slug'],
                 defaults={
@@ -114,7 +114,7 @@ class Take(models.Model):
                     'language': language_obj,
                     'book': book_obj,
                     'published': published,
-                    'source_language': language_obj  # TODO create source language
+                    'source_language': language_obj
                 },
             )
 
