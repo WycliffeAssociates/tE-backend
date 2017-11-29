@@ -7,6 +7,7 @@ import json
 from django.contrib.contenttypes.fields import GenericRelation
 
 
+
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
@@ -16,7 +17,6 @@ class Chapter(models.Model):
         on_delete=models.CASCADE
     )
     comments = GenericRelation("Comment")
-
 
     class Meta:
         ordering = ["number"]

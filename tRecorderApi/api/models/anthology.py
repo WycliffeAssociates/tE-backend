@@ -7,3 +7,8 @@ class Anthology(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def slug_by_id(id):
+        anthology = Anthology.objects.filter(id=id).values('slug')[0]
+        return anthology['slug']
