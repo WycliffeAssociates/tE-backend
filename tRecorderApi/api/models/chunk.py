@@ -99,6 +99,14 @@ class Chunk(models.Model):
                 except:
                     pass
 
+                # Include mode data
+                try:
+                    if "mode" not in data_dict:
+                        data_dict["mode"] = model_to_dict(chunk.chapter.project.mode,
+                                                          fields=["slug", "name"])
+                except:
+                    pass
+
                 # Include chapter data
                 try:
                     if "chapter" not in data_dict:
