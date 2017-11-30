@@ -11,7 +11,7 @@ class Upload(FileTransfer):
         directory = self.file_utility.root_dir(['media','dump'])
         resp, stat = self.archive_project.extract(file, directory)   #returns response, status
         if resp == 'ok':
-            resp, stat = self.file_utility.processUploadedTakes(directory, self.takeDatabase, ext)
+            resp, stat = self.file_utility.process_uploaded_takes(directory, self.takeDatabase, ext)
 
         return resp, stat
 

@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^resumable_upload/(?P<filename>[^/]+)/$',
         views.resumable_upload.ResumableFileUploadView.as_view()),
     # url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
-    url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
+    #url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
     # url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
     url(r'^get_source/$', tr_project_files.TrProjectFiles.as_view()),
     url(r'^zip_project_files/$', zip_project_files.ZipProjectFiles.as_view()),

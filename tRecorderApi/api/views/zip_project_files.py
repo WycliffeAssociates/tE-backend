@@ -5,7 +5,7 @@ import uuid
 import zipfile
 from api.models import Chunk
 from django.conf import settings
-from .helpers import getRelativePath
+from .helpers import get_relative_path
 from pydub import AudioSegment
 from rest_framework import views
 from rest_framework.parsers import JSONParser
@@ -103,7 +103,7 @@ class ZipProjectFiles(views.APIView):
             shutil.rmtree(project_root_directory)
             return Response(
                 {
-                    "location": getRelativePath(project_file)
+                    "location": get_relative_path(project_file)
                 },
                 status=200)
 
