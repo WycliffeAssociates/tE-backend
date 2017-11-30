@@ -72,11 +72,9 @@ class ZipProjectFiles(views.APIView):
 5.if project is in data assign it to dictionary created,else
 6.check if language,book,version is in data
 7.If language,book,version is in data assign them to the created dictionary
-
 //dealing with database
 8.Fetch project(which is array of chunks with array of takes),database query
 9.Check if project exist
-
 //dealing with file system
 10.If porject exists,construct project_path
 11.Create directory for project(project_path) if it doesn't exist
@@ -84,7 +82,6 @@ class ZipProjectFiles(views.APIView):
 13.Loop through takes in chunk
 14.Create array of takes location(source and destination)
 15.Copy takes to destination from source location
-
 //data manupulation and informing
 16.Converts moved .wav file to .mp3
 17.Zip the files and send response with location of files,else
