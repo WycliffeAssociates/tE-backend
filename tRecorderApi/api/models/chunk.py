@@ -70,7 +70,6 @@ class Chunk(models.Model):
         data_dict = {}
         chunks_filter = Chunk.create_chunk_filter(data)
         if chunks_filter:
-
             chunks = Chunk.fetch_data(chunks_filter)
 
             data_dict["chunks"] = []
@@ -121,7 +120,6 @@ class Chunk(models.Model):
                                     pass
                                 data_dict["chapter"]["comment"].append(comm_dict)
                 except Exception as e:
-                    print(e)
                     pass
 
                 # Include comment for chunk

@@ -7,7 +7,6 @@ import json
 from django.contrib.contenttypes.fields import GenericRelation
 
 
-
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
@@ -136,9 +135,9 @@ class Chapter(models.Model):
                 dic["project_id"] = project.id
             except:
                 dic["project_id"] = {}
-            # Get is_publish
+            # Get published
             try:
-                dic["published"] = project.is_publish
+                dic["published"] = project.published
             except:
                 dic["published"] = {}
         return dic
