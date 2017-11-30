@@ -8,7 +8,11 @@ class GetLanguages(APIView):
         return self.get_lang()
 
     def post(self,request):
-        return self.get_lang(request.data['slug'])
+        if "language" in request.data:
+            return self.get_lang(request.data['language'])
+        else:
+            return Response("bad request", status=400)
+
 
     def get_lang(self,slug=None):
         language_response = []

@@ -39,7 +39,7 @@ class FileUtility:
         for root, dirs, files in os.walk(directory):
             for f in files:
                 abpath = os.path.join(root, os.path.basename(f))
-                if f == "manifest.json":  # TODO create a json object
+                if f == "manifest.json":
                     manifest = json.load(open(abpath))
                     continue
                 relpath = self.getRelativePath(abpath)
@@ -48,7 +48,7 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                meta_data, take_info = self.createObjectFromMeta(meta)
+                meta_data, take_info = self.createObjectFromMeta(meta) #change name to parseMetaData
                 if meta_data == 'bad meta':
                     return meta_data, take_info
                 # highPassFilter(abpath)

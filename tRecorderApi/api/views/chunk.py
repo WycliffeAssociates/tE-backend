@@ -13,8 +13,7 @@ class ChunkViewSet(viewsets.ModelViewSet):
 class GetChunks(views.APIView):
     def post(self, request):
         data = request.data
-        result = None
-        Chunk.get_chunks(data)
+        result = Chunk.get_chunks(data)
         if result is None:
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
         return Response(result, status=status.HTTP_200_OK)

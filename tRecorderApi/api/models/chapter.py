@@ -29,9 +29,9 @@ class Chapter(models.Model):
         dic = {}
         filter = {}
 
-        filter["language__slug"] = data["language"]
-        filter["version__slug"] = data["version"]
-        filter["book__slug"] = data["book"]
+        filter["language__slug"] = data["language_slug"]
+        filter["version__slug"] = data["version_slug"]
+        filter["book__slug"] = data["book_slug"]
         filter["published"] = False
         from .project import Project
         projects = Project.objects.filter(**filter)
