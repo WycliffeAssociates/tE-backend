@@ -11,7 +11,6 @@ import uuid
 import zipfile
 from api.models import Chunk
 from django.conf import settings
-from .helpers import getRelativePath
 from pydub import AudioSegment
 from rest_framework import views
 from rest_framework.parsers import JSONParser
