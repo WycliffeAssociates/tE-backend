@@ -32,6 +32,7 @@ class Take(models.Model):
         return '{} ({})'.format(self.chunk, self.id)
 
     def get_takes(chunk_id):
+
         takes = Take.objects.filter(id=chunk_id)
         ls = []
         for take in takes:
@@ -41,7 +42,8 @@ class Take(models.Model):
                 "markers": take.markers,
                 "location": take.location,
                 "duration": take.duration,
-                "id": take.id
+                "id": take.id,
+                "date_modified":take.date_modified
             }
             ls.append(tk)
         return ls

@@ -29,9 +29,9 @@ class Chapter(models.Model):
         dic = {}
         filter = {}
 
-        filter["language__slug"] = data["language_slug"]
-        filter["version__slug"] = data["version_slug"]
-        filter["book__slug"] = data["book_slug"]
+        filter["language__slug"] = data["language"]
+        filter["version__slug"] = data["version"]
+        filter["book__slug"] = data["book"]
         filter["published"] = False
         from .project import Project
         projects = Project.objects.filter(**filter)
@@ -138,7 +138,7 @@ class Chapter(models.Model):
                 dic["project_id"] = {}
             # Get is_publish
             try:
-                dic["published"] = project.is_publish
+                dic["published"] = project.published
             except:
                 dic["published"] = {}
         return dic

@@ -48,7 +48,7 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                meta_data, take_info = self.createObjectFromMeta(meta) #change name to parseMetaData
+                meta_data, take_info = self.parse_metadata(meta)
 
                 if meta_data == 'bad meta':
                     return meta_data, take_info
