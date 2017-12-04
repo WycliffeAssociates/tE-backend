@@ -31,7 +31,7 @@ class Chapter(models.Model):
         filter["language__slug"] = data["language"]
         filter["version__slug"] = data["version"]
         filter["book__slug"] = data["book"]
-        filter["published"] = False
+        # filter["published"] = False
         from .project import Project
         projects = Project.objects.filter(**filter)
 

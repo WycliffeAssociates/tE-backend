@@ -20,10 +20,10 @@ class GetProjectTakesView(views.APIView):
 
         # parameters in the browser url not in the database field form, so needed to tweak
 
-        data['language_slug'] = data.pop('language')
-        data['book_slug'] = data.pop('book')
-        data['chapter_number'] = data.pop('chapter')
-        data['version_slug'] = data.pop('version')
+        # data['language_slug'] = data.pop('language')
+        # data['book_slug'] = data.pop('book')
+        # data['chapter_number'] = data.pop('chapter')
+        # data['version_slug'] = data.pop('version')
 
         lst = Chunk.with_takes_by_project(data)
 

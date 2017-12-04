@@ -34,20 +34,20 @@ class Chunk(models.Model):
         if data is not None:
             if "project_id" in data:
                 chunk_filter["chapter__project__id"] = data["project_id"]
-            if "chapter_number" in data:
-                chunk_filter["chapter__number"] = data["chapter_number"]
+            if "chapter" in data:
+                chunk_filter["chapter__number"] = data["chapter"]
             # This is specific enough to grab chunks of a chapter, so return after
-            if "project_id" in data and "chapter_number" in data:
+            if "project_id" in data and "chapter" in data:
                 return chunk_filter
 
-            if "anthology_slug" in data:
-                chunk_filter["chapter__project__anthology__slug__iexact"] = data["anthology_slug"]
-            if "language_slug" in data:
-                chunk_filter["chapter__project__language__slug__iexact"] = data["language_slug"]
-            if "book_slug" in data:
-                chunk_filter["chapter__project__book__slug__iexact"] = data["book_slug"]
-            if "version_slug" in data:
-                chunk_filter["chapter__project__version__slug__iexact"] = data["version_slug"]
+            if "anthology" in data:
+                chunk_filter["chapter__project__anthology__slug__iexact"] = data["anthology"]
+            if "language" in data:
+                chunk_filter["chapter__project__language__slug__iexact"] = data["language"]
+            if "book" in data:
+                chunk_filter["chapter__project__book__slug__iexact"] = data["book"]
+            if "version" in data:
+                chunk_filter["chapter__project__version__slug__iexact"] = data["version"]
             return chunk_filter
 
     @staticmethod
@@ -176,7 +176,8 @@ class Chunk(models.Model):
                     take_dict["take"] = model_to_dict(take, fields=[
                         "location", "duration", "rating",
                         "markers", "id",
-                        "published"
+                        "published",
+                        "date_modified"
                     ])
 
                     takes_list.append(take_dict)
