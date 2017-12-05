@@ -7,8 +7,8 @@ class TrIt(ArchiveProject):
     def archive(self):
         print("zipped")
 
-    def extract(self, file, directory, temp):
+    def extract(self, file, directory):
         fl = FileUtility()
-        resp, stat = fl.processTrFile(file, directory, temp)
+        resp, stat = fl.processTrFile(file, directory)
         return resp, stat
 

@@ -149,10 +149,10 @@ class FileUtility:
         return bn
 
     @staticmethod
-    def processTrFile(file, directory, temp):
+    def processTrFile(file, directory):
         with open(os.path.join(directory, "source.tr"), 'wb') as temp_file:
-            for line in file:
-                temp_file.write(line)
+            for chunk in file.chunks():
+                temp_file.write(chunk)
             try:
                 FNULL = open(os.devnull, 'wb')
                 base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
