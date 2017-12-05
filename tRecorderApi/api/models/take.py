@@ -83,7 +83,7 @@ class Take(models.Model):
             version_obj, v_created = Version.objects.get_or_create(
                 slug=manifest["version"]["slug"],
                 defaults={
-                    'slug': manifest["version"]["slug"],  # TODO add name and unit after it is included in meta
+                    'slug': manifest["version"]["slug"],
                     'name': manifest["version"]["name"]
 
                 }
@@ -118,8 +118,11 @@ class Take(models.Model):
                 }
             )
 
-            manifest_chapter = int(meta['chapter']) - 1
-            checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
+            if published:
+                checked_level = 0
+            else:
+                manifest_chapter = int(meta['chapter']) - 1
+                checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
 
             # Create Chapter in database if it's not there
             chapter_obj, cr_created = Chapter.objects.get_or_create(
@@ -155,7 +158,7 @@ class Take(models.Model):
                 defaults = {
                     'location': relpath,
                     'duration': take_data['duration'],
-                    'rating': 0,  # TODO get rating from tR
+                    'rating': 0,
                     'markers': markers,
                 }
                 try:
