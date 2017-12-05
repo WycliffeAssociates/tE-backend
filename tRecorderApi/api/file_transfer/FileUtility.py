@@ -18,7 +18,7 @@ class FileUtility:
     def root_dir(root_dir_of):
         directory = ''
         for dir in root_dir_of:
-            directory += dir + os.sep
+            directory += dir + "/"
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
@@ -32,35 +32,64 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def processUploadedTakes(self, directory, Take, ext):
-        if ext == 'tr':
-            os.remove(os.path.join(directory, "source.tr"))
+    def process_uploaded_takes(self, directory, Take, ext):
+
         manifest = ''
         for root, dirs, files in os.walk(directory):
             for f in files:
                 abpath = os.path.join(root, os.path.basename(f))
-                if f == "manifest.json":  # TODO create a json object
+                if f == "manifest.json":
                     manifest = json.load(open(abpath))
                     continue
-                relpath = self.getRelativePath(abpath)
+                relpath = self.get_relative_path(abpath)
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                meta_data, take_info = self.createObjectFromMeta(meta)
+                meta_data, take_info = self.parse_metadata(meta, abpath)
+
                 if meta_data == 'bad meta':
                     return meta_data, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
                 if ext == 'tr':
                     is_source_file = True
+                    manifest = self.create_manifest(take_info)
 
                 Take.saveTakesToDB(take_info, relpath, meta_data, manifest, is_source_file)
+                # if ext == 'tr':
+                #     os.remove(os.path.join(directory, "source.tr"))
 
         return 'ok', 200
 
-    def createObjectFromMeta(self, meta):
+    @staticmethod
+    def create_manifest(meta):
+        dict = {"language":  {"slug": meta["language"],
+                              "name": ''
+                              },
+                "anthology":  {"slug": meta["anthology"],
+                               "name": ''
+                              },
+                "book":       {"slug": meta["book"],
+                               "name": meta["book"],
+                               "number": meta["book_number"],
+                              },
+                "version":    {"slug": '',
+                               "name": ''
+                               },
+                "mode":       {"slug": '',
+                               "name": ''
+                               },
+                "chapter":     {"slug": '',
+                                "name": ''
+                                }
+
+        }
+
+        return dict
+
+    def parse_metadata(self, meta, abpath):
         try:
             a = meta.artist
             lastindex = a.rfind("}") + 1
@@ -82,7 +111,7 @@ class FileUtility:
             return 'bad meta', 400
 
     @staticmethod
-    def getRelativePath(location):
+    def get_relative_path(location):
         reg = re.search('(media\/.*)$', location)
         return reg.group(1)
 
@@ -122,8 +151,8 @@ class FileUtility:
     @staticmethod
     def processTrFile(file, directory):
         with open(os.path.join(directory, "source.tr"), 'wb') as temp_file:
-            for line in file:
-                temp_file.write(line)
+            for chunk in file.chunks():
+                temp_file.write(chunk)
             try:
                 FNULL = open(os.devnull, 'wb')
                 base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -132,10 +161,16 @@ class FileUtility:
                 file_path = os.path.join(os.path.join(directory, "source.tr"))
 
                 subprocess.check_output(
-                    ['java', '-jar', os.path.join(base_dir, 'aoh/aoh.jar'), '-x', file_path],
+                    ['java', '-jar', path, '-x', file_path],
                     stderr=subprocess.STDOUT
                 )
+
+                temp_file.close()
+                os.remove(os.path.join(directory, 'source.tr'))
+
                 FNULL.close()
+
+
 
                 return 'ok', 200
 
@@ -184,7 +219,8 @@ class FileUtility:
     def remove_dir(self, dir_to_remove):
         shutil.rmtree(dir_to_remove)
 
-    def remove_file(self, file):
+    @staticmethod
+    def remove_file(file):
         os.remove(file)
 
     def rename(self, oldname, newname):
@@ -202,3 +238,9 @@ class FileUtility:
                 base_dir, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
             stdout=FNULL, stderr=subprocess.STDOUT)
         FNULL.close()
+
+    @staticmethod
+    def check_if_path_exists(path):
+        path_exist = os.path.exists(path)
+        return path_exist
+

@@ -58,7 +58,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     #         "media/dump/comments"
     #     )
     #     comment_location = os.path.join(comments_folder, uuid_name)
-    #     relpath = getRelativePath(comment_location)
+    #     relpath = get_relative_path(comment_location)
 
     #     if not os.path.exists(comments_folder):
     #         os.makedirs(comments_folder)

@@ -32,8 +32,6 @@ class Chunk(models.Model):
     def create_chunk_filter(data):
         chunk_filter = {}
         if data is not None:
-            if "project_id" in data:
-                chunk_filter["chapter__project__id"] = data["project_id"]
             if "chapter" in data:
                 chunk_filter["chapter__number"] = data["chapter"]
             # This is specific enough to grab chunks of a chapter, so return after

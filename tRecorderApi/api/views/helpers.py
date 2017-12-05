@@ -31,7 +31,7 @@ def highPassFilter(location):
     new.export(location, format="wav")
 
 
-def getRelativePath(location):
+def get_relative_path(location):
     reg = re.search('(media\/.*)$', location)
     return reg.group(1)
 

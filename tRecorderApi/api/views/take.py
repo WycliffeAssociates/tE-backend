@@ -61,7 +61,7 @@ class GetTakes(views.APIView):
         data = request.data
         if "chunk_id" in data:
             takes = Take.get_takes(data["chunk_id"])
-            serialized_takes = TakeSerializer(takes, many=True).data
-            return Response(serialized_takes, status=status.HTTP_200_OK)
+           # serialized_takes = TakeSerializer(takes, many=True).data
+            return Response(takes, status=status.HTTP_200_OK)
         else:
             return Response(data=None, status=status.HTTP_400_BAD_REQUEST)

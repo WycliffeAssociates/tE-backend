@@ -1,11 +1,8 @@
 import json
-import json
-import os
-
+from ..file_transfer.FileUtility import FileUtility
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-
 from ..models import book, language, chunk, anthology, version, chapter, mode, project
 
 Language = language.Language
@@ -35,6 +32,7 @@ class Take(models.Model):
         return '{} ({})'.format(self.chunk, self.id)
 
     def get_takes(chunk_id):
+
         takes = Take.objects.filter(id=chunk_id)
         ls = []
         for take in takes:
@@ -44,7 +42,8 @@ class Take(models.Model):
                 "markers": take.markers,
                 "location": take.location,
                 "duration": take.duration,
-                "id": take.id
+                "id": take.id,
+                "date_modified":take.date_modified
             }
             ls.append(tk)
         return ls
@@ -57,7 +56,8 @@ class Take(models.Model):
                 slug=manifest["language"]["slug"],
                 defaults={
                     'slug': manifest["language"]["slug"],
-                    'name': manifest["language"]["name"]},
+                    'name': manifest["language"]["name"]
+                }
             )
             # check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
             anthology_obj, a_created = Anthology.objects.get_or_create(
@@ -76,14 +76,14 @@ class Take(models.Model):
                     'number': manifest["book"]['number'],
                     'name': manifest["book"]['name'],
                     'anthology': anthology_obj
-                },
+                }
 
             )
             # Create version in database if it does not exist
             version_obj, v_created = Version.objects.get_or_create(
                 slug=manifest["version"]["slug"],
                 defaults={
-                    'slug': manifest["version"]["slug"],  # TODO add name and unit after it is included in meta
+                    'slug': manifest["version"]["slug"],
                     'name': manifest["version"]["name"]
 
                 }
@@ -115,11 +115,14 @@ class Take(models.Model):
                     'book': book_obj,
                     'published': published,
                     'source_language': language_obj
-                },
+                }
             )
 
-            manifest_chapter = int(meta['chapter']) - 1
-            checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
+            if published:
+                checked_level = 0
+            else:
+                manifest_chapter = int(meta['chapter']) - 1
+                checked_level = manifest['manifest'][manifest_chapter]["checking_level"]
 
             # Create Chapter in database if it's not there
             chapter_obj, cr_created = Chapter.objects.get_or_create(
@@ -128,7 +131,8 @@ class Take(models.Model):
                 defaults={
                     'number': meta['chapter'],
                     'checked_level': checked_level,
-                    'project': project_obj},
+                    'project': project_obj
+                }
             )
 
             # Create Chunk in database if it's not there
@@ -139,7 +143,8 @@ class Take(models.Model):
                 defaults={
                     'startv': meta['startv'],
                     'endv': meta['endv'],
-                    'chapter': chapter_obj},
+                    'chapter': chapter_obj
+                }
             )
 
             markers = json.dumps(meta['markers'])
@@ -153,15 +158,15 @@ class Take(models.Model):
                 defaults = {
                     'location': relpath,
                     'duration': take_data['duration'],
-                    'rating': 0,  # TODO get rating from tR
+                    'rating': 0,
                     'markers': markers,
                 }
                 try:
                     obj = Take.objects.get(
                         chunk=chunk_obj,
                     )
-                    if os.path.exists(obj.location):
-                        os.remove(obj.location)
+                    if FileUtility.check_if_path_exists(obj.location):
+                        FileUtility.remove_file(obj.location)
                     for key, value in defaults.items():
                         setattr(obj, key, value)
                     obj.save()
