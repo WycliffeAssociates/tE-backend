@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils.timezone import now
-import urllib2
+import urllib
 import pickle
 import json
 import os
@@ -30,11 +30,12 @@ class Language(models.Model):
         url = 'http://td.unfoldingword.org/exports/langnames.json'
         languages = []
         try:
-            response = urllib2.urlopen(url)
-            languages = json.loads(response.read())
+            response = urllib.request.urlopen(url)
+            response_text = response.readline().decode('utf-8')
+            languages = json.loads(response_text)
             with open('language.json', 'wb') as fp:
                 pickle.dump(languages, fp)
-        except urllib2.URLError, e:
+        except urllib.error.URLError:
             with open('language.json', 'rb') as fp:
                 languages = pickle.load(fp)
 
@@ -530,7 +531,8 @@ class Chunk(models.Model):
                 "startv", "endv", "id"
             ])
 
-            chunk_dic = dict(chunk_dic.items() + chunk_dic2.items())
+            chunk_dic = chunk_dic.copy()
+            chunk_dic.update(chunk_dic2)
 
             data_dic["chunks"].append(chunk_dic)
         return data_dic

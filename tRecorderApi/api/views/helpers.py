@@ -1,6 +1,6 @@
 import json
 import pickle
-import urllib2
+import urllib
 import os
 import hashlib
 import zipfile

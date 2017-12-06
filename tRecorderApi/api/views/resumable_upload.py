@@ -9,10 +9,10 @@ from tinytag import TinyTag
 from rest_framework.response import Response
 import json
 import re
-from helpers import highPassFilter, getRelativePath
+from api.views.helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
-from file_upload import FileUploadView
+from api.views.file_upload import FileUploadView
 
 class ResumableFileUploadView(views.APIView):
     parser_classes = (MultiPartParser,)
@@ -38,7 +38,7 @@ class ResumableFileUploadView(views.APIView):
                 except:
                     pass
 
-                with open(chunkPath, 'w') as temp_file:
+                with open(chunkPath, 'wb') as temp_file:
                     for line in upload:
                         temp_file.write(line)
                     
@@ -46,7 +46,7 @@ class ResumableFileUploadView(views.APIView):
                 # check if the size of uploaded chunk is correct
                 if os.path.isfile(chunkPath):
                     uplChunkSize = os.path.getsize(chunkPath)
-                    print 'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
+                    #print 'Chunk #{}: {} = {}'.format(chunkNumber, currentChunkSize, uplChunkSize)
                     if int(currentChunkSize) != int(uplChunkSize):
                         # reupload chunk
                         return Response(status=204)
@@ -61,13 +61,13 @@ class ResumableFileUploadView(views.APIView):
                     # check if the size of uloaded file is correct
                     if os.path.isfile(fileLocation):
                         uplFileSize = os.path.getsize(fileLocation)
-                        print 'File: {} = {}'.format(totalSize, uplFileSize)
+                        #print 'File: {} = {}'.format(totalSize, uplFileSize)
                         
                         if int(totalSize) != int(uplFileSize):
                             shutil.rmtree(self.filePath, ignore_errors=True)
                             return Response({"error": "file_is_corrupted"}, status=500)
                         else:
-                            print 'Chunk #{} of {}'.format(chunkNumber, totalChunks) 
+                            #print 'Chunk #{} of {}'.format(chunkNumber, totalChunks) 
                             
                             status = 200
                             response = {}

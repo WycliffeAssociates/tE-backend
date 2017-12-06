@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from api.serializers import CommentSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, JSONParser
-from helpers import getRelativePath
+from api.views.helpers import getRelativePath
 from django.forms.models import model_to_dict
 from api.models import Take, User, Chapter, Chunk
 import os

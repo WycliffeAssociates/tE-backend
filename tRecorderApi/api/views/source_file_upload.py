@@ -8,7 +8,7 @@ import json
 import shutil
 from rest_framework.response import Response
 from tinytag import TinyTag
-from helpers import highPassFilter, getRelativePath
+from api.views.helpers import highPassFilter, getRelativePath
 from api.models import Language, Book, Take
 from django.conf import settings
 

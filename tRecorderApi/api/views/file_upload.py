@@ -7,7 +7,7 @@ import os
 from tinytag import TinyTag
 from rest_framework.response import Response
 import json
-from helpers import highPassFilter, getRelativePath
+from api.views.helpers import highPassFilter, getRelativePath
 from api.models import Book, Language, Take
 from django.conf import settings
 import re
@@ -69,7 +69,7 @@ class FileUploadView(views.APIView):
                                 "duration": meta.duration
                                 }
                             
-                            highPassFilter(abpath)
+                            #highPassFilter(abpath)
                             Take.prepareDataToSave(pls, relpath, data)
                         else:
                             return Response({"error": "bad_wave_file"}, status=400)
@@ -134,7 +134,7 @@ class FileUploadView(views.APIView):
                             "duration": meta.duration
                             }
                         
-                        highPassFilter(abpath)
+                        #highPassFilter(abpath)
                         Take.prepareDataToSave(pls, relpath, data)
                     else:
                         return {"error": "bad_wave_file"}

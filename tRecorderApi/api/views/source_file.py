@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.core import files
 from rest_framework.parsers import JSONParser, FileUploadParser
 from tinytag import TinyTag
-import urllib2
+import urllib
 import pickle
 from api.models import Take, Chunk
 from django.conf import settings

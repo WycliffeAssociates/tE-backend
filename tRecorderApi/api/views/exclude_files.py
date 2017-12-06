@@ -1,7 +1,7 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
 import json
-from helpers import getFileName, md5Hash
+from api.views.helpers import getFileName, md5Hash
 from rest_framework.response import Response
 from api.models import Chunk
 
