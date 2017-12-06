@@ -35,6 +35,7 @@ class Project(models.Model):
         filter["book__slug__iexact"] = data["book_slug"]
         project = Project.objects.filter(**filter)[0]
         return project.id
+
     def get_projects(projects):
         project_list = []
         for project in projects:
@@ -84,7 +85,10 @@ class Project(models.Model):
 
     @staticmethod
     def get_percentage_completed(chunks_done, total_chunks):
-        return int(round((chunks_done / total_chunks) * 100))
+        try:
+            return int(round((chunks_done / total_chunks) * 100))
+        except ZeroDivisionError:
+            return 0
 
     @staticmethod
     def get_total_chunks(book_name_slug):
