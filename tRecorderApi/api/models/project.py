@@ -7,7 +7,7 @@ from .chapter import Chapter
 
 
 class Project(models.Model):
-    version = models.ForeignKey("Version")
+    version = models.ForeignKey("Version", on_delete=models.CASCADE)
     mode = models.ForeignKey("Mode", on_delete=models.CASCADE)
     anthology = models.ForeignKey("Anthology")
     language = models.ForeignKey("Language")
