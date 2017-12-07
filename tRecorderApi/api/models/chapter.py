@@ -50,6 +50,8 @@ class Chapter(models.Model):
             chaps = []
             chapters = project.chapter_set.all()
             for chapter in chapters:
+                if "chapter" in data and int(data["chapter"]) is not chapter.number:
+                    continue
                 chap_dic = {}
                 chap_dic["id"] = chapter.id
                 chap_dic["chapter"] = chapter.number

@@ -19,6 +19,7 @@ class GetProjectsView(views.APIView):
         else:
             if "language" in data:
                 project_filter["language__slug"] = data["language"]
+
             if "version" in data:
                 project_filter["version__slug"] = data["version"]
             if "book" in data:
