@@ -32,8 +32,7 @@ class Take(models.Model):
         return '{} ({})'.format(self.chunk, self.id)
 
     def get_takes(chunk_id):
-
-        takes = Take.objects.filter(id=chunk_id)
+        takes = Take.objects.filter(chunk_id=chunk_id)
         ls = []
         for take in takes:
             tk = {
@@ -45,6 +44,7 @@ class Take(models.Model):
                 "id": take.id,
                 "date_modified":take.date_modified
             }
+            print(tk)
             ls.append(tk)
         return ls
 
@@ -131,7 +131,8 @@ class Take(models.Model):
                 defaults={
                     'number': meta['chapter'],
                     'checked_level': checked_level,
-                    'project': project_obj
+                    'project': project_obj,
+                    'published': published
                 }
             )
 

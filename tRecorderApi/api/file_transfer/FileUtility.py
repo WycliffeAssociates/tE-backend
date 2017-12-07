@@ -47,44 +47,40 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                meta_data, take_info = self.parse_metadata(meta, abpath)
+                metadata, take_info = self.parse_metadata(meta, abpath)
 
-                if meta_data == 'bad meta':
-                    return meta_data, take_info
+                if metadata == 'bad meta':
+                    return metadata, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
                 if ext == 'tr':
                     is_source_file = True
-                    manifest = self.create_manifest(take_info)
+                    manifest = self.create_manifest(take_info, metadata)
 
-                Take.saveTakesToDB(take_info, relpath, meta_data, manifest, is_source_file)
+                Take.saveTakesToDB(take_info, relpath, metadata, manifest, is_source_file)
                 # if ext == 'tr':
                 #     os.remove(os.path.join(directory, "source.tr"))
 
         return 'ok', 200
 
     @staticmethod
-    def create_manifest(meta):
+    def create_manifest(meta, info):
         dict = {"language":  {"slug": meta["language"],
-                              "name": ''
+                              "name": info["langname"]
                               },
                 "anthology":  {"slug": meta["anthology"],
                                "name": ''
                               },
                 "book":       {"slug": meta["book"],
-                               "name": meta["book"],
+                               "name": info["bookname"],
                                "number": meta["book_number"],
                               },
-                "version":    {"slug": '',
+                "version":    {"slug": meta['version'],
                                "name": ''
                                },
-                "mode":       {"slug": '',
-                               "name": ''
-                               },
-                "chapter":     {"slug": '',
-                                "name": ''
-                                }
-
+                "mode":       {"slug": meta["mode"],
+                               "name": meta['mode']
+                               }
         }
 
         return dict
