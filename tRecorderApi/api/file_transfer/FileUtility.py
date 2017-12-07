@@ -8,6 +8,7 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+from django.conf import settings
 
 import urllib3
 from tinytag import TinyTag
@@ -19,10 +20,9 @@ class FileUtility:
         directory = ''
         for dir in root_dir_of:
             directory += dir + "/"
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
-        root_directory = os.path.join(base_dir, directory + uuid_name)
+        root_directory = os.path.join(settings.BASE_DIR, directory + uuid_name)
 
         if not os.path.exists(root_directory):
             os.makedirs(root_directory)
@@ -119,10 +119,10 @@ class FileUtility:
         languages = []
         try:
             languages = json.loads(request.data.decode('utf8'))
-            with open('language.json', 'wb') as fp:
+            with open(os.path.join(settings.BASE_DIR, 'language.json'), 'wb') as fp:
                 pickle.dump(languages, fp)
         except urllib.error.URLError as e:
-            with open('language.json', 'rb') as fp:
+            with open(os.path.join(settings.BASE_DIR, 'language.json'), 'rb') as fp:
                 languages = pickle.load(fp)
 
         ln = ""
@@ -134,7 +134,7 @@ class FileUtility:
 
     @staticmethod
     def getBookByCode(code):
-        with open('books.json') as books_file:
+        with open(os.path.join(settings.BASE_DIR, 'books.json')) as books_file:
             books = json.load(books_file)
 
         bn = ""
@@ -151,9 +151,8 @@ class FileUtility:
                 temp_file.write(chunk)
             try:
                 FNULL = open(os.devnull, 'wb')
-                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-                path = os.path.join(base_dir, 'aoh/aoh.jar')
+                path = os.path.join(settings.BASE_DIR, 'aoh/aoh.jar')
                 file_path = os.path.join(os.path.join(directory, "source.tr"))
 
                 subprocess.check_output(
@@ -204,8 +203,7 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def copy_files(self, src, dst):
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        shutil.copy2(os.path.join(base_dir, src), dst)
+        shutil.copy2(os.path.join(settings.BASE_DIR, src), dst)
         return os.path.join(dst, os.path.basename(src))
 
     def project_file(self, project_name, dir_of, file_extension):
@@ -223,15 +221,13 @@ class FileUtility:
         os.rename(oldname, newname)
 
     def create_tr_path(self, media, tmp, filename):
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        return os.path.join(base_dir, media, tmp, filename + ".tr")
+        return os.path.join(settings.BASE_DIR, media, tmp, filename + ".tr")
 
     def compile_into_tr(self, root_dir):
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         FNULL = open(os.devnull, 'w')
         subprocess.call(
             ['java', '-jar', os.path.join(
-                base_dir, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
+                settings.BASE_DIR, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
             stdout=FNULL, stderr=subprocess.STDOUT)
         FNULL.close()
 
