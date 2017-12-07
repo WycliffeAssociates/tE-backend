@@ -45,7 +45,7 @@ class TakeViewSet(viewsets.ModelViewSet):
         take = model_to_dict(instance, fields=[
             "location","duration","rating",
             "date_modified","markers","id",
-            "is_publish"
+            "published"
         ])
         # take["anthology"] = instance.chunk.chapter.project.anthology.id
         # take["version"] = instance.chunk.chapter.project.version
