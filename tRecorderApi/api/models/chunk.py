@@ -23,7 +23,7 @@ class Chunk(models.Model):
 
     def __str__(self):
         return '{}:{}-{}'.format(
-            Chapter.objects.get(pk=self.chapter).number,
+            self.chapter.number,
             self.startv,
             self.endv
         )
