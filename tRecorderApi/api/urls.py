@@ -50,8 +50,7 @@ urlpatterns = [
     url(r'^get_comments/$', views.GetComments.as_view()),
     url(r'^get_books/$', views.book.GetBooksView.as_view()),
     # url(r'^languages/$',languageView.languages),
-    url(r'^get_projects/$', all_projects.GetProjectsView.as_view())
-
+    url(r'^get_projects/$', all_projects.GetProjectsView.as_view()),
 ]
 
 urlpatterns += router.urls

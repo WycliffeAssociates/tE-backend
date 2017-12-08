@@ -31,13 +31,16 @@ class Chapter(models.Model):
         filter["language__slug"] = data["language"]
         filter["version__slug"] = data["version"]
         filter["book__slug"] = data["book"]
-        # filter["published"] = False
+        if "published" not in data:
+            filter["published"] = False
+        else:
+            filter["published"] =data["published"]
+
         from .project import Project
         projects = Project.objects.filter(**filter)
 
         for project in projects:
             # Get chapters
-
             if not project.version or not project.language or not project.book:
                 continue
 

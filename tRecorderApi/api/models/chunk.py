@@ -56,7 +56,7 @@ class Chunk(models.Model):
         chunks = Chunk.fetch_data(chunk_filter)
         ls = []
         for chunk in chunks:
-            ck = {"endv": chunk.endv, "startv": chunk.startv, "id": chunk.id}
+            ck = {"endv": chunk.endv, "startv": chunk.startv, "id": chunk.id, "comments": []}
             ls.append(ck)
         return ls
 

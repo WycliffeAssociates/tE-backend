@@ -1,17 +1,18 @@
-from api.models import Comment
-from rest_framework import viewsets, status, views
-from api.serializers import CommentSerializer
-from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, JSONParser
-from django.forms.models import model_to_dict
-from api.models import Take, Chapter, Chunk
+import base64
 import os
 import re
-import base64
-import pydub
-import uuid
 import time
+import uuid
+
+import pydub
+from api.file_transfer.FileUtility import FileUtility
+from api.models import Comment
+from api.models import Take, Chapter, Chunk
+from api.serializers import CommentSerializer
 from django.conf import settings
+from rest_framework import viewsets, status, views
+from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.response import Response
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -56,7 +57,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             "media/dump/comments"
         )
         comment_location = os.path.join(comments_folder, uuid_name)
-        relpath = get_relative_path(comment_location)
+        relpath = FileUtility.get_relative_path(comment_location)
 
         if not os.path.exists(comments_folder):
             os.makedirs(comments_folder)
@@ -69,7 +70,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             sound = pydub.AudioSegment.from_file(comment_location + '.webm')
             sound.export(comment_location + ".mp3", format='mp3')
             os.remove(comment_location + ".webm")
-        except:
+        except Exception as e:
             if os.path.isfile(comment_location + '.webm'):
                 os.remove(comment_location + '.webm')
             return Response(
@@ -100,7 +101,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
     def blob2base64Decode(self, str):
-        return base64.decodestring(re.sub(r'^(.*base64,)', '', str))
+        return base64.b64decode(re.sub(r'^(.*base64,)', '', str))
 
 
 class GetComments(views.APIView):
