@@ -34,7 +34,7 @@ class Chapter(models.Model):
         if "published" not in data:
             filter["published"] = False
         else:
-            filter["published"] =data["published"]
+            filter["published"] = data["published"] == "true"
 
         from .project import Project
         projects = Project.objects.filter(**filter)
@@ -46,7 +46,7 @@ class Chapter(models.Model):
 
             mode = project.mode
             bkname = project.book.slug
-            from.take import Take
+            from .take import Take
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
 

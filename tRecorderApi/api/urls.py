@@ -6,12 +6,12 @@ from .views import (
     book, language,
     version, anthology,
     zip_project_files, index,
-    resumable_upload, tr_project_files, all_projects
-)
+    resumable_upload, tr_project_files, all_projects,
+    ProjectViewSet)
 
 
 router = routers.DefaultRouter()
-# router.register(r'projects', ProjectViewSet)
+router.register(r'projects', ProjectViewSet)
 # router.register(r'chapters', views.ChapterViewSet)
 # router.register(r'chunks', views.ChunkViewSet)
 # router.register(r'languages', views.LanguageViewSet)

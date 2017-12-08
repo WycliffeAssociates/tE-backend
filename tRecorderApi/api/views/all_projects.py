@@ -25,7 +25,7 @@ class GetProjectsView(views.APIView):
             if "book" in data:
                 project_filter["book__slug"] = data["book"]
             if "published" in data:
-                project_filter["published"] = data["published"]
+                project_filter["published"] = data["published"] == "true"
             if "anthology" in data:
                 project_filter["anthology__slug"] = data["anthology"]
             if "limit" in data:
