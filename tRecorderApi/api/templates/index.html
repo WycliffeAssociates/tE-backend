@@ -5,10 +5,17 @@
 <div style="width: 600px; margin: 0 auto">
     <strong>Normal Upload:</strong>
     <br>
-    <form action="/api/upload/zip" method="post" enctype="multipart/form-data">
-        <input type="file" name="upload" /> {% csrf_token %}
-        <input type="submit" value="Upload Zip" />
+    <form action="/api/upload/file" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="upload" />
+        <button type="submit"> Upload Zip or Tr</button>
     </form>
+
+    <!--<form action="/api/upload/tr" method="post" enctype="multipart/form-data">-->
+        <!--{% csrf_token %}-->
+        <!--<input type="file" name="upload" />-->
+        <!--<button type="submit"> Upload Tr</button>-->
+    <!--</form>-->
     <!--
     <form action="/api/source/tr" method="post" enctype="multipart/form-data">
         <input type="file" name="upload" /> {% csrf_token %}
@@ -16,14 +23,14 @@
     </form>
     <br>
     -->
-    <div>
-        <strong>Resumable Upload:</strong>
-        <br>
-        <button id="browseButton">Select file</button>
-        <button id="pause-upload-btn">Pause</button>
-        <span id="progr"></span>
-        <div id="response"></div>
-    </div>
+    <!--<div>-->
+        <!--<strong>Resumable Upload:</strong>-->
+        <!--<br>-->
+        <!--<button id="browseButton">Select file</button>-->
+        <!--<button id="pause-upload-btn">Pause</button>-->
+        <!--<span id="progr"></span>-->
+        <!--<div id="response"></div>-->
+    <!--</div>-->
 
     {% if lasttake %}
     <hr>

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 class GetLanguages(APIView):
 
-    def get(self,request):
+    def get(self, request):
         return self.get_lang()
 
     def post(self,request):

@@ -7,7 +7,7 @@ import uuid
 
 from api.models import Language, Book, Take
 from django.conf import settings
-from helpers import getRelativePath
+from .helpers import get_relative_path
 from rest_framework import views
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -32,12 +32,11 @@ class UploadSourceFileView(views.APIView):
                         temp_file.write(line)
         try:
             FNULL = open(os.devnull, 'w')
-            subprocess.check_output(
+            out = subprocess.check_output(
                 ['java', '-jar', os.path.join(
                     settings.BASE_DIR, 'aoh/aoh.jar'), '-x', tempFolder + "/source.tr"],
                 stderr=subprocess.STDOUT
             )
-
             os.remove(os.path.join(tempFolder, "source.tr"))
             FNULL.close()
 
@@ -49,7 +48,7 @@ class UploadSourceFileView(views.APIView):
             for root, dirs, files in os.walk(tempFolder):
                 for f in files:
                     abpath = os.path.join(root, os.path.basename(f))
-                    relpath = getRelativePath(abpath)
+                    relpath = get_relative_path(abpath)
                     meta = TinyTag.get(abpath)
 
                     if meta and meta.artist:

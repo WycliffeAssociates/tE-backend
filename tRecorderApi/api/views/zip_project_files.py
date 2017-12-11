@@ -3,10 +3,9 @@ import shutil
 import time
 import uuid
 import zipfile
-
 from api.models import Chunk
 from django.conf import settings
-from .helpers import getRelativePath
+from .helpers import get_relative_path
 from pydub import AudioSegment
 from rest_framework import views
 from rest_framework.parsers import JSONParser
@@ -26,9 +25,10 @@ class ZipProjectFiles(views.APIView):
             if not os.path.exists(project_root_directory):
                 os.makedirs(project_root_directory)
 
-            project_to_find['language'] = data['language']
-            project_to_find['version'] = data['version']
-            project_to_find['book'] = data['book']
+            project_to_find['language__slug'] = data['language']['slug']
+            project_to_find['version__slug'] = data['version']['slug']
+            project_to_find['book__slug'] = data['book']['slug']
+            project_to_find['book__number'] = data['book']['number']
 
             project = Chunk.getChunksWithTakesByProject(project_to_find)
 
@@ -103,7 +103,7 @@ class ZipProjectFiles(views.APIView):
             shutil.rmtree(project_root_directory)
             return Response(
                 {
-                    "location": getRelativePath(project_file)
+                    "location": get_relative_path(project_file)
                 },
                 status=200)
 
@@ -202,11 +202,9 @@ class ZipProjectFiles(views.APIView):
         5.if project is in data assign it to dictionary created,else
         6.check if language,book,version is in data
         7.If language,book,version is in data assign them to the created dictionary
-
         //dealing with database
         8.Fetch project(which is array of chunks with array of takes),database query
         9.Check if project exist
-
         //dealing with file system
         10.If porject exists,construct project_path
         11.Create directory for project(project_path) if it doesn't exist
@@ -214,7 +212,6 @@ class ZipProjectFiles(views.APIView):
         13.Loop through takes in chunk
         14.Create array of takes location(source and destination)
         15.Copy takes to destination from source location
-
         //data manupulation and informing
         16.Converts moved .wav file to .mp3
         17.Zip the files and send response with location of files,else

@@ -15,10 +15,11 @@ class Book(models.Model):
                 "id": book.id,
                 "slug": book.slug,
                 "name": book.name,
-                "book_num": book.number
+                "number": book.number
             }
             book_list.append(dic)
         return book_list
+
 
     class Meta:
         ordering = ["number"]
