@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from .chunk import Chunk
 
 
 class Take(models.Model):
@@ -25,7 +26,7 @@ class Take(models.Model):
     #     filter["chapter__project__version"] = data["version"]
     #     filter["chapter__project__book__slug"] = data["book"]
     #     filter["chapter__number"] = data["chapter"]
-
+    #
     #     res = Chunk.objects.filter(**filter)
     #     return res
 

@@ -21,6 +21,11 @@ class Book(models.Model):
             book_list.append(dic)
         return book_list
 
+    @staticmethod
+    def get_books_list():
+        bookList = Book.objects.all()
+        return bookList
+
     class Meta:
         ordering = ["number"]
         unique_together = ("anthology", "slug")
