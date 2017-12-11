@@ -32,7 +32,7 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def processUploadedTakes(self, directory, Take, ext):
+    def process_uploaded_takes(self, directory, Take, ext):
         if ext == 'tr':
             os.remove(os.path.join(directory, "source.tr"))
         manifest = ''
@@ -42,13 +42,13 @@ class FileUtility:
                 if f == "manifest.json":  # TODO create a json object
                     manifest = json.load(open(abpath))
                     continue
-                relpath = self.getRelativePath(abpath)
+                relpath = self.get_relative_path(abpath)
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                meta_data, take_info = self.createObjectFromMeta(meta)
+                meta_data, take_info = self.parse_metadata(meta)
                 if meta_data == 'bad meta':
                     return meta_data, take_info
                 # highPassFilter(abpath)
@@ -60,7 +60,7 @@ class FileUtility:
 
         return 'ok', 200
 
-    def createObjectFromMeta(self, meta):
+    def parse_metadata(self, meta):
         try:
             a = meta.artist
             lastindex = a.rfind("}") + 1
@@ -82,7 +82,7 @@ class FileUtility:
             return 'bad meta', 400
 
     @staticmethod
-    def getRelativePath(location):
+    def get_relative_path(location):
         reg = re.search('(media\/.*)$', location)
         return reg.group(1)
 
@@ -144,7 +144,7 @@ class FileUtility:
                 return str(e), 400
 
     def create_path(self, root_dir, lang_slug, version, book_slug, chapter_number):
-        path = os.path.join(root_dir, lang_slug, version, book_slug, chapter_number).replace("\\","/")
+        path = os.path.join(root_dir, lang_slug, version, book_slug, chapter_number)
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -153,8 +153,8 @@ class FileUtility:
     def create_folder_path(self, root_dir, lang, version, book):
         return os.path.join(root_dir, lang, version, book)
 
-    def create_chapter_path(self, root_dir, lang,version,book,chapter_number):
-        path = os.path.join(self.create_folder_path(root_dir,lang, version, book), chapter_number)
+    def create_chapter_path(self, root_dir, chapter_number):
+        path = os.path.join(root_dir, chapter_number)
         if not os.path.exists(path):
             os.makedirs(path)
         return path
@@ -202,3 +202,8 @@ class FileUtility:
                 base_dir, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
             stdout=FNULL, stderr=subprocess.STDOUT)
         FNULL.close()
+
+    def check_if_path_exists(self, path):
+        path_exist = os.path.exists(path)
+        return path_exist
+

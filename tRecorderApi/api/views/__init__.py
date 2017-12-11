@@ -1,5 +1,6 @@
 #from index import *
 # from chapter import ChapterViewSet
+from .project import *
 from .chunk import *
 from .take import *
 from .comment import *

@@ -1,6 +1,8 @@
 import json
 import os
+
 from django.db import models
+from .take import Take
 from .chapter import Chapter
 
 
@@ -33,6 +35,7 @@ class Project(models.Model):
         filter["book__slug__iexact"] = data["book_slug"]
         project = Project.objects.filter(**filter)[0]
         return project.id
+    
     def get_projects(projects):
         project_list = []
         for project in projects:

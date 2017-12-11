@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+=======
+import json
+from ..file_transfer.FileUtility import FileUtility
+>>>>>>> dev
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
+from .chunk import Chunk
 from django.contrib.contenttypes.fields import GenericRelation
 from ..models import book, language, chunk, anthology, version, chapter, mode, project
 import os
@@ -13,7 +19,6 @@ Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
 Project = project.Project
-
 
 
 class Take(models.Model):
@@ -89,7 +94,7 @@ class Take(models.Model):
             )
 
             # Create mode in database if it does not exist
-            mode_obj, m_created = Mode.objects.get_or_create(   #TODO check with joe unique constraint
+            mode_obj, m_created = Mode.objects.get_or_create(
                 name=manifest["mode"]['name'],
                 slug=manifest["mode"]['slug'],
                 defaults={
@@ -113,8 +118,8 @@ class Take(models.Model):
                     'language': language_obj,
                     'book': book_obj,
                     'published': published,
-                    'source_language': language_obj #TODO create source language
-                },
+                    'source_language': language_obj
+                }
             )
 
             manifest_chapter = int(meta['chapter']) - 1
@@ -127,9 +132,9 @@ class Take(models.Model):
                 defaults={
                     'number': meta['chapter'],
                     'checked_level': checked_level,
-                    'project': project_obj},
+                    'project': project_obj
+                }
             )
-
 
             # Create Chunk in database if it's not there
             chunk_obj, ck_created = Chunk.objects.get_or_create(
@@ -139,7 +144,8 @@ class Take(models.Model):
                 defaults={
                     'startv': meta['startv'],
                     'endv': meta['endv'],
-                    'chapter': chapter_obj},
+                    'chapter': chapter_obj
+                }
             )
 
             markers = json.dumps(meta['markers'])
@@ -160,8 +166,8 @@ class Take(models.Model):
                     obj = Take.objects.get(
                         chunk=chunk_obj,
                     )
-                    if os.path.exists(obj.location):
-                        os.remove(obj.location)
+                    if FileUtility.check_if_path_exists(obj.location):
+                        FileUtility.remove_file(obj.location)
                     for key, value in defaults.items():
                         setattr(obj, key, value)
                     obj.save()
@@ -173,17 +179,16 @@ class Take(models.Model):
                     obj = Take(**new_values)
                     obj.save()
             else:
-                    take = Take(location=relpath,
-                    chunk= chunk_obj,
-                    duration=take_data['duration'],
-                    rating=0,  # TODO get rating from tR
-                    markers=markers,
-                    )  # TODO get author of file and save it to Take model
-                    take.save()
+                take = Take(location=relpath,
+                            chunk=chunk_obj,
+                            duration=take_data['duration'],
+                            rating=0,  # TODO get rating from tR
+                            markers=markers,
+                            )  # TODO get author of file and save it to Take model
+                take.save()
 
         except Exception as e:
             return str(e), 400
 
     def by_project_id(id):
         return Take.objects.filter(chunk__chapter__project=id)
-
