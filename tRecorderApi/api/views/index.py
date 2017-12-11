@@ -13,6 +13,6 @@ def index(request):
     return render(request,
                   'index.html',
                   {
-                      "lasttake": take,
+                      "lasttake": 0,
                       "filetype": filetype
                   })

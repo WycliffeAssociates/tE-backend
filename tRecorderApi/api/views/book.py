@@ -15,6 +15,11 @@ class BookViewSet(viewsets.ModelViewSet):
 class GetBooksView(views.APIView):
     parser_classes = (JSONParser,)
 
+    def get(self, request):
+        books = Book.objects.all()
+        book_list = Book.get_books(books)
+        return Response(book_list, status=200)
+
     @staticmethod
     def post(request):
         data = request.data

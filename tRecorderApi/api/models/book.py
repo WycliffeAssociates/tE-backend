@@ -15,15 +15,10 @@ class Book(models.Model):
                 "id": book.id,
                 "slug": book.slug,
                 "name": book.name,
-                "book_num": book.number
+                "number": book.number
             }
             book_list.append(dic)
         return book_list
-
-    @staticmethod
-    def get_books_list():
-        bookList = Book.objects.all()
-        return bookList
 
     class Meta:
         ordering = ["number"]

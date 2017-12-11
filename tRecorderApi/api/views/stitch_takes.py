@@ -1,12 +1,12 @@
 from pydub import AudioSegment
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-from api.models import Take, Language, Book, User, Comment, Project
+from api.models import Take, Language, Book, Comment, Project
 import json
 from rest_framework.response import Response
 import os
 from django.conf import settings
-from .helpers import getRelativePath
+from .helpers import get_relative_path
 
 
 class SourceStitchView(views.APIView):
@@ -14,10 +14,7 @@ class SourceStitchView(views.APIView):
 
     def post(self, request):
         data = request.data
-        if "language" in data
-        and "version" in data
-        and "book" in data
-        and "chapter" in data:
+        if "language" in data and "version" in data and "book" in data and "chapter" in data:
             chunks = Take.stitchSource(data)
             # chunks = list(chunks)
             chunks = sorted(chunks, key=lambda x: x.startv)
@@ -58,7 +55,7 @@ class SourceStitchView(views.APIView):
         return Response(
             {
                 "location":
-                getRelativePath(
+                get_relative_path(
                     stitch_folder + "/" +
                     project_name + ".mp3")
             },

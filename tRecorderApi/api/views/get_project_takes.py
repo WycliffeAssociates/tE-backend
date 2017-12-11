@@ -18,6 +18,6 @@ class GetProjectTakesView(views.APIView):
         if "chapter" not in data:
             return Response({"error": "not_enough_parameters"}, status=400)
         
-        lst = Chunk.getChunksWithTakesByProject(data)
+        lst = Chunk.get_chunks(data)
 
         return Response(lst, status=200)

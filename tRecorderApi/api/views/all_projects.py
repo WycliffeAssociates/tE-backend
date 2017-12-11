@@ -1,6 +1,5 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-from api.models import Take, Language, Book, User, Comment
 from rest_framework.response import Response
 from ..models import Project
 
@@ -21,15 +20,15 @@ class AllProjectsView(views.APIView):
             projects = Project.get_projects(all_projects)
 
         else:
-            if data["language"] is not None:
+            if "language" in data:
                 project_filter["language__slug"] = data["language"]
-            if data["version"] is not None:
+            if "version" in data:
                 project_filter["version__slug"] = data["version"]
-            if data["book"] is not None:
+            if "book" in data:
                 project_filter["book__slug"] = data["book"]
-            if data["published"] is not None:
+            if "published" in data:
                 project_filter["published"] = data["published"]
-            if data["anthology"] is not None:
+            if "anthology" in data:
                 project_filter["anthology__slug"] = data["anthology"]
 
             # filter projects based on the project being requested
