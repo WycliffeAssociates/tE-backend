@@ -1,11 +1,13 @@
 #from index import *
-from .project import ProjectViewSet
 # from chapter import ChapterViewSet
-# from chunk import ChunkViewSet
+from .chunk import *
+from .take import *
+from .comment import *
 # from language import LanguageViewSet
 # from book import BookViewSet
-# from take import TakeViewSet
-# from comment import CommentViewSet
+from .take import TakeViewSet
+from .comment import CommentViewSet
+from .anthology import AnthologyViewSet
 # from file_upload import *
 # from get_project_takes import *
 # from source_file import *
