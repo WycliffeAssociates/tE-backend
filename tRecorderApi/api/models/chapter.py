@@ -17,7 +17,6 @@ class Chapter(models.Model):
     )
     comments = GenericRelation("Comment")
 
-
     class Meta:
         ordering = ["number"]
 

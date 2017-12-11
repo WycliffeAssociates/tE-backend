@@ -18,7 +18,7 @@ class FileUtility:
     def root_dir(root_dir_of):
         directory = ''
         for dir in root_dir_of:
-            directory += dir + '/'
+            directory += dir + os.sep
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
@@ -202,7 +202,6 @@ class FileUtility:
                 base_dir, 'aoh/aoh.jar'), '-c', '-tr', root_dir],
             stdout=FNULL, stderr=subprocess.STDOUT)
         FNULL.close()
-
 
     def check_if_path_exists(self, path):
         path_exist = os.path.exists(path)

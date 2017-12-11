@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Book(models.Model):
     anthology = models.ForeignKey("Anthology", on_delete=models.CASCADE)
     slug = models.CharField(max_length=50)
@@ -20,9 +21,15 @@ class Book(models.Model):
             book_list.append(dic)
         return book_list
 
+    @staticmethod
+    def get_books_list():
+        bookList = Book.objects.all()
+        return bookList
+
     class Meta:
         ordering = ["number"]
         unique_together = ("anthology", "slug")
 
     def __str__(self):
         return self.name
+

@@ -1,17 +1,20 @@
+<<<<<<< HEAD
+=======
 import json
 from ..file_transfer.FileUtility import FileUtility
+>>>>>>> dev
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 from .chunk import Chunk
 from django.contrib.contenttypes.fields import GenericRelation
-#from .comment import Comment
 from ..models import book, language, chunk, anthology, version, chapter, mode, project
-
+import os
+import json
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
-Anthology = anthology.Anthology
+Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
@@ -34,6 +37,7 @@ class Take(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
 
+
     def get_takes(chunk_id):
         takes = Take.objects.filter(id=chunk_id)
         ls = []
@@ -50,17 +54,16 @@ class Take(models.Model):
         return ls
 
     @staticmethod
-    def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
+    def saveTakesToDB(meta, relpath, take_data, manifest, published=False ):
         try:
             # Create Language in database if it's not there
             language_obj, l_created = Language.objects.get_or_create(
                 slug=manifest["language"]["slug"],
                 defaults={
                     'slug': manifest["language"]["slug"],
-                    'name': manifest["language"]["name"]
-                }
+                    'name': manifest["language"]["name"]},
             )
-            # check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
+            #check if the anthology is in DB if not create it, returns a tuple with an instance of the object in DB and a boolean
             anthology_obj, a_created = Anthology.objects.get_or_create(
                 slug=manifest["anthology"]["slug"],
                 defaults={
@@ -77,14 +80,14 @@ class Take(models.Model):
                     'number': manifest["book"]['number'],
                     'name': manifest["book"]['name'],
                     'anthology': anthology_obj
-                }
+                },
 
             )
             # Create version in database if it does not exist
             version_obj, v_created = Version.objects.get_or_create(
                 slug=manifest["version"]["slug"],
                 defaults={
-                    'slug': manifest["version"]["slug"],  # TODO add name and unit after it is included in meta
+                    'slug': manifest["version"]["slug"],  #TODO add name and unit after it is included in meta
                     'name': manifest["version"]["name"]
 
                 }

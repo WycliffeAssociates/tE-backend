@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -129,5 +130,5 @@ USE_TZ = True
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
-#MEDIA_ROOT = 'media'
-#MEDIA_URL = '/media/'
+# MEDIA_ROOT = 'media'
+# MEDIA_URL = '/media/'
