@@ -20,7 +20,6 @@ class Book(models.Model):
             book_list.append(dic)
         return book_list
 
-
     class Meta:
         ordering = ["number"]
         unique_together = ("anthology", "slug")

@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from rest_framework import routers
-
-from . import views
-from .views import (
+from .views import all_projects, ProjectViewSet, book
+from api.views import GetChunks, GetTakes, GetComments, CommentViewSet, TakeViewSet, AnthologyViewSet
+from .views import(
     book, language,
     version, anthology,
     zip_project_files, index,
@@ -11,7 +11,7 @@ from .views import (
 
 
 router = routers.DefaultRouter()
-#router.register(r'projects', ProjectViewSet)
+router.register(r'projects', ProjectViewSet)
 # router.register(r'chapters', views.ChapterViewSet)
 # router.register(r'chunks', views.ChunkViewSet)
 # router.register(r'languages', views.LanguageViewSet)

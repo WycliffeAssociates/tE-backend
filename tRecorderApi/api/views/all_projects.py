@@ -5,6 +5,9 @@ from ..models import Project
 
 
 class GetProjectsView(views.APIView):
+    return
+
+class AllProjectsView(views.APIView):
     parser_classes = (JSONParser,)
 
     @staticmethod

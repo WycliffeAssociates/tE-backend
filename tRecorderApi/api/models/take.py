@@ -3,6 +3,9 @@ from ..file_transfer.FileUtility import FileUtility
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
+from .chunk import Chunk
+from django.contrib.contenttypes.fields import GenericRelation
+#from .comment import Comment
 from ..models import book, language, chunk, anthology, version, chapter, mode, project
 
 Language = language.Language
