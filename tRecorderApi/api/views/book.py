@@ -1,5 +1,4 @@
 from api.models import Book
-from rest_framework import viewsets
 from api.serializers import BookSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -12,21 +11,3 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
 
 
-class GetBooksView(views.APIView):
-    parser_classes = (JSONParser,)
-
-    def get(self, request):
-        books = Book.objects.all()
-        book_list = Book.get_books(books)
-        return Response(book_list, status=200)
-
-    @staticmethod
-    def post(request):
-        data = request.data
-        book_filter ={}
-        if "slug" in data:
-            book_filter = Book.objects.filter(slug__iexact=data["slug"])
-        if "anthology" in data:
-            book_filter = Book.objects.filter(anthology__slug__iexact=data["anthology"]["slug"])
-        book = Book.get_books(book_filter)
-        return Response(book, status=200)

@@ -121,19 +121,20 @@ class ZipProjectFiles(views.APIView):
     #                 or "book" not in data:
     # return Response({"error", "not_enough_parameters"}, status=400)
 
-                project_name = language_slug + "_" + version_slug + "_" + book_slug
+            #     project_name = language_slug + "_" + version_slug + "_" + book_slug
 
-                zip_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
+            #     zip_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
 
-                root_dir = zip_it.file_utility.root_dir(['media', 'export'])
+            #     root_dir = zip_it.file_utility.root_dir(['media', 'export'])
 
-                location_list = self.location_list(root_dir, chunk_list, zip_it.file_utility.create_path,
-                                                   zip_it.file_utility.take_location)
+            #     location_list = self.location_list(root_dir, chunk_list, zip_it.file_utility.create_path,
+            #                                        zip_it.file_utility.take_location)
 
-                zipped_file_location = zip_it.download(project_name, location_list, root_dir)
-                return Response({"location": zip_it.file_utility.relative_path(zipped_file_location)}, status=200)
-            else:
-                return Response({"error": "no_files"}, status=400)
+            #     zipped_file_location = zip_it.download(
+            #         project_name, location_list, root_dir)
+            #     return Response({"location": zip_it.file_utility.relative_path(zipped_file_location)}, status=200)
+            # else:
+            #     return Response({"error": "no_files"}, status=400)
 
     @staticmethod
     def location_list(root_dir, chunk_list, chapter_dir, take_location):
@@ -142,14 +143,17 @@ class ZipProjectFiles(views.APIView):
         for chunk in chunk_list["chunks"]:
             for take in chunk['takes']:
                 lang = chunk_list['language']["slug"]
-                version = Version.slug_by_version_id(chunk_list['project']['version'])
+                version = Version.slug_by_version_id(
+                    chunk_list['project']['version'])
                 book = chunk_list['book']['slug']
                 number = str(chunk_list['chapter']['number'])
                 location = {}
                 location["src"] = take_location(take["take"]["location"])
-                location["dst"] = chapter_dir(root_dir, lang, version, book, str(number))
+                location["dst"] = chapter_dir(
+                    root_dir, lang, version, book, str(number))
                 locations.append(location)
         return locations
+
 
  # code flow
 """

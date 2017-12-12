@@ -1,14 +1,11 @@
-<<<<<<< HEAD
-=======
 import json
 from ..file_transfer.FileUtility import FileUtility
->>>>>>> dev
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 from .chunk import Chunk
 from django.contrib.contenttypes.fields import GenericRelation
-from ..models import book, language, chunk, anthology, version, chapter, mode, project
+from ..models import book, language, chunk, anthology, version, chapter, mode
 import os
 import json
 Language = language.Language
@@ -18,7 +15,6 @@ Anthology= anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
-Project = project.Project
 
 
 class Take(models.Model):

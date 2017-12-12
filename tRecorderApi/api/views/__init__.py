@@ -5,7 +5,7 @@ from .chunk import *
 from .take import *
 from .comment import *
 #from .language import LanguageViewSet
-from .book import BookViewSet
+from .book import *
 from .take import TakeViewSet
 from .comment import CommentViewSet
 from .anthology import AnthologyViewSet
@@ -19,6 +19,8 @@ from .all_projects import *
 from .project_chapter_info import *
 from .push_takes import *
 from .update_project_takes import *
-from .book_list import *
 from .stitch_takes import *
 from .resumable_upload import *
+from .zip_project_files import *
+from .tr_project_files import *
+from .index import *
