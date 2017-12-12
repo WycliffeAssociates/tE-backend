@@ -18,6 +18,7 @@ from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
+    url(r'^docs/', include_docs_urls(title="translationExchange")),
     url(r'^api/', include('api.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework'))
