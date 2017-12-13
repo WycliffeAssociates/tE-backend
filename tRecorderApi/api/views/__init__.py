@@ -8,7 +8,10 @@ from .language import LanguageViewSet
 from .book import *
 from .take import TakeViewSet
 from .comment import CommentViewSet
+from .chapter import ChapterViewSet
 from .anthology import AnthologyViewSet
+from .version import VersionViewSet
+from .mode import ModeViewSet
 from .file_upload import *
 from .source_file import *
 #from .project_zip_file import *

@@ -6,12 +6,14 @@ import api.views as views
 router = routers.DefaultRouter()
 router.register(r'languages', views.LanguageViewSet)
 router.register(r'anthologies', views.AnthologyViewSet)
+router.register(r'versions', views.VersionViewSet)
 router.register(r'^books', views.BookViewSet)
+router.register(r'modes', views.ModeViewSet)
 router.register(r'projects', views.ProjectViewSet)
-# router.register(r'chapters', views.ChapterViewSet)
-# router.register(r'chunks', views.ChunkViewSet)
-# router.register(r'takes', views.TakeViewSet)
-# router.register(r'comments', views.CommentViewSet)
+router.register(r'chapters', views.ChapterViewSet)
+router.register(r'chunks', views.ChunkViewSet)
+router.register(r'takes', views.TakeViewSet)
+router.register(r'comments', views.CommentViewSet)
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
