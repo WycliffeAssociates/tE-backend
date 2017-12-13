@@ -4,7 +4,7 @@ from .project import *
 from .chunk import *
 from .take import *
 from .comment import *
-#from .language import LanguageViewSet
+from .language import LanguageViewSet
 from .book import *
 from .take import TakeViewSet
 from .comment import CommentViewSet
