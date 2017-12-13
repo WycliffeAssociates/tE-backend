@@ -8,7 +8,6 @@ import time
 import urllib.error
 import urllib.request
 import uuid
-
 import urllib3
 from tinytag import TinyTag
 

@@ -1,29 +1,28 @@
 from api.models import Language
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import viewsets
+from api.serializers import LanguageSerializer
 
-class GetLanguages(APIView):
+class LanguageViewSet(viewsets.ModelViewSet):
+    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer
 
-    def get(self, request):
-        return self.get_lang()
-
-    def post(self,request):
-        return self.get_lang(request.data['slug'])
-
-    def get_lang(self,slug=None):
-        language_response = []
+    def build_params_filter(self, query):
+        pk = query.get("id", None)
+        slug = query.get("slug", None)
+        filter = {}
+        if pk is not None:
+            filter["id"] = pk
         if slug is not None:
-            languages = Language.objects.filter(slug=slug)
-        else:
-            languages = Language.objects.all()
+            filter["slug__iexact"] = slug
+        return filter
 
-        for language in languages:
-            lang = {
-                "slug": language.slug,
-                "name": language.name
-            }
-            language_response.append(lang)
-        if len(language_response)!=0:
-            return Response(language_response, status=200)
+    def get_queryset(self):
+        queryset = Language.objects.all()
+        pk = self.kwargs.get("pk", None)
+        if pk is not None:
+            print(pk)
+            return Language.objects.filter(id=pk)
         else:
-            return Response(language_response, status=204)
+            filter = self.build_params_filter(self.request.query_params)
+            return queryset.filter(**filter)

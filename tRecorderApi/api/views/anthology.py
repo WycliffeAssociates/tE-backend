@@ -1,36 +1,28 @@
 from api.models import Anthology
 from rest_framework import viewsets
 from api.serializers import AnthologySerializer
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 class AnthologyViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Anthology.objects.all()
     serializer_class = AnthologySerializer
 
-class GetAnthologies(APIView):
-
-    def get(self,request):
-        return self.get_anthology()
-
-    def post(self,request):
-        return self.get_anthology(request.data['slug'])
-
-    def get_anthology(self,slug=None):
-        anthology_response = []
+    def build_params_filter(self, query):
+        pk = query.get("id", None)
+        slug = query.get("slug", None)
+        filter = {}
+        if pk is not None:
+            filter["id"] = pk
         if slug is not None:
-            anthologies = Anthology.objects.filter(slug=slug)
-        else:
-            anthologies = Anthology.objects.all()
+            filter["slug__iexact"] = slug
+        return filter
 
-        for anthology in anthologies:
-            nthology = {
-                "slug": anthology.slug,
-                "name": anthology.name
-            }
-            anthology_response.append(nthology)
-        if len(anthology_response)!=0:
-            return Response(anthology_response, status=200)
+    def get_queryset(self):
+        queryset = Anthology.objects.all()
+        pk = self.kwargs.get("pk", None)
+        if pk is not None:
+            print(pk)
+            return Anthology.objects.filter(id=pk)
         else:
-            return Response(anthology_response, status=204)
+            filter = self.build_params_filter(self.request.query_params)
+            return queryset.filter(**filter)
