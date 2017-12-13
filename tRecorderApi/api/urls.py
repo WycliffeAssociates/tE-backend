@@ -2,13 +2,12 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from api.views.zip import ZipViewSet
-# from api.views.tr import TrViewSet
+from api.views.tr import TrViewSet
 from . import views
 from .views import (
     book, language,
-    version, anthology,
-    zip_project_files, index,
-    resumable_upload, tr_project_files, all_projects,
+    version, anthology, index,
+    resumable_upload, all_projects,
     ProjectViewSet)
 
 router = routers.DefaultRouter()
@@ -24,7 +23,7 @@ router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'anthologies', views.AnthologyViewSet)
 router.register(r'zip', ZipViewSet)
-# router.register(r'tr', TrViewSet)
+router.register(r'tr', TrViewSet)
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
@@ -36,8 +35,6 @@ urlpatterns = [
     # views.UploadSourceFileView.as_view()),
     # url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
     # url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
-    url(r'^get_source/$', tr_project_files.TrProjectFiles.as_view()),
-    url(r'^zip_project_files/$', zip_project_files.ZipProjectFiles.as_view()),
     # url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
     # url(r'^all_projects/$', all_projects.AllProjectsView.as_view()),
     url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),
