@@ -10,15 +10,11 @@ from .take import TakeViewSet
 from .comment import CommentViewSet
 from .anthology import AnthologyViewSet
 from .file_upload import *
-from .get_project_takes import *
 from .source_file import *
 #from .project_zip_file import *
 from .exclude_files import *
 from .source_file_upload import *
-from .all_projects import *
-from .project_chapter_info import *
 from .push_takes import *
-from .update_project_takes import *
 from .stitch_takes import *
 from .resumable_upload import *
 from .zip_project_files import *
