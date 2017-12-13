@@ -2,6 +2,7 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from api.views.zip import ZipViewSet
+# from api.views.tr import TrViewSet
 from . import views
 from .views import (
     book, language,
@@ -9,7 +10,6 @@ from .views import (
     zip_project_files, index,
     resumable_upload, tr_project_files, all_projects,
     ProjectViewSet)
-
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
@@ -24,6 +24,7 @@ router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'anthologies', views.AnthologyViewSet)
 router.register(r'zip', ZipViewSet)
+# router.register(r'tr', TrViewSet)
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),
@@ -33,7 +34,7 @@ urlpatterns = [
         views.resumable_upload.ResumableFileUploadView.as_view()),
     # url(r'^source/(?P<filename>[^/]+)$',
     # views.UploadSourceFileView.as_view()),
-    #url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
+    # url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
     # url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
     url(r'^get_source/$', tr_project_files.TrProjectFiles.as_view()),
     url(r'^zip_project_files/$', zip_project_files.ZipProjectFiles.as_view()),
