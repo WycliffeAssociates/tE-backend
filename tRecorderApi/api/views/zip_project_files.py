@@ -4,15 +4,7 @@ from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
 from api.models import Chunk
 from api.models import Version
-import os
-import shutil
-import time
-import uuid
-import zipfile
-from api.models import Chunk
-from django.conf import settings
-from pydub import AudioSegment
-from rest_framework import views
+from rest_framework import views,generics
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 

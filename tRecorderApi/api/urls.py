@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from rest_framework import routers
 
+from api.views.zip import ZipViewSet
 from . import views
 from .views import (
     book, language,
@@ -22,7 +23,7 @@ router.register(r'books', book.BookViewSet)
 router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'anthologies', views.AnthologyViewSet)
-
+router.register(r'zip', ZipViewSet)
 
 urlpatterns = [
     url(r'^$', index.index, name='index'),

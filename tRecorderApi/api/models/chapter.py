@@ -1,10 +1,9 @@
+import json
+import os
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.forms.models import model_to_dict
-from ..models import project
-import os
-import json
-from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Chapter(models.Model):
@@ -47,8 +46,7 @@ class Chapter(models.Model):
             mode = project.mode
             bkname = project.book.slug
             from .take import Take
-            latest_take = Take.objects.filter(chunk__chapter__project=project) \
-                .latest("date_modified")
+            latest_take = Take.objects.filter(chunk__chapter__project=project).latest("date_modified")
 
             chaps = []
             chapters = project.chapter_set.all()
@@ -146,3 +144,4 @@ class Chapter(models.Model):
             except:
                 dic["published"] = {}
         return dic
+
