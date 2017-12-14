@@ -1,13 +1,12 @@
 import json
-from ..file_transfer.FileUtility import FileUtility
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-from .chunk import Chunk
-from django.contrib.contenttypes.fields import GenericRelation
+
+from ..file_transfer.FileUtility import FileUtility
 from ..models import book, language, chunk, anthology, version, chapter, mode
-import os
-import json
+
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
@@ -15,6 +14,7 @@ Anthology = anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
+
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -43,7 +43,7 @@ class Take(models.Model):
                 "location": take.location,
                 "duration": take.duration,
                 "id": take.id,
-                "date_modified":take.date_modified
+                "date_modified": take.date_modified
             }
             print(tk)
             ls.append(tk)
@@ -101,6 +101,8 @@ class Take(models.Model):
             )
 
             # Create Project in database if it's not there
+
+            from api.models import Project
             project_obj, p_created = Project.objects.get_or_create(
                 version=version_obj,
                 mode=mode_obj,
