@@ -3,8 +3,11 @@ from ..file_transfer.FileUtility import FileUtility
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
-from ..models import book, language, chunk, anthology, version, chapter, mode, project
-
+from .chunk import Chunk
+from django.contrib.contenttypes.fields import GenericRelation
+from ..models import book, language, chunk, anthology, version, chapter, mode
+import os
+import json
 Language = language.Language
 Book = book.Book
 Chunk = chunk.Chunk
@@ -12,8 +15,6 @@ Anthology = anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
-Project = project.Project
-
 
 class Take(models.Model):
     location = models.CharField(max_length=255)
@@ -131,8 +132,7 @@ class Take(models.Model):
                 defaults={
                     'number': meta['chapter'],
                     'checked_level': checked_level,
-                    'project': project_obj,
-                    'published': published
+                    'project': project_obj
                 }
             )
 

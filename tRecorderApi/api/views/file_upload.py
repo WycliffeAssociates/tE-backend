@@ -17,7 +17,7 @@ class FileUploadView(views.APIView):
         if request.data["upload"]:
             arch_project = ZipIt()
             file_to_upload = request.data["upload"]
-            ext = file_to_upload.name.rsplit('.', 1)[-1]   #get file extension
+            ext = file_to_upload.name.rsplit('.', 1)[-1]  # get file extension
             if ext == "tr":
                 arch_project = TrIt()
             up = Upload(arch_project, None, FileUtility(), Take)

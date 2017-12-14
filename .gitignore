@@ -240,7 +240,4 @@ tRecorderApi/static/rest_framework
 tRecorderApi/static/admin
 tRecorderApi/api/migrations
 /.vscode/
-
 /tRecorderApi/media/
-/tRecorderApi/media/dump/
-

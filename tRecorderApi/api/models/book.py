@@ -7,21 +7,6 @@ class Book(models.Model):
     name = models.CharField(max_length=255)
     number = models.IntegerField(default=0)
 
-    @staticmethod
-    def get_books(books):
-        book_list = []
-        dic = {}
-        for book in books:
-            dic = {
-                "id": book.id,
-                "slug": book.slug,
-                "name": book.name,
-                "number": book.number
-            }
-            book_list.append(dic)
-        return book_list
-
-
     class Meta:
         ordering = ["number"]
         unique_together = ("anthology", "slug")

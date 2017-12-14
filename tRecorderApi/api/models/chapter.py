@@ -4,6 +4,10 @@ import os
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.forms.models import model_to_dict
+from ..models import project
+import os
+import json
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Chapter(models.Model):
@@ -30,11 +34,7 @@ class Chapter(models.Model):
         filter["language__slug"] = data["language"]
         filter["version__slug"] = data["version"]
         filter["book__slug"] = data["book"]
-        if "published" not in data:
-            filter["published"] = False
-        else:
-            filter["published"] = data["published"] == "true"
-
+        filter["published"] = False
         from .project import Project
         projects = Project.objects.filter(**filter)
 
@@ -45,14 +45,13 @@ class Chapter(models.Model):
 
             mode = project.mode
             bkname = project.book.slug
-            from .take import Take
-            latest_take = Take.objects.filter(chunk__chapter__project=project).latest("date_modified")
+            from.take import Take
+            latest_take = Take.objects.filter(chunk__chapter__project=project) \
+                .latest("date_modified")
 
             chaps = []
             chapters = project.chapter_set.all()
             for chapter in chapters:
-                if "chapter" in data and int(data["chapter"]) is not chapter.number:
-                    continue
                 chap_dic = {}
                 chap_dic["id"] = chapter.id
                 chap_dic["chapter"] = chapter.number
@@ -138,10 +137,9 @@ class Chapter(models.Model):
                 dic["project_id"] = project.id
             except:
                 dic["project_id"] = {}
-            # Get published
+            # Get is_publish
             try:
-                dic["published"] = project.published
+                dic["published"] = project.is_publish
             except:
                 dic["published"] = {}
         return dic
-

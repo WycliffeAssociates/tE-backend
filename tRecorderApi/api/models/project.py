@@ -2,22 +2,23 @@ import json
 import os
 
 from django.db import models
-
+from .take import Take
 from .chapter import Chapter
 
 
 class Project(models.Model):
-    version = models.ForeignKey("Version")
+    version = models.ForeignKey("Version", on_delete=models.CASCADE)
     mode = models.ForeignKey("Mode", on_delete=models.CASCADE)
-    anthology = models.ForeignKey("Anthology")
-    language = models.ForeignKey("Language")
+    anthology = models.ForeignKey("Anthology", on_delete=models.CASCADE)
+    language = models.ForeignKey("Language", on_delete=models.CASCADE)
     source_language = models.ForeignKey(
         "Language",
         related_name="language_source",
         blank=True,
-        null=True
+        null=True,
+        on_delete=models.CASCADE
     )
-    book = models.ForeignKey("Book")
+    book = models.ForeignKey("Book", on_delete=models.CASCADE)
     published = models.BooleanField(default=False)
 
     class Meta:
@@ -35,7 +36,7 @@ class Project(models.Model):
         filter["book__slug__iexact"] = data["book_slug"]
         project = Project.objects.filter(**filter)[0]
         return project.id
-
+    
     def get_projects(projects):
         project_list = []
         for project in projects:
@@ -102,5 +103,3 @@ class Project(models.Model):
                     chunk_info = sus
                 break
         return len(chunk_info)
-
-

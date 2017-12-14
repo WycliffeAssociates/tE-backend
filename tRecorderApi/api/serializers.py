@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology
-from yaml import serialize
-
+from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology, Version, Mode
 
 class ProjectSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -9,6 +7,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Project
+        depth = 1
         fields = '__all__'
 
 
@@ -102,3 +101,18 @@ class TakeForZipSerializer(serializers.ModelSerializer):
         # fields = ('location', 'version_slug', 'book_slug', 'mode_slug', 'anthology_slug', 'chapter')
         # # read_only_fields = ()
         depth = 4
+class VersionSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Version
+        fields = '__all__'
+
+class ModeSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Mode
+        fields = '__all__'
