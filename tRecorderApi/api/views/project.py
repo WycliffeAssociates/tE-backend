@@ -2,6 +2,7 @@ from api.models import Project
 from rest_framework import viewsets
 from api.serializers import ProjectSerializer
 
+
 class ProjectViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Project.objects.all()
@@ -19,7 +20,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if pk is not None:
             filter["id"] = pk
         if published is not None:
-            filter["published"] = published
+            filter["published"] = published == "true"
         if lang is not None:
             filter["language__slug__iexact"] = lang
         if version is not None:
