@@ -17,7 +17,7 @@ class ChapterViewSet(viewsets.ModelViewSet):
         if project_id is not None:
             filter["project"] = project_id
         if published is not None:
-            filter["published"] = published
+            filter["published"] = published=='true'
         return filter
 
     def get_queryset(self):
