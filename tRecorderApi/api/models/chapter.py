@@ -1,3 +1,6 @@
+import json
+import os
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.forms.models import model_to_dict
@@ -37,7 +40,6 @@ class Chapter(models.Model):
 
         for project in projects:
             # Get chapters
-
             if not project.version or not project.language or not project.book:
                 continue
 

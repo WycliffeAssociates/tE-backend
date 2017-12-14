@@ -61,6 +61,7 @@ class Project(models.Model):
                        "number": project.book.number
                    }
                    }
+            from .take import Take
             latest_take = Take.objects.filter(chunk__chapter__project=project) \
                 .latest("date_modified")
 
@@ -85,7 +86,10 @@ class Project(models.Model):
 
     @staticmethod
     def get_percentage_completed(chunks_done, total_chunks):
-        return int(round((chunks_done / total_chunks) * 100))
+        try:
+            return int(round((chunks_done / total_chunks) * 100))
+        except ZeroDivisionError:
+            return 0
 
     @staticmethod
     def get_total_chunks(book_name_slug):
