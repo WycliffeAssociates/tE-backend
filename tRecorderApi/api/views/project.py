@@ -19,7 +19,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if pk is not None:
             filter["id"] = pk
         if published is not None:
-            filter["published"] = published
+            filter["published"] = published.title()
         if lang is not None:
             filter["language__slug__iexact"] = lang
         if version is not None:
