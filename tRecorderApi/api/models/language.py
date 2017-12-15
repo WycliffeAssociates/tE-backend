@@ -10,7 +10,3 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
-
-    @staticmethod
-    def get_lang(id):
-        return Language.objects.filter(chunk__chapter__project=id)

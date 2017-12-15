@@ -4,6 +4,7 @@ import os
 from django.db import models
 from .take import Take
 from .chapter import Chapter
+from .chunk import Chunk
 
 
 class Project(models.Model):
@@ -23,73 +24,14 @@ class Project(models.Model):
 
     class Meta:
         ordering = ["language", "version", "book"]
-        unique_together = (("version", "anthology", "language", "mode", "book"),)
+        unique_together = (
+            ("version", "anthology", "language", "mode", "book"),)
 
     def __str__(self):
         return '{}-{}-{} ({})'.format(self.language, self.version, self.book, self.id)
 
-    @staticmethod
-    def project_id(data):
-        filter = {}
-        filter["language__slug__iexact"] = data["language_slug"]
-        filter["version__slug__iexact"] = data["version_slug"]
-        filter["book__slug__iexact"] = data["book_slug"]
-        project = Project.objects.filter(**filter)[0]
-        return project.id
-    
-    def get_projects(projects):
-        project_list = []
-        for project in projects:
-            dic = {"id": project.id,
-                   "published": project.published,
-                   "contributors": [],
-                   "version": {
-                       "slug": project.version.slug,
-                       "name": project.version.name
-                   },
-                   "anthology": {
-                       "slug": project.anthology.slug,
-                       "name": project.anthology.name
-                   },
-                   "language": {
-                       "slug": project.language.slug,
-                       "name": project.language.name
-                   },
-                   "book": {
-                       "slug": project.book.slug,
-                       "name": project.book.name,
-                       "number": project.book.number
-                   }
-                   }
-            from .take import Take
-            latest_take = Take.objects.filter(chunk__chapter__project=project) \
-                .latest("date_modified")
-
-            dic["date_modified"] = latest_take.date_modified
-
-            min_check_level = Chapter.objects.all().values_list('checked_level') \
-                .order_by('checked_level')[0][0]
-
-            chunks_done = Chapter.objects.all().values_list('chunk').count()
-
-            dic["checked_level"] = min_check_level
-
-            book_name_slug = project.book.slug
-
-            total_chunk = Project.get_total_chunks(book_name_slug)
-
-            dic["completed"] = Project.get_percentage_completed(chunks_done, total_chunk)
-
-            project_list.append(dic)
-
-        return project_list
-
-    @staticmethod
-    def get_percentage_completed(chunks_done, total_chunks):
-        try:
-            return int(round((chunks_done / total_chunks) * 100))
-        except ZeroDivisionError:
-            return 0
+    def get_completed_chunks(self):
+        return Chunk.objects.filter(chapter__project=self.pk).count()
 
     @staticmethod
     def get_total_chunks(book_name_slug):
@@ -103,3 +45,23 @@ class Project(models.Model):
                     chunk_info = sus
                 break
         return len(chunk_info)
+
+    @property
+    def completed(self):
+        chunks_done = self.get_completed_chunks()
+        total_chunks = self.get_total_chunks(self.book.slug)
+        try:
+            return int(round((chunks_done / total_chunks) * 100))
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def date_modified(self):
+        take = Take.objects.filter(chunk__chapter__project=self.pk) \
+            .order_by('date_modified') \
+            .first()
+        if take is not None:
+            return take.date_modified
+        else:
+            return 0
+            

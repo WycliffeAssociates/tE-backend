@@ -32,23 +32,6 @@ class Take(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
 
-    def get_takes(chunk_id):
-        takes = Take.objects.filter(chunk_id=chunk_id)
-        ls = []
-        for take in takes:
-            tk = {
-                "rating": take.rating,
-                "published": take.published,
-                "markers": take.markers,
-                "location": take.location,
-                "duration": take.duration,
-                "id": take.id,
-                "date_modified": take.date_modified
-            }
-            print(tk)
-            ls.append(tk)
-        return ls
-
     @staticmethod
     def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
         try:
@@ -191,6 +174,3 @@ class Take(models.Model):
 
         except Exception as e:
             return str(e), 400
-
-    def by_project_id(id):
-        return Take.objects.filter(chunk__chapter__project=id)

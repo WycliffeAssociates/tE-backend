@@ -11,8 +11,3 @@ class Mode(models.Model):
 
     def __str__(self):
         return self.name
-
-    @staticmethod
-    def slug_by_id(id):
-        mode = Mode.objects.filter(id=id).values('slug')[0]
-        return mode['slug']

@@ -3,12 +3,15 @@ from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, A
 
 class ProjectSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
+    completed = serializers.IntegerField()
+    date_modified = serializers.DateTimeField()
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Project
         depth = 1
         fields = '__all__'
+
 
 
 class LanguageSerializer(serializers.ModelSerializer):
@@ -31,10 +34,13 @@ class BookSerializer(serializers.ModelSerializer):
 
 class ChapterSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
+    date_modified = serializers.DateTimeField()
+    contributors = serializers.CharField()
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Chapter
+        depth = 2
         fields = '__all__'
 
 

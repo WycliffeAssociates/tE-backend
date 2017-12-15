@@ -1,11 +1,7 @@
 from django.conf.urls import url
 from rest_framework import routers
-from . import views
-from .views import (
-    book, language,
-    version, anthology, index,
-    resumable_upload, all_projects,
-    ProjectViewSet)
+import api.views as views
+
 
 router = routers.DefaultRouter()
 router.register(r'languages', views.LanguageViewSet)
@@ -18,8 +14,6 @@ router.register(r'chapters', views.ChapterViewSet)
 router.register(r'chunks', views.ChunkViewSet)
 router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
-router.register(r'zip', views.ZipViewSet)
-router.register(r'tr', views.TrViewSet)
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
