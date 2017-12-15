@@ -48,18 +48,17 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
     def blob2base64Decode(self, str):
-        return base64.decodestring(re.sub(r'^(.*base64,)', '', str))
+        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
 
     def create(self, request):
             
             data = request.data
 
-            if "comment" not in data or "user" not in data  \
+            if "comment" not in data \
                 or "object" not in data or "type" not in data:
                 return Response({"error": "not_enough_parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
             comment = data["comment"]
-            user = data["user"]
             obj = data["object"]
             obj_type = data["type"]
 
