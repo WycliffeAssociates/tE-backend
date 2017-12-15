@@ -65,22 +65,11 @@ class FileUtility:
 
     @staticmethod
     def create_manifest(meta, info):
-        dict = {"language":  {"slug": meta["language"],
-                              "name": info["langname"]
-                              },
-                "anthology":  {"slug": meta["anthology"],
-                               "name": ''
-                              },
-                "book":       {"slug": meta["book"],
-                               "name": info["bookname"],
-                               "number": meta["book_number"],
-                              },
-                "version":    {"slug": meta['version'],
-                               "name": ''
-                               },
-                "mode":       {"slug": meta["mode"],
-                               "name": meta['mode']
-                               }
+        dict = {"language":  meta["language"],
+                "anthology":  meta["anthology"],
+                "book":       meta["book"],
+                "version":    meta["version"],
+                "mode":       meta["mode"]
         }
 
         return dict
