@@ -14,6 +14,8 @@ router.register(r'chapters', views.ChapterViewSet)
 router.register(r'chunks', views.ChunkViewSet)
 router.register(r'takes', views.TakeViewSet)
 router.register(r'comments', views.CommentViewSet)
+router.register(r'zip', views.ZipViewSet)
+router.register(r'tr', views.TrViewSet)
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
