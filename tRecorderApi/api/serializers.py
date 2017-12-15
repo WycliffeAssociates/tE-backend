@@ -67,7 +67,7 @@ class TakeSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Take
-        fields = ('location',)
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
