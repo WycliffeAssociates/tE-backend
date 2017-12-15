@@ -183,6 +183,7 @@ class FileUtility:
         return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                             take_location)
 
+    @staticmethod
     def relative_path(self, location):
         reg = re.search('(media\/.*)$', location)
         return reg.group(1)
