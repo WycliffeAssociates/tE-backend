@@ -230,7 +230,7 @@ tRecorderApi/htmlcov/
 language.json
 **/language.json
 tRecorderApi/language.json
-
+tRecorderApi/frontend
 tRecorderApi/api/CreateZIP.py
 tRecorderApi/media/dump/**
 tRecorderApi/sample.docx
