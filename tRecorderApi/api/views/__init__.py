@@ -19,3 +19,4 @@ from .stitch_takes import *
 from .take import *
 from .zip import  ZipViewSet
 from .tr import TrViewSet
+from .frontend import FrontendAppView
