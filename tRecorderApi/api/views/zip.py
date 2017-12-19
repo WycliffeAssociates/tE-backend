@@ -41,5 +41,5 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
                                                               str(project.chunk.chapter))
             take_location_list.append(location)
         zipped_file_location = zip_it.download(project_name, take_location_list, root_dir, file_format)
-        path = {"location": zipped_file_location}
+        path = {"location": zip_it.file_utility.relative_path(zipped_file_location)}
         return Response(path)
