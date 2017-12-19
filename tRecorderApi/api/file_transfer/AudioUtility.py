@@ -8,12 +8,12 @@ class AudioUtility:
     def high_pass_filter(self):
         pass
 
-    def convert_to_mp3(self, root_directory, option):
+    def convert_to_mp3(self, root_directory, file_format):
         converted_mp3_list = []
         for subdir, dirs, files in os.walk(root_directory):
             for file in files:
                 file_path = subdir + os.sep + file
-                if option == 'zip':
+                if file_format == 'zip':
                     if file_path.endswith(".wav"):
                         sound = AudioSegment.from_wav(file_path)
 
