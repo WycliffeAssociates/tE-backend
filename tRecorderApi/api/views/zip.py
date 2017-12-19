@@ -19,6 +19,7 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         id = self.request.query_params.get('id')
+        option = self.request.query_params.get('option')
         if id is None:
             id = kwargs.get("pk", None)
         projects = Take.objects.filter(chunk__chapter__project=id)
@@ -39,6 +40,6 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
                                                               book_slug,
                                                               str(project.chunk.chapter))
             take_location_list.append(location)
-        zipped_file_location = zip_it.download(project_name, take_location_list, root_dir)
+        zipped_file_location = zip_it.download(project_name, take_location_list, root_dir,option)
         path = {"location": zipped_file_location}
         return Response(path)
