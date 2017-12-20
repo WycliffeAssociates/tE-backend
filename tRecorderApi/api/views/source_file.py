@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from django.core import files
 from rest_framework.parsers import JSONParser, FileUploadParser
-from tinytag import TinyTag
+from api.file_transfer import TinyTag
 import pickle
 from api.models import Take, Chunk
 from django.conf import settings

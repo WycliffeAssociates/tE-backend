@@ -11,7 +11,7 @@ import uuid
 from pathlib import PurePath
 from django.conf import settings
 import urllib3
-from tinytag import TinyTag
+from .tinytag import TinyTag
 
 
 class FileUtility:
@@ -24,7 +24,7 @@ class FileUtility:
             os.path.dirname(os.path.abspath(__file__))))
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
-        root_directory = os.path.join(base_dir, directory + uuid_name)
+        root_directory = os.path.join(base_dir, directory, uuid_name)
 
         if not os.path.exists(root_directory):
             os.makedirs(root_directory)

@@ -11,7 +11,7 @@ from api.file_transfer import FileUtility
 from rest_framework import views
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
-from tinytag import TinyTag
+from api.file_transfer import TinyTag
 
 
 class UploadSourceFileView(views.APIView):
