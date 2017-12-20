@@ -5,10 +5,10 @@ class Download(FileTransfer):
     def __init__(self, archive_project, audio_utility, file_utility):
         super().__init__(archive_project, audio_utility, file_utility)
 
-    def download(self, project_name, location_list, root_dir, option):
+    def download(self, project_name, location_list, root_dir, file_format):
         self.file_utility.copy_files_from_src_to_dest(location_list)
 
-        converted_list = self.audio_utility.convert_to_mp3(root_dir, option)
+        converted_list = self.audio_utility.convert_to_mp3(root_dir, file_format)
 
         project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
 
