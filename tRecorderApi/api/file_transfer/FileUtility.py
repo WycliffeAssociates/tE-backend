@@ -193,7 +193,7 @@ class FileUtility:
     @staticmethod
     def relative_path(location):
         p = PurePath(location)
-        pr = p.relative_to(os.path.join(settings.BASE_DIR, "media"))
+        pr = p.relative_to(os.path.join(settings.BASE_DIR, "tRecorderApi"))
         return str(pr)
 
     def copy_files_from_src_to_dest(self, location_list):
