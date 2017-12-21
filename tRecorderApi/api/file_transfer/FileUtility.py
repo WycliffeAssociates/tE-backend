@@ -8,7 +8,6 @@ import time
 import urllib.error
 import urllib.request
 import uuid
-from pathlib import PurePath
 from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
@@ -192,9 +191,7 @@ class FileUtility:
 
     @staticmethod
     def relative_path(location):
-        p = PurePath(location)
-        pr = p.relative_to(os.path.join(settings.BASE_DIR, "tRecorderApi"))
-        return str(pr)
+        return os.path.relpath(location, "tRecorderApi")
 
     def copy_files_from_src_to_dest(self, location_list):
 
