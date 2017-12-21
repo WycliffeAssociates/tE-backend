@@ -38,7 +38,7 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
             location['src'] = project.location
             location['dst'] = zip_it.file_utility.create_path(root_dir, language_slug, version_slug,
                                                               book_slug,
-                                                              str(project.chunk.chapter))
+                                                              str(project.chunk.chapter).zfill(2))
             take_location_list.append(location)
         zipped_file_location = zip_it.download(project_name, take_location_list, root_dir, file_format)
         path = {"location": zip_it.file_utility.relative_path(zipped_file_location)}
