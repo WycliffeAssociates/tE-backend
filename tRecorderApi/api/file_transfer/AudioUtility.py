@@ -13,7 +13,7 @@ class AudioUtility:
         for subdir, dirs, files in os.walk(root_directory):
             for file in files:
                 file_path = os.path.join(subdir, file)
-                if file_format == 'zip':
+                if file_format == 'mp3':
                     if file_path.endswith(".wav"):
                         sound = AudioSegment.from_wav(file_path)
 
