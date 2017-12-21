@@ -191,7 +191,7 @@ class FileUtility:
 
     @staticmethod
     def relative_path(location):
-        return os.path.relpath(location, "tRecorderApi")
+        return os.path.relpath(location, os.path.dirname("tRecorderApi"))
 
     def copy_files_from_src_to_dest(self, location_list):
 
