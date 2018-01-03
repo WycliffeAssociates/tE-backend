@@ -1,4 +1,3 @@
-from django.http import HttpResponsePermanentRedirect
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -6,7 +5,7 @@ from rest_framework.test import APIClient
 from ..models import Anthology
 
 
-class AnthologyTest(TestCase):
+class AnthologyApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
