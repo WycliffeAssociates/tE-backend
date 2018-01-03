@@ -10,7 +10,7 @@ class AnthologyApiTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         Anthology.objects.create(name='New Testament', slug='nt')
-        Anthology.objects.create(name='Old Testament', slug='ot')
+        # Anthology.objects.create(name='Old Testament', slug='ot'.)
 
     def test_number_of_items_are_equal(self):
         anthology_num = Anthology.objects.count()
@@ -34,5 +34,14 @@ class AnthologyApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_text_as_parameter_gives_400_status_code(self):
+        # 400 was expected status code but 200 is returned
+
         response = self.client.get('/api/anthologies/?randomeparameter/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_anth_equals_ot_as_parameter_has_len_one(self):
+        # should have failed but passes
+
+        response = self.client.get('/api/anthologies/?slug=ot/')
+        anthology = Anthology.objects.filter(slug='ot').count()
+        self.assertEqual(len(response.data), anthology)
