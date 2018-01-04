@@ -5,7 +5,7 @@ import os
 from ..models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, Take
 
 cur_path = os.path.dirname(__file__)
-file_path = os.path.join(cur_path, "test_files", "zip", "en_ulb_b41_mat_c01_v01_t01.wav")
+file_path = os.path.join(cur_path, "test_files", "zip", "abc.wav")
 
 
 class ZipApiTest(TestCase):
