@@ -2,46 +2,43 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ..models import Anthology
+from ..models import Language
 
 
-class AnthologyApiTest(TestCase):
+class LanguageApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        Anthology.objects.create(name='New Testament', slug='nt')
-        # Anthology.objects.create(name='Old Testament', slug='ot'.)
+        self.lang = Language.objects.create(slug='yo', name='yolo')
 
     def test_number_of_items_are_equal(self):
-        anthology_num = Anthology.objects.count()
-        response = self.client.get('/api/anthologies/')
-        self.assertEqual(len(response.data), anthology_num)
+        language_num = Language.objects.count()
+        response = self.client.get('/api/languages/')
+        self.assertEqual(len(response.data), language_num)
 
     def test_get_request_has_200_status_code(self):
-        response = self.client.get('/api/anthologies/')
+        response = self.client.get('/api/languages/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_request_with_id_has_200_status_code(self):
-        response = self.client.get('/api/anthologies/1/')
+        response = self.client.get('/api/languages/1/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_request_with_id_has_200_status_code(self):
-        response = self.client.get('/api/anthologies/?id=1')
+        response = self.client.get('/api/languages/?id=1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_request_with_non_existent_id_has_404_status_code(self):
-        response = self.client.get('/api/anthologies/4/')
+        response = self.client.get('/api/languages/4/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_text_as_parameter_gives_400_status_code(self):
         # 400 was expected status code but 200 is returned
 
-        response = self.client.get('/api/anthologies/?randomeparameter/')
+        response = self.client.get('/api/languages/?randomeparameter/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_anth_equals_ot_as_parameter_has_len_one(self):
+    def test_slug_equals_en_x_demo_as_parameter_has_len_one(self):
         # should have failed but passes
-
-        response = self.client.get('/api/anthologies/?slug=ot/')
-        anthology = Anthology.objects.filter(slug='ot').count()
-        self.assertEqual(len(response.data), anthology)
+        response = self.client.get('/api/languages/?slug=yo')
+        self.assertEqual(len(response.data), 1)
