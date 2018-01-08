@@ -17,29 +17,30 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    def build_params_filter(self, query):
+        pk = query.get("id", None)
+        chapter_id = query.get("chapter_id", None)
+        chunk_id = query.get("chunk_id", None)
+        take_id = query.get("take_id", None)
+        filter = {}
+        if pk is not None:
+            filter = Comment.objects.filter(id=pk)
+        if chapter_id is not None:
+            filter = Comment.get_comments(chapter_id=chapter_id)
+        if chunk_id is not None:
+            filter = Comment.get_comments(chunk_id=chunk_id)
+        if take_id is not None:
+            filter = Comment.get_comments(take_id=take_id)
+        return filter
+
     def get_queryset(self):
         queryset = Comment.objects.all()
-        print(queryset)
-        pk = self.kwargs.get("pk", None)
-        if pk is not None:
-            print(pk)
-            return Comment.objects.filter(id=pk)
-        else:
-            query = self.request.query_params
-            pk = query.get("id", None)
-            chapter_id = query.get("chapter_id", None)
-            chunk_id = query.get("chunk_id", None)
-            take_id = query.get("take_id", None)
-            filter = {}
-            if pk is not None:
-                queryset = Comment.objects.filter(id=pk)
-            if chapter_id is not None:
-                queryset = Comment.get_comments(chapter_id=chapter_id)
-            if chunk_id is not None:
-                queryset = Comment.get_comments(chunk_id=chunk_id)
-            if take_id is not None:
-                queryset = Comment.get_comments(take_id=take_id)
-            return queryset
+        if self.request.query_params:
+            filter = self.build_params_filter(self.request.query_params)
+            if filter:
+                return queryset.filter(**filter)
+            return None
+        return queryset
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
