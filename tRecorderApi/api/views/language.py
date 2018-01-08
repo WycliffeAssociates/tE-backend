@@ -2,6 +2,7 @@ from api.models import Language
 from rest_framework import viewsets
 from api.serializers import LanguageSerializer
 
+
 class LanguageViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Language.objects.all()
@@ -19,10 +20,10 @@ class LanguageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Language.objects.all()
-        pk = self.kwargs.get("pk", None)
-        if pk is not None:
-            print(pk)
-            return Language.objects.filter(id=pk)
-        else:
+        print(self.request.query_params)
+        if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
-            return queryset.filter(**filter)
+            if filter:
+                return queryset.filter(**filter)
+            return None
+        return queryset
