@@ -2,6 +2,7 @@ from api.models import Chunk
 from rest_framework import viewsets
 from api.serializers import ChunkSerializer
 
+
 class ChunkViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Chunk.objects.all()
@@ -22,10 +23,9 @@ class ChunkViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Chunk.objects.all()
-        pk = self.kwargs.get("pk", None)
-        if pk is not None:
-            print(pk)
-            return Chunk.objects.filter(id=pk)
-        else:
+        if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
-            return queryset.filter(**filter)
+            if filter:
+                return queryset.filter(**filter)
+            return None
+        return queryset
