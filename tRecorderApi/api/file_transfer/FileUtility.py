@@ -11,6 +11,7 @@ import uuid
 from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
+from platform import system as system_name
 
 
 class FileUtility:
@@ -126,10 +127,14 @@ class FileUtility:
 
     @staticmethod
     def internet_connection():
-        try:
-            urllib.request.urlopen("http://google.com")
+        hostname = "8.8.8.8"  # example
+        parameters = "-n 1" if system_name().lower() == "windows" else "-c 1"
+        response = os.system("ping "+ parameters + " " + hostname)
+
+        # and then check the response...
+        if response == 0:
             return True
-        except urllib.error.URLError as e:
+        else:
             return False
 
     @staticmethod
