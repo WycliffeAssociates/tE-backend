@@ -11,6 +11,7 @@ class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
+    has_comment = models.BooleanField(default=False)
     project = models.ForeignKey(
         "Project",
         on_delete=models.CASCADE
@@ -31,7 +32,7 @@ class Chapter(models.Model):
         # if take is not None:
         #     return take.date_modified
         # else:
-            return 0
+        return 0
 
     @property
     def contributors(self):

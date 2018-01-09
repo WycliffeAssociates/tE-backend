@@ -22,6 +22,7 @@ class Take(models.Model):
     rating = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
     markers = models.TextField(blank=True)
+    has_comment = models.BooleanField(default=False)
     date_modified = models.DateTimeField(default=now)
     chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE)
     comment = GenericRelation("Comment")

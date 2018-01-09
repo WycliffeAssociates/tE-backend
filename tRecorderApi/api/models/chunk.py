@@ -10,6 +10,7 @@ from .chapter import Chapter
 class Chunk(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
+    has_comment = models.BooleanField(default=False)
     chapter = models.ForeignKey(
         Chapter,
         on_delete=models.CASCADE
