@@ -97,17 +97,23 @@ class FileUtility:
         except Exception as e:
             return 'bad meta', 400
 
-    @staticmethod
-    def getLanguageByCode(code):
-        url = 'http://td.unfoldingword.org/exports/langnames.json'
-        http = urllib3.PoolManager()
-        request = http.request('GET', url)
-        languages = []
-        try:
-            languages = json.loads(request.data.decode('utf8'))
-            with open('language.json', 'wb') as fp:
-                pickle.dump(languages, fp)
-        except urllib.error.URLError as e:
+    def getLanguageByCode(self, code):
+
+        internet_connection = self.internet_connection()
+
+        if internet_connection:
+            url = 'http://td.unfoldingword.org/exports/langnames.json'
+            http = urllib3.PoolManager()
+            request = http.request('GET', url, timeout=1.5)
+            languages = []
+            try:
+                languages = json.loads(request.data.decode('utf8'))
+                with open('language.json', 'wb') as fp:
+                    pickle.dump(languages, fp)
+            except urllib.error.URLError as e:
+                with open('language.json', 'rb') as fp:
+                    languages = pickle.load(fp)
+        else:
             with open('language.json', 'rb') as fp:
                 languages = pickle.load(fp)
 
@@ -117,6 +123,14 @@ class FileUtility:
                 ln = dicti["ln"]
                 break
         return ln
+
+    @staticmethod
+    def internet_connection():
+        try:
+            urllib.request.urlopen("http://google.com")
+            return True
+        except urllib.error.URLError as e:
+            return False
 
     @staticmethod
     def getBookByCode(code):
