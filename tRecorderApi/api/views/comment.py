@@ -109,10 +109,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             location=relpath + ".mp3",
             content_object=q_obj,
         )
-        q_obj.has_comment = True
-        q_obj.save()
         c.save()
-
         dic = {
             "location": relpath + ".mp3",
             "id": c.pk

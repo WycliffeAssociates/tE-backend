@@ -1,17 +1,11 @@
-import json
-import os
-
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from django.forms.models import model_to_dict
-from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
-    has_comment = models.BooleanField(default=False)
     project = models.ForeignKey(
         "Project",
         on_delete=models.CASCADE
@@ -37,3 +31,7 @@ class Chapter(models.Model):
     @property
     def contributors(self):
         return ""
+
+    @property
+    def has_comment(self):
+        return Chapter.objects.filter(comments__object_id=self.id).exists()

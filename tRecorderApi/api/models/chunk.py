@@ -10,7 +10,6 @@ from .chapter import Chapter
 class Chunk(models.Model):
     startv = models.IntegerField(default=0)
     endv = models.IntegerField(default=0)
-    has_comment = models.BooleanField(default=False)
     chapter = models.ForeignKey(
         Chapter,
         on_delete=models.CASCADE
@@ -22,3 +21,7 @@ class Chunk(models.Model):
 
     def __str__(self):
         return "{}"
+
+    @property
+    def has_comment(self):
+        return Chunk.objects.filter(comments__object_id=self.id).exists()

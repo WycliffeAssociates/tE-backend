@@ -22,7 +22,6 @@ class Take(models.Model):
     rating = models.IntegerField(default=0)
     published = models.BooleanField(default=False)
     markers = models.TextField(blank=True)
-    has_comment = models.BooleanField(default=False)
     date_modified = models.DateTimeField(default=now)
     chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE)
     comment = GenericRelation("Comment")
@@ -32,6 +31,10 @@ class Take(models.Model):
 
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
+
+    @property
+    def has_comment(self):
+        return Take.objects.filter(comment__object_id=self.id).exists()
 
     @staticmethod
     def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
@@ -175,3 +178,4 @@ class Take(models.Model):
 
         except Exception as e:
             return str(e), 400
+
