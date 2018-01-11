@@ -21,3 +21,7 @@ class Chunk(models.Model):
 
     def __str__(self):
         return "{}"
+
+    @property
+    def has_comment(self):
+        return Chunk.objects.filter(comments__object_id=self.id).exists()

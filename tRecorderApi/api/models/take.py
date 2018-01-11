@@ -32,6 +32,10 @@ class Take(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
 
+    @property
+    def has_comment(self):
+        return Take.objects.filter(comment__object_id=self.id).exists()
+
     @staticmethod
     def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
         try:
@@ -174,3 +178,4 @@ class Take(models.Model):
 
         except Exception as e:
             return str(e), 400
+

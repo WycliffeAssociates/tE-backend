@@ -36,6 +36,7 @@ class ChapterSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     date_modified = serializers.DateTimeField()
     contributors = serializers.CharField()
+    has_comment = serializers.BooleanField(default=False)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -46,6 +47,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 
 class ChunkSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
+    has_comment = serializers.BooleanField(default=False)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -63,6 +65,7 @@ class ChunkSerializer(serializers.ModelSerializer):
 
 class TakeSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
+    has_comment = serializers.BooleanField(default=False)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
