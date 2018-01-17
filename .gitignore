@@ -241,3 +241,4 @@ tRecorderApi/static/admin
 tRecorderApi/api/migrations
 /.vscode/
 /tRecorderApi/media/
+/tRecorderApi/static/

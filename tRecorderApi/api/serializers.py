@@ -128,3 +128,13 @@ class ModeSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Mode
         fields = '__all__'
+
+class ExcludeFilesSerializer(serializers.ModelSerializer):
+
+    md5hash = serializers.CharField()
+    name = serializers.CharField()
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Take
+        fields = ('name','md5hash')

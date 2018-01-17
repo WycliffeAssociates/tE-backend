@@ -16,6 +16,7 @@ router.register(r'api/takes', views.TakeViewSet)
 router.register(r'api/comments', views.CommentViewSet)
 router.register(r'api/zip', views.ZipViewSet)
 router.register(r'api/tr', views.TrViewSet)
+router.register(r'api/exclude_files', views.ExcludeFilesViewSet)
 
 urlpatterns = [
     url(r'^(?!api).*$', views.frontend.FrontendAppView.as_view()),
