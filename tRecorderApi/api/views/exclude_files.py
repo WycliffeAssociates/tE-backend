@@ -42,9 +42,9 @@ class ExcludeFilesViewSet(viewsets.ReadOnlyModelViewSet):
         book = query.get("book", None)
         filter = {}
         if lang is not None:
-            filter["chunk__chapter__project__lang__slug__iexact"] = lang
+            filter["chunk__chapter__project__language__slug__iexact"] = lang
         if anth is not None:
-            filter["chunk__chapter__project__anth__slug__iexact"] = anth
+            filter["chunk__chapter__project__anthology__slug__iexact"] = anth
         if version is not None:
             filter["chunk__chapter__project__version__slug__iexact"] = version
         if book is not None:
