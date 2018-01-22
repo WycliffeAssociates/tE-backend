@@ -1,6 +1,6 @@
 from api.models import Take
-from rest_framework import viewsets
 from api.serializers import TakeSerializer
+from rest_framework import viewsets
 
 
 class TakeViewSet(viewsets.ModelViewSet):
@@ -13,6 +13,9 @@ class TakeViewSet(viewsets.ModelViewSet):
         project_id = query.get("project_id", None)
         chapter_id = query.get("chapter_id", None)
         chunk_id = query.get("chunk_id", None)
+        published = query.get("published", None)
+        lang = query.get("lang", None)
+
         filter = {}
         if pk is not None:
             filter["id"] = pk
@@ -22,6 +25,10 @@ class TakeViewSet(viewsets.ModelViewSet):
             filter["chunk__chapter"] = chapter_id
         if chunk_id is not None:
             filter["chunk"] = chunk_id
+        if published is not None:
+            filter['published'] = published.title()
+        if lang is not None:
+            filter['chunk__chapter__project__language__slug'] = lang
         return filter
 
     def get_queryset(self):

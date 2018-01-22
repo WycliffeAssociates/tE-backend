@@ -178,4 +178,3 @@ class Take(models.Model):
 
         except Exception as e:
             return str(e), 400
-
