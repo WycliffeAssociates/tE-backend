@@ -46,7 +46,7 @@ class FileUtility:
                     manifest = json.load(open(abpath))
                     continue
                 relpath = self.relative_path(abpath)
-                logger.info("Reading metadata of file from wav: " + f)
+                logger.info("Reading metadata of file from wav: " + str(f))
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
