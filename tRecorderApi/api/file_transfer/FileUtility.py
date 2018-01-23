@@ -35,7 +35,7 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def process_uploaded_takes(self, directory, Take, ext):
-
+        languages = self.updateLanguages()
         manifest = ''
         for root, dirs, files in os.walk(directory):
             for f in files:
@@ -49,7 +49,7 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                metadata, take_info = self.parse_metadata(meta, abpath)
+                metadata, take_info = self.parse_metadata(meta, languages)
 
                 if metadata == 'bad meta':
                     return metadata, take_info
@@ -77,7 +77,7 @@ class FileUtility:
 
         return dict
 
-    def parse_metadata(self, meta, abpath):
+    def parse_metadata(self, meta, languages):
         try:
             a = meta.artist
             lastindex = a.rfind("}") + 1
@@ -87,7 +87,7 @@ class FileUtility:
             bookcode = take_info['book']
             bookname = self.getBookByCode(bookcode)
             langcode = take_info['language']
-            langname = self.getLanguageByCode(langcode)
+            langname = self.getLanguageByCode(langcode, languages)
 
             lng_book_dur = {
                 "langname": langname,
@@ -98,8 +98,7 @@ class FileUtility:
         except Exception as e:
             return 'bad meta', 400
 
-    def getLanguageByCode(self, code):
-
+    def updateLanguages(self):
         internet_connection = self.internet_connection()
 
         if internet_connection:
@@ -118,6 +117,9 @@ class FileUtility:
             with open('language.json', 'rb') as fp:
                 languages = pickle.load(fp)
 
+        return languages
+
+    def getLanguageByCode(self, code, languages):
         ln = ""
         for dicti in languages:
             if dicti["lc"] == code:
