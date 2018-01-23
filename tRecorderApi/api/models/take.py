@@ -1,11 +1,12 @@
 import json
-
+import hashlib
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
 from ..file_transfer.FileUtility import FileUtility
 from ..models import book, language, chunk, anthology, version, chapter, mode
+import os
 
 Language = language.Language
 Book = book.Book
@@ -35,6 +36,23 @@ class Take(models.Model):
     @property
     def has_comment(self):
         return Take.objects.filter(comment__object_id=self.id).exists()
+
+    @property
+    def name(self):
+        take = Take.objects.get(pk=self.id)
+        return take.location.split(os.sep)[-1:][0]
+
+    @property
+    def md5hash(self):
+        hash_md5 = hashlib.md5()
+        take = Take.objects.get(pk=self.id)
+        try:
+            with open(take.location, "rb") as file:
+                for chunk in iter(lambda: file.read(4096), b""):
+                    hash_md5.update(chunk)
+            return hash_md5.hexdigest()
+        except:
+            return ""
 
     @staticmethod
     def saveTakesToDB(meta, relpath, take_data, manifest, published=False):
