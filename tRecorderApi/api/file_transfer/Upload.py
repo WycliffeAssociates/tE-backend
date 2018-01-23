@@ -11,7 +11,7 @@ class Upload(FileTransfer):
 
     def upload(self, file, ext):
         directory = self.file_utility.root_dir(['media','dump'])
-        logger.info("Upload.upload extracting file: " + file)
+        logger.info("Upload.upload extracting file")
         resp, stat = self.archive_project.extract(file, directory)   #returns response, status
         logger.info("Upload.upload response: " + resp)
         logger.info("Upload.upload stat: " + stat)
