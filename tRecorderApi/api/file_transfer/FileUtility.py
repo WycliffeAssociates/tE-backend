@@ -35,7 +35,7 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def process_uploaded_takes(self, directory, Take, ext):
-        languages = self.updateLanguages()
+        languages = self.getLanguagesDatabase()
         manifest = ''
         for root, dirs, files in os.walk(directory):
             for f in files:
@@ -98,7 +98,7 @@ class FileUtility:
         except Exception as e:
             return 'bad meta', 400
 
-    def updateLanguages(self):
+    def getLanguagesDatabase(self):
         internet_connection = self.internet_connection()
 
         if internet_connection:
