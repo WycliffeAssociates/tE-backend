@@ -12,7 +12,9 @@ from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
 from platform import system as system_name
+import logging
 
+logger = logging.getLogger(__name__)
 
 class FileUtility:
     @staticmethod
@@ -44,14 +46,19 @@ class FileUtility:
                     manifest = json.load(open(abpath))
                     continue
                 relpath = self.relative_path(abpath)
+                logger.info("Reading metadata of file from wav: " + f)
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
+                    logger.error("Error in processing metadata")    
+                    logger.error(e)
                     return {'error': 'bad_wave_file'}, 400
 
+                logger.info("Metadata acquired, parsing...")
                 metadata, take_info = self.parse_metadata(meta, languages)
 
                 if metadata == 'bad meta':
+                    logger.info("Error parsing metadata")
                     return metadata, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
@@ -59,6 +66,7 @@ class FileUtility:
                     is_source_file = True
                     manifest = self.create_manifest(take_info, metadata)
 
+                logger.info("Saving take to database")
                 Take.saveTakesToDB(take_info, relpath,
                                    metadata, manifest, is_source_file)
                 # if ext == 'tr':
