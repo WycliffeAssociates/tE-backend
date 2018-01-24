@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'coreapi',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,9 @@ MIDDLEWARE = [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }"""
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'django-db'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -140,6 +144,6 @@ STATICFILES_DIRS = [
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
