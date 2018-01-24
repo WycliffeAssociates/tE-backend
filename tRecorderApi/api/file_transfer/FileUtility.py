@@ -36,13 +36,12 @@ class FileUtility:
 
     def process_uploaded_takes(self, directory, Take, ext):
         languages = self.getLanguagesDatabase()
-        manifest = ''
+        manifest = FileUtility.open_manifest_file(directory)
         for root, dirs, files in os.walk(directory):
             for f in files:
-                abpath = os.path.join(root, os.path.basename(f))
                 if f == "manifest.json":
-                    manifest = json.load(open(abpath))
                     continue
+                abpath = os.path.join(root, os.path.basename(f))
                 relpath = self.relative_path(abpath)
                 try:
                     meta = TinyTag.get(abpath)  # get metadata for every file
@@ -67,12 +66,22 @@ class FileUtility:
         return 'ok', 200
 
     @staticmethod
+    def open_manifest_file(directory):
+        manifest = ''
+        for root, dirs, files in os.walk(directory):
+            for f in files:
+                if f == "manifest.json":
+                    abpath = os.path.join(root, os.path.basename(f))
+                    return json.load(open(abpath))
+        return manifest
+
+    @staticmethod
     def create_manifest(meta, info):
-        dict = {"language":  meta["language"],
-                "anthology":  meta["anthology"],
-                "book":       meta["book"],
-                "version":    meta["version"],
-                "mode":       meta["mode"]
+        dict = {"language": meta["language"],
+                "anthology": meta["anthology"],
+                "book": meta["book"],
+                "version": meta["version"],
+                "mode": meta["mode"]
                 }
 
         return dict
@@ -131,7 +140,7 @@ class FileUtility:
     def internet_connection():
         hostname = "8.8.8.8"  # example
         parameters = "-n 1" if system_name().lower() == "windows" else "-c 1"
-        response = os.system("ping "+ parameters + " " + hostname)
+        response = os.system("ping " + parameters + " " + hostname)
 
         # and then check the response...
         if response == 0:
