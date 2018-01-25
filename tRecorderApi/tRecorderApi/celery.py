@@ -13,6 +13,11 @@ app = Celery('tRecorderApi')
 #   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
+app.conf.CELERY_BROKER_URL = 'amqp://localhost'
+app.conf.CELERY_RESULT_BACKEND = 'django-db'
+app.conf.CELERY_TASK_SERIALIZER = 'pickle'
+app.conf.CELERY_RESULT_SERIALIZER = 'pickle'
+app.conf.CELERY_ACCEPT_CONTENT = ['pickle']
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
