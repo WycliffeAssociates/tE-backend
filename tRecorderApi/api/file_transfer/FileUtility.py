@@ -8,10 +8,10 @@ import time
 import urllib.error
 import urllib.request
 import uuid
-from django.conf import settings
 import urllib3
-from .tinytag import TinyTag
+
 from platform import system as system_name
+from ..tasks import process_uploaded
 
 
 class FileUtility:
@@ -36,43 +36,30 @@ class FileUtility:
 
     def process_uploaded_takes(self, directory, Take, ext):
         languages = self.getLanguagesDatabase()
+        manifest = FileUtility.open_manifest_file(directory)
+        result = process_uploaded.delay(self, languages, manifest, directory, Take, ext)
+        if result.ready:
+            return result.get()
+        else:
+            return {"status": 'processing'}
+
+    @staticmethod
+    def open_manifest_file(directory):
         manifest = ''
         for root, dirs, files in os.walk(directory):
             for f in files:
-                abpath = os.path.join(root, os.path.basename(f))
                 if f == "manifest.json":
-                    manifest = json.load(open(abpath))
-                    continue
-                relpath = self.relative_path(abpath)
-                try:
-                    meta = TinyTag.get(abpath)  # get metadata for every file
-                except LookupError as e:
-                    return {'error': 'bad_wave_file'}, 400
-
-                metadata, take_info = self.parse_metadata(meta, languages)
-
-                if metadata == 'bad meta':
-                    return metadata, take_info
-                # highPassFilter(abpath)
-                is_source_file = False
-                if ext == 'tr':
-                    is_source_file = True
-                    manifest = self.create_manifest(take_info, metadata)
-
-                Take.saveTakesToDB(take_info, relpath,
-                                   metadata, manifest, is_source_file)
-                # if ext == 'tr':
-                #     os.remove(os.path.join(directory, "source.tr"))
-
-        return 'ok', 200
+                    abpath = os.path.join(root, os.path.basename(f))
+                    return json.load(open(abpath))
+        return manifest
 
     @staticmethod
     def create_manifest(meta, info):
-        dict = {"language":  meta["language"],
-                "anthology":  meta["anthology"],
-                "book":       meta["book"],
-                "version":    meta["version"],
-                "mode":       meta["mode"]
+        dict = {"language": meta["language"],
+                "anthology": meta["anthology"],
+                "book": meta["book"],
+                "version": meta["version"],
+                "mode": meta["mode"]
                 }
 
         return dict
@@ -131,7 +118,7 @@ class FileUtility:
     def internet_connection():
         hostname = "8.8.8.8"  # example
         parameters = "-n 1" if system_name().lower() == "windows" else "-c 1"
-        response = os.system("ping "+ parameters + " " + hostname)
+        response = os.system("ping " + parameters + " " + hostname)
 
         # and then check the response...
         if response == 0:

@@ -13,7 +13,7 @@ class Upload(FileTransfer):
         directory = self.file_utility.root_dir(['media', 'dump'])
         result = extract.delay(file, directory)
         if result.ready:
-            resp, stat = self.archive_project.extract(file, directory)  # returns response, status
-            if resp == 'ok':
-                resp, stat = self.file_utility.process_uploaded_takes(directory, self.takeDatabase, ext)
-        return resp, stat
+            resp, stat = self.file_utility.process_uploaded_takes(directory, self.takeDatabase, ext)
+            return resp, stat
+        else:
+            return {"status": 'processing'}
