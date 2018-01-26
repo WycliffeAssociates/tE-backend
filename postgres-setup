@@ -1,0 +1,11 @@
+After installing postgres :
+1.Create user
+    create user te
+2.Set user password
+    alter user user_name with password 'te'
+
+3.Create database with user
+    create database te owner te
+
+4.Migrate run migrate command
+

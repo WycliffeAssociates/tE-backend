@@ -1,16 +1,16 @@
 import json
 import os
 import pickle
-import re
 import shutil
 import subprocess
 import time
 import urllib.error
 import urllib.request
 import uuid
+from platform import system as system_name
+
 import urllib3
 
-from platform import system as system_name
 from ..tasks import process_uploaded
 
 
