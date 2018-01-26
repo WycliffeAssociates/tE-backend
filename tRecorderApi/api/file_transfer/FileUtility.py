@@ -11,7 +11,7 @@ from platform import system as system_name
 
 import urllib3
 
-from ..tasks import process_uploaded
+from ..file_transfer.tinytag import TinyTag
 
 
 class FileUtility:
@@ -37,11 +37,29 @@ class FileUtility:
     def process_uploaded_takes(self, directory, Take, ext):
         languages = self.getLanguagesDatabase()
         manifest = FileUtility.open_manifest_file(directory)
-        result = process_uploaded.delay(self, languages, manifest, directory, Take, ext)
-        if result.ready:
-            return result.get()
-        else:
-            return {"status": 'processing'}
+        for root, dirs, files in os.walk(directory):
+            for f in files:
+                if f == "manifest.json":
+                    continue
+                abpath = os.path.join(root, os.path.basename(f))
+                relpath = self.relative_path(abpath)
+                try:
+                    meta = TinyTag.get(abpath)  # get metadata for every file
+                except LookupError as e:
+                    return {'error': 'bad_wave_file'}, 400
+
+                metadata, take_info = self.parse_metadata(meta, languages)
+
+                if metadata == 'bad meta':
+                    return metadata, take_info
+                # highPassFilter(abpath)
+                is_source_file = False
+                if ext == 'tr':
+                    is_source_file = True
+                    manifest = self.create_manifest(take_info, metadata)
+                Take.saveTakesToDB(take_info, relpath,
+                                   metadata, manifest, is_source_file)
+        return 'ok', 200
 
     @staticmethod
     def open_manifest_file(directory):
@@ -245,3 +263,7 @@ class FileUtility:
     def check_if_path_exists(path):
         path_exist = os.path.exists(path)
         return path_exist
+
+    # @staticmethod
+    # def get_abs_path(location, file):
+    #     return os.path.abspath(FileUtility.relative_path(os.path.join(location, file)))

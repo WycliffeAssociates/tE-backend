@@ -1,4 +1,5 @@
 from .FileTransfer import FileTransfer
+from ..tasks import extract_process_file
 
 
 class Upload(FileTransfer):
@@ -10,8 +11,8 @@ class Upload(FileTransfer):
 
     def upload(self, file, ext):
         directory = self.file_utility.root_dir(['media', 'dump'])
-        resp, stat = self.archive_project.extract(file, directory)
-        if resp == 'ok':
-            return self.file_utility.process_uploaded_takes(directory, self.takeDatabase, ext)
+        result = extract_process_file.delay(self, directory, file, self.takeDatabase, ext)
+        if result.ready:
+            return result.get()
         else:
             return {"status": 'processing'}
