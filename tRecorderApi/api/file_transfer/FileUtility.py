@@ -35,7 +35,7 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def process_uploaded_takes(self, directory, Take, ext):
-        languages = self.getLanguagesDatabase()
+        languages = self.get_languages_database()
         manifest = ''
         update_languagesDB = True               #since the updating languagesDB is inside the loop, this boolean is used to only update once
         for root, dirs, files in os.walk(directory):
@@ -100,7 +100,7 @@ class FileUtility:
         except Exception as e:
             return 'bad meta', 400
 
-    def getLanguagesDatabase(self):
+    def get_languages_database(self):
         with open('language.json', 'rb') as fp:
             languages = pickle.load(fp)
 
