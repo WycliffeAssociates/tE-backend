@@ -106,7 +106,7 @@ class FileUtility:
 
         return languages
 
-    def updateLanguagesDataBase(self):
+    def update_languages_database(self):
         internet_connection = self.internet_connection()
         if internet_connection:
             url = 'http://td.unfoldingword.org/exports/langnames.json'
@@ -128,7 +128,7 @@ class FileUtility:
                 ln = dicti["ln"]
                 break
             elif update_languagesDB:
-                updatedLanguageDB = self.updateLanguagesDataBase()
+                updatedLanguageDB = self.update_languages_database()
                 for dicti in updatedLanguageDB:
                     if dicti["lc"] == code:
                         ln = dicti["ln"]
