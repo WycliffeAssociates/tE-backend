@@ -5,7 +5,6 @@ import re
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
-
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)
@@ -38,7 +37,7 @@ class Chapter(models.Model):
                     for ch in sus:
                         n = re.sub(r'([0-9]{2,3})-([0-9]{2,3})', r'\1', ch["id"])
                         if(int(n) == chapter_number):
-                            chunk_info.append(sus)
+                            chunk_info.append(ch)
                 break
         return len(chunk_info)
 
