@@ -52,8 +52,7 @@ class FileUtility:
                 metadata, take_info = self.parse_metadata(meta, languages)
 
                 if metadata == 'bad meta':
-                    #return metadata, take_info
-                    continue
+                    return metadata, take_info
                 # highPassFilter(abpath)
                 is_source_file = False
                 if ext == 'tr':
