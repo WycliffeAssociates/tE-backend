@@ -27,7 +27,7 @@ class Chapter(models.Model):
 
     @staticmethod
     def get_total_chunks(book_name_slug, chapter_number):
-        chunk_info = []
+        length = 0
         # TODO 'os' will not be useful when the code migrates to AWS
         for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
             if dirpath[-3:] == book_name_slug:
@@ -37,9 +37,9 @@ class Chapter(models.Model):
                     for ch in sus:
                         n = re.sub(r'([0-9]{2,3})-([0-9]{2,3})', r'\1', ch["id"])
                         if(int(n) == chapter_number):
-                            chunk_info.append(ch)
+                            length += 1
                 break
-        return len(chunk_info)
+        return length
 
     @property
     def date_modified(self):
