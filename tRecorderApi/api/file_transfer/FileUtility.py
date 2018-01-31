@@ -37,7 +37,7 @@ class FileUtility:
     def process_uploaded_takes(self, directory, Take, ext):
         languages = self.get_languages_database()
         manifest = ''
-        update_languagesDB = True               #since the updating languagesDB is inside the loop, this boolean is used to only update once
+        update_languages_DB = True               #since the updating languagesDB is inside the loop, this boolean is used to only update once
         for root, dirs, files in os.walk(directory):
             for f in files:
 
@@ -51,7 +51,7 @@ class FileUtility:
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
 
-                metadata, take_info = self.parse_metadata(meta, languages, update_languagesDB)
+                metadata, take_info = self.parse_metadata(meta, languages, update_languages_DB)
 
                 if metadata == 'bad meta':
                     return metadata, take_info
@@ -65,7 +65,7 @@ class FileUtility:
                                    metadata, manifest, is_source_file)
                 # if ext == 'tr':
                 #     os.remove(os.path.join(directory, "source.tr"))
-                update_languagesDB = False
+                update_languages_DB = False
         return 'ok', 200
 
     @staticmethod
@@ -79,7 +79,7 @@ class FileUtility:
 
         return dict
 
-    def parse_metadata(self, meta, languages, update_languagesDB):
+    def parse_metadata(self, meta, languages, update_languages_DB):
         try:
             a = meta.artist
             lastindex = a.rfind("}") + 1
@@ -89,7 +89,7 @@ class FileUtility:
             bookcode = take_info['book']
             bookname = self.getBookByCode(bookcode)
             langcode = take_info['language']
-            langname = self.getLanguageByCode(langcode, languages, update_languagesDB)
+            langname = self.get_language_by_code(langcode, languages, update_languages_DB)
 
             lng_book_dur = {
                 "langname": langname,
@@ -121,7 +121,7 @@ class FileUtility:
                 print(e)
         return languages
 
-    def getLanguageByCode(self, code, languages, update_languagesDB):
+    def get_language_by_code(self, code, languages, update_languagesDB):
         ln = ""
         for dicti in languages:
             if dicti["lc"] == code:
