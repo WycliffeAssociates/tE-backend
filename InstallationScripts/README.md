@@ -21,10 +21,9 @@ To remove server from machine execute uninstall (`./uninstall`)
 In terminal you have to be in the same level with 'install' folder.
 1. Set proper chmod `chmod -R 755 install/`
 2. Execute `dpkg-deb --build install/`
-3. Copy install.deb to 'build' folder `cp install.deb build/`
 
 ## RPi installation
-1. Go to 'build' folder and make all the scripts executable `chmod +x *`
+1. Make all the scripts executable `chmod +x *.*`
 2. Execute prepare (double click) 
 3. Execute install.deb (double click)
 
