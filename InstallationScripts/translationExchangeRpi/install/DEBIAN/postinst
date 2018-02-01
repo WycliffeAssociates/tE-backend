@@ -1,0 +1,49 @@
+#!/bin/sh
+
+COLOR='\033[0;35m'
+NC='\033[0m'
+
+# Add docker to autorun
+sed -i "s/^@sh \/home\/pi\/tex_autorun.sh/#&/g" /home/pi/.config/lxsession/LXDE-pi/autostart
+echo "\n@sh /home/pi/tex_autorun.sh" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+cp /tmp/tex_install/config/tex_autorun.sh /home/pi/
+sudo chmod +x /home/pi/tex_autorun.sh
+
+# setup DHCP
+sudo cp /tmp/tex_install/config/dhcpcd.conf /etc/
+sudo cp /tmp/tex_install/config/hosts /etc/
+
+# Copy Docker folder to home folder
+cp -r /tmp/tex_install/TranslationExchange /home/pi/
+
+# Clone TE repos
+cd /home/pi/TranslationExchange
+
+echo -e "${COLOR}----------| Cloning backend... |----------${NC}"
+git clone -b dev https://github.com/WycliffeAssociates/tE-backend.git
+
+echo -e "${COLOR}----------| Cloning frontend... |----------${NC}"
+git clone -b jl_dm_dev https://github.com/WycliffeAssociates/translationExchange.git
+cd translationExchange
+
+# URL Fix
+sed -i "s/localhost/te.loc/g" src/config/config.js
+
+# Build frontend
+echo -e "${COLOR}----------| Building frontend... |----------${NC}"
+sudo npm link cross-env
+sudo npm install
+sudo npm run build
+
+# Build Docker container
+cd ..
+sudo pip install docker-compose
+
+echo -e "${COLOR}----------| Building docker container... |----------${NC}"
+docker-compose build
+
+# Restart RaspberryPi
+echo -e "${COLOR}**********| Installation complete. Please reboot now. |**********${NC}"
+sudo usermod -aG docker pi
+sleep 3
+#sudo docker-compose up

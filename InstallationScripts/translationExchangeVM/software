@@ -1,0 +1,8 @@
+#!/bin/sh
+
+COLOR='\033[0;35m'
+NC='\033[0m'
+
+echo -e "${COLOR}----------| Installing neccessary packages for Translation Exchange server... |----------${NC}"
+
+sudo apt update && sudo apt install -y git curl docker-ce python-pip nodejs
