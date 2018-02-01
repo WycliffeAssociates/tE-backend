@@ -18,19 +18,15 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        queryset = Comment.objects.all()
-        print(queryset)
-        pk = self.kwargs.get("pk", None)
-        if pk is not None:
-            print(pk)
-            return Comment.objects.filter(id=pk)
+        queryset = []
+        query = self.request.query_params
+        if len(query) == 0:
+            return Comment.objects.all()
         else:
-            query = self.request.query_params
             pk = query.get("id", None)
             chapter_id = query.get("chapter_id", None)
             chunk_id = query.get("chunk_id", None)
             take_id = query.get("take_id", None)
-            filter = {}
             if pk is not None:
                 queryset = Comment.objects.filter(id=pk)
             if chapter_id is not None:
@@ -39,7 +35,11 @@ class CommentViewSet(viewsets.ModelViewSet):
                 queryset = Comment.get_comments(chunk_id=chunk_id)
             if take_id is not None:
                 queryset = Comment.get_comments(take_id=take_id)
-            return queryset
+
+            if len(queryset) != 0:
+                return queryset
+            else:
+                return None
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
@@ -110,7 +110,6 @@ class CommentViewSet(viewsets.ModelViewSet):
             content_object=q_obj,
         )
         c.save()
-
         dic = {
             "location": relpath + ".mp3",
             "id": c.pk

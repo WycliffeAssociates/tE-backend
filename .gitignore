@@ -242,3 +242,4 @@ tRecorderApi/api/migrations
 /.vscode/
 /tRecorderApi/media/
 /tRecorderApi/api/tests/test_files/
+/tRecorderApi/static/

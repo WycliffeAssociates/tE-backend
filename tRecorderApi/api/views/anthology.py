@@ -19,10 +19,9 @@ class AnthologyViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Anthology.objects.all()
-        pk = self.kwargs.get("pk", None)
-        if pk is not None:
-            print(pk)
-            return Anthology.objects.filter(id=pk)
-        else:
+        if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
-            return queryset.filter(**filter)
+            if filter:
+                return queryset.filter(**filter)
+            return None
+        return queryset
