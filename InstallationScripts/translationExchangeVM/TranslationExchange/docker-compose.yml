@@ -26,3 +26,16 @@ services:
       - /static:/static
     expose:
       - "8000"
+    depends_on:
+      - db
+  ap:
+    build: './ap'
+    container_name: ap01
+    network_mode: host
+    privileged: true
+    stop_signal: SIGTERM
+    depends_on: 
+      - nginx
+  db:
+    image: postgres:latest
+    container_name: ps01

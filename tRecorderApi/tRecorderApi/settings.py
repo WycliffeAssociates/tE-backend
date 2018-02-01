@@ -99,11 +99,10 @@ WSGI_APPLICATION = 'tRecorderApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'te',
-        'USER': 'te',
-        'PASSWORD': 'te',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': 'postgres',
+	    'USER': 'postgres',
+	    'HOST': 'db',
+	    'PORT': 5432,
     }
 }
 
@@ -153,7 +152,7 @@ STATICFILES_DIRS = [
     os.path.join(REACT_APP_DIR, 'build', 'static'),
 ]
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
