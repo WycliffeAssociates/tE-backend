@@ -24,10 +24,10 @@ In terminal you have to be in the same level with 'install' folder.
 
 ## RPi installation
 1. Make all the scripts executable `chmod +x *.*`
-2. Execute prepare (double click) 
+2. Execute prepare.sh (double click) 
 3. Execute install.deb (double click)
 
-To remove server from machine execute uninstall (double click or `./uninstall`)
+To remove server from machine execute uninstall (double click or `./uninstall.sh`)
 
 ### Hardware 
 * [Rasberry Pi 3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
