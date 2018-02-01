@@ -1,11 +1,12 @@
-from django.test import TestCase
 import os
 import shutil
-from rest_framework.test import APIClient
-from ..models import Project, Language, Book, Chapter, Chunk, Take, Anthology, Version, Mode
+
+from django.test import TestCase
+
 from ..file_transfer.FileUtility import FileUtility
 from ..file_transfer.Upload import Upload
 from ..file_transfer.ZipIt import ZipIt
+from ..models import Take
 
 
 class UploadTestCases(TestCase):

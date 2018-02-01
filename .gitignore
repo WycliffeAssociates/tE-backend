@@ -11,7 +11,7 @@ __pycache__/
 *.DS_Store
 
 # Mockups and designs
-*.png
+tRecorderApi/frontend/build/static/media/logo.4cf3e438.png
 *.jpeg
 *.jpg
 DB_backend_requirements.txt
@@ -241,4 +241,5 @@ tRecorderApi/static/admin
 tRecorderApi/api/migrations
 /.vscode/
 /tRecorderApi/media/
+/tRecorderApi/api/tests/test_files/
 /tRecorderApi/static/
