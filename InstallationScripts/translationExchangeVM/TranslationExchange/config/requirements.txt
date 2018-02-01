@@ -6,3 +6,4 @@ django_rest_framework
 django-cors-headers
 coreapi
 whitenoise
+psycopg2
