@@ -1,6 +1,9 @@
+import os
+import json
+import re
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-
 
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
@@ -17,6 +20,26 @@ class Chapter(models.Model):
 
     def __str__(self):
         return '{}'.format(self.number)
+
+    def get_completed_chunks(self):
+        from .chunk import Chunk
+        return Chunk.objects.filter(chapter=self.pk).count()
+
+    @staticmethod
+    def get_total_chunks(book_name_slug, chapter_number):
+        length = 0
+        # TODO 'os' will not be useful when the code migrates to AWS
+        for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
+            if dirpath[-3:] == book_name_slug:
+                for fname in os.listdir(dirpath):
+                    f = open(os.path.join(dirpath, fname), "r")
+                    sus = json.loads(f.read())
+                    for ch in sus:
+                        n = re.sub(r'([0-9]{2,3})-([0-9]{2,3})', r'\1', ch["id"])
+                        if(int(n) == chapter_number):
+                            length += 1
+                break
+        return length
 
     @property
     def date_modified(self):
@@ -35,3 +58,12 @@ class Chapter(models.Model):
     @property
     def has_comment(self):
         return Chapter.objects.filter(comments__object_id=self.id).exists()
+
+    @property
+    def completed(self):
+        chunks_done = self.get_completed_chunks()
+        total_chunks = self.get_total_chunks(self.project.book.slug, self.number)
+        try:
+            return int(round((chunks_done / total_chunks) * 100))
+        except ZeroDivisionError:
+            return 0
