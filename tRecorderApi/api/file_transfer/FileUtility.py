@@ -35,9 +35,9 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def process_uploaded_takes(self, directory, Take, ext):
-        languages = self.getLanguagesDatabase()
+        languages = self.get_languages_database()
         manifest = FileUtility.open_manifest_file(directory)
-        update_languages_DB = True               #since the updating languagesDB is inside the loop, this boolean is used to only update once
+        update_languages_DB = True  # since the updating languagesDB is inside the loop, this boolean is used to only update once
         for root, dirs, files in os.walk(directory):
             for f in files:
                 if f == "manifest.json":
@@ -48,7 +48,6 @@ class FileUtility:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
-
                 metadata, take_info = self.parse_metadata(meta, languages, update_languages_DB)
                 if metadata == 'bad meta':
                     return metadata, take_info
@@ -80,7 +79,6 @@ class FileUtility:
                 "version": meta["version"],
                 "mode": meta["mode"]
                 }
-
         return dict
 
     def parse_metadata(self, meta, languages, update_languages_DB):
@@ -129,14 +127,12 @@ class FileUtility:
         ln = ""
         for dicti in languages:
             if dicti["lc"] == code:
-                ln = dicti["ln"]
-                break
+                return dicti["ln"]
             elif update_languagesDB:
                 updatedLanguageDB = self.update_languages_database()
                 for dicti in updatedLanguageDB:
                     if dicti["lc"] == code:
-                        ln = dicti["ln"]
-                        break
+                        return dicti["ln"]
 
         return ln
 
