@@ -37,6 +37,7 @@ class ChapterSerializer(serializers.ModelSerializer):
     date_modified = serializers.DateTimeField()
     contributors = serializers.CharField()
     has_comment = serializers.BooleanField(default=False)
+    completed = serializers.IntegerField()
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""

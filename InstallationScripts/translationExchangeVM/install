@@ -1,0 +1,46 @@
+#!/bin/sh
+
+COLOR='\033[0;35m'
+NC='\033[0m'
+
+# Add docker to autorun
+cp autorun/tex_autorun.sh /home/admin/
+sudo chmod 755 /home/admin/tex_autorun.sh
+sudo crontab -l > /tmp/crontab
+echo "@reboot sh /home/admin/tex_autorun.sh" >> /tmp/crontab
+sudo crontab /tmp/crontab
+rm /tmp/crontab
+
+# Copy Docker folder to home folder
+cp -r TranslationExchange /home/admin/
+
+# Clone TE repos
+cd /home/admin/TranslationExchange
+
+echo -e "${COLOR}----------| Cloning backend... |----------${NC}"
+git clone -b dev https://github.com/WycliffeAssociates/tE-backend.git
+
+echo -e "${COLOR}----------| Cloning frontend... |----------${NC}"
+git clone -b jl_dm_dev https://github.com/WycliffeAssociates/translationExchange.git
+cd translationExchange
+
+# URL Fix
+sed -i "s/localhost/te.loc/g" src/config/config.js
+
+# Build frontend
+echo -e "${COLOR}----------| Building frontend... |----------${NC}"
+sudo npm link cross-env
+sudo npm install
+sudo npm run build
+
+# Build Docker container
+cd ..
+sudo pip install docker-compose
+
+echo -e "${COLOR}----------| Building docker container... |----------${NC}"
+docker-compose build
+
+# Restart RaspberryPi
+echo -e "${COLOR}**********| Installation complete. Rebooting... |**********${NC}"
+sleep 3
+sudo systemctl reboot

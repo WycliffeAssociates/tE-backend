@@ -21,10 +21,8 @@ class TrViewSet(viewsets.ReadOnlyModelViewSet):
         id = self.request.query_params.get('id')
         if id is None:
             id = kwargs.get("pk", None)
-
         takes = Take.objects.filter(chunk__chapter__project=id,
-                                    chunk__chapter__project__published=True)
-
+                                    published=True)
         if takes.count() > 0:
             language_slug = takes[0].chunk.chapter.project.language.slug
             book_slug = takes[0].chunk.chapter.project.book.slug

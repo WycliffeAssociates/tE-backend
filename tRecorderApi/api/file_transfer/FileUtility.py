@@ -35,8 +35,9 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def process_uploaded_takes(self, directory, Take, ext):
-        languages = self.getLanguagesDatabase()
+        languages = self.get_languages_database()
         manifest = FileUtility.open_manifest_file(directory)
+        update_languages_DB = True  # since the updating languagesDB is inside the loop, this boolean is used to only update once
         for root, dirs, files in os.walk(directory):
             for f in files:
                 if f == "manifest.json":
@@ -47,9 +48,7 @@ class FileUtility:
                     meta = TinyTag.get(abpath)  # get metadata for every file
                 except LookupError as e:
                     return {'error': 'bad_wave_file'}, 400
-
-                metadata, take_info = self.parse_metadata(meta, languages)
-
+                metadata, take_info = self.parse_metadata(meta, languages, update_languages_DB)
                 if metadata == 'bad meta':
                     return metadata, take_info
                 # highPassFilter(abpath)
@@ -59,6 +58,7 @@ class FileUtility:
                     manifest = self.create_manifest(take_info, metadata)
                 Take.saveTakesToDB(take_info, relpath,
                                    metadata, manifest, is_source_file)
+                update_languages_DB = False
         return 'ok', 200
 
     @staticmethod
@@ -79,10 +79,9 @@ class FileUtility:
                 "version": meta["version"],
                 "mode": meta["mode"]
                 }
-
         return dict
 
-    def parse_metadata(self, meta, languages):
+    def parse_metadata(self, meta, languages, update_languages_DB):
         try:
             a = meta.artist
             lastindex = a.rfind("}") + 1
@@ -92,7 +91,7 @@ class FileUtility:
             bookcode = take_info['book']
             bookname = self.getBookByCode(bookcode)
             langcode = take_info['language']
-            langname = self.getLanguageByCode(langcode, languages)
+            langname = self.get_language_by_code(langcode, languages, update_languages_DB)
 
             lng_book_dur = {
                 "langname": langname,
@@ -103,9 +102,14 @@ class FileUtility:
         except Exception as e:
             return 'bad meta', 400
 
-    def getLanguagesDatabase(self):
-        internet_connection = self.internet_connection()
+    def get_languages_database(self):
+        with open('language.json', 'rb') as fp:
+            languages = pickle.load(fp)
 
+        return languages
+
+    def update_languages_database(self):
+        internet_connection = self.internet_connection()
         if internet_connection:
             url = 'http://td.unfoldingword.org/exports/langnames.json'
             http = urllib3.PoolManager()
@@ -116,20 +120,20 @@ class FileUtility:
                 with open('language.json', 'wb') as fp:
                     pickle.dump(languages, fp)
             except urllib.error.URLError as e:
-                with open('language.json', 'rb') as fp:
-                    languages = pickle.load(fp)
-        else:
-            with open('language.json', 'rb') as fp:
-                languages = pickle.load(fp)
-
+                print(e)
         return languages
 
-    def getLanguageByCode(self, code, languages):
+    def get_language_by_code(self, code, languages, update_languagesDB):
         ln = ""
         for dicti in languages:
             if dicti["lc"] == code:
-                ln = dicti["ln"]
-                break
+                return dicti["ln"]
+            elif update_languagesDB:
+                updatedLanguageDB = self.update_languages_database()
+                for dicti in updatedLanguageDB:
+                    if dicti["lc"] == code:
+                        return dicti["ln"]
+
         return ln
 
     @staticmethod
@@ -263,7 +267,3 @@ class FileUtility:
     def check_if_path_exists(path):
         path_exist = os.path.exists(path)
         return path_exist
-
-    # @staticmethod
-    # def get_abs_path(location, file):
-    #     return os.path.abspath(FileUtility.relative_path(os.path.join(location, file)))
