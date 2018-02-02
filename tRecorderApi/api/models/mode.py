@@ -11,3 +11,16 @@ class Mode(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def import_mode(mode):
+        # Create mode in database if it does not exist
+        mode_obj, m_created = Mode.objects.get_or_create(
+            name=mode['name'],
+            slug=mode['slug'],
+            defaults={
+                'slug': mode["slug"],
+                'name': mode["name"]
+            }
+        )
+        return mode_obj

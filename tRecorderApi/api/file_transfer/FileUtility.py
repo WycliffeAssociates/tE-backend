@@ -12,6 +12,16 @@ from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
 from platform import system as system_name
+from ..models.language import Language
+from ..models.book import Book
+from ..models.anthology import Anthology
+from ..models.version import Version
+from ..models.mode import Mode
+from ..models.project import Project
+from ..models.chapter import Chapter
+from ..models.chunk import Chunk
+
+
 
 
 class FileUtility:
@@ -34,131 +44,95 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def process_uploaded_takes(self, directory, Take, ext):
-        languages = self.get_languages_database()
-        manifest = FileUtility.open_manifest_file(directory)
-        update_languages_DB = True  # since the updating languagesDB is inside the loop, this boolean is used to only update once
-        for root, dirs, files in os.walk(directory):
-            for f in files:
-                if f == "manifest.json":
-                    continue
-                abpath = os.path.join(root, os.path.basename(f))
-                relpath = self.relative_path(abpath)
-                try:
-                    meta = TinyTag.get(abpath)  # get metadata for every file
-                except LookupError as e:
-                    return {'error': 'bad_wave_file'}, 400
-                metadata, take_info = self.parse_metadata(meta, languages, update_languages_DB)
-                if metadata == 'bad meta':
-                    return metadata, take_info
-                # highPassFilter(abpath)
-                is_source_file = False
-                if ext == 'tr':
-                    is_source_file = True
-                    manifest = self.create_manifest(take_info, metadata)
-                Take.saveTakesToDB(take_info, relpath,
-                                   metadata, manifest, is_source_file)
-                update_languages_DB = False
+    def import_project(self, directory):
+        bad_files=[]
+        project_manifest = self.open_manifest_file(directory)
+        language = Language.import_language(project_manifest["language"])
+        anthology = Anthology.import_anthology(project_manifest["anthology"])
+        book = Book.import_book(project_manifest["book"], anthology)
+        version = Version.import_version(project_manifest["version"])
+        mode = Mode.import_mode(project_manifest["mode"])
+        project=Project.import_project(version, mode, anthology, language, book)
+
+        for chapters in project_manifest["manifest"]:
+            number=chapters["chapter"]
+            checking_level = chapters["checking_level"]
+            chapter = self.get_or_add_chapter(project, number, checking_level)
+
+            for chunks in chapters["chunks"]:
+                startv = chunks["startv"]
+                endv = chunks["endv"]
+                chunk = self.get_or_add_chunks(chapter, startv, endv)
+
+                for take in chunks["takes"]:
+                    from ..models.take import Take
+                    file = os.path.join(directory, take["name"])
+                    try:
+                        meta = TinyTag.get(file)
+                    except Exception as e:
+                        os.remove(file)
+                        bad_files.append(take["name"])
+                        continue
+
+                    markers = self.get_markers(meta)
+                    rating = take["rating"]
+                    duration = meta.duration
+                    self.push_audio_processing_to_background(file)
+                    Take.import_takes(file, duration, markers, rating, chunk)
+        if len(bad_files) > 0:
+            return bad_files, 202
         return 'ok', 200
 
     @staticmethod
+    def get_markers(meta):
+        a = meta.artist
+        lastindex = a.rfind("}") + 1
+        substr = a[:lastindex]
+        take_info = json.loads(substr)
+        markers = json.dumps(take_info['markers'])
+        return markers
+
+
+    @staticmethod
+    def get_or_add_chapter(project, number, checked_level):
+        # Create Chapter in database if it's not there
+        chapter_obj, cr_created = Chapter.objects.get_or_create(
+            project= project,
+            number=number,
+            defaults={
+                'number': number,
+                'checked_level': checked_level,
+                'project': project
+            }
+        )
+
+        return chapter_obj
+
+    @staticmethod
+    def get_or_add_chunks(chapter, startv, endv):
+        chunk_obj, ck_created = Chunk.objects.get_or_create(
+            chapter=chapter,
+            startv=startv,
+            endv=endv,
+            defaults={
+                'startv': startv,
+                'endv': endv,
+                'chapter': chapter
+
+            }
+        )
+        return chunk_obj
+
+    @staticmethod
     def open_manifest_file(directory):
-        manifest = ''
-        for root, dirs, files in os.walk(directory):
-            for f in files:
-                if f == "manifest.json":
-                    abpath = os.path.join(root, os.path.basename(f))
-                    return json.load(open(abpath))
+        manifest_path = os.path.join(directory, 'manifest.json')
+        manifest = json.load(open(manifest_path))
         return manifest
 
     @staticmethod
-    def create_manifest(meta, info):
-        dict = {"language": meta["language"],
-                "anthology": meta["anthology"],
-                "book": meta["book"],
-                "version": meta["version"],
-                "mode": meta["mode"]
-                }
-        return dict
+    def push_audio_processing_to_background(take):
+        print(take)
 
-    def parse_metadata(self, meta, languages, update_languages_DB):
-        try:
-            a = meta.artist
-            lastindex = a.rfind("}") + 1
-            substr = a[:lastindex]
-            take_info = json.loads(substr)
-
-            bookcode = take_info['book']
-            bookname = self.getBookByCode(bookcode)
-            langcode = take_info['language']
-            langname = self.get_language_by_code(langcode, languages, update_languages_DB)
-
-            lng_book_dur = {
-                "langname": langname,
-                "bookname": bookname,
-                "duration": meta.duration
-            }
-            return lng_book_dur, take_info
-        except Exception as e:
-            return 'bad meta', 400
-
-    def get_languages_database(self):
-        with open('language.json', 'rb') as fp:
-            languages = pickle.load(fp)
-
-        return languages
-
-    def update_languages_database(self):
-        internet_connection = self.internet_connection()
-        if internet_connection:
-            url = 'http://td.unfoldingword.org/exports/langnames.json'
-            http = urllib3.PoolManager()
-            request = http.request('GET', url, timeout=1.5)
-            languages = []
-            try:
-                languages = json.loads(request.data.decode('utf8'))
-                with open('language.json', 'wb') as fp:
-                    pickle.dump(languages, fp)
-            except urllib.error.URLError as e:
-                print(e)
-        return languages
-
-    def get_language_by_code(self, code, languages, update_languagesDB):
-        ln = ""
-        for dicti in languages:
-            if dicti["lc"] == code:
-                return dicti["ln"]
-            elif update_languagesDB:
-                updatedLanguageDB = self.update_languages_database()
-                for dicti in updatedLanguageDB:
-                    if dicti["lc"] == code:
-                        return dicti["ln"]
-
-        return ln
-
-    @staticmethod
-    def internet_connection():
-        hostname = "8.8.8.8"  # example
-        parameters = "-n 1" if system_name().lower() == "windows" else "-c 1"
-        response = os.system("ping " + parameters + " " + hostname)
-
-        # and then check the response...
-        if response == 0:
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def getBookByCode(code):
-        with open('books.json') as books_file:
-            books = json.load(books_file)
-
-        bn = ""
-        for dicti in books:
-            if dicti["slug"] == code:
-                bn = dicti["name"]
-                break
-        return bn
 
     @staticmethod
     def processTrFile(file, directory):
