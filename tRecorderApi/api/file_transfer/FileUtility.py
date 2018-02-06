@@ -57,12 +57,12 @@ class FileUtility:
         for chapters in project_manifest["manifest"]:
             number=chapters["chapter"]
             checking_level = chapters["checking_level"]
-            chapter = self.get_or_add_chapter(project, number, checking_level)
+            chapter = Chapter.import_chapter(project, number, checking_level)
 
             for chunks in chapters["chunks"]:
                 startv = chunks["startv"]
                 endv = chunks["endv"]
-                chunk = self.get_or_add_chunks(chapter, startv, endv)
+                chunk = Chunk.import_chunk(chapter, startv, endv)
 
                 for take in chunks["takes"]:
                     from ..models.take import Take
@@ -92,36 +92,6 @@ class FileUtility:
         markers = json.dumps(take_info['markers'])
         return markers
 
-
-    @staticmethod
-    def get_or_add_chapter(project, number, checked_level):
-        # Create Chapter in database if it's not there
-        chapter_obj, cr_created = Chapter.objects.get_or_create(
-            project= project,
-            number=number,
-            defaults={
-                'number': number,
-                'checked_level': checked_level,
-                'project': project
-            }
-        )
-
-        return chapter_obj
-
-    @staticmethod
-    def get_or_add_chunks(chapter, startv, endv):
-        chunk_obj, ck_created = Chunk.objects.get_or_create(
-            chapter=chapter,
-            startv=startv,
-            endv=endv,
-            defaults={
-                'startv': startv,
-                'endv': endv,
-                'chapter': chapter
-
-            }
-        )
-        return chunk_obj
 
     @staticmethod
     def open_manifest_file(directory):

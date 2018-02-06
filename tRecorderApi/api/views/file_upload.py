@@ -18,8 +18,8 @@ class FileUploadView(views.APIView):
             file_to_upload = request.data["file"]
             if filename == "tr":
                 arch_project = TrIt()
-            up = Upload(arch_project, None, FileUtility(), Take)
-            resp, stat = up.upload(file_to_upload, filename)
+            up = Upload(arch_project, None, FileUtility())
+            resp, stat = up.upload(file_to_upload)
             return Response({"response": resp}, status=stat)
         else:
             return Response({"response": "no file"}, status=200)
