@@ -101,7 +101,7 @@ class FileUtility:
 
     @staticmethod
     def push_audio_processing_to_background(take):
-        print(take)
+        return take
 
 
     @staticmethod
