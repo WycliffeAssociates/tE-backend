@@ -14,3 +14,17 @@ class Book(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def import_book(book, anthology):
+        # Create Book in database if it's not there
+        book_obj, b_created = Book.objects.get_or_create(
+            slug=book["slug"],
+            defaults={
+                'slug': book['slug'],
+                'number': book['number'],
+                'name': book['name'],
+                'anthology': anthology
+            }
+        )
+        return book_obj
+

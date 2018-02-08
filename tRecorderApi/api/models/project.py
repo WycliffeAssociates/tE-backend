@@ -2,8 +2,6 @@ import json
 import os
 
 from django.db import models
-from .take import Take
-from .chapter import Chapter
 from .chunk import Chunk
 
 
@@ -57,6 +55,7 @@ class Project(models.Model):
 
     @property
     def date_modified(self):
+        from .take import Take
         take = Take.objects.filter(chunk__chapter__project=self.pk) \
             .order_by('date_modified') \
             .first()
@@ -64,4 +63,24 @@ class Project(models.Model):
             return take.date_modified
         else:
             return 0
-            
+
+    @staticmethod
+    def import_project(version, mode, anthology, language, book, published=False ):
+        project_obj, p_created = Project.objects.get_or_create(
+            version=version,
+            mode=mode,
+            anthology=anthology,
+            language=language,
+            book=book,
+            published=published,
+            defaults={
+                'version': version,
+                'mode': mode,
+                'anthology': anthology,
+                'language': language,
+                'book': book,
+                'published': published,
+                'source_language': language
+            }
+        )
+        return project_obj
