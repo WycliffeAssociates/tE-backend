@@ -67,3 +67,18 @@ class Chapter(models.Model):
             return int(round((chunks_done / total_chunks) * 100))
         except ZeroDivisionError:
             return 0
+
+    @staticmethod
+    def import_chapter(project, number, checked_level):
+        # Create Chapter in database if it's not there
+        chapter_obj, cr_created = Chapter.objects.get_or_create(
+            project=project,
+            number=number,
+            defaults={
+                'number': number,
+                'checked_level': checked_level,
+                'project': project
+            }
+        )
+
+        return chapter_obj
