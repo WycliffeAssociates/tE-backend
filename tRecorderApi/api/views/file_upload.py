@@ -18,12 +18,15 @@ class FileUploadView(views.APIView):
             arch_project = ZipIt()
             file_to_upload = request.data["file"]
             fs = FileSystemStorage()
-            filename = fs.save(file_to_upload.name, file_to_upload)
-            uploaded_file_url = fs.url(filename)
+            filename_to_upload = fs.save(file_to_upload.name, file_to_upload)
+            uploaded_file_url = fs.url(filename_to_upload)
             if filename == "tr":
                 arch_project = TrIt()
-            up = Upload(arch_project, None, FileUtility())
+            file_utility = FileUtility()
+            up = Upload(arch_project, None, file_utility)
             resp, stat = up.upload(file_to_upload)
+            if resp:
+                file_utility.remove_file(uploaded_file_url)
             return Response({"response": resp}, status=stat)
         else:
             return Response({"response": "no file"}, status=200)
