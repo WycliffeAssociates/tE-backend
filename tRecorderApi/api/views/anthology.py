@@ -21,10 +21,6 @@ class AnthologyViewSet(viewsets.ModelViewSet):
         return filter
 
     def get_queryset(self):
-        result = add.delay(3, 3)
-        print("Result{}".format(result))
-        if result.ready:
-            print(result)
         queryset = Anthology.objects.all()
         if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)

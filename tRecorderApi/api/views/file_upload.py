@@ -24,7 +24,7 @@ class FileUploadView(views.APIView):
                 arch_project = TrIt()
             file_utility = FileUtility()
             up = Upload(arch_project, None, file_utility)
-            resp, stat = up.upload(file_to_upload)
+            resp, stat = up.upload(uploaded_file_url)
             if resp:
                 file_utility.remove_file(uploaded_file_url)
             return Response({"response": resp}, status=stat)
