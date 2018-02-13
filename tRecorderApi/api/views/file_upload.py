@@ -24,6 +24,6 @@ class FileUploadView(views.APIView):
                 arch_project = TrIt()
             up = Upload(arch_project, None, FileUtility())
             up.upload(uploaded_file_url)
-            return Response({"response": "processing"}, status=200)
+            return Response({"response": "processing"}, status=202)
         else:
             return Response({"response": "no file"}, status=200)
