@@ -1,12 +1,12 @@
-from api.file_transfer.FileUtility import FileUtility
-from api.file_transfer.TrIt import TrIt
-from api.file_transfer.Upload import Upload
-from api.file_transfer.ZipIt import ZipIt
-from api.models import Take
 from django.core.files.storage import FileSystemStorage
 from rest_framework import views
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
+
+from api.file_transfer.FileUtility import FileUtility
+from api.file_transfer.TrIt import TrIt
+from api.file_transfer.Upload import Upload
+from api.file_transfer.ZipIt import ZipIt
 
 
 class FileUploadView(views.APIView):
@@ -22,11 +22,8 @@ class FileUploadView(views.APIView):
             uploaded_file_url = fs.url(filename_to_upload)
             if filename == "tr":
                 arch_project = TrIt()
-            file_utility = FileUtility()
-            up = Upload(arch_project, None, file_utility)
-            resp, stat = up.upload(uploaded_file_url)
-            if resp:
-                file_utility.remove_file(uploaded_file_url)
-            return Response({"response": resp}, status=stat)
+            up = Upload(arch_project, None, FileUtility())
+            up.upload(uploaded_file_url)
+            return Response({"response": "processing"}, status=200)
         else:
             return Response({"response": "no file"}, status=200)

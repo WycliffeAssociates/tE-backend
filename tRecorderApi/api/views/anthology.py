@@ -1,7 +1,7 @@
-from api.models import Anthology
 from rest_framework import viewsets
+
+from api.models import Anthology
 from api.serializers import AnthologySerializer
-from ..tasks import add
 
 
 class AnthologyViewSet(viewsets.ModelViewSet):
