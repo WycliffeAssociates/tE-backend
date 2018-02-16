@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'coreapi',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,13 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+        'ROUTING': 'tRecorderApi.routing.channel_routing',
+    },
+}
