@@ -23,7 +23,7 @@ from ..models.chapter import Chapter
 from ..models.chunk import Chunk
 
 
-logger = logging.getLogger('api.file_transfer.FileUtility')
+logger = logging.getLogger(__name__)
 
 class FileUtility:
     @staticmethod
