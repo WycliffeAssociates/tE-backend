@@ -12,3 +12,16 @@ class Version(models.Model):
     def slug_by_version_id(id):
         version = Version.objects.filter(id=id).values('slug')[0]
         return version['slug']
+
+    @staticmethod
+    def import_version(version):
+        # Create version in database if it does not exist
+        version_obj, v_created = Version.objects.get_or_create(
+            slug=version["slug"],
+            defaults={
+                'slug': version["slug"],
+                'name': version["name"]
+
+            }
+        )
+        return version_obj
