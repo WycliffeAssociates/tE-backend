@@ -12,6 +12,7 @@ from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
 from platform import system as system_name
+from raven.contrib.django.raven_compat.models import client
 from ..models.language import Language
 from ..models.book import Book
 from ..models.anthology import Anthology
@@ -22,7 +23,7 @@ from ..models.chapter import Chapter
 from ..models.chunk import Chunk
 
 
-
+logger = logging.getLogger(__name__)
 
 class FileUtility:
     @staticmethod
@@ -91,7 +92,6 @@ class FileUtility:
         take_info = json.loads(substr)
         markers = json.dumps(take_info['markers'])
         return markers
-
 
     @staticmethod
     def open_manifest_file(directory):
