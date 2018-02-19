@@ -1,15 +1,30 @@
-from api.models import Project, Language, Chapter, Take
-from rest_framework import viewsets
-
-from api.serializers import TakeForZipSerializer
-
 from api.file_transfer.ArchiveIt import ArchiveIt
 from api.file_transfer.AudioUtility import AudioUtility
 from api.file_transfer.Download import Download
 from api.file_transfer.FileUtility import FileUtility
+from api.models import Take
+from api.serializers import TakeForZipSerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 from rest_framework.response import Response
 
 
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_description="Downloads the project based on given project id and file format",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_PATH,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a project",
+        ), openapi.Parameter(
+            name='file_format', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="It can be .mp3 or .wav",
+        )
+    ]
+))
 class ZipViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeForZipSerializer

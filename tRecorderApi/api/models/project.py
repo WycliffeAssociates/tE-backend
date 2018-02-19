@@ -65,7 +65,7 @@ class Project(models.Model):
             return 0
 
     @staticmethod
-    def import_project(version, mode, anthology, language, book, published=False ):
+    def import_project(version, mode, anthology, language, book, published=False):
         project_obj, p_created = Project.objects.get_or_create(
             version=version,
             mode=mode,

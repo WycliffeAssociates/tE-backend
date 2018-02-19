@@ -1,4 +1,7 @@
 from api.models import Take
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 
 from api.serializers import TakeForZipSerializer
@@ -10,6 +13,16 @@ from api.file_transfer.FileUtility import FileUtility
 from rest_framework.response import Response
 
 
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_description="Downloads a source project based on given project id",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_PATH,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a project",
+        )
+    ]
+))
 class TrViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeForZipSerializer

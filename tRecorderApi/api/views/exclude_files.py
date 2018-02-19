@@ -1,16 +1,34 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser
-import json
-from .helpers import getFileName, md5Hash
-from rest_framework.response import Response
 from api.models import Take
 from api.serializers import ExcludeFilesSerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
-from api.serializers import TakeSerializer
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of file names with md5 hash value based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='lang', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A language slug",
+        ), openapi.Parameter(
+            name='anth', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A anthology slug",
+        ), openapi.Parameter(
+            name='version', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A version slug",
+        ), openapi.Parameter(
+            name='book', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A book slug",
+        )
+    ]
+))
 class ExcludeFilesViewSet(viewsets.ReadOnlyModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Take.objects.all()
     serializer_class = ExcludeFilesSerializer
 

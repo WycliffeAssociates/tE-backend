@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api',
-    'coreapi',
     'django_celery_results',
+    'drf_yasg'
+
 ]
 
 MIDDLEWARE = [

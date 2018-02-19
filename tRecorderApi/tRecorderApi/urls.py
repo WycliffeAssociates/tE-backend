@@ -15,11 +15,23 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from rest_framework.documentation import include_docs_urls
+
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="tE API DOC",
+      default_version='v1',
+      description="Test description",
+   ),
+   public=False,
+)
 
 urlpatterns = [
-    url(r'^docs/', include_docs_urls(title="translationExchange")),
+    url(r'^docs/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
     url(r'^', include('api.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]

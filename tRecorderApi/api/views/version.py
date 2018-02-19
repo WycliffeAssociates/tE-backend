@@ -1,10 +1,26 @@
 from api.models import Version
-from rest_framework import viewsets
 from api.serializers import VersionSerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of takes based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a version",
+        ), openapi.Parameter(
+            name='slug', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A version slug",
+        )
+    ]
+))
 class VersionViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Version.objects.all()
     serializer_class = VersionSerializer
 

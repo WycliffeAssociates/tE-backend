@@ -1,10 +1,56 @@
 from api.models import Project
-from rest_framework import viewsets
 from api.serializers import ProjectSerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of projects based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a project",
+        ), openapi.Parameter(
+            name='published', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_BOOLEAN,
+            description="Published status of a project",
+        ), openapi.Parameter(
+            name='lang', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A language slug",
+        ), openapi.Parameter(
+            name='version', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A version slug",
+        ), openapi.Parameter(
+            name='book', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A book slug",
+        ), openapi.Parameter(
+            name='mode', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="A mode slug",
+        ), openapi.Parameter(
+            name='anth', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="An anthology slug",
+        ),
+    ]
+))
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_description='This end point is used for updating the published status',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['published'],
+        properties={
+            'published': openapi.Schema(type=openapi.TYPE_BOOLEAN)
+        }
+    ),
+))
 class ProjectViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
