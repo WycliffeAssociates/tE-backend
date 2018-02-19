@@ -12,7 +12,10 @@ from django.conf import settings
 import urllib3
 from .tinytag import TinyTag
 from platform import system as system_name
+from raven.contrib.django.raven_compat.models import client
+import logging
 
+logger = logging.getLogger('api.file_transfer.FileUtility')
 
 class FileUtility:
     @staticmethod
@@ -36,6 +39,7 @@ class FileUtility:
 
     def process_uploaded_takes(self, directory, Take, ext):
         languages = self.get_languages_database()
+        logger.info(languages)
         manifest = FileUtility.open_manifest_file(directory)
         update_languages_DB = True  # since the updating languagesDB is inside the loop, this boolean is used to only update once
         for root, dirs, files in os.walk(directory):
@@ -100,27 +104,31 @@ class FileUtility:
             }
             return lng_book_dur, take_info
         except Exception as e:
+            logger.exception("bad metadata")            
+            client.captureException()
             return 'bad meta', 400
 
     def get_languages_database(self):
-        with open('language.json', 'rb') as fp:
-            languages = pickle.load(fp)
-
+        languages = []
+        with open('langnames.json', encoding='utf-8') as data_file:
+            languages = json.loads(data_file.read())
         return languages
 
     def update_languages_database(self):
         internet_connection = self.internet_connection()
+        languages = []
         if internet_connection:
             url = 'http://td.unfoldingword.org/exports/langnames.json'
             http = urllib3.PoolManager()
             request = http.request('GET', url, timeout=1.5)
-            languages = []
             try:
                 languages = json.loads(request.data.decode('utf8'))
-                with open('language.json', 'wb') as fp:
-                    pickle.dump(languages, fp)
+                with open('langnames.json', 'w') as fp:
+                    json.dump(languages, fp)
             except urllib.error.URLError as e:
                 print(e)
+        with open('langnames.json', encoding='utf-8') as data_file:
+            languages = json.loads(data_file.read())
         return languages
 
     def get_language_by_code(self, code, languages, update_languagesDB):
