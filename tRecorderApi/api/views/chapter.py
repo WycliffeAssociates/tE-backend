@@ -30,7 +30,7 @@ from api.serializers import ChapterSerializer
         type=openapi.TYPE_OBJECT,
         properties={
             'published': openapi.Schema(type=openapi.TYPE_BOOLEAN),
-            'checked_level': openapi.Schema(type=openapi.TYPE_STRING)
+            'checked_level': openapi.Schema(type=openapi.TYPE_INTEGER)
         }
     ),
 ))
