@@ -149,12 +149,13 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
+ASGI_APPLICATION = 'tRecorderApi.routing.application'
+
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
         'CONFIG': {
             'hosts': [('redis', 6379)],
         },
-        'ROUTING': 'tRecorderApi.routing.channel_routing',
     },
 }

@@ -1,36 +1,64 @@
-import json
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 
-from django.http import HttpResponse
-from channels import Group
-from channels.handler import AsgiHandler
-
-
-def http_consumer(message):
-    response = HttpResponse('Welcome translation Exchange! You should try websockets.')
-
-    for chunk in AsgiHandler.encode_response(response):
-        message.reply_channel.send(chunk)
-
-# Register the new client
-def ws_add(message):
-    Group('game').add(message.reply_channel)
-    message.reply_channel.send({
-        'text': 'hello',
-    })
+# from .exceptions import ClientError
+# from .utils import get_room_or_error
 
 
-# Compute a new life’s generation
-def ws_receive(message):
+class Consumer(WebsocketConsumer):
+    """
+    This chat consumer handles websocket connections for chat clients.
 
-    for number in range(1, 101):
-        Group('game').send({
-            'text': json.dumps({
-             'username': 'Juan',
-             'is_logged_in': True
-             }),
-        })
+    It uses AsyncJsonWebsocketConsumer, which means all the handling functions
+    must be async functions, and any sync work (like ORM access) has to be
+    behind database_sync_to_async or sync_to_async. For more, read
+    http://channels.readthedocs.io/en/latest/topics/consumers.html
+    """
+
+    ##### WebSocket event handlers
+
+    def connect(self):
+        async_to_sync(self.channel_layer.group_add)("translator", self.channel_name)
+        # Accept the connection
+        self.accept()
 
 
-#  Unregister the client for updates
-def ws_disconnect(message):
-    Group('game').discard(message.reply_channel)
+
+
+    def disconnect(self, code):
+        """
+        Called when the WebSocket closes for any reason.
+        """
+
+    def upload_complete_message(self, event):
+        self.send(text_data=event["text"])
+
+    # ##### Handlers for messages sent over the channel layer
+    #
+    # # These helper methods are named by the types we send - so chat.join becomes chat_join
+    # async def chat_join(self, event):
+    #     """
+    #     Called when someone has joined our chat.
+    #     """
+    #     # Send a message down to the client
+    #     await self.send_json(
+    #         {
+    #             "msg_type": settings.MSG_TYPE_ENTER,
+    #             "room": event["room_id"],
+    #             "username": event["username"],
+    #         },
+    #     )
+    #
+    # async def chat_message(self, event):
+    #     """
+    #     Called when someone has messaged our chat.
+    #     """
+    #     # Send a message down to the client
+    #     await self.send_json(
+    #         {
+    #             "msg_type": settings.MSG_TYPE_MESSAGE,
+    #             "room": event["room_id"],
+    #             "username": event["username"],
+    #             "message": event["message"],
+    #         },
+    #     )

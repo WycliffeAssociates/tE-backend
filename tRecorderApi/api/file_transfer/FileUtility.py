@@ -10,6 +10,8 @@ import urllib.request
 import uuid
 from django.conf import settings
 import urllib3
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from .tinytag import TinyTag
 from platform import system as system_name
 from ..models.language import Language
@@ -22,7 +24,7 @@ from ..models.chapter import Chapter
 from ..models.chunk import Chunk
 
 
-
+channel_layer = get_channel_layer()
 
 class FileUtility:
     @staticmethod
@@ -81,6 +83,8 @@ class FileUtility:
                     Take.import_takes(file, duration, markers, rating, chunk)
         if len(bad_files) > 0:
             return bad_files, 202
+        async_to_sync(channel_layer.group_send)\
+            ("translator", {"type": "upload_complete_message", "text": "project uploaded"})
         return 'ok', 200
 
     @staticmethod
