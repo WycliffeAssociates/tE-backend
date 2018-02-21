@@ -81,7 +81,7 @@ class FileUtility:
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(file, duration, markers, rating, chunk)
+                    Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
         if len(bad_files) > 0:
             return bad_files, 202
         return 'ok', 200
