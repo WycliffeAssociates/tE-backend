@@ -7,7 +7,7 @@ from asgiref.sync import async_to_sync
 
 class Consumer(WebsocketConsumer):
     """
-    This chat consumer handles websocket connections for chat clients.
+    This consumer handles websocket connections for chat clients.
 
     It uses AsyncJsonWebsocketConsumer, which means all the handling functions
     must be async functions, and any sync work (like ORM access) has to be
@@ -33,32 +33,3 @@ class Consumer(WebsocketConsumer):
     def upload_complete_message(self, event):
         self.send(text_data=event["text"])
 
-    # ##### Handlers for messages sent over the channel layer
-    #
-    # # These helper methods are named by the types we send - so chat.join becomes chat_join
-    # async def chat_join(self, event):
-    #     """
-    #     Called when someone has joined our chat.
-    #     """
-    #     # Send a message down to the client
-    #     await self.send_json(
-    #         {
-    #             "msg_type": settings.MSG_TYPE_ENTER,
-    #             "room": event["room_id"],
-    #             "username": event["username"],
-    #         },
-    #     )
-    #
-    # async def chat_message(self, event):
-    #     """
-    #     Called when someone has messaged our chat.
-    #     """
-    #     # Send a message down to the client
-    #     await self.send_json(
-    #         {
-    #             "msg_type": settings.MSG_TYPE_MESSAGE,
-    #             "room": event["room_id"],
-    #             "username": event["username"],
-    #             "message": event["message"],
-    #         },
-    #     )

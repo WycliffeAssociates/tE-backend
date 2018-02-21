@@ -8,5 +8,4 @@ coreapi
 whitenoise
 psycopg2
 channels
-daphne
 channels_redis~=2.0

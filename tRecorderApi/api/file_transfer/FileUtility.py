@@ -83,8 +83,12 @@ class FileUtility:
                     Take.import_takes(file, duration, markers, rating, chunk)
         if len(bad_files) > 0:
             return bad_files, 202
+        book_name = project_manifest["book"]["name"]
+        book_language = project_manifest["language"]["name"]
+        text = book_name + " " + book_language + " " + "uploaded."
+
         async_to_sync(channel_layer.group_send)\
-            ("translator", {"type": "upload_complete_message", "text": "project uploaded"})
+            ("translator", {"type": "upload_complete_message", "text": text})
         return 'ok', 200
 
     @staticmethod

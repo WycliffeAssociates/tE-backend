@@ -17,6 +17,10 @@ tRecorderApi/frontend/build/static/media/logo.4cf3e438.png
 DB_backend_requirements.txt
 Create_Statements.txt
 
+.Dockerfile
+.docker-compose
+.requirements-backup.txt
+
 # Distribution / packaging
 .Python
 env/
