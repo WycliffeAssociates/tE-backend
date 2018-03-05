@@ -1,16 +1,12 @@
 import json
 import os
 import pickle
-import re
 import shutil
 import subprocess
 import time
 import urllib.error
 import urllib.request
 import uuid
-from django.conf import settings
-import urllib3
-from .tinytag import TinyTag
 from platform import system as system_name
 from raven.contrib.django.raven_compat.models import client
 from ..models.language import Language
@@ -21,9 +17,14 @@ from ..models.mode import Mode
 from ..models.project import Project
 from ..models.chapter import Chapter
 from ..models.chunk import Chunk
+import logging
 
+import urllib3
+
+from ..file_transfer.tinytag import TinyTag
 
 logger = logging.getLogger(__name__)
+
 
 class FileUtility:
     @staticmethod
@@ -46,17 +47,18 @@ class FileUtility:
             shutil.copy2(location["src"], location["dst"])
 
     def import_project(self, directory):
-        bad_files=[]
+        bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
         anthology = Anthology.import_anthology(project_manifest["anthology"])
         book = Book.import_book(project_manifest["book"], anthology)
         version = Version.import_version(project_manifest["version"])
         mode = Mode.import_mode(project_manifest["mode"])
-        project=Project.import_project(version, mode, anthology, language, book)
+        project = Project.import_project(
+            version, mode, anthology, language, book)
 
         for chapters in project_manifest["manifest"]:
-            number=chapters["chapter"]
+            number = chapters["chapter"]
             checking_level = chapters["checking_level"]
             chapter = Chapter.import_chapter(project, number, checking_level)
 
@@ -79,7 +81,7 @@ class FileUtility:
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(file, duration, markers, rating, chunk)
+                    Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
         if len(bad_files) > 0:
             return bad_files, 202
         return 'ok', 200
@@ -102,7 +104,6 @@ class FileUtility:
     @staticmethod
     def push_audio_processing_to_background(take):
         return take
-
 
     @staticmethod
     def processTrFile(file, directory):

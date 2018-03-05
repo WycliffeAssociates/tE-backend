@@ -1,15 +1,33 @@
 from api.models import Anthology
-from rest_framework import viewsets
 from api.serializers import AnthologySerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 
+
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of anthologies based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of an anthology",
+        ), openapi.Parameter(
+            name='slug', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="An Anthology slug",
+        ),
+    ]
+))
 class AnthologyViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Anthology.objects.all()
     serializer_class = AnthologySerializer
 
     def build_params_filter(self, query):
         pk = query.get("id", None)
         slug = query.get("slug", None)
+
         filter = {}
         if pk is not None:
             filter["id"] = pk

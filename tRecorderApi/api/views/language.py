@@ -1,10 +1,26 @@
 from api.models import Language
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from api.serializers import LanguageSerializer
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of languages based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a language",
+        ), openapi.Parameter(
+            name='slug', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="A language slug",
+        )
+    ]
+))
 class LanguageViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
 

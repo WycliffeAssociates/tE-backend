@@ -1,4 +1,5 @@
 from .FileTransfer import FileTransfer
+from ..tasks import extract_and_save_project
 
 
 class Upload(FileTransfer):
@@ -10,7 +11,4 @@ class Upload(FileTransfer):
 
     def upload(self, file):
         directory = self.file_utility.root_dir(['media', 'dump'])
-        resp, stat = self.archive_project.extract(file, directory)   #returns response, status
-        if resp == 'ok':
-            resp, stat = self.file_utility.import_project(directory)
-        return resp, stat
+        extract_and_save_project.delay(self, file, directory)

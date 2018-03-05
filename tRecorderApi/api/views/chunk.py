@@ -1,10 +1,30 @@
 from api.models import Chunk
-from rest_framework import viewsets
 from api.serializers import ChunkSerializer
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of chunks based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a chunk",
+        ), openapi.Parameter(
+            name='project_id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a project",
+        ), openapi.Parameter(
+            name='chapter_id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a chapter",
+        )
+    ]
+))
 class ChunkViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Chunk.objects.all()
     serializer_class = ChunkSerializer
 

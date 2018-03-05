@@ -42,7 +42,7 @@ class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Chapter
-        depth = 2
+        depth = 1
         fields = '__all__'
 
 
