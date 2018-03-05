@@ -1,34 +1,32 @@
 from django.conf.urls import url
 from rest_framework import routers
-import views
+
+import api.views as views
 
 router = routers.DefaultRouter()
-router.register(r'projects', views.ProjectViewSet)
-router.register(r'chapters', views.ChapterViewSet)
-router.register(r'chunks', views.ChunkViewSet)
-router.register(r'languages', views.LanguageViewSet)
-router.register(r'books', views.BookViewSet)
-router.register(r'users', views.UserViewSet)
-router.register(r'takes', views.TakeViewSet)
-router.register(r'comments', views.CommentViewSet)
+router.register(r'api/languages', views.LanguageViewSet)
+router.register(r'api/anthologies', views.AnthologyViewSet)
+router.register(r'api/versions', views.VersionViewSet)
+router.register(r'api/books', views.BookViewSet)
+router.register(r'api/modes', views.ModeViewSet)
+router.register(r'api/projects', views.ProjectViewSet)
+router.register(r'api/chapters', views.ChapterViewSet)
+router.register(r'api/chunks', views.ChunkViewSet)
+router.register(r'api/takes', views.TakeViewSet)
+router.register(r'api/comments', views.CommentViewSet)
+router.register(r'api/zip', views.ZipViewSet)
+router.register(r'api/tr', views.TrViewSet)
+router.register(r'api/exclude_files', views.ExcludeFilesViewSet)
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^upload/(?P<filename>[^/]+)$', views.FileUploadView.as_view()),
-    url(r'^resumable_upload/(?P<filename>[^/]+)/$', views.ResumableFileUploadView.as_view()),
-    url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
-    url(r'^get_project_takes/$', views.GetProjectTakesView.as_view()),
-    url(r'^update_project_takes/$', views.UpdateProjectTakesView.as_view()),
-    url(r'^get_source/$', views.SourceFileView.as_view()),
-    url(r'^zip_files/$', views.ProjectZipFilesView.as_view()),
-    url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
-    url(r'^all_projects/$', views.AllProjectsView.as_view()),
-    url(r'^get_chapters/$', views.ProjectChapterInfoView.as_view()),
-    url(r'^get_langs/$', views.getLangsView.as_view()),
-    url(r'^get_versions/$', views.getVersionsView.as_view()),
-    url(r'^get_books/$', views.getBooksView.as_view()),
-    url(r'^push_takes/$', views.PushTakesView.as_view()),
-    url(r'^stitch_takes/$', views.SourceStitchView.as_view()),
+    url(r'^(?!api).*$', views.frontend.FrontendAppView.as_view()),
+    url(r'^api/$', views.index, name='index'),
+    url(r'^api/upload/(?P<filename>[^/]+)$',
+        views.file_upload.FileUploadView.as_view()),
+    url(r'^api/resumable_upload/(?P<filename>[^/]+)/$',
+        views.resumable_upload.ResumableFileUploadView.as_view()),
+    # url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
+    # url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
 ]
 
 urlpatterns += router.urls

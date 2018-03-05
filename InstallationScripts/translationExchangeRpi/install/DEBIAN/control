@@ -1,0 +1,10 @@
+Package: translationExchangeServer.v0.1
+Version: 0.1
+Maintainer: Wycliffe Associates <maksim_murzamuratov@wycliffeassociates.org>
+Installed-Size: 1431513
+Section: devel
+Priority: optional
+Homepage: http://te.loc
+Depends: git (>= 2.14.1), docker-ce (>= 17.12.0), python-pip (>= 9.0.1), nodejs (>= 8.9.4)
+Architecture: armhf
+Description: TranslationExchange server for Raspberry Pi in docker container

@@ -1,148 +1,39 @@
-from rest_framework import views, status
-from rest_framework.parsers import JSONParser, FileUploadParser
-import time
-import uuid
-import zipfile
-import os
-from tinytag import TinyTag
+from django.core.files.storage import FileSystemStorage
+from rest_framework import views
+from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
-import json
-from helpers import highPassFilter, getRelativePath
-from api.models import Book, Language, Take
-from django.conf import settings
-import re
-import shutil
+
+from api.file_transfer.FileUtility import FileUtility
+from api.file_transfer.TrIt import TrIt
+from api.file_transfer.Upload import Upload
+from api.file_transfer.ZipIt import ZipIt
+from api.models import Take
+from rest_framework import views
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+import logging
+from raven.contrib.django.raven_compat.models import client
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
 
-    def post(self, request, filename, format='zip'):
+    def post(self, request, filename):
+        logger.info("in upload view!")
         """ Normal upload """
-        if request.method == 'POST' and request.data['file']:
-            uuid_name = str(time.time()) + str(uuid.uuid4())
-            upload = request.data["file"]
-
-            # unzip files
-            try:
-                zip = zipfile.ZipFile(upload)
-                folder_name = os.path.join(settings.BASE_DIR, 'media/dump/' + uuid_name)
-
-                zip.extractall(folder_name)
-                zip.close()
-
-                # extract metadata / get the apsolute path to the file to be stored
-
-                # Cache language and book to re-use later
-                bookname = ''
-                bookcode = ''
-                langname = ''
-                langcode = ''
-
-                is_empty_zip = True # for testing if zip file is empty
-
-                for root, dirs, files in os.walk(folder_name):
-                    for f in files:
-                        is_empty_zip = False
-                        abpath = os.path.join(root, os.path.basename(f))
-                        relpath = getRelativePath(abpath)
-                        try:
-                            meta = TinyTag.get(abpath)
-                        except LookupError as e:
-                            return Response({"error": "bad_wave_file"}, status=400)
-                        
-                        if meta and meta.artist:
-                            a = meta.artist
-                            lastindex = a.rfind("}") + 1
-                            substr = a[:lastindex]
-                            pls = json.loads(substr)
-
-                            if bookcode != pls['slug']:
-                                bookcode = pls['slug']
-                                bookname = Book.getBookByCode(bookcode)
-                            if langcode != pls['language']:
-                                langcode = pls['language']
-                                langname = Language.getLanguageByCode(langcode)
-
-                            data = {
-                                "langname": langname,
-                                "bookname": bookname,
-                                "duration": meta.duration
-                                }
-                            
-                            highPassFilter(abpath)
-                            Take.prepareDataToSave(pls, relpath, data)
-                        else:
-                            return Response({"error": "bad_wave_file"}, status=400)
-                
-                if is_empty_zip:
-                    return Response({"error": "bad_zip_file"}, status=400)
-                return Response({"response": "ok"}, status=200)
-
-            except zipfile.BadZipfile:
-                return Response({"error": "bad_zip_file"}, status=400)
+        if request.data["file"]:
+            arch_project = ZipIt()
+            file_to_upload = request.data["file"]
+            fs = FileSystemStorage()
+            filename_to_upload = fs.save(file_to_upload.name, file_to_upload)
+            uploaded_file_url = fs.url(filename_to_upload)
+            if filename == "tr":
+                arch_project = TrIt()
+            up = Upload(arch_project, None, FileUtility())
+            up.upload(uploaded_file_url)
+            return Response({"response": "processing"}, status=202)
         else:
-            return Response(status=404)
-
-    @staticmethod
-    def processFile(folderPath, filePath):
-        """ File processor for resumable upload """
-        # unzip files
-        try:
-            location = os.path.join(folderPath, filePath)
-            uuid_name = str(time.time()) + str(uuid.uuid4())
-            zip = zipfile.ZipFile(location)
-            folder_name = os.path.join(settings.BASE_DIR, 'media/dump/' + uuid_name)
-
-            zip.extractall(folder_name)
-            zip.close()
-            shutil.rmtree(folderPath, ignore_errors=True)
-
-            # Cache language and book to re-use later
-            bookname = ''
-            bookcode = ''
-            langname = ''
-            langcode = ''
-
-            is_empty_zip = True # for testing if zip file is empty
-
-            for root, dirs, files in os.walk(folder_name):
-                for f in files:
-                    is_empty_zip = False
-                    abpath = os.path.join(root, os.path.basename(f))
-                    relpath = getRelativePath(abpath)
-                    try:
-                        meta = TinyTag.get(abpath)
-                    except LookupError as e:
-                        return {"error": "bad_wave_file"}
-                    
-                    if meta and meta.artist:
-                        a = meta.artist
-                        lastindex = a.rfind("}") + 1
-                        substr = a[:lastindex]
-                        pls = json.loads(substr)
-
-                        if bookcode != pls['slug']:
-                            bookcode = pls['slug']
-                            bookname = Book.getBookByCode(bookcode)
-                        if langcode != pls['language']:
-                            langcode = pls['language']
-                            langname = Language.getLanguageByCode(langcode)
-
-                        data = {
-                            "langname": langname,
-                            "bookname": bookname,
-                            "duration": meta.duration
-                            }
-                        
-                        highPassFilter(abpath)
-                        Take.prepareDataToSave(pls, relpath, data)
-                    else:
-                        return {"error": "bad_wave_file"}
-            
-            if is_empty_zip:
-                return {"error": "bad_zip_file"}
-            
-            return {"response": "ok"}
-
-        except zipfile.BadZipfile:
-            return {"error": "bad_zip_file"}
+            return Response({"response": "no file"}, status=200)

@@ -1,57 +1,76 @@
 from api.models import Take
-from rest_framework import viewsets, status
 from api.serializers import TakeSerializer
-from rest_framework.response import Response
-import os
-import json
-from django.forms.models import model_to_dict
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 
+
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Return list of takes based on given query string",
+    manual_parameters=[
+        openapi.Parameter(
+            name='id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a take",
+        ), openapi.Parameter(
+            name='published', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_BOOLEAN,
+            description="Published status of a take",
+        ), openapi.Parameter(
+            name='project_id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a project",
+        ), openapi.Parameter(
+            name='chapter_id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a chapter",
+        ), openapi.Parameter(
+            name='chunk_id', in_=openapi.IN_QUERY,
+            type=openapi.TYPE_INTEGER,
+            description="Id of a chunk",
+        )
+    ]
+))
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_description='This end point is used for updating rating or published status of a take',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['id'],
+        properties={
+            'published': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+            'rating': openapi.Schema(type=openapi.TYPE_INTEGER)
+        }
+    ),
+))
 class TakeViewSet(viewsets.ModelViewSet):
-    """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
 
-    def list(self, request):
+    def build_params_filter(self, query):
+        pk = query.get("id", None)
+        published = query.get("published", None)
+        project_id = query.get("project_id", None)
+        chapter_id = query.get("chapter_id", None)
+        chunk_id = query.get("chunk_id", None)
+        filter = {}
+        if pk is not None:
+            filter["id"] = pk
+        if published is not None:
+            filter['published'] = published.title()
+        if project_id is not None:
+            filter["chunk__chapter__project"] = project_id
+        if chapter_id is not None:
+            filter["chunk__chapter"] = chapter_id
+        if chunk_id is not None:
+            filter["chunk"] = chunk_id
+        return filter
+
+    def get_queryset(self):
         queryset = Take.objects.all()
-        serializer = TakeSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        try:
-            os.remove(instance.location)
-        except OSError:
-            pass
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        if instance.markers:
-            instance.markers = json.loads(instance.markers)
-        else:
-            instance.markers = {}
-
-        take = model_to_dict(instance, fields=[
-            "location","duration","rating",
-            "date_modified","markers","id",
-            "is_publish"
-        ])
-        take["anthology"] = instance.chunk.chapter.project.anthology
-        take["version"] = instance.chunk.chapter.project.version
-        take["chapter"] = instance.chunk.chapter.number
-        take["mode"] = instance.chunk.chapter.project.mode
-        take["startv"] = instance.chunk.startv
-        take["endv"] = instance.chunk.endv
-
-        return Response(take)
+        if self.request.query_params:
+            filter = self.build_params_filter(self.request.query_params)
+            if filter:
+                return queryset.filter(**filter)
+            return None
+        return queryset

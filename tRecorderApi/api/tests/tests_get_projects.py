@@ -1,10 +1,8 @@
 from django.test import TestCase
-from api.models import Take, Language, Book, User, Comment, Chunk, Project, Chapter
 from rest_framework.test import APIClient
-from rest_framework import status
-import os
-from sys import platform
+from ..models import Project, Language, Book, Chapter, Chunk, Take, Anthology, Version, Mode
 from django.conf import settings
+from django.forms.models import model_to_dict
 
 view_url = 'http://127.0.0.1:8000/api/get_project_takes/'
 base_url = 'http://127.0.0.1:8000/api/'
@@ -13,52 +11,74 @@ location_wav = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
 class GetProjectsTestCases(TestCase):
-
     def setUp(self):
         self.client = APIClient()
         self.lang = Language.objects.create(slug='en-x-demo', name='english')
-        self.book = Book.objects.create(name='mark', booknum=5, slug='mrk')
-        self.proj = Project.objects.create(version='ulb', mode='chunk',
-                                      anthology='nt', is_source=False, language=self.lang,
-                                      book=self.book)
-        self.chap = Chapter.objects.create(number=1, checked_level=1, is_publish=False, project=self.proj)
+        self.anthology = Anthology.objects.create(slug='ot', name="old testament")
+        self.book = Book.objects.create(name='mark', number=5, slug='mrk', anthology=self.anthology)
+        self.version = Version.objects.create(slug='ulb', name="Unlocked literal bible")
+        self.mode = Mode.objects.create(slug="chk", name="chunk", unit=1)
+        self.proj = Project.objects.create(version=self.version, mode=self.mode,
+                                           anthology=self.anthology, language=self.lang,
+                                           book=self.book)
+        self.proj.save()
+        self.chap = Chapter.objects.create(number=1, checked_level=1, published=False, project=self.proj)
+        self.chap2 = Chapter.objects.create(number=2, checked_level=2, published=False, project=self.proj)
+        self.chap3 = Chapter.objects.create(number=3, checked_level=3, published=False, project=self.proj)
+        self.chap4 = Chapter.objects.create(number=4, checked_level=0, published=False, project=self.proj)
+
         self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
-        self.user = User.objects.create(name='testy', agreed=True, picture='mypic.jpg')
-        self.take = Take.objects.create(location=location_wav, is_publish=True,
-                                   duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk, user=self.user)
+        self.chunk2 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap2)
+        self.chunk3 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap3)
+        self.chunk4 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap4)
+        self.chunk5 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap4)
+        self.chunk6 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap4)
+
+        self.take = Take.objects.create(location=location_wav, published=True,
+                                        duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk
+                                        )
+        self.take = Take.objects.create(location=location_wav, published=True,
+                                        duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk2
+                                        )
+        self.take = Take.objects.create(location=location_wav, published=True,
+                                        duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk3
+                                        )
+        self.take = Take.objects.create(location=location_wav, published=True,
+                                        duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk4
+                                        )
+        self.take.save()
+
         self.project_takes_data = {"language": "en-x-demo2", "version": "ulb", "book": "mrk", "chapter": 1}
 
-    def test_that_we_can_get_projects(self):
-        """Testing that submitting a POST request through key search returns a JSON object"""
+    def test_get_minimum_checked_level(self):
+        min_check_level = Chapter.objects.all().values_list('checked_level') \
+            .order_by('checked_level')[0][0]
+        self.assertEqual(min_check_level, 0)
 
-        self.response = self.client.post(view_url, self.project_takes_data ,
-                                    format='json')
-        # telling the API that I want all takes that are saved on the specified location
-        result = str(self.response.data)  # convert data returned from post request to string so we can checkthe data inside
-        self.assertEqual(self.response.status_code, status.HTTP_200_OK)  # verifying that that we succesfully post to the API
-        self.assertIn("en-x-demo2",
-                      result)  # test that the term we searched for is in the data returned from the post request
+    def test_get_total_chunks(self):
+        chunks_done = Chapter.objects.all().values_list('chunk').count()
+        self.assertEqual(chunks_done, 6)
 
-    def test_that_we_can_get_no_projects_from_api(self):
-        """Testing that getting a project that does not exist from not enough parameters posted"""
-        # saving objects in temporary database so they can be read by the API
+    def test_keys_in_project(self):
 
-        self.response = self.client.post(view_url, {'location': my_file},
-                                    format='json')
-        # getting 400 error not enough parameters returned
-        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)  # verifying that that we succesfully post to the API
+        get_projects = Project.objects.all()
 
-    def tearDown(self):
-        if platform == "darwin":  # OSX
-            os.system('rm -rf ' + my_file)  # cleaning out all files generated during tests
-            os.system('mkdir ' + my_file)
-        elif platform == "win32":  # Windows
-            os.system('rmdir /s /q ' + 'media\dump')  # cleaning out all files generated during tests
-            os.system('mkdir ' + 'media\dump')
-        self.take.delete()
-        self.user.delete()
-        self.chunk.delete()
-        self.chap.delete()
-        self.proj.delete()
-        self.book.delete()
-        self.lang.delete()
+        projects = Project.get_projects(get_projects)
+        project_list = []
+        for pr in projects:
+            self.assertIn("id", pr)
+            self.assertIn("published", pr)
+            self.assertIn("contributors", pr)
+            self.assertIn("date_modified", pr)
+            self.assertIn("completed", pr)
+            self.assertIn("checked_level", pr)
+            self.assertIn("language", pr)
+            self.assertIn("book", pr)
+            self.assertIn("version", pr)
+            self.assertIn("anthology", pr)
+
+    def test_get_percentage_function(self):
+        chunks_done = 30
+        total_chunks = 100
+        percentage = Project.get_percentage_completed(chunks_done, total_chunks)
+        self.assertEqual(percentage, 30)
