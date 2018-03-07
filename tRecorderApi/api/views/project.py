@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of projects based on given query string",
@@ -53,6 +53,7 @@ from rest_framework import viewsets
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = (IsAuthenticated,)
 
     def build_params_filter(self, query):
         pk = query.get("id", None)
