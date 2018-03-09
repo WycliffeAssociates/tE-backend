@@ -42,20 +42,14 @@ INSTALLED_APPS = [
     'django_celery_results',
     'drf_yasg',
     'raven.contrib.django.raven_compat',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
-    'django.contrib.sites',
-
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
+    'social_django',
+    'rest_social_auth',
 ]
 
-SITE_ID = 2
+# SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -226,3 +220,40 @@ CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
 CELERY_IGNORE_RESULT = False
 CELERY_TASK_TRACK_STARTED = True
+
+
+# DRF settings
+
+# social auth settings
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '654283088678-4m4eecv24f79fn9neid8v9846m0gdl49.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'EOTv4IpHCcLNfggS_Cslc-Ms'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', ]
+
+SOCIAL_AUTH_GITHUB_KEY = 'f5e981378e91c2067d41'
+SOCIAL_AUTH_GITHUB_SECRET = 'd364859057d424b65db85ff0be2d967beacd988f'
+SOCIAL_AUTH_GITHUB_SCOPE = [
+    'read:user',
+    'user:email'
+]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    # 'users.social_pipeline.auto_logout',  # custom action
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    # 'users.social_pipeline.check_for_email',  # custom action
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    # 'users.social_pipeline.save_avatar',  # custom action
+)

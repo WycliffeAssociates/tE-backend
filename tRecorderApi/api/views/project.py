@@ -5,6 +5,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of projects based on given query string",
@@ -53,6 +54,7 @@ from rest_framework.permissions import IsAuthenticated
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    authentication_classes=(TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def build_params_filter(self, query):
