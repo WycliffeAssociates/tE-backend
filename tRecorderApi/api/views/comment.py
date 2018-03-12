@@ -1,18 +1,21 @@
+import base64
+import os
+import re
+import time
+import uuid
+
+import pydub
+from api.file_transfer import FileUtility
 from api.models import Comment, Chapter, Chunk, Take
+from api.serializers import CommentSerializer
+from django.conf import settings
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from api.serializers import CommentSerializer
-import os
-import re
-import base64
-import pydub
-import time
-import uuid
-from api.file_transfer import FileUtility
-from django.conf import settings
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -40,6 +43,8 @@ from django.conf import settings
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         queryset = []
