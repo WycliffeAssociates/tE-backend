@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from rest_framework import routers
-
 import api.views as views
 
 router = routers.DefaultRouter()
@@ -25,6 +24,10 @@ urlpatterns = [
         views.file_upload.FileUploadView.as_view()),
     url(r'^api/resumable_upload/(?P<filename>[^/]+)/$',
         views.resumable_upload.ResumableFileUploadView.as_view()),
+    url(r'^api/auth/create/',
+        views.user.CreateTeUserView.as_view()),
+    url(r'^api/auth/login/',
+        views.user.LoginTeUserView.as_view()),
     # url(r'^source/(?P<filename>[^/]+)$', views.UploadSourceFileView.as_view()),
     # url(r'^exclude_files/$', views.ExcludeFilesView.as_view()),
 ]
