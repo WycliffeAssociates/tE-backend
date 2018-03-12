@@ -29,8 +29,8 @@ schema_view = get_schema_view(
 )
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^docs/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include('api.urls')),
     url(r'^api/login/', include('rest_social_auth.urls_token')),
-    url(r'^docs/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
 ]
