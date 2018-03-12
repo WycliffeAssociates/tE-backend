@@ -226,14 +226,15 @@ CELERY_TASK_TRACK_STARTED = True
 
 # social auth settings
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '654283088678-4m4eecv24f79fn9neid8v9846m0gdl49.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '8naZhu5KVsX4VMmqgSSEisqq'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '429550859531-rp6ihtu7o9fe9uko3t6523hs8m5b06ir.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'QNCjxMSVpHHoMyE2TGswK37o'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+]
 
 SOCIAL_AUTH_GITHUB_KEY = 'f5e981378e91c2067d41'
 SOCIAL_AUTH_GITHUB_SECRET = 'd364859057d424b65db85ff0be2d967beacd988f'
 SOCIAL_AUTH_GITHUB_SCOPE = [
-    'read:user',
     'user:email'
 ]
 
