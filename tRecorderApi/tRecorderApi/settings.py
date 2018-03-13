@@ -225,7 +225,7 @@ CELERY_TASK_TRACK_STARTED = True
 # DRF settings
 
 # social auth settings
-AUTH_USER_MODEL = 'api.TeUser'
+AUTH_USER_MODEL = 'api.User'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '429550859531-rp6ihtu7o9fe9uko3t6523hs8m5b06ir.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'QNCjxMSVpHHoMyE2TGswK37o'

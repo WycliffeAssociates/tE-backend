@@ -20,4 +20,4 @@ from .take import *
 from .zip import ZipViewSet
 from .tr import TrViewSet
 from .frontend import FrontendAppView
-from .user import CreateTeUserView
+from .user import UserViewSet

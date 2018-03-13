@@ -1,4 +1,4 @@
-from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology, Version, Mode, TeUser
+from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology, Version, Mode, User
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 

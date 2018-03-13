@@ -54,7 +54,7 @@ from rest_framework.authentication import TokenAuthentication
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    authentication_classes=(TokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def build_params_filter(self, query):
