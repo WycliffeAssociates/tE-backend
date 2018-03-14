@@ -14,8 +14,10 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+
+from api.permissions import IsOwnerOrReadOnly
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -43,8 +45,7 @@ from rest_framework.response import Response
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         queryset = []
@@ -137,6 +138,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         c = Comment.objects.create(
             location=relpath + ".mp3",
             content_object=q_obj,
+            owner=request.user
         )
         c.save()
         dic = {

@@ -5,6 +5,7 @@ from django.utils.timezone import now
 from .chapter import Chapter
 from .chunk import Chunk
 from .take import Take
+from .user import User
 
 
 class Comment(models.Model):
@@ -13,6 +14,7 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(db_index=True)
     content_object = GenericForeignKey('content_type', 'object_id')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ["date_modified"]
