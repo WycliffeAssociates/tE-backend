@@ -78,10 +78,14 @@ class TakeSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
+    owner_icon_hash = serializers.CharField(source='owner.icon_hash')
+    owner_name_audio = serializers.CharField(source='owner.name_audio')
+
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Comment
-        fields = '__all__'
+        fields = ('id', 'location', 'date_modified', 'object_id',
+                  'content_type', 'owner', 'owner_icon_hash', 'owner_name_audio')
 
 
 class AnthologySerializer(serializers.ModelSerializer):
