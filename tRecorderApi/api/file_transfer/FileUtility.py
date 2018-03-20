@@ -99,9 +99,13 @@ class FileUtility:
 
     @staticmethod
     def open_manifest_file(directory):
-        manifest_path = os.path.join(directory, 'manifest.json')
-        manifest = json.load(open(manifest_path))
-        return manifest
+        try:
+            manifest_path = os.path.join(directory, 'manifest.json')
+            manifest = json.load(open(manifest_path))
+            return manifest
+        except Exception as e:
+            shutil.rmtree(directory)
+            logger.error("Error: ", e.message)
 
     @staticmethod
     def push_audio_processing_to_background(take):
