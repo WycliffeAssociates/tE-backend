@@ -1,29 +1,30 @@
+import datetime
 import json
+import logging
 import os
-import pickle
 import shutil
 import subprocess
 import time
-import urllib.error
-import urllib.request
 import uuid
-from platform import system as system_name
-from raven.contrib.django.raven_compat.models import client
-from ..models.language import Language
-from ..models.book import Book
-from ..models.anthology import Anthology
-from ..models.version import Version
-from ..models.mode import Mode
-from ..models.project import Project
-from ..models.chapter import Chapter
-from ..models.chunk import Chunk
-import logging
-
-import urllib3
 
 from ..file_transfer.tinytag import TinyTag
+from ..models.anthology import Anthology
+from ..models.book import Book
+from ..models.chapter import Chapter
+from ..models.chunk import Chunk
+from ..models.language import Language
+from ..models.mode import Mode
+from ..models.project import Project
+from ..models.version import Version
 
 logger = logging.getLogger(__name__)
+
+
+class CleanupType:
+    TAKE = 1
+    COMMENT = 2
+    NAME_AUDIO = 3
+    EXPORT = 4
 
 
 class FileUtility:
@@ -42,7 +43,8 @@ class FileUtility:
             os.makedirs(root_directory)
         return root_directory
 
-    def copy_files_from_src_to_dest(self, location_list):
+    @staticmethod
+    def copy_files_from_src_to_dest(location_list):
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
@@ -83,8 +85,8 @@ class FileUtility:
                     self.push_audio_processing_to_background(file)
                     Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
         if len(bad_files) > 0:
-            return bad_files, 202
-        return 'ok', 200
+            return 'Bad files: ' + ', '.join(bad_files)
+        return 'Successfully imported!'
 
     @staticmethod
     def get_markers(meta):
@@ -212,3 +214,83 @@ class FileUtility:
     def check_if_path_exists(path):
         path_exist = os.path.exists(path)
         return path_exist
+
+    def __cleanup_files(self, cleanup_type):
+        fs_records = []
+        db_records = []
+
+        if cleanup_type == CleanupType.TAKE:
+            from ..models import Take
+            target_dir = ['media', 'dump']
+            file_format = ".wav"
+
+            takes = Take.objects.all()
+            for take in takes:
+                db_records.append(take.location)
+        elif cleanup_type == CleanupType.COMMENT:
+            from ..models import Comment
+            target_dir = ['media', 'dump', 'comments']
+            file_format = ".mp3"
+
+            comments = Comment.objects.all()
+            for comment in comments:
+                db_records.append(comment.location)
+        elif cleanup_type == CleanupType.NAME_AUDIO:
+            from ..models import User
+            target_dir = ['media', 'dump', 'name_audios']
+            file_format = ".mp3"
+
+            users = User.objects.all()
+            for user in users:
+                if user.name_audio != "":
+                    db_records.append(user.name_audio)
+        elif cleanup_type == CleanupType.EXPORT:
+            target_dir = ['media', 'export']
+            file_format = ".zip"
+        else:
+            return 0
+
+        directory = ''
+        for dir in target_dir:
+            directory = os.path.join(directory, dir)
+        base_dir = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))))
+        root_directory = os.path.join(base_dir, directory)
+
+        for subdir, dirs, files in os.walk(root_directory):
+            for file in files:
+                filepath = os.path.join(subdir, file)
+
+                if filepath.endswith(file_format):
+                    if cleanup_type != CleanupType.EXPORT:
+                        fs_records.append(self.relative_path(filepath))
+                    else:
+                        mtime = os.path.getmtime(filepath)
+                        last_modified_date = datetime.datetime.fromtimestamp(mtime)
+                        diff = datetime.datetime.now() - last_modified_date
+                        # Include files for deletion older than 24 hours
+                        if diff.seconds > 24*60*60:
+                            fs_records.append(self.relative_path(filepath))
+
+        orphans = frozenset(fs_records).difference(db_records)
+
+        for location in orphans:
+            filename = os.path.join(base_dir, location)
+            if os.path.isfile(filename):
+                self.remove_file(filename)
+
+        return len(orphans)
+
+    def cleanup_orphans(self):
+        total_removed = 0
+
+        # cleanup takes
+        total_removed += self.__cleanup_files(CleanupType.TAKE)
+        # cleanup comments
+        total_removed += self.__cleanup_files(CleanupType.COMMENT)
+        # cleanup user name audios
+        total_removed += self.__cleanup_files(CleanupType.NAME_AUDIO)
+        # cleanup old (24 hours) zip files in export folder
+        total_removed += self.__cleanup_files(CleanupType.EXPORT)
+
+        return total_removed

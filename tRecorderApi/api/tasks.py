@@ -11,3 +11,10 @@ def extract_and_save_project(self, file, directory):
         self.file_utility.remove_file(file)
         logger.info("File extracted and  removed.")
         return self.file_utility.import_project(directory)
+
+
+@shared_task(name='cleanup_orphan_files')
+def cleanup_orphan_files(res, self):
+    files_removed = self.file_utility.cleanup_orphans()
+    logger.info("{0} files have been removed".format(files_removed))
+    return "{0} files have been removed".format(files_removed)
