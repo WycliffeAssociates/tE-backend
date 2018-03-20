@@ -11,3 +11,8 @@ def extract_and_save_project(self, file, directory):
         self.file_utility.remove_file(file)
         logger.info("File extracted and  removed.")
         return self.file_utility.import_project(directory)
+    else:
+        self.file_utility.remove_file(file)
+        logger.info("File extraction failed, so removed.")
+
+
