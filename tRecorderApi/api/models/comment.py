@@ -45,12 +45,10 @@ class Comment(models.Model):
     @staticmethod
     def get_comments_for_take_by_chunk_id(chunk_id):
         takes = Take.objects.filter(chunk=chunk_id)
-        print(takes)
         take_comment_list = []
         for take in takes:
             comment = Comment.objects.filter(object_id=take.id, content_type=ContentType.objects.get_for_model(Take))
             if comment:
-                print(comment)
                 for cmt in comment:
                     take_comment_list.append(cmt)
         return take_comment_list
