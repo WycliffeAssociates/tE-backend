@@ -1,12 +1,10 @@
-import json
 import hashlib
+import os
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
-from ..file_transfer.FileUtility import FileUtility
 from ..models import book, language, chunk, anthology, version, chapter, mode
-import os
 
 Language = language.Language
 Book = book.Book
@@ -36,6 +34,12 @@ class Take(models.Model):
     @property
     def has_comment(self):
         return Take.objects.filter(comment__object_id=self.id).exists()
+
+    @property
+    def take_num(self):
+        take = Take.objects.get(pk=self.id)
+        location = take.location
+        return location[len(location) - 6:len(location) - 4:1]
 
     @property
     def name(self):
