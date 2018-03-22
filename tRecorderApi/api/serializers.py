@@ -81,7 +81,7 @@ class TakeSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     take_num = serializers.IntegerField()
     has_comment = serializers.BooleanField(default=False)
-    comment = CommentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
