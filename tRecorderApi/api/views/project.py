@@ -1,5 +1,5 @@
-from api.models import Project
-from api.serializers import ProjectSerializer
+from ..models import Project
+from ..serializers import ProjectSerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -7,7 +7,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
-from api.permissions import IsStaffOrReadOnly
+from ..permissions import IsStaffOrReadOnly
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(

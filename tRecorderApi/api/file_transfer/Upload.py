@@ -1,5 +1,5 @@
 from .FileTransfer import FileTransfer
-from ..tasks import extract_and_save_project, cleanup_orphan_files
+from ..tasks import extract_and_save_project
 
 
 class Upload(FileTransfer):
@@ -10,7 +10,7 @@ class Upload(FileTransfer):
 
     def upload(self, file):
         directory = self.file_utility.root_dir(['media', 'dump'])
-        chain = extract_and_save_project.s(self, file, directory) | \
-            cleanup_orphan_files.s(self)
 
-        chain()
+        task = extract_and_save_project.delay(self, file, directory)
+
+        return task.id

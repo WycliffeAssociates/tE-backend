@@ -39,16 +39,13 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'api',
-    'django_celery_results',
     'drf_yasg',
     'raven.contrib.django.raven_compat',
-    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
+    'social_django',
     'rest_social_auth',
 ]
-
-# SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -109,7 +106,7 @@ DATABASES = {
 }
 
 RAVEN_CONFIG = {
-    'dsn': 'http://2e7130f730eb42dfa6bbe67875dfd8ee:15b0167a7b714b7697a63e6678081e3b@sentry:9000/2',
+    'dsn': 'http://2e7130f730eb42dfa6bbe67875dfd8ee:15b0167a7b714b7697a63e6678081e3b@sentry:9000/1',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
     'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
@@ -212,12 +209,12 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
 # celery
-CELERY_BROKER_URL = 'amqp://te:te@rabbit:5672'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
-CELERY_IGNORE_RESULT = False
+CELERY_TASK_IGNORE_RESULT = False
 CELERY_TASK_TRACK_STARTED = True
 
 

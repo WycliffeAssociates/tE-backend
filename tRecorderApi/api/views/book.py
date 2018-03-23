@@ -1,5 +1,5 @@
-from api.models import Book
-from api.serializers import BookSerializer
+from ..models import Book
+from ..serializers import BookSerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

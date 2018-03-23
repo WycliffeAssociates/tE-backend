@@ -1,12 +1,11 @@
-import json
 import hashlib
+import os
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
-from ..file_transfer.FileUtility import FileUtility
 from ..models import book, language, chunk, anthology, version, chapter, mode
-import os
 
 Language = language.Language
 Book = book.Book

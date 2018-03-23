@@ -1,4 +1,4 @@
-from api.models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology, Version, Mode, User
+from .models import Language, Book, Take, Comment, Chapter, Chunk, Project, Anthology, Version, Mode, Task
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -144,4 +144,28 @@ class ExcludeFilesSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Take
-        fields = ('name','md5hash')
+        fields = ('name', 'md5hash')
+
+
+class TaskSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+    current = serializers.IntegerField(read_only=True)
+    total = serializers.IntegerField(read_only=True)
+    progress = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    message = serializers.CharField(read_only=True)
+    details = serializers.CharField(read_only=True)
+    started_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+    finished_at = serializers.DateTimeField(read_only=True)
+
+    def create(self, validated_data):
+        return Task(id=None, **validated_data)
+
+    def update(self, instance, validated_data):
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
+        return instance
+

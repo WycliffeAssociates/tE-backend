@@ -5,6 +5,7 @@ import re
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
+
 class Chapter(models.Model):
     number = models.IntegerField(default=0)
     checked_level = models.IntegerField(default=0)

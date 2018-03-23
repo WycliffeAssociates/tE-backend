@@ -1,5 +1,5 @@
-from api.models import Chapter
-from api.serializers import ChapterSerializer
+from ..models import Chapter
+from ..serializers import ChapterSerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

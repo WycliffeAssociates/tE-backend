@@ -48,7 +48,8 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def import_project(self, directory):
+    def import_project(self, task, started_at, directory):
+        updated_at = None
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -58,6 +59,12 @@ class FileUtility:
         mode = Mode.import_mode(project_manifest["mode"])
         project = Project.import_project(
             version, mode, anthology, language, book)
+
+        title = project_manifest["language"]["name"] + " - " + \
+            project_manifest["book"]["name"] + " - " + \
+            project_manifest["version"]["name"]
+        total_takes = self.manifest_takes_count(project_manifest["manifest"])
+        current_take = 0
 
         for chapters in project_manifest["manifest"]:
             number = chapters["chapter"]
@@ -72,9 +79,23 @@ class FileUtility:
                 for take in chunks["takes"]:
                     from ..models.take import Take
                     file = os.path.join(directory, take["name"])
+
+                    current_take += 1
+                    updated_at = datetime.datetime.now()
+                    task.update_state(state='PROGRESS',
+                                      meta={
+                                          'current': current_take,
+                                          'total': total_takes,
+                                          'name': task.name,
+                                          'started_at': started_at,
+                                          'updated_at': updated_at,
+                                          'title': title,
+                                          'message': 'Adding takes to database...',
+                                          'details': take["name"]})
+
                     try:
                         meta = TinyTag.get(file)
-                    except Exception as e:
+                    except Exception:
                         os.remove(file)
                         bad_files.append(take["name"])
                         continue
@@ -84,9 +105,20 @@ class FileUtility:
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
                     Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
+
+        add_info = ""
         if len(bad_files) > 0:
-            return 'Bad files: ' + ', '.join(bad_files)
-        return 'Successfully imported!'
+            add_info = 'Bad files: ' + ', '.join(bad_files)
+
+        return {
+            'name': task.name,
+            'started_at': started_at,
+            'updated_at': updated_at,
+            'finished_at': datetime.datetime.now(),
+            'title': title,
+            'message': 'Upload complete!',
+            'details': add_info,
+        }
 
     @staticmethod
     def get_markers(meta):
@@ -106,6 +138,15 @@ class FileUtility:
         except Exception as e:
             shutil.rmtree(directory)
             logger.error("Error: ", e.message)
+
+    @staticmethod
+    def manifest_takes_count(manifest):
+        takes_count = 0
+        for chapters in manifest:
+            for chunks in chapters["chunks"]:
+                takes_count += len(chunks["takes"])
+
+        return takes_count
 
     @staticmethod
     def push_audio_processing_to_background(take):

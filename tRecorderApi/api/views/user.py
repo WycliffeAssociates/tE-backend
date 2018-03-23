@@ -4,7 +4,7 @@ import re
 import uuid
 
 import pydub
-from api.file_transfer import FileUtility
+from ..file_transfer import FileUtility
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
@@ -19,7 +19,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from api.permissions import CanCreateOrDestroyOrReadonly
+from ..permissions import CanCreateOrDestroyOrReadonly
 from ..models.user import User
 from ..serializers import UserSerializer
 
