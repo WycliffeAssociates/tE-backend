@@ -63,6 +63,7 @@ class FileUtility:
             project_manifest["book"]["name"] + " - " + \
             project_manifest["version"]["name"]
         total_takes = self.manifest_takes_count(project_manifest["manifest"])
+        takes_added = 0
         current_take = 0
 
         for chapters in project_manifest["manifest"]:
@@ -102,6 +103,7 @@ class FileUtility:
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
                     Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
+                    takes_added += 1
 
         add_info = ""
         if len(bad_files) > 0:
@@ -113,7 +115,7 @@ class FileUtility:
             'finished': datetime.datetime.now(),
             'title': title,
             'message': 'Upload complete!',
-            'details': add_info,
+            'details': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
         }
 
     @staticmethod
