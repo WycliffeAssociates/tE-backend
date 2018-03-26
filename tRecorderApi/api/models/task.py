@@ -10,7 +10,6 @@ class Task(object):
                 'message',
                 'details',
                 'status',
-                'started_at',
-                'updated_at',
-                'finished_at'):
+                'started',
+                'finished'):
             setattr(self, field, kwargs.get(field, None))

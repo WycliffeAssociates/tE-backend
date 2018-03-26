@@ -48,8 +48,7 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def import_project(self, task, started_at, directory):
-        updated_at = None
+    def import_project(self, directory, task, title, started):
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -81,14 +80,12 @@ class FileUtility:
                     file = os.path.join(directory, take["name"])
 
                     current_take += 1
-                    updated_at = datetime.datetime.now()
                     task.update_state(state='PROGRESS',
                                       meta={
                                           'current': current_take,
                                           'total': total_takes,
                                           'name': task.name,
-                                          'started_at': started_at,
-                                          'updated_at': updated_at,
+                                          'started': started,
                                           'title': title,
                                           'message': 'Adding takes to database...',
                                           'details': take["name"]})
@@ -112,9 +109,8 @@ class FileUtility:
 
         return {
             'name': task.name,
-            'started_at': started_at,
-            'updated_at': updated_at,
-            'finished_at': datetime.datetime.now(),
+            'started': started,
+            'finished': datetime.datetime.now(),
             'title': title,
             'message': 'Upload complete!',
             'details': add_info,

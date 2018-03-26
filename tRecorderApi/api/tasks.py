@@ -1,4 +1,5 @@
 import datetime
+from time import sleep
 from zipfile import BadZipfile
 
 import celery
@@ -13,21 +14,22 @@ class BaseTask(celery.Task):
         self.update_state(state='FAILURE',
                           meta={
                                'name': self.name,
-                               'title': 'An error occurred',
                                'message': "{0!r}".format(exc),
                                'details': einfo,
-                               'finished_at': datetime.datetime.now(),
+                               'title': kwargs["title"],
+                               'started': kwargs["started"],
+                               'finished': datetime.datetime.now(),
                           })
 
 
 @shared_task(name='extract_and_save_project', base=BaseTask)
-def extract_and_save_project(self, file, directory):
-    started_at = datetime.datetime.now()
+def extract_and_save_project(self, file, directory, title, started):
     task = extract_and_save_project
     task.update_state(state='STARTED',
                       meta={
                           'name': task.name,
-                          'started_at': started_at,
+                          'title': title,
+                          'started': started,
                           'message': "Extracting files..."
                       })
 
@@ -35,7 +37,7 @@ def extract_and_save_project(self, file, directory):
     if resp == 'ok':
         self.file_utility.remove_file(file)
         logger.info("File extracted and removed.")
-        return self.file_utility.import_project(task, started_at, directory)
+        return self.file_utility.import_project(directory, task, title, started)
     else:
         self.file_utility.remove_file(file)
         logger.info("File extraction failed, so removed.")
@@ -44,13 +46,13 @@ def extract_and_save_project(self, file, directory):
 
 
 @shared_task(name='cleanup_orphan_files', base=BaseTask)
-def cleanup_orphan_files(file_utility):
-    started_at = datetime.datetime.now()
+def cleanup_orphan_files(file_utility, title, started):
     task = cleanup_orphan_files
     task.update_state(state='STARTED',
                       meta={
                           'name': task.name,
-                          'started_at': started_at,
+                          'title': title,
+                          'started': started,
                           'message': "Deleting orphan files..."
                       })
 
@@ -59,9 +61,41 @@ def cleanup_orphan_files(file_utility):
     return {
         'name': cleanup_orphan_files.name,
         'date': datetime.datetime.now(),
-        'title': 'Cleaning orphan files',
+        'title': title,
         'message': "Cleaning files complete.",
         'details': "{0} files have been removed".format(files_removed),
-        'started_at': started_at,
-        'finished_at': datetime.datetime.now(),
+        'started': started,
+        'finished': datetime.datetime.now(),
     }
+
+
+@shared_task(name='test_task', base=BaseTask)
+def test_task(title, started):
+    task = test_task
+    task.update_state(state='STARTED',
+                      meta={
+                          'name': task.name,
+                          'title': title,
+                          'started': started,
+                          'message': "Starting test task..."
+                      })
+
+    for counter in range(0, 6):
+        if counter == 2:
+            raise KeyError()
+        test_task.update_state(state='PROGRESS',
+                               meta={
+                                   'current': counter * 5,
+                                   'total': 60,
+                                   'name': test_task.name,
+                                   'started': started,
+                                   'title': title,
+                                   'message': 'Processing...'})
+        sleep(5)
+
+    return {
+        'name': test_task.name,
+        'started': started,
+        'finished': datetime.datetime.now(),
+        'title': title,
+        'message': "Task complete!"}

@@ -61,9 +61,8 @@ class TaskViewSet(viewsets.ViewSet):
                 "details": "",
                 "current": 0,
                 "total": 0,
-                "started_at": None,
-                "updated_at": None,
-                "finished_at": None,
+                "started": None,
+                "finished": None,
             },
         }
         if "task_id" in data:
@@ -83,12 +82,10 @@ class TaskViewSet(viewsets.ViewSet):
                 dic["result"]["current"] = data["result"]["current"]
             if "total" in data["result"]:
                 dic["result"]["total"] = data["result"]["total"]
-            if "started_at" in data["result"]:
-                dic["result"]["started_at"] = data["result"]["started_at"]
-            if "updated_at" in data["result"]:
-                dic["result"]["updated_at"] = data["result"]["updated_at"]
-            if "finished_at" in data["result"]:
-                dic["result"]["finished_at"] = data["result"]["finished_at"]
+            if "started" in data["result"]:
+                dic["result"]["started"] = data["result"]["started"]
+            if "finished" in data["result"]:
+                dic["result"]["finished"] = data["result"]["finished"]
         return dic
 
     @staticmethod
@@ -102,9 +99,8 @@ class TaskViewSet(viewsets.ViewSet):
         task_obj.details = data["result"]["details"]
         task_obj.current = data["result"]["current"]
         task_obj.total = data["result"]["total"]
-        task_obj.started_at = data["result"]["started_at"]
-        task_obj.updated_at = data["result"]["updated_at"]
-        task_obj.finished_at = data["result"]["finished_at"]
+        task_obj.started = data["result"]["started"]
+        task_obj.finished = data["result"]["finished"]
         task_obj.progress = 0
 
         if task_obj.status == u'SUCCESS':

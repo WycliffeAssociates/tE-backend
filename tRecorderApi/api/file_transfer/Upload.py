@@ -1,3 +1,5 @@
+import datetime
+
 from .FileTransfer import FileTransfer
 from ..tasks import extract_and_save_project
 
@@ -11,6 +13,8 @@ class Upload(FileTransfer):
     def upload(self, file):
         directory = self.file_utility.root_dir(['media', 'dump'])
 
-        task = extract_and_save_project.delay(self, file, directory)
+        task = extract_and_save_project.delay(self, file, directory,
+                                              title='Upload and import project',
+                                              started=datetime.datetime.now())
 
         return task.id

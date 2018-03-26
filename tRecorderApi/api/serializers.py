@@ -157,9 +157,8 @@ class TaskSerializer(serializers.Serializer):
     title = serializers.CharField(read_only=True)
     message = serializers.CharField(read_only=True)
     details = serializers.CharField(read_only=True)
-    started_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
-    finished_at = serializers.DateTimeField(read_only=True)
+    started = serializers.DateTimeField(read_only=True)
+    finished = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         return Task(id=None, **validated_data)
