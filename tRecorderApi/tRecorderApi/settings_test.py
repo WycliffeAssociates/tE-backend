@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'django_celery_results',
-    'drf_yasg',
-    'raven.contrib.django.raven_compat',
+    'drf_yasg'
+    # 'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE = [
@@ -106,57 +106,57 @@ DATABASES = {
     # }
 # }
 
-RAVEN_CONFIG = {
-    'dsn': 'http://2e7130f730eb42dfa6bbe67875dfd8ee:15b0167a7b714b7697a63e6678081e3b@sentry:9000/2',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-}
+# RAVEN_CONFIG = {
+    # 'dsn': 'http://2e7130f730eb42dfa6bbe67875dfd8ee:15b0167a7b714b7697a63e6678081e3b@sentry:9000/2',
+    # # If you are using git, you can also automatically configure the
+    # # release based on the git info.
+    # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+# }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry'],
-    },
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s '
-                      '%(process)d %(thread)d %(message)s'
-        },
-    },
-    'handlers': {
-        'sentry': {
-            # To capture more than ERROR, change to WARNING, INFO, etc.
-            'level': 'INFO',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-    },
-}
+# LOGGING = {
+    # 'version': 1,
+    # 'disable_existing_loggers': True,
+    # 'root': {
+        # 'level': 'WARNING',
+        # 'handlers': ['sentry'],
+    # },
+    # 'formatters': {
+        # 'verbose': {
+            # 'format': '%(levelname)s %(asctime)s %(module)s '
+                      # '%(process)d %(thread)d %(message)s'
+        # },
+    # },
+    # 'handlers': {
+        # 'sentry': {
+            # # To capture more than ERROR, change to WARNING, INFO, etc.
+            # 'level': 'INFO',
+            # 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            # 'tags': {'custom-tag': 'x'},
+        # },
+        # 'console': {
+            # 'level': 'DEBUG',
+            # 'class': 'logging.StreamHandler',
+            # 'formatter': 'verbose'
+        # }
+    # },
+    # 'loggers': {
+        # 'django.db.backends': {
+            # 'level': 'ERROR',
+            # 'handlers': ['console'],
+            # 'propagate': False,
+        # },
+        # 'raven': {
+            # 'level': 'DEBUG',
+            # 'handlers': ['console'],
+            # 'propagate': False,
+        # },
+        # 'sentry.errors': {
+            # 'level': 'DEBUG',
+            # 'handlers': ['console'],
+            # 'propagate': False,
+        # },
+    # },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
