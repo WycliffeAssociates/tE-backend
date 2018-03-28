@@ -14,3 +14,4 @@ redis
 django-celery-results
 flower
 drf-yasg
+django-jenkins
