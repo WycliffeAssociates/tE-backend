@@ -2,7 +2,6 @@ import json
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from django.forms.models import model_to_dict
 
 from .chapter import Chapter
 
@@ -25,6 +24,10 @@ class Chunk(models.Model):
     @property
     def has_comment(self):
         return Chunk.objects.filter(comments__object_id=self.id).exists()
+
+    @property
+    def published_take(self):
+        return self.takes.filter(published=True).first()
 
     @staticmethod
     def import_chunk(chapter, startv, endv):

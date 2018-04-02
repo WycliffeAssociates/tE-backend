@@ -47,16 +47,6 @@ class ChapterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ChunkSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    has_comment = serializers.BooleanField(default=False)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Chunk
-        fields = '__all__'
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -80,12 +70,22 @@ class CommentSerializer(serializers.ModelSerializer):
 class TakeSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     take_num = serializers.IntegerField()
-    has_comment = serializers.BooleanField(default=False)
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Take
+        fields = '__all__'
+
+
+class ChunkSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    has_comment = serializers.BooleanField(default=False)
+    published_take = TakeSerializer(many=False, read_only=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Chunk
         fields = '__all__'
 
 
