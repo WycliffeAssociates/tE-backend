@@ -7,6 +7,7 @@ import pydub
 from api.file_transfer import FileUtility
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -47,6 +48,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (CanCreateOrDestroyOrReadonly,)
+
+    def retrieve(self, request, pk=None):
+        if pk == 'me':
+            user = request.user
+        else:
+            user = self.get_object()
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
     def get_queryset(self):
         queryset = []
