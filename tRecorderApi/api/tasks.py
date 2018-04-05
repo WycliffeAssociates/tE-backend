@@ -15,7 +15,7 @@ class BaseTask(celery.Task):
                           meta={
                                'name': self.name,
                                'message': "{0!r}".format(exc),
-                               'details': einfo,
+                               'details': {"result": repr(einfo)},
                                'title': kwargs["title"],
                                'started': kwargs["started"],
                                'finished': datetime.datetime.now(),
@@ -30,7 +30,8 @@ def extract_and_save_project(self, file, directory, title, started):
                           'name': task.name,
                           'title': title,
                           'started': started,
-                          'message': "Extracting files..."
+                          'message': "Extracting files...",
+                          'details': {}
                       })
 
     resp, stat = self.archive_project.extract(file, directory)
@@ -53,7 +54,8 @@ def cleanup_orphan_files(file_utility, title, started):
                           'name': task.name,
                           'title': title,
                           'started': started,
-                          'message': "Deleting orphan files..."
+                          'message': "Deleting orphan files...",
+                          'details': {}
                       })
 
     files_removed = file_utility.cleanup_orphans()
@@ -63,7 +65,7 @@ def cleanup_orphan_files(file_utility, title, started):
         'date': datetime.datetime.now(),
         'title': title,
         'message': "Cleaning files complete.",
-        'details': "{0} files have been removed".format(files_removed),
+        'details': {"result": "{0} files have been removed".format(files_removed)},
         'started': started,
         'finished': datetime.datetime.now(),
     }
@@ -77,7 +79,8 @@ def test_task(title, started):
                           'name': task.name,
                           'title': title,
                           'started': started,
-                          'message': "Starting test task..."
+                          'message': "Starting test task...",
+                          'details': {}
                       })
 
     for counter in range(0, 6):
@@ -90,7 +93,8 @@ def test_task(title, started):
                                    'name': test_task.name,
                                    'started': started,
                                    'title': title,
-                                   'message': 'Processing...'})
+                                   'message': 'Processing...',
+                                   'details': {}})
         sleep(5)
 
     return {
@@ -98,4 +102,5 @@ def test_task(title, started):
         'started': started,
         'finished': datetime.datetime.now(),
         'title': title,
-        'message': "Task complete!"}
+        'message': "Task complete!",
+        'details': {}}

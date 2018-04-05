@@ -1,7 +1,7 @@
 import datetime
 
 from .FileTransfer import FileTransfer
-from ..tasks import extract_and_save_project
+from api.tasks import extract_and_save_project
 
 
 class Upload(FileTransfer):

@@ -156,7 +156,7 @@ class TaskSerializer(serializers.Serializer):
     progress = serializers.IntegerField(read_only=True)
     title = serializers.CharField(read_only=True)
     message = serializers.CharField(read_only=True)
-    details = serializers.CharField(read_only=True)
+    details = serializers.DictField(read_only=True)
     started = serializers.DateTimeField(read_only=True)
     finished = serializers.DateTimeField(read_only=True)
 

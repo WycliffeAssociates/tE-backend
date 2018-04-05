@@ -60,8 +60,7 @@ class FileUtility:
             version, mode, anthology, language, book)
 
         title = project_manifest["language"]["name"] + " - " + \
-            project_manifest["book"]["name"] + " - " + \
-            project_manifest["version"]["name"]
+            project_manifest["book"]["name"]
         total_takes = self.manifest_takes_count(project_manifest["manifest"])
         takes_added = 0
         current_take = 0
@@ -89,7 +88,14 @@ class FileUtility:
                                           'started': started,
                                           'title': title,
                                           'message': 'Adding takes to database...',
-                                          'details': take["name"]})
+                                          'details': {
+                                              'lang_slug': project_manifest["language"]["slug"],
+                                              'lang_name': project_manifest["language"]["name"],
+                                              'book_slug': project_manifest["book"]["slug"],
+                                              'book_name': project_manifest["book"]["name"],
+                                              'result': take["name"],
+                                          }
+                                      })
 
                     try:
                         meta = TinyTag.get(file)
@@ -115,7 +121,13 @@ class FileUtility:
             'finished': datetime.datetime.now(),
             'title': title,
             'message': 'Upload complete!',
-            'details': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
+            'details': {
+                'lang_slug': project_manifest["language"]["slug"],
+                'lang_name': project_manifest["language"]["name"],
+                'book_slug': project_manifest["book"]["slug"],
+                'book_name': project_manifest["book"]["name"],
+                'result': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
+            }
         }
 
     @staticmethod

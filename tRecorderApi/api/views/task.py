@@ -30,8 +30,9 @@ class TaskViewSet(viewsets.ViewSet):
                 task_obj = self.get_task_from_data(data)
                 task_list.append(task_obj)
 
+        sorted_list = sorted(task_list, key=lambda k: k.started, reverse=True)
         serializer = TaskSerializer(
-            instance=task_list, many=True)
+            instance=sorted_list, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
