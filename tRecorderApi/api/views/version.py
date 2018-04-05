@@ -4,7 +4,9 @@ from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
-
+from rest_framework import status 
+from rest_framework.response import Response
+from django.core.exceptions import SuspiciousOperation
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of takes based on given query string",
@@ -40,5 +42,6 @@ class VersionViewSet(viewsets.ModelViewSet):
             filter = self.build_params_filter(self.request.query_params)
             if filter:
                 return queryset.filter(**filter)
-            return None
+            else:
+                raise SuspiciousOperation
         return queryset
