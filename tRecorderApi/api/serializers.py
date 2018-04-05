@@ -39,6 +39,9 @@ class ChapterSerializer(serializers.ModelSerializer):
     contributors = serializers.CharField()
     has_comment = serializers.BooleanField(default=False)
     completed = serializers.IntegerField()
+    total_chunks = serializers.IntegerField()
+    uploaded_chunks = serializers.IntegerField()
+    published_chunks = serializers.IntegerField()
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""

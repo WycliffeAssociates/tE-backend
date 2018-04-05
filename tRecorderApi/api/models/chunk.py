@@ -11,7 +11,8 @@ class Chunk(models.Model):
     endv = models.IntegerField(default=0)
     chapter = models.ForeignKey(
         Chapter,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='chunks'
     )
     comments = GenericRelation("Comment")
 
