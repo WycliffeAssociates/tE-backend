@@ -59,7 +59,6 @@ class CommentViewSet(viewsets.ModelViewSet):
                 queryset = Comment.get_comments(chunk_id=chunk_id)
             if take_id is not None:
                 queryset = Comment.get_comments(take_id=take_id)
-
             if len(queryset) != 0:
                 return queryset
             else:

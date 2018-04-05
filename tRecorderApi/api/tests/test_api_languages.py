@@ -1,6 +1,8 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+import random
+import string
 
 from ..models import Language
 
@@ -10,6 +12,9 @@ class LanguageApiTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.lang = Language.objects.create(slug='yo', name='yolo')
+        self.random_url = ''.join(random.choices(string.ascii_uppercase +
+                                                 string.digits,
+                                                 k=random.randint(1,15)))
 
     def test_number_of_items_are_equal(self):
         language_num = Language.objects.count()
@@ -33,9 +38,7 @@ class LanguageApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_text_as_parameter_gives_400_status_code(self):
-        # 400 was expected status code but 200 is returned
-
-        response = self.client.get('/api/languages/?randomeparameter/')
+        response = self.client.get('/api/languages/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_slug_equals_en_x_demo_as_parameter_has_len_one(self):

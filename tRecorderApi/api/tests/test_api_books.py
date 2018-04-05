@@ -1,6 +1,8 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+import random
+import string
 
 from ..models import Anthology, Book
 
@@ -11,6 +13,9 @@ class BookApiTest(TestCase):
         self.client = APIClient()
         self.anthology = Anthology.objects.create(slug='ot', name="old testament")
         self.book = Book.objects.create(name='mark', number=5, slug='mrk', anthology=self.anthology)
+        self.random_url = ''.join(random.choices(string.ascii_uppercase +
+                                                 string.digits,
+                                                 k=random.randint(1,15)))
 
     def test_number_of_items_are_equal(self):
         language_num = Book.objects.count()
@@ -34,9 +39,7 @@ class BookApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_text_as_parameter_gives_400_status_code(self):
-        # 400 was expected status code but 200 is returned
-
-        response = self.client.get('/api/books/?randomeparameter/')
+        response = self.client.get('/api/books/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_slug_equals_en_x_demo_as_parameter_has_len_one(self):

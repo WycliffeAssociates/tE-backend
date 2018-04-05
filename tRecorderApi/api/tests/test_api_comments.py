@@ -1,6 +1,8 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+import random
+import string
 
 from ..models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk
 
@@ -23,6 +25,9 @@ class CommentApiTest(TestCase):
 
         self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
         self.chunk2 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap2)
+        self.random_url = ''.join(random.choices(string.ascii_uppercase +
+                                                 string.digits,
+                                                 k=random.randint(1,15)))
 
     def test_number_of_items_are_equal(self):
         chapter_num = Chunk.objects.count()
@@ -46,7 +51,7 @@ class CommentApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_text_as_parameter_gives_400_status_code(self):
-        response = self.client.get('/api/chunks/?randomeparameter/')
+        response = self.client.get('/api/chunks/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_response_contains_project(self):
