@@ -1,3 +1,6 @@
+"""
+    This module contains test cases for the retrieval of project data.
+"""
 from django.test import TestCase
 from django.conf import settings
 from rest_framework.test import APIClient
@@ -12,6 +15,10 @@ LOCATION_WAV = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
 
 
 class GetProjectsTestCases(TestCase):
+    """
+        Test cases which tests functions associated with retrieving data about
+        projects.
+    """
     def setUp(self):
         self.client = APIClient()
         self.lang = Language.objects.create(slug='en-x-demo',
@@ -115,7 +122,7 @@ class GetProjectsTestCases(TestCase):
         """
         Verify that the ProjectSerializer class serializes an object of type
         'Project' into a JSON format containing the following assumed keys:
-            1) id
+            1)  id
             2)  published
             3)  contributors
             4)  date_modified
@@ -125,7 +132,7 @@ class GetProjectsTestCases(TestCase):
             8)  book
             9)  version
             10) anthology
-        Input: data => serialized data of project object created in setup
+        Input: data = serialized data of project object created in setup
         Expected: data will contain all of the keys listed above
         """
 
@@ -143,8 +150,17 @@ class GetProjectsTestCases(TestCase):
         self.assertIn("version", data)
         self.assertIn("anthology", data)
 
-    def test_get_percentage_function(self):
-        chunks_done = 30
-        total_chunks = 100
-        percentage = Project.get_percentage_completed(chunks_done, total_chunks)
-        self.assertEqual(percentage, 30)
+    # def test_get_percentage_function(self):
+        # """
+        # Verify the 'Project' class's 'get_percentage_completed' function
+        # behaves as expected.
+        # Input: chunks_done = number of chunks ready for publishing within a
+                             # chapter
+               # total_chunks = total number of chunks within a chapter
+        # Expected: function will return chunks_done/total_chunks represented as
+                  # a whole number
+        # """
+        # chunks_done = 30
+        # total_chunks = 100
+        # percentage = Project.get_percentage_completed(chunks_done, total_chunks)
+        # self.assertEqual(percentage, 30)
