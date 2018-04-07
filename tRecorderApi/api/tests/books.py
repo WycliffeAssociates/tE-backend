@@ -1,33 +1,38 @@
+"""
+    This module contains test cases that test the Book model independently from
+    the api. APIClient library still needed to generate Book model data inside
+    of database.
+"""
 from django.test import TestCase
 from rest_framework.test import APIClient
 from ..models import Book, Anthology
 from ..serializers import BookSerializer
 
 
-class IntegrationBookTests(TestCase):
-
+class BookModelTestCases(TestCase):
+    """
+        Test cases which verify the behavior of the Book class as defined in the
+        api/models/book.py file.
+    """
     def setUp(self):
         self.client = APIClient()
         self.anthology = Anthology.objects.create(
-            slug='nt', name="new testament", id=1)
-        self.anthology2 = Anthology.objects.create(
-            slug='ot', name="old testament", id=2)
+            slug='nt',
+            name="new testament",
+            id=1)
         self.book_1 = Book.objects.create(
-            name='mark', number=5, slug='mrk', anthology=self.anthology)
-        self.book_2 = Book.objects.create(
-            name='john', number=1, slug='jhn', anthology=self.anthology)
-        self.book_2 = Book.objects.create(
-            name='genesis', number=1, slug='gem', anthology=self.anthology2)
+            name='mark',
+            number=5,
+            slug='mrk',
+            anthology=self.anthology)
         self.book_serializer = BookSerializer(instance=self.book_1)
 
-    def test_get_book(self):
+    def serializer_ouput(self):
         """
-            Verify that the BookSerializer class serializes an object of type
-            'Book' into a JSON format containing the following assumed keys:
-                1) id
-                2) slug
-                3) name
-                4) book_num
+            Verify the BookSerializer class outputs data containing
+            the keys defined in the BookSerializer class and the Book class.
+            For more information about the classes, see api/serializers.py and
+            api/models/books.py.
             Input: data = serialized data of book object created in setup
             Expected: data will contain all of the keys listed above
         """
