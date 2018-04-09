@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 import random
 import string
 
-from ..models import Anthology
+from ...models import Anthology
 
 
 class AnthologyApiTest(TestCase):

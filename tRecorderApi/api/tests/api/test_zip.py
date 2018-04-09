@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 import os
-from ..models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, Take
+from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, Take
 
 cur_path = os.path.dirname(__file__)
 file_path = os.path.join(cur_path, "test_files", "zip", "abc.wav")

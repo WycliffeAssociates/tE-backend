@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 import random
 import string
-from ..models import Language, Anthology, Book, Version, Mode, Project, Chapter
+from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter
 
 
 class ChapterApiTest(TestCase):
