@@ -27,7 +27,7 @@ class BookModelTestCases(TestCase):
             anthology=self.anthology)
         self.book_serializer = BookSerializer(instance=self.book_1)
 
-    def serializer_ouput(self):
+    def test_serializer_ouput(self):
         """
             Verify the BookSerializer class outputs data containing
             the keys defined in the BookSerializer class and the Book class.

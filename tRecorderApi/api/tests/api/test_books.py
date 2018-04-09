@@ -33,7 +33,7 @@ class BookApiTestCases(TestCase):
                 string.ascii_uppercase + string.digits,
                 k=random.randint(1, 15)))
 
-    def language_dependency(self):
+    def test_language_dependency(self):
         """
             Verify each book created in the database, creates a language object
             as well.
@@ -46,7 +46,7 @@ class BookApiTestCases(TestCase):
         response = self.client.get('/api/books/')
         self.assertEqual(len(response.data), language_num)
 
-    def get_request_returns_ok(self):
+    def test_get_request_returns_ok(self):
         """
             Verify making a GET request to the api URL for the books returns an
             HTTPResponse with a status code of 200.
@@ -60,7 +60,7 @@ class BookApiTestCases(TestCase):
         # response = self.client.get('/api/books/1/')
         # self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def get_request_with_id_returns_ok(self):
+    def test_get_request_with_id_returns_ok(self):
         """
             Verify making a GET request to the api URL for the books that
             specifies an id returns an HTTPResponse with a status code of 200.
@@ -70,7 +70,7 @@ class BookApiTestCases(TestCase):
         response = self.client.get('/api/books/?id=1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def null_url_returns_404(self):
+    def test_null_url_returns_404(self):
         """
             Verify that sending a GET request to the api url for books using an id
             that does not exist within the test database will return an HTTP
@@ -82,7 +82,7 @@ class BookApiTestCases(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     # def test_random_text_as_parameter_gives_400_status_code(self):
-    def random_url_returns_400(self):
+    def test_random_url_returns_400(self):
         """
             Verify sending a GET request to the api URL for books with a
             parameter containing a random string will return an HTTP response
@@ -94,7 +94,7 @@ class BookApiTestCases(TestCase):
         response = self.client.get('/api/books/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def response_length(self):
+    def test_response_length(self):
         """
             Verify api returns the expected number of books given a GET request
             containing a URL with a query set.
