@@ -11,23 +11,42 @@ class CommentApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.lang = Language.objects.create(slug='en-x-demo', name='english')
-        self.anthology = Anthology.objects.create(slug='ot', name="old testament")
-        self.book = Book.objects.create(name='mark', number=5, slug='mrk', anthology=self.anthology)
-        self.version = Version.objects.create(slug='ulb', name="Unlocked literal bible")
-        self.mode = Mode.objects.create(slug="chk", name="chunk", unit=1)
-        self.project = Project.objects.create(version=self.version, mode=self.mode,
-                                              anthology=self.anthology, language=self.lang,
-                                              book=self.book)
-
-        self.chap = Chapter.objects.create(number=1, checked_level=1, published=False, project=self.project)
-        self.chap2 = Chapter.objects.create(number=2, checked_level=2, published=False, project=self.project)
-
-        self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
-        self.chunk2 = Chunk.objects.create(startv=0, endv=3, chapter=self.chap2)
-        self.random_url = ''.join(random.choices(string.ascii_uppercase +
-                                                 string.digits,
-                                                 k=random.randint(1,15)))
+        self.lang = Language.objects.create(
+            slug='en-x-demo',
+            name='english')
+        self.anthology = Anthology.objects.create(
+            slug='ot',
+            name="old testament")
+        self.book = Book.objects.create(
+            name='mark',
+            number=5,
+            slug='mrk',
+            anthology=self.anthology)
+        self.version = Version.objects.create(
+            slug='ulb',
+            name="Unlocked literal bible")
+        self.mode = Mode.objects.create(
+            slug="chk",
+            name="chunk",
+            unit=1)
+        self.project = Project.objects.create(
+            version=self.version,
+            mode=self.mode,
+            anthology=self.anthology,
+            language=self.lang,
+            book=self.book)
+        self.chap = Chapter.objects.create(
+            number=1,
+            checked_level=1,
+            published=False,
+            project=self.project)
+        self.chunk = Chunk.objects.create(
+            startv=0,
+            endv=3,
+            chapter=self.chap)
+        self.random_url = ''.join(random.choices(
+            string.ascii_uppercase + string.digits,
+            k=random.randint(1, 15)))
 
     def test_number_of_items_are_equal(self):
         chapter_num = Chunk.objects.count()
@@ -54,6 +73,11 @@ class CommentApiTest(TestCase):
         response = self.client.get('/api/chunks/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_response_contains_project(self):
-        response = self.client.get('/api/chunks/')
-        self.assertContains(response.data, self.project)
+# TODO: The test below needs review due to the data returned by response. The data
+# does not explicitly list self.project. It can only be assumed by the
+# inclusion of "('chapter', 1)" in the data returned which would contain the
+# project. This test may be redundant due to test_response_contains_project
+# already in tests/api/chapters.py.
+    # def test_response_contains_project(self):
+        # response = self.client.get('/api/chunks/')
+        # self.assertContains(response.data, self.project)

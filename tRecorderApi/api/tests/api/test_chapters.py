@@ -32,13 +32,9 @@ class ChapterApiTest(TestCase):
                                            checked_level=1,
                                            published=False,
                                            project=self.project)
-        self.chap2 = Chapter.objects.create(number=2,
-                                            checked_level=2,
-                                            published=False,
-                                            project=self.project)
-        self.random_url = ''.join(random.choices(string.ascii_uppercase +
-                                                 string.digits,
-                                                 k=random.randint(1,15)))
+        self.random_url = ''.join(random.choices(
+            string.ascii_uppercase + string.digits,
+            k=random.randint(1, 15)))
 
     def test_number_of_items_are_equal(self):
         chapter_num = Chapter.objects.count()
@@ -66,9 +62,19 @@ class ChapterApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_response_contains_project(self):
+        """
+            Verfiy the data returned after sending a GET request to
+            localhost:8000/api/chapters contains data on the project associated
+            with the chapter.
+            Input:    GET request to localhost:8000/api/chapters
+            Expected: response back from the api will contain information on
+                      self.project
+        """
         response = self.client.get('/api/chapters/')
-        print(response.data)
-        print(self.project)
-        # self.assertContains(response.data, self.project)
-        # cannot use the above assert statement because it is not an
-        # HttpResponse object that is returned
+        self.assertIn("project", str(response.data))
+        # self.project will have an id of 1 since it is the only project
+        # created in this test case
+        # the format for verifying the id data for a project was verified
+        # manually using the statement below:
+        # print(response.data)
+        self.assertIn("('id', 1)", str(response.data))
