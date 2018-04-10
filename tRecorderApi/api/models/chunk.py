@@ -9,7 +9,8 @@ class Chunk(models.Model):
     endv = models.IntegerField(default=0)
     chapter = models.ForeignKey(
         Chapter,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='chunks'
     )
     comments = GenericRelation("Comment")
 
@@ -22,6 +23,10 @@ class Chunk(models.Model):
     @property
     def has_comment(self):
         return Chunk.objects.filter(comments__object_id=self.id).exists()
+
+    @property
+    def published_take(self):
+        return self.takes.filter(published=True).first()
 
     @staticmethod
     def import_chunk(chapter, startv, endv):

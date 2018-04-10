@@ -48,8 +48,8 @@ from rest_framework.permissions import IsAuthenticated
 class TakeViewSet(viewsets.ModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
 
     def build_params_filter(self, query):
         pk = query.get("id", None)

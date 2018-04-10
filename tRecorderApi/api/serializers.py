@@ -39,6 +39,9 @@ class ChapterSerializer(serializers.ModelSerializer):
     contributors = serializers.CharField()
     has_comment = serializers.BooleanField(default=False)
     completed = serializers.IntegerField()
+    total_chunks = serializers.IntegerField()
+    uploaded_chunks = serializers.IntegerField()
+    published_chunks = serializers.IntegerField()
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -47,32 +50,11 @@ class ChapterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ChunkSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    has_comment = serializers.BooleanField(default=False)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Chunk
-        fields = '__all__'
-
-
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = get_user_model()
         exclude = ('date_joined', 'password',
                    'last_login', 'user_permissions', 'groups', 'is_superuser',)
-
-
-class TakeSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    has_comment = serializers.BooleanField(default=False)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Take
-        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -86,6 +68,28 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ('id', 'location', 'date_modified', 'object_id',
                   'content_type', 'owner', 'owner_icon_hash', 'owner_name_audio')
+
+
+class TakeSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    take_num = serializers.IntegerField()
+    comments = CommentSerializer(many=True, read_only=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Take
+        fields = '__all__'
+
+
+class ChunkSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    has_comment = serializers.BooleanField(default=False)
+    published_take = TakeSerializer(many=False, read_only=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Chunk
+        fields = '__all__'
 
 
 class AnthologySerializer(serializers.ModelSerializer):
@@ -137,7 +141,6 @@ class ModeSerializer(serializers.ModelSerializer):
 
 
 class ExcludeFilesSerializer(serializers.ModelSerializer):
-
     md5hash = serializers.CharField()
     name = serializers.CharField()
 
@@ -167,4 +170,3 @@ class TaskSerializer(serializers.Serializer):
         for field, value in validated_data.items():
             setattr(instance, field, value)
         return instance
-

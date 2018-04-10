@@ -65,7 +65,6 @@ class CommentViewSet(viewsets.ModelViewSet):
                 queryset = Comment.get_comments(chunk_id=chunk_id)
             if take_id is not None:
                 queryset = Comment.get_comments(take_id=take_id)
-
             if len(queryset) != 0:
                 return queryset
             else:
@@ -141,9 +140,6 @@ class CommentViewSet(viewsets.ModelViewSet):
             owner=request.user
         )
         c.save()
-        dic = {
-            "location": relpath + ".mp3",
-            "id": c.pk
-        }
 
-        return Response(dic, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(c)
+        return Response(serializer.data, status=status.HTTP_200_OK)

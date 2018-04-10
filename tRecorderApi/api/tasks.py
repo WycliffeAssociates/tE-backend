@@ -1,5 +1,4 @@
 import datetime
-from time import sleep
 from zipfile import BadZipfile
 
 import celery
@@ -62,7 +61,6 @@ def cleanup_orphan_files(file_utility, title, started):
     logger.info("{0} files have been removed".format(files_removed))
     return {
         'name': cleanup_orphan_files.name,
-        'date': datetime.datetime.now(),
         'title': title,
         'message': "Cleaning files complete.",
         'details': {"result": "{0} files have been removed".format(files_removed)},
@@ -71,36 +69,49 @@ def cleanup_orphan_files(file_utility, title, started):
     }
 
 
-@shared_task(name='test_task', base=BaseTask)
-def test_task(title, started):
-    task = test_task
+@shared_task(name='download_project')
+def download_project(self, project_name, root_dir, location_list, file_format, title, started):
+    task = download_project
     task.update_state(state='STARTED',
                       meta={
                           'name': task.name,
                           'title': title,
                           'started': started,
-                          'message': "Starting test task...",
+                          'message': "Starting download...",
                           'details': {}
                       })
 
-    for counter in range(0, 6):
-        if counter == 2:
-            raise KeyError()
-        test_task.update_state(state='PROGRESS',
-                               meta={
-                                   'current': counter * 5,
-                                   'total': 60,
-                                   'name': test_task.name,
-                                   'started': started,
-                                   'title': title,
-                                   'message': 'Processing...',
-                                   'details': {}})
-        sleep(5)
+    self.file_utility.copy_files_from_src_to_dest(
+        location_list,
+        task,
+        title,
+        started)  # 1/3 of overall progress
+
+    converted_list = self.audio_utility.convert_to_mp3(
+        location_list,
+        file_format,
+        task,
+        title,
+        started)  # 2/3 of overall progress
+
+    project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
+    zip_abs_location = self.archive_project.archive(
+        root_dir,
+        project_file,
+        converted_list,
+        self.file_utility.remove_dir,
+        task,
+        title,
+        started
+    )  # 3/3 of overall progress
+
+    zip_rel_location = self.file_utility.relative_path(zip_abs_location)
 
     return {
-        'name': test_task.name,
-        'started': started,
-        'finished': datetime.datetime.now(),
-        'title': title,
-        'message': "Task complete!",
-        'details': {}}
+            'name': download_project.name,
+            'title': title,
+            'message': "Download is ready.",
+            'details': {"result": zip_rel_location},
+            'started': started,
+            'finished': datetime.datetime.now(),
+        }

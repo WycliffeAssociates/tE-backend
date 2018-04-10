@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.timezone import now
+
 from .chapter import Chapter
 from .chunk import Chunk
 from .take import Take
@@ -27,8 +28,8 @@ class Comment(models.Model):
         commented_object = None
         object_id = None
         if chunk_id is not None:
-             commented_object = Chunk
-             object_id = chunk_id
+            commented_object = Chunk
+            object_id = chunk_id
         elif take_id is not None:
             commented_object = Take
             object_id = take_id
@@ -37,5 +38,17 @@ class Comment(models.Model):
             object_id = chapter_id
         else:
             return None
-        comments = Comment.objects.filter(object_id=object_id, content_type=ContentType.objects.get_for_model(commented_object))
+        comments = Comment.objects.filter(object_id=object_id,
+                                          content_type=ContentType.objects.get_for_model(commented_object))
         return comments
+
+    @staticmethod
+    def get_comments_for_take_by_chunk_id(chunk_id):
+        takes = Take.objects.filter(chunk=chunk_id)
+        take_comment_list = []
+        for take in takes:
+            comment = Comment.objects.filter(object_id=take.id, content_type=ContentType.objects.get_for_model(Take))
+            if comment:
+                for cmt in comment:
+                    take_comment_list.append(cmt)
+        return take_comment_list

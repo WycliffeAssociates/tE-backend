@@ -7,6 +7,7 @@ import pydub
 from ..file_transfer import FileUtility
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -48,6 +49,14 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (CanCreateOrDestroyOrReadonly,)
 
+    def retrieve(self, request, pk=None):
+        if pk == 'me':
+            user = request.user
+        else:
+            user = self.get_object()
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
     def get_queryset(self):
         queryset = []
         query = self.request.query_params
@@ -87,60 +96,65 @@ class UserViewSet(viewsets.ModelViewSet):
 
         if "iconHash" not in data or data["iconHash"].strip() == "":
             return Response({"error": "empty_icon_hash"}, status=status.HTTP_400_BAD_REQUEST)
+        if "nameAudio" not in data or data["nameAudio"].strip() == "":
+            return Response({"error": "empty_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user, created = User.objects.get_or_create(icon_hash=data["iconHash"])
-        if created:
-            if "nameAudio" not in data or data["nameAudio"].strip() == "":
-                user.delete()
-                return Response({"error": "empty_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
+        uuid_name = str(uuid.uuid1())[:8]
+        name_audio_location = self.create_name_audio(data["nameAudio"], uuid_name)
 
-            name_audio = data["nameAudio"]
-            uuid_name = str(uuid.uuid1())[:8]
+        if name_audio_location is not None:
+            if not User.objects.filter(icon_hash=data["iconHash"]).exists():
+                user = self.create_user(data["iconHash"], uuid_name, name_audio_location)
+                if user is not None:
+                    token, created = Token.objects.get_or_create(user=user)
 
-            nameaudios_folder = os.path.join(
-                settings.BASE_DIR, "media", "dump", "name_audios")
-            nameaudio_location = os.path.join(nameaudios_folder, uuid_name)
-            relpath = FileUtility.relative_path(nameaudio_location)
+                    return Response({
+                        "token": token.key,
+                        "userId": user.pk,
+                        "nameAudio": user.name_audio
+                    }, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "user_exists"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "bad_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
-            if not os.path.exists(nameaudios_folder):
-                os.makedirs(nameaudios_folder)
-
-            try:
-                name = self.blob2base64decode(name_audio)
-                with open(nameaudio_location + '.webm', 'wb') as audio_file:
-                    audio_file.write(name)
-                if os.path.isfile(nameaudio_location + '.webm'):
-                    print(nameaudio_location + '.webm')
-                    print("file exists")
-                else:
-                    print("file doesnt exist?")
-                sound = pydub.AudioSegment.from_file(nameaudio_location + '.webm')
-                sound.export(nameaudio_location + ".mp3", format='mp3')
-                os.remove(nameaudio_location + ".webm")
-            except Exception as e:
-                user.delete()
-                print(e)
-                if os.path.isfile(nameaudio_location + '.webm'):
-                    os.remove(nameaudio_location + '.webm')
-                return Response({"error": "bad_audio"}, status=status.HTTP_400_BAD_REQUEST)
-
-            password = make_password("P@ssw0rd-22")
-
-            user.username = uuid_name
-            user.password = password
-            user.name_audio = relpath + ".mp3"
-            user.save()
-
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response({
-            "token": token.key,
-            "userId": user.pk,
-            "nameAudio": user.name_audio
-        }, status=status.HTTP_200_OK)
-
-    def blob2base64decode(self, str):
+    @staticmethod
+    def blob2base64decode(str):
         return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
+
+    def create_name_audio(self, name_audio, uuid_name):
+        nameaudios_folder = os.path.join(
+            settings.BASE_DIR, "media", "dump", "name_audios")
+        nameaudio_location = os.path.join(nameaudios_folder, uuid_name)
+        relpath = FileUtility.relative_path(nameaudio_location) + ".mp3"
+
+        if not os.path.exists(nameaudios_folder):
+            os.makedirs(nameaudios_folder)
+
+        try:
+            name = self.blob2base64decode(name_audio)
+            with open(nameaudio_location + '.webm', 'wb') as audio_file:
+                audio_file.write(name)
+            sound = pydub.AudioSegment.from_file(nameaudio_location + '.webm')
+            sound.export(nameaudio_location + ".mp3", format='mp3')
+            os.remove(nameaudio_location + ".webm")
+        except Exception:
+            if os.path.isfile(nameaudio_location + '.webm'):
+                os.remove(nameaudio_location + '.webm')
+            return None
+
+        return relpath
+
+    def create_user(self, icon_hash, uuid_name, name_audio):
+        password = make_password("P@ssw0rd-22")
+        user = User.objects.create(
+            icon_hash=icon_hash,
+            username=uuid_name,
+            password=password,
+            name_audio=name_audio
+        )
+
+        return user
 
 
 class LoginUserView(views.APIView):

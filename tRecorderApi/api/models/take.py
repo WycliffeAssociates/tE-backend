@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
-from ..models import book, language, chunk, anthology, version, chapter, mode
+from api.models import book, language, chunk, anthology, version, chapter, mode
 
 Language = language.Language
 Book = book.Book
@@ -23,8 +23,8 @@ class Take(models.Model):
     published = models.BooleanField(default=False)
     markers = models.TextField(blank=True)
     date_modified = models.DateTimeField(default=now)
-    chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE)
-    comment = GenericRelation("Comment")
+    chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE, related_name='takes')
+    comments = GenericRelation("Comment")
 
     class Meta:
         ordering = ["chunk"]
@@ -33,20 +33,18 @@ class Take(models.Model):
         return '{} ({})'.format(self.chunk, self.id)
 
     @property
-    def has_comment(self):
-        return Take.objects.filter(comment__object_id=self.id).exists()
+    def take_num(self):
+        return self.location[len(self.location) - 6:len(self.location) - 4:1]
 
     @property
     def name(self):
-        take = Take.objects.get(pk=self.id)
-        return take.location.split(os.sep)[-1:][0]
+        return self.location.split(os.sep)[-1:][0]
 
     @property
     def md5hash(self):
         hash_md5 = hashlib.md5()
-        take = Take.objects.get(pk=self.id)
         try:
-            with open(take.location, "rb") as file:
+            with open(self.location, "rb") as file:
                 for chunk in iter(lambda: file.read(4096), b""):
                     hash_md5.update(chunk)
             return hash_md5.hexdigest()

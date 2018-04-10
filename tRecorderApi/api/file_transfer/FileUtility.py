@@ -7,15 +7,15 @@ import subprocess
 import time
 import uuid
 
-from ..file_transfer.tinytag import TinyTag
-from ..models.anthology import Anthology
-from ..models.book import Book
-from ..models.chapter import Chapter
-from ..models.chunk import Chunk
-from ..models.language import Language
-from ..models.mode import Mode
-from ..models.project import Project
-from ..models.version import Version
+from api.file_transfer.tinytag import TinyTag
+from api.models.anthology import Anthology
+from api.models.book import Book
+from api.models.chapter import Chapter
+from api.models.chunk import Chunk
+from api.models.language import Language
+from api.models.mode import Mode
+from api.models.project import Project
+from api.models.version import Version
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +108,7 @@ class FileUtility:
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
+                    Take.import_takes(self.relative_path(file), duration, markers, rating, chunk)
                     takes_added += 1
 
         add_info = ""
@@ -191,6 +191,18 @@ class FileUtility:
                 shutil.rmtree(directory)
                 return str(e), 400
 
+    @staticmethod
+    def convert_and_compress(file_transfer, takes, file_format):
+        files_list = []
+        for take in takes:
+            path, take_contents = file_transfer.audio_utility.convert_in_memory(take, file_format)
+            files_list.append({
+                "file_path": path,
+                "file_contents": take_contents
+            })
+
+        return file_transfer.archive_project.archive_in_memory(files_list)
+
     def create_path(self, root_dir, lang_slug, version, book_slug, chapter_number):
         path = os.path.join(root_dir, lang_slug, version,
                             book_slug, chapter_number)
@@ -225,10 +237,29 @@ class FileUtility:
     def relative_path(location):
         return os.path.relpath(location, os.path.dirname("tRecorderApi"))
 
-    def copy_files_from_src_to_dest(self, location_list):
+    @staticmethod
+    def file_name(location):
+        return os.path.basename(location)
 
+    def copy_files_from_src_to_dest(self, location_list, task, title, started):
+        current_take = 0
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
+
+            current_take += 1
+            progress = int((current_take / len(location_list) * 100) / 3)  # 1/3 of overall task
+            task.update_state(state='PROGRESS',
+                              meta={
+                                  'current': progress,
+                                  'total': 100,
+                                  'name': task.name,
+                                  'started': started,
+                                  'title': title,
+                                  'message': 'Copying takes...',
+                                  'details': {
+                                      'result': location["fn"],
+                                  }
+                              })
 
     def copy_files(self, src, dst):
         base_dir = os.path.dirname(os.path.dirname(
