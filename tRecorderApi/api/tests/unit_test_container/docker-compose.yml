@@ -5,7 +5,7 @@ services:
     container_name: te_unit_tests
     command: bash -c "python3 /tE-backend/tRecorderApi/manage.py jenkins --enable-coverage --settings=tRecorderApi.settings_test"
     volumes:
-      - ${WORKSPACE}:/tE-backend
+      - ${WORKSPACE}/tE-backend:/tE-backend
     depends_on:
       - db
   db:
