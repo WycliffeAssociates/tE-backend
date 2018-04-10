@@ -11,22 +11,49 @@ class TakesApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.lang = Language.objects.create(slug='yo', name='yolo')
-        self.anthology = Anthology.objects.create(slug='ot', name="old testament")
-        self.book = Book.objects.create(name='mark', number=5, slug='mrk', anthology=self.anthology)
-        self.version = Version.objects.create(slug='ulb', name="Unlocked literal bible")
-        self.mode = Mode.objects.create(slug="chk", name="chunk", unit=1)
-        self.proj = Project.objects.create(version=self.version, mode=self.mode,
-                                           anthology=self.anthology, language=self.lang,
-                                           book=self.book)
-        self.chap = Chapter.objects.create(number=1, checked_level=1, published=False, project=self.proj)
-        self.chunk = Chunk.objects.create(startv=0, endv=3, chapter=self.chap)
-        self.take = Take.objects.create(location="take1.mp3", published=True,
-                                        duration=0, markers="{\"test\" : \"true\"}", rating=2, chunk=self.chunk
-                                        )
-        self.random_url = ''.join(random.choices(string.ascii_uppercase +
-                                                 string.digits,
-                                                 k=random.randint(1,15)))
+        self.lang = Language.objects.create(
+            slug='yo',
+            name='yolo')
+        self.anthology = Anthology.objects.create(
+            slug='ot',
+            name="old testament")
+        self.book = Book.objects.create(
+            name='mark',
+            number=5,
+            slug='mrk',
+            anthology=self.anthology)
+        self.version = Version.objects.create(
+            slug='ulb',
+            name="Unlocked literal bible")
+        self.mode = Mode.objects.create(
+            slug="chk",
+            name="chunk",
+            unit=1)
+        self.proj = Project.objects.create(
+            version=self.version,
+            mode=self.mode,
+            anthology=self.anthology,
+            language=self.lang,
+            book=self.book)
+        self.chap = Chapter.objects.create(
+            number=1,
+            checked_level=1,
+            published=False,
+            project=self.proj)
+        self.chunk = Chunk.objects.create(
+            startv=0,
+            endv=3,
+            chapter=self.chap)
+        self.take = Take.objects.create(
+            location="take1.mp3",
+            published=True,
+            duration=0,
+            markers="{\"test\" : \"true\"}",
+            rating=2,
+            chunk=self.chunk)
+        self.random_url = ''.join(random.choices(
+            string.ascii_uppercase + string.digits,
+            k=random.randint(1, 15)))
 
     def test_number_of_items_are_equal(self):
         language_num = Take.objects.count()
@@ -62,3 +89,14 @@ class TakesApiTest(TestCase):
         self.client.patch('/api/takes/1/', {"published": False})
         take = Take.objects.get(id=1)
         self.assertFalse(take.published)
+    
+    def tearDown(self):
+        self.lang.delete()
+        self.anthology.delete()
+        self.book.delete()
+        self.version.delete()
+        self.mode.delete()
+        self.proj.delete()
+        self.chap.delete()
+        self.chunk.delete()
+        self.take.delete()

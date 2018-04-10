@@ -54,8 +54,6 @@ class ChunkApiTest(TestCase):
     def test_get_request_with_id_has_200_status_code(self):
         response = self.client.get('/api/chunks/1/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_request_with_id_has_200_status_code(self):
         response = self.client.get('/api/chunks/?id=1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -76,3 +74,13 @@ class ChunkApiTest(TestCase):
         # response = self.client.get('/api/chunks/')
         # self.assertIn("project", str(response.data))
         # self.assertIn("('id', 1)", str(response.data))
+
+    def tearDown(self):
+        self.lang.delete()
+        self.anthology.delete()
+        self.book.delete()
+        self.mode.delete()
+        self.version.delete()
+        self.project.delete()
+        self.chap.delete()
+        self.chunk.delete()

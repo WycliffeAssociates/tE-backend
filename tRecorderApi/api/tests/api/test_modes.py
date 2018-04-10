@@ -44,3 +44,6 @@ class ModesApiTest(TestCase):
     def test_slug_equals_en_x_demo_as_parameter_has_len_one(self):
         response = self.client.get('/api/modes/?slug=chk')
         self.assertEqual(len(response.data), 1)
+
+    def tearDown(self):
+        self.mode.delete()

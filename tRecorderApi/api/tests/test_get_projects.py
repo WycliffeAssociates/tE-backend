@@ -2,17 +2,8 @@
     This module contains test cases for the retrieval of project data.
 """
 from django.test import TestCase
-from django.conf import settings
-from rest_framework.test import APIClient
-# from django.forms.models import model_to_dict
-from ..models import Project, Language, Book, Chapter, Chunk, Take, Anthology, Version, Mode
+from ..models import Project, Language, Book, Anthology, Version, Mode
 from ..serializers import ProjectSerializer
-
-VIEW_URL = 'http://127.0.0.1:8000/api/get_project_takes/'
-BASE_URL = 'http://127.0.0.1:8000/api/'
-MY_FILE = settings.BASE_DIR + 'media/dump'
-LOCATION_WAV = settings.BASE_DIR + '/en-x-demo2_ulb_b42_mrk_c06_v01-03_t11.wav'
-
 
 class GetProjectsTestCases(TestCase):
     """
@@ -20,103 +11,32 @@ class GetProjectsTestCases(TestCase):
         projects.
     """
     def setUp(self):
-        self.client = APIClient()
-        self.lang = Language.objects.create(slug='en-x-demo',
-                                            name='english')
-        self.anthology = Anthology.objects.create(slug='ot',
-                                                  name="old testament")
-        self.book = Book.objects.create(name='mark',
-                                        number=5,
-                                        slug='mrk',
-                                        anthology=self.anthology)
-        self.version = Version.objects.create(slug='ulb',
-                                              name="Unlocked literal bible")
-        self.mode = Mode.objects.create(slug="chk",
-                                        name="chunk",
-                                        unit=1)
-        self.proj = Project.objects.create(version=self.version,
-                                           mode=self.mode,
-                                           anthology=self.anthology,
-                                           language=self.lang,
-                                           book=self.book)
-        self.proj.save()
-        self.chap = Chapter.objects.create(number=1,
-                                           checked_level=1,
-                                           published=False,
-                                           project=self.proj)
-        self.chap2 = Chapter.objects.create(number=2,
-                                            checked_level=2,
-                                            published=False,
-                                            project=self.proj)
-        self.chap3 = Chapter.objects.create(number=3,
-                                            checked_level=3,
-                                            published=False,
-                                            project=self.proj)
-        self.chap4 = Chapter.objects.create(number=4,
-                                            checked_level=0,
-                                            published=False,
-                                            project=self.proj)
-
-        self.chunk = Chunk.objects.create(startv=0,
-                                          endv=3,
-                                          chapter=self.chap)
-        self.chunk2 = Chunk.objects.create(startv=0,
-                                           endv=3,
-                                           chapter=self.chap2)
-        self.chunk3 = Chunk.objects.create(startv=0,
-                                           endv=3,
-                                           chapter=self.chap3)
-        self.chunk4 = Chunk.objects.create(startv=0,
-                                           endv=3,
-                                           chapter=self.chap4)
-        self.chunk5 = Chunk.objects.create(startv=0,
-                                           endv=3,
-                                           chapter=self.chap4)
-        self.chunk6 = Chunk.objects.create(startv=0,
-                                           endv=3,
-                                           chapter=self.chap4)
-
-        self.take = Take.objects.create(location=LOCATION_WAV,
-                                        published=True,
-                                        duration=0,
-                                        markers="{\"test\" : \"true\"}",
-                                        rating=2,
-                                        chunk=self.chunk)
-        self.take = Take.objects.create(location=LOCATION_WAV,
-                                        published=True,
-                                        duration=0,
-                                        markers="{\"test\" : \"true\"}",
-                                        rating=2,
-                                        chunk=self.chunk2)
-        self.take = Take.objects.create(location=LOCATION_WAV,
-                                        published=True,
-                                        duration=0,
-                                        markers="{\"test\" : \"true\"}",
-                                        rating=2,
-                                        chunk=self.chunk3)
-        self.take = Take.objects.create(location=LOCATION_WAV,
-                                        published=True,
-                                        duration=0,
-                                        markers="{\"test\" : \"true\"}",
-                                        rating=2,
-                                        chunk=self.chunk4)
-        self.take.save()
-
-        self.project_takes_data = {"language": "en-x-demo2",
-                                   "version" : "ulb",
-                                   "book"    : "mrk",
-                                   "chapter" : 1
-                                  }
+        self.lang = Language.objects.create(
+            slug='en-x-demo',
+            name='english')
+        self.anthology = Anthology.objects.create(
+            slug='ot',
+            name="old testament")
+        self.book = Book.objects.create(
+            name='mark',
+            number=5,
+            slug='mrk',
+            anthology=self.anthology)
+        self.version = Version.objects.create(
+            slug='ulb',
+            name="Unlocked literal bible")
+        self.mode = Mode.objects.create(
+            slug="chk",
+            name="chunk",
+            unit=1)
+        self.proj = Project.objects.create(
+            version=self.version,
+            mode=self.mode,
+            anthology=self.anthology,
+            language=self.lang,
+            book=self.book)
         self.project_serializer = ProjectSerializer(instance=self.proj)
 
-    def test_get_minimum_checked_level(self):
-        min_check_level = Chapter.objects.all().values_list('checked_level') \
-            .order_by('checked_level')[0][0]
-        self.assertEqual(min_check_level, 0)
-
-    def test_get_total_chunks(self):
-        chunks_done = Chapter.objects.all().values_list('chunk').count()
-        self.assertEqual(chunks_done, 6)
 
     def test_keys_in_project(self):
         """
@@ -135,7 +55,6 @@ class GetProjectsTestCases(TestCase):
         Input: data = serialized data of project object created in setup
         Expected: data will contain all of the keys listed above
         """
-
         data = self.project_serializer.data
         self.assertIn("id", data)
         self.assertIn("published", data)
@@ -150,6 +69,16 @@ class GetProjectsTestCases(TestCase):
         self.assertIn("version", data)
         self.assertIn("anthology", data)
 
+    #TODO: This test seems to be test built-in django functions. Django
+    # functions should not need to be tested by us. Please review this test to
+    # see if it should be removed.
+    # def test_get_minimum_checked_level(self):
+        # min_check_level = Chapter.objects.all().values_list('checked_level') \
+            # .order_by('checked_level')[0][0]
+        # self.assertEqual(min_check_level, 0)
+
+    #TODO: This function does not exist yet for the project class. Please
+    # review to see if this test is still relevant.
     # def test_get_percentage_function(self):
         # """
         # Verify the 'Project' class's 'get_percentage_completed' function
@@ -164,3 +93,11 @@ class GetProjectsTestCases(TestCase):
         # total_chunks = 100
         # percentage = Project.get_percentage_completed(chunks_done, total_chunks)
         # self.assertEqual(percentage, 30)
+
+    def tearDown(self):
+        self.lang.delete()
+        self.anthology.delete()
+        self.book.delete()
+        self.version.delete()
+        self.mode.delete()
+        self.proj.delete()

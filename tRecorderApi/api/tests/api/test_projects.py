@@ -61,3 +61,11 @@ class ProjectsApiTest(TestCase):
     def test_random_text_as_parameter_gives_400_status_code(self):
         response = self.client.get('/api/projects/?'+self.random_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def tearDown(self):
+        self.lang.delete()
+        self.anthology.delete()
+        self.book.delete()
+        self.version.delete()
+        self.mode.delete()
+        self.project.delete()

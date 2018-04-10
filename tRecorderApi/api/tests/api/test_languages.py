@@ -45,3 +45,6 @@ class LanguageApiTest(TestCase):
         # should have failed but passes
         response = self.client.get('/api/languages/?slug=yo')
         self.assertEqual(len(response.data), 1)
+
+    def tearDown(self):
+        self.lang.delete()

@@ -10,28 +10,35 @@ class ChapterApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.lang = Language.objects.create(slug='en-x-demo',
-                                            name='english')
-        self.anthology = Anthology.objects.create(slug='ot',
-                                                  name="old testament")
-        self.book = Book.objects.create(name='mark',
-                                        number=5,
-                                        slug='mrk',
-                                        anthology=self.anthology)
-        self.version = Version.objects.create(slug='ulb',
-                                              name="Unlocked literal bible")
-        self.mode = Mode.objects.create(slug="chk",
-                                        name="chunk",
-                                        unit=1)
-        self.project = Project.objects.create(version=self.version,
-                                              mode=self.mode,
-                                              anthology=self.anthology,
-                                              language=self.lang,
-                                              book=self.book)
-        self.chap = Chapter.objects.create(number=1,
-                                           checked_level=1,
-                                           published=False,
-                                           project=self.project)
+        self.lang = Language.objects.create(
+            slug='en-x-demo',
+            name='english')
+        self.anthology = Anthology.objects.create(
+            slug='ot',
+            name="old testament")
+        self.book = Book.objects.create(
+            name='mark',
+            number=5,
+            slug='mrk',
+            anthology=self.anthology)
+        self.version = Version.objects.create(
+            slug='ulb',
+            name="Unlocked literal bible")
+        self.mode = Mode.objects.create(
+            slug="chk",
+            name="chunk",
+            unit=1)
+        self.project = Project.objects.create(
+            version=self.version,
+            mode=self.mode,
+            anthology=self.anthology,
+            language=self.lang,
+            book=self.book)
+        self.chap = Chapter.objects.create(
+            number=1,
+            checked_level=1,
+            published=False,
+            project=self.project)
         self.random_url = ''.join(random.choices(
             string.ascii_uppercase + string.digits,
             k=random.randint(1, 15)))
@@ -44,12 +51,6 @@ class ChapterApiTest(TestCase):
     def test_get_request_has_200_status_code(self):
         response = self.client.get('/api/chapters/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    # def test_get_request_with_id_has_200_status_code(self):
-        # response = self.client.get('/api/chapters/1/')
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_request_with_id_has_200_status_code(self):
         response = self.client.get('/api/chapters/?id=1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -78,3 +79,12 @@ class ChapterApiTest(TestCase):
         # manually using the statement below:
         # print(response.data)
         self.assertIn("('id', 1)", str(response.data))
+
+    def tearDown(self):
+        self.lang.delete()
+        self.anthology.delete()
+        self.book.delete()
+        self.version.delete()
+        self.mode.delete()
+        self.project.delete()
+        self.chap.delete()

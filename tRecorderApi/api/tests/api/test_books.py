@@ -81,7 +81,6 @@ class BookApiTestCases(TestCase):
         response = self.client.get('/api/books/4/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # def test_random_text_as_parameter_gives_400_status_code(self):
     def test_random_url_returns_400(self):
         """
             Verify sending a GET request to the api URL for books with a
@@ -103,3 +102,7 @@ class BookApiTestCases(TestCase):
         """
         response = self.client.get('/api/books/?slug=mrk')
         self.assertEqual(len(response.data), 1)
+
+    def tearDown(self):
+        self.anthology.delete()
+        self.book.delete()

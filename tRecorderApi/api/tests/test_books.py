@@ -20,12 +20,12 @@ class BookModelTestCases(TestCase):
             slug='nt',
             name="new testament",
             id=1)
-        self.book_1 = Book.objects.create(
+        self.book = Book.objects.create(
             name='mark',
             number=5,
             slug='mrk',
             anthology=self.anthology)
-        self.book_serializer = BookSerializer(instance=self.book_1)
+        self.book_serializer = BookSerializer(instance=self.book)
 
     def test_serializer_ouput(self):
         """
@@ -51,3 +51,7 @@ class BookModelTestCases(TestCase):
             # self.assertIn("slug", book)
             # self.assertIn("name", book)
             # self.assertIn("book_num", book)
+
+    def tearDown(self):
+        self.anthology.delete()
+        self.book.delete()
