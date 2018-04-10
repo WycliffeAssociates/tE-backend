@@ -78,7 +78,7 @@ class BookApiTestCases(TestCase):
             Input:    GET request to localhost:8000/api/books/4
             Expected: api returns a response with status code 404
         """
-        response = self.client.get('/api/books/4/')
+        response = self.client.get('/api/books/1000/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_random_url_returns_400(self):

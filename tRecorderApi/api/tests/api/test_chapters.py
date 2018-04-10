@@ -73,12 +73,10 @@ class ChapterApiTest(TestCase):
         """
         response = self.client.get('/api/chapters/')
         self.assertIn("project", str(response.data))
-        # self.project will have an id of 1 since it is the only project
-        # created in this test case
         # the format for verifying the id data for a project was verified
         # manually using the statement below:
         # print(response.data)
-        self.assertIn("('id', 1)", str(response.data))
+        self.assertIn("('id', " + str(self.project.id) + ")", str(response.data))
 
     def tearDown(self):
         self.lang.delete()

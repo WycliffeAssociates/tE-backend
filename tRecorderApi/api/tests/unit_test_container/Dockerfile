@@ -8,4 +8,4 @@ RUN apt-get update \
 && cd /tmp \
 && pip install -r requirements.txt
 
-ENTRYPOINT ["python3", "/tE-backend/tRecorderApi/manage.py", "jenkins", "--enable-coverage", "--settings=tRecorderApi.settings_test"]
+#ENTRYPOINT ["python3", "/tE-backend/tRecorderApi/manage.py", "jenkins", "--enable-coverage", "--settings=tRecorderApi.settings_test"]

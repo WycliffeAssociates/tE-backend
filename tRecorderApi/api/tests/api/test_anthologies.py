@@ -28,12 +28,10 @@ class AnthologyApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_request_with_id_has_200_status_code(self):
-        response = self.client.get('/api/anthologies/1/')
+        response = self.client.get('/api/anthologies/' + str(self.anthology.id) + '/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    # def test_get_request_with_id_has_200_status_code(self):
-        # response = self.client.get('/api/anthologies/?id=1')
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get('/api/anthologies/?id=' + str(self.anthology.id))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_request_with_non_existent_id_has_404_status_code(self):
         response = self.client.get('/api/anthologies/4/')

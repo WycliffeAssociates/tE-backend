@@ -13,5 +13,6 @@ redis
 django-celery-results
 flower
 drf-yasg
+psycopg2
 django-jenkins
 coverage
