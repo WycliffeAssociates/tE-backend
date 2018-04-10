@@ -1,4 +1,7 @@
+import os
+
 from .FileTransfer import FileTransfer
+from ..tasks import download_project
 
 
 class Download(FileTransfer):
@@ -13,3 +16,6 @@ class Download(FileTransfer):
         project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
 
         return self.archive_project.archive(root_dir, project_file, converted_list, self.file_utility.remove_dir)
+
+    def download2(self, takes, file_format):
+        download_project.delay(self, takes, file_format)

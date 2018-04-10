@@ -16,3 +16,6 @@ def extract_and_save_project(self, file, directory):
         logger.info("File extraction failed, so removed.")
 
 
+@shared_task(name='download_project')
+def download_project(self, takes, file_format):
+    return self.file_utility.convert_and_compress(self, takes, file_format)

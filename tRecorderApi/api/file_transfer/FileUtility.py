@@ -1,6 +1,7 @@
 import json
 import os
 import pickle
+import re
 import shutil
 import subprocess
 import time
@@ -81,7 +82,7 @@ class FileUtility:
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(FileUtility.relative_path(file), duration, markers, rating, chunk)
+                    Take.import_takes(self.relative_path(file), duration, markers, rating, chunk)
         if len(bad_files) > 0:
             return bad_files, 202
         return 'ok', 200
@@ -138,6 +139,18 @@ class FileUtility:
                 shutil.rmtree(directory)
                 return str(e), 400
 
+    @staticmethod
+    def convert_and_compress(file_transfer, takes, file_format):
+        files_list = []
+        for take in takes:
+            path, take_contents = file_transfer.audio_utility.convert_in_memory(take, file_format)
+            files_list.append({
+                "file_path": path,
+                "file_contents": take_contents
+            })
+
+        return file_transfer.archive_project.archive_in_memory(files_list)
+
     def create_path(self, root_dir, lang_slug, version, book_slug, chapter_number):
         path = os.path.join(root_dir, lang_slug, version,
                             book_slug, chapter_number)
@@ -171,6 +184,10 @@ class FileUtility:
     @staticmethod
     def relative_path(location):
         return os.path.relpath(location, os.path.dirname("tRecorderApi"))
+
+    @staticmethod
+    def file_name(location):
+        return os.path.basename(location)
 
     def copy_files_from_src_to_dest(self, location_list):
 

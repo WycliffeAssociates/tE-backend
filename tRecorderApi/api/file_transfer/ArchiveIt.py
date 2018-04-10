@@ -1,4 +1,5 @@
 import zipfile
+from io import BytesIO
 
 from .ArchiveProject import ArchiveProject
 
@@ -11,6 +12,15 @@ class ArchiveIt(ArchiveProject):
 
         remove_dir(root_dir)
         return project_file
+
+    def archive_in_memory(self, files_list):
+        in_memory_zip = BytesIO()
+
+        with zipfile.ZipFile(in_memory_zip, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
+            for file_obj in files_list:
+                zf.writestr(file_obj["file_path"], file_obj["file_contents"])
+
+        return in_memory_zip.getvalue()
 
     def extract(self):
         pass

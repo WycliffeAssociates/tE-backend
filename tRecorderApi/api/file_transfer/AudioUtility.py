@@ -1,7 +1,9 @@
 import json
 import os
+from io import BytesIO
 
 from pydub import AudioSegment
+from api.file_transfer import FileUtility
 
 
 class AudioUtility:
@@ -28,6 +30,36 @@ class AudioUtility:
                 else:
                     converted_mp3_list.append(file_path)
         return converted_mp3_list
+
+    def convert_in_memory(self, take, file_format):
+        language_slug = take.chunk.chapter.project.language.slug
+        book_slug = take.chunk.chapter.project.book.slug
+        version_slug = take.chunk.chapter.project.version.slug
+
+        if file_format == "mp3":
+            filename = take.location.replace(".wav", ".mp3")
+            path = os.path.join(
+                language_slug,
+                version_slug,
+                book_slug,
+                str(take.chunk.chapter).zfill(2),
+                FileUtility.file_name(filename))
+
+            sound = AudioSegment.from_wav(take.location)
+            file_io = BytesIO()
+            sound.export(file_io, format=file_format)
+
+            return path, file_io.getvalue()
+        else:
+            with open(take.location, "rb") as take_contents:
+                path = os.path.join(
+                    language_slug,
+                    version_slug,
+                    book_slug,
+                    str(take.chunk.chapter).zfill(2),
+                    FileUtility.file_name(take.location))
+
+                return path, take_contents.read()
 
     def write_meta(self, file_path, file_path_mp3, meta):
         sound = AudioSegment.from_wav(file_path)
