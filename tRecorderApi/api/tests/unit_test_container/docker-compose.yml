@@ -3,7 +3,7 @@ services:
   web:
     build: .
     container_name: te_unit_tests
-    command: bash -c "sh entrypoint.sh"
+    command: bash -c "sh /tmp/entrypoint.sh"
     volumes:
       - "${WORKSPACE}:/tE-backend"
     depends_on:
