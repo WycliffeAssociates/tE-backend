@@ -8,7 +8,7 @@ services:
       - ./entrypoint.sh:/entrypoint.sh
     environment:
       - DJANGO_SETTINGS_MODULE=tRecorderApi.settings_test
-    command: bash -c "/entrypoint.sh"
+    command: bash -c "chmod +x /entrypoint.sh && /entrypoint.sh"
     depends_on:
       - db
   db:
