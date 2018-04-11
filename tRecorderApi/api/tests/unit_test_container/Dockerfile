@@ -1,6 +1,6 @@
 FROM python:3-slim-stretch
 
-WORKDIR /tE-backend/tRecorderApi
+#WORKDIR /tE-backend/tRecorderApi
 
 COPY . /tmp 
 

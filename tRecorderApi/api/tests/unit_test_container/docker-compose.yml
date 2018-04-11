@@ -5,15 +5,15 @@ services:
     container_name: te_unit_tests
     volumes:
       - "${WORKSPACE}:/tE-backend"
-    command: bash -c "python3 /tE-backend/tRecorderApi/manage.py jenkins --enable-coverage --settings=tRecorderApi.settings_test"
+    environment:
+      - DJANGO_SETTINGS_MODULE=tRecorderApi.settings_test
+    command: bash -c "mkdir /tE-backend/tRecorderApi/api/migrations && touch /tE-backend/tRecorderApi/api/migrations/__init__.py && cd /tE-backend/tRecorderApi && python3 manage.py makemigrations && python3 manage.py migrate && python3 /tE-backend/tRecorderApi/manage.py jenkins --enable-coverage && rm -rf /tE-backend/tRecorderApi/api/migrations" 
     depends_on:
       - db
   db:
     image: postgres
     container_name: te-postgres
     restart: always
-    volumes:
-      - ./config/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
