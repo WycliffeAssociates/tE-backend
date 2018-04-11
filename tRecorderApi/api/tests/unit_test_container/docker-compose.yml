@@ -12,6 +12,8 @@ services:
     image: postgres
     container_name: te-postgres
     restart: always
+    volumes:
+      - ./config/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
