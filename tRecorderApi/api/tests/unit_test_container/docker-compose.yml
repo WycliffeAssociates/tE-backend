@@ -5,7 +5,7 @@ services:
     container_name: te_unit_tests
     volumes:
       - "${WORKSPACE}:/tE-backend"
-    command: bash -c "cd /tE-backend/tRecorderApi && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py jenkins --enable-coverage --settings=tRecorderApi.settings_test"
+    command: bash -c "cd /tE-backend/tRecorderApi && python manage.py makemigrations && python manage.py migrate && python manage.py jenkins --enable-coverage --settings=tRecorderApi.settings_test"
     depends_on:
       - db
   db:
