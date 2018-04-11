@@ -3,11 +3,9 @@ services:
   web:
     build: .
     container_name: te_unit_tests
-    environment:
-      DJANGO_SETTINGS_MODULES: tRecorderApi.settings_test
-    command: bash -c "cd /tE-backend/tRecorderApi && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py jenkins --enable-coverage"
     volumes:
       - "${WORKSPACE}:/tE-backend"
+    command: bash -c "cd /tE-backend/tRecorderApi && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py jenkins --enable-coverage --settings=tRecorderApi.settings_test"
     depends_on:
       - db
   db:
