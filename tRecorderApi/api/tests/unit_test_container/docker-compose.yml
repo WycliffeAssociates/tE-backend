@@ -20,9 +20,9 @@ services:
   db:
     image: postgres
     container_name: te-postgres
+    restart: always
     expose:
       - "5432"
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
