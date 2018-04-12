@@ -88,12 +88,6 @@ WSGI_APPLICATION = 'tRecorderApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-    # 'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-    # }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -141,9 +135,6 @@ USE_TZ = True
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
-# MEDIA_ROOT = 'media'
-# MEDIA_URL = '/media/'
-
 REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
 
 STATICFILES_DIRS = [
@@ -152,14 +143,5 @@ STATICFILES_DIRS = [
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False 
-CSRF_COOKIE_SECURE = False 
-
-# celery
-# CELERY_BROKER_URL = 'amqp://te:te@rabbit:5672'
-# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-# CELERY_ACCEPT_CONTENT = ['pickle']
-# CELERY_TASK_SERIALIZER = 'pickle'
-# CELERY_RESULT_SERIALIZER = 'pickle'
-# CELERY_IGNORE_RESULT = False
-# CELERY_TASK_TRACK_STARTED = True
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
