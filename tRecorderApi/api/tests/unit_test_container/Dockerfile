@@ -6,7 +6,7 @@ COPY . /tmp
 
 RUN apt-get update \
 && apt-get install ffmpeg \
-	  postgtresql \
+	  postgresql \
 		postgresql-client \
 && cd /tmp \
 && pip install -r requirements.txt
