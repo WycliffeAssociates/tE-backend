@@ -118,6 +118,35 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": "bad_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Updates icon_hash and name_audio parameters of a user
+        """
+
+        user = self.get_object()
+        data = request.data
+
+        if "iconHash" not in data or data["iconHash"].strip() == "":
+            return Response({"error": "empty_icon_hash"}, status=status.HTTP_400_BAD_REQUEST)
+        if "nameAudio" not in data or data["nameAudio"].strip() == "":
+            return Response({"error": "empty_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
+
+        uuid_name = str(uuid.uuid1())[:8]
+        name_audio_location = self.create_name_audio(data["nameAudio"], uuid_name)
+
+        if name_audio_location is not None:
+            user.icon_hash = data["iconHash"]
+            user.name_audio = name_audio_location
+            user.save()
+
+            return Response({
+                "userId": user.pk,
+                "nameAudio": user.name_audio,
+                "iconHash": user.icon_hash
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "bad_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
+
     @staticmethod
     def blob2base64decode(str):
         return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
