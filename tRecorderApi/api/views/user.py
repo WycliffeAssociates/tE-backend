@@ -21,8 +21,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from api.permissions import CanCreateOrDestroyOrReadonly
-from ..models.user import User
-from ..serializers import UserSerializer
+from api.models.user import User
+from api.serializers import UserSerializer
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -65,16 +65,16 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             pk = query.get("id", None)
             icon_hash = query.get("icon_hash", None)
-            is_staff = query.get("is_staff", None)
+            is_social = query.get("is_social", None)
             if pk is not None:
                 queryset = User.objects.filter(id=pk, is_superuser=False)
             if icon_hash is not None:
                 queryset = User.objects.filter(icon_hash=icon_hash, is_superuser=False)
-            if is_staff is not None:
-                if is_staff == "true":
-                    queryset = User.objects.filter(is_staff=True, is_superuser=False)
+            if is_social is not None:
+                if is_social == "true":
+                    queryset = User.objects.filter(is_social=True, is_superuser=False)
                 else:
-                    queryset = User.objects.filter(is_staff=False, is_superuser=False)
+                    queryset = User.objects.filter(is_social=False, is_superuser=False)
 
             if len(queryset) != 0:
                 return queryset
@@ -94,24 +94,24 @@ class UserViewSet(viewsets.ModelViewSet):
 
         data = request.data
 
-        if "iconHash" not in data or data["iconHash"].strip() == "":
+        if "icon_hash" not in data or data["icon_hash"].strip() == "":
             return Response({"error": "empty_icon_hash"}, status=status.HTTP_400_BAD_REQUEST)
-        if "nameAudio" not in data or data["nameAudio"].strip() == "":
+        if "name_audio" not in data or data["name_audio"].strip() == "":
             return Response({"error": "empty_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
         uuid_name = str(uuid.uuid1())[:8]
-        name_audio_location = self.create_name_audio(data["nameAudio"], uuid_name)
+        name_audio_location = self.create_name_audio(data["name_audio"], uuid_name)
 
         if name_audio_location is not None:
-            if not User.objects.filter(icon_hash=data["iconHash"]).exists():
-                user = self.create_user(data["iconHash"], uuid_name, name_audio_location)
+            if not User.objects.filter(icon_hash=data["icon_hash"]).exists():
+                user = self.create_user(data["icon_hash"], uuid_name, name_audio_location)
                 if user is not None:
                     token, created = Token.objects.get_or_create(user=user)
 
                     return Response({
                         "token": token.key,
-                        "userId": user.pk,
-                        "nameAudio": user.name_audio
+                        "user_id": user.pk,
+                        "name_audio": user.name_audio
                     }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "user_exists"}, status=status.HTTP_400_BAD_REQUEST)
@@ -120,32 +120,25 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         """
-        Updates icon_hash and name_audio parameters of a user
+        User partial update
         """
-
         user = self.get_object()
         data = request.data
 
-        if "iconHash" not in data or data["iconHash"].strip() == "":
-            return Response({"error": "empty_icon_hash"}, status=status.HTTP_400_BAD_REQUEST)
-        if "nameAudio" not in data or data["nameAudio"].strip() == "":
-            return Response({"error": "empty_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
+        if "name_audio" in data:
+            uuid_name = str(uuid.uuid1())[:8]
+            name_audio_location = self.create_name_audio(data["name_audio"], uuid_name)
 
-        uuid_name = str(uuid.uuid1())[:8]
-        name_audio_location = self.create_name_audio(data["nameAudio"], uuid_name)
+            if name_audio_location is not None:
+                data["name_audio"] = name_audio_location
+            else:
+                return Response({"error": "bad_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if name_audio_location is not None:
-            user.icon_hash = data["iconHash"]
-            user.name_audio = name_audio_location
-            user.save()
+        serializer = self.get_serializer(user, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-            return Response({
-                "userId": user.pk,
-                "nameAudio": user.name_audio,
-                "iconHash": user.icon_hash
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "bad_name_audio"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
     def blob2base64decode(str):
@@ -175,7 +168,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return relpath
 
     def create_user(self, icon_hash, uuid_name, name_audio):
-        password = make_password("P@ssw0rd-22")
+        password = make_password("P@ssw0rd")
         user = User.objects.create(
             icon_hash=icon_hash,
             username=uuid_name,
@@ -192,18 +185,18 @@ class LoginUserView(views.APIView):
     def post(self, request):
         data = request.data
 
-        if "iconHash" not in data or data["iconHash"].strip() == "":
+        if "icon_hash" not in data or data["icon_hash"].strip() == "":
             return Response({"error": "empty_icon_hash"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.filter(icon_hash=data["iconHash"]).first()
+        user = User.objects.filter(icon_hash=data["icon_hash"]).first()
 
-        if user and check_password("P@ssw0rd-22", user.password):
+        if user and check_password("P@ssw0rd", user.password):
             token, created = Token.objects.get_or_create(user=user)
 
             return Response({
                 "token": token.key,
-                "userId": user.pk,
-                "nameAudio": user.name_audio
+                "user_id": user.pk,
+                "name_audio": user.name_audio
             }, status=status.HTTP_200_OK)
 
         return Response({"error": "Wrong user"}, status=status.HTTP_400_BAD_REQUEST)
