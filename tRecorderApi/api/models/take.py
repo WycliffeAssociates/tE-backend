@@ -26,7 +26,7 @@ class Take(models.Model):
     comments = GenericRelation("Comment")
 
     class Meta:
-        ordering = ["chunk"]
+        ordering = ["chunk", "date_modified"]
 
     def __str__(self):
         return '{} ({})'.format(self.chunk, self.id)
