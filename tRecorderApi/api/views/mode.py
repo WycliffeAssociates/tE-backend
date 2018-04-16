@@ -6,7 +6,8 @@ from rest_framework import viewsets
 from ..serializers import ModeSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from api.serializers import ModeSerializer
+from django.core.exceptions import SuspiciousOperation
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of modes based on given query string",
@@ -44,5 +45,6 @@ class ModeViewSet(viewsets.ModelViewSet):
             filter = self.build_params_filter(self.request.query_params)
             if filter:
                 return queryset.filter(**filter)
-            return None
+            else:
+                raise SuspiciousOperation
         return queryset
