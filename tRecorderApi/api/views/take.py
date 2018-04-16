@@ -8,7 +8,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import SuspiciousOperation
 
-
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of takes based on given query string",
     manual_parameters=[

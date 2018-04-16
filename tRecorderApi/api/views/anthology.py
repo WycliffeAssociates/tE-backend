@@ -4,9 +4,15 @@ from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
+<<<<<<< HEAD
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import SuspiciousOperation
+=======
+from django.core.exceptions import SuspiciousOperation
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+>>>>>>> 42a67312697ee93f6a78262e1e49b9a9d1e74409
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
