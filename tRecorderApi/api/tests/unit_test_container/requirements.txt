@@ -10,3 +10,4 @@ whitenoise
 psycopg2
 django-jenkins
 coverage
+rest_social_auth
