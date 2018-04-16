@@ -6,7 +6,7 @@ import time
 import uuid
 
 import pydub
-from api.models import Chunk
+from ..models import Chunk
 from django.conf import settings
 from rest_framework import views
 from rest_framework.parsers import JSONParser

@@ -1,4 +1,4 @@
-from api.models import Mode
+from ..models import Mode
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

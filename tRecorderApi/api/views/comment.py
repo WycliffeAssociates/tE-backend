@@ -5,9 +5,9 @@ import time
 import uuid
 
 import pydub
-from api.file_transfer import FileUtility
-from api.models import Comment, Chapter, Chunk, Take
-from api.serializers import CommentSerializer
+from ..file_transfer import FileUtility
+from ..models import Comment, Chapter, Chunk, Take
+from ..serializers import CommentSerializer
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
@@ -17,7 +17,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from api.permissions import IsOwnerOrReadOnly
+from ..permissions import IsOwnerOrReadOnly
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
