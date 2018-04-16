@@ -19,6 +19,12 @@ from api.models.version import Version
 
 logger = logging.getLogger(__name__)
 
+class CleanupType:
+    TAKE = 1
+    COMMENT = 2
+    NAME_AUDIO = 3
+    EXPORT = 4
+
 
 class CleanupType:
     TAKE = 1
