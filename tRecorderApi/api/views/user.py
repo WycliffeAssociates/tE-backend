@@ -4,7 +4,7 @@ import re
 import uuid
 
 import pydub
-from api.file_transfer import FileUtility
+from ..file_transfer import FileUtility
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import get_object_or_404

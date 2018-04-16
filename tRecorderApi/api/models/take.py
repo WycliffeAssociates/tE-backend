@@ -1,10 +1,11 @@
 import hashlib
 import os
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
-from ..models import book, language, chunk, anthology, version, chapter, mode
+from api.models import book, language, chunk, anthology, version, chapter, mode
 
 Language = language.Language
 Book = book.Book
