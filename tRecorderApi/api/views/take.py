@@ -1,12 +1,14 @@
+import os
 from ..models import Take
 from ..serializers import TakeSerializer
 from django.utils.decorators import method_decorator
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import SuspiciousOperation
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of takes based on given query string",
@@ -34,6 +36,7 @@ from django.core.exceptions import SuspiciousOperation
         )
     ]
 ))
+
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
     operation_description='This end point is used for updating rating or published status of a take',
     request_body=openapi.Schema(
@@ -45,6 +48,7 @@ from django.core.exceptions import SuspiciousOperation
         }
     ),
 ))
+
 class TakeViewSet(viewsets.ModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeSerializer

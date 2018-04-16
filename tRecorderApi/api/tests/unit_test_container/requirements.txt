@@ -13,3 +13,4 @@ coverage
 rest_social_auth
 drf-yasg
 celery
+redis

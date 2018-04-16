@@ -39,11 +39,7 @@ INSTALLED_APPS = [
     
     'corsheaders',
     'api',
-    'drf_yasg'
     'rest_framework',
-    'rest_framework.authtoken',
-    'social_django',
-    'rest_social_auth',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +144,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+# social auth settings
+AUTH_USER_MODEL = 'api.User'

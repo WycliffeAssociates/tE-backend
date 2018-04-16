@@ -15,7 +15,6 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.result_expires = 604800  # store tasks results for 7 days (in seconds)
 app.autodiscover_tasks()
 
-
 @app.task(bind=True)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
