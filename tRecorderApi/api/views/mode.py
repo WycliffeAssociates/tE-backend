@@ -5,6 +5,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from api.serializers import ModeSerializer
 from django.core.exceptions import SuspiciousOperation
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of modes based on given query string",
@@ -23,6 +25,8 @@ from django.core.exceptions import SuspiciousOperation
 class ModeViewSet(viewsets.ModelViewSet):
     queryset = Mode.objects.all()
     serializer_class = ModeSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def build_params_filter(self, query):
         pk = query.get("id", None)
