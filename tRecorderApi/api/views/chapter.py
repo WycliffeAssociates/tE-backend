@@ -1,9 +1,11 @@
-from api.models import Chapter
+from ..models import Chapter
+from ..serializers import ChapterSerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
-from api.serializers import ChapterSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -37,6 +39,8 @@ from api.serializers import ChapterSerializer
 class ChapterViewSet(viewsets.ModelViewSet):
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     # TODO:Should we expose only REST methods we have used rather than exposing everything django CBV provides
     # http_method_names = ['get', 'list', 'patch', 'post']
