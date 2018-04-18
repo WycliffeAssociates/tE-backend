@@ -36,11 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    
     'corsheaders',
     'api',
-    'django_celery_results',
-    'drf_yasg'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +144,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+# social auth settings
+AUTH_USER_MODEL = 'api.User'

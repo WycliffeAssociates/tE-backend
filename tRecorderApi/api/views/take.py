@@ -34,6 +34,7 @@ from rest_framework.permissions import IsAuthenticated
         )
     ]
 ))
+
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
     operation_description='This end point is used for updating rating or published status of a take',
     request_body=openapi.Schema(
@@ -45,6 +46,7 @@ from rest_framework.permissions import IsAuthenticated
         }
     ),
 ))
+
 class TakeViewSet(viewsets.ModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
