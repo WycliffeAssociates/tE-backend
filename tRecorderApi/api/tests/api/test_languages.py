@@ -4,13 +4,15 @@ from rest_framework.test import APIClient
 import random
 import string
 
-from ...models import Language
+from ...models import Language, User
 
 
 class LanguageApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.lang = Language.objects.create(
             slug='yo',
             name='yolo')
@@ -48,3 +50,4 @@ class LanguageApiTest(TestCase):
 
     def tearDown(self):
         self.lang.delete()
+        self.user.delete()
