@@ -2,13 +2,15 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk
+from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, User
 
 
 class ChunkApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.lang = Language.objects.create(
             slug='en-x-demo',
             name='english')

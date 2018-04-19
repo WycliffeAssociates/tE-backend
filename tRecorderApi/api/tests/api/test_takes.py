@@ -9,7 +9,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, Take
+from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, Chunk, Take, User
 
 
 class TakesApiTest(TestCase):
@@ -18,7 +18,9 @@ class TakesApiTest(TestCase):
         interacts with the Take object class.
     """
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.lang = Language.objects.create(
             slug='yo',
             name='yolo')
@@ -53,7 +55,7 @@ class TakesApiTest(TestCase):
             endv=3,
             chapter=self.chap)
         self.take = Take.objects.create(
-            location="take1.mp3",
+            location="take01.mp3",
             published=True,
             duration=0,
             markers="{\"test\" : \"true\"}",
@@ -82,7 +84,7 @@ class TakesApiTest(TestCase):
             Expected: API will return an HTTP response with status code 200
 
         """
-        response = self.client.get('/api/takes/' + str(self.take.id) + '/')
+        response = self.client.get('/api/takes/'+str(self.take.id) + '/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.client.get('/api/takes/?id='+str(self.take.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -147,3 +149,4 @@ class TakesApiTest(TestCase):
         self.chap.delete()
         self.chunk.delete()
         self.take.delete()
+        self.user.delete()

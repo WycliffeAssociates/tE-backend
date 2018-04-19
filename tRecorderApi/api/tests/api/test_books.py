@@ -8,7 +8,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ...models import Anthology, Book
+from ...models import Anthology, Book, User
 
 class BookApiTestCases(TestCase):
     """
@@ -19,7 +19,9 @@ class BookApiTestCases(TestCase):
         views/book.py file.
     """
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.anthology = Anthology.objects.create(
             slug='ot',
             name="old testament")
@@ -106,3 +108,4 @@ class BookApiTestCases(TestCase):
     def tearDown(self):
         self.anthology.delete()
         self.book.delete()
+        self.user.delete()
