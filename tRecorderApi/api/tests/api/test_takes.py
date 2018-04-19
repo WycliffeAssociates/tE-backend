@@ -55,7 +55,7 @@ class TakesApiTest(TestCase):
             endv=3,
             chapter=self.chap)
         self.take = Take.objects.create(
-            location="take1.mp3",
+            location="take01.mp3",
             published=True,
             duration=0,
             markers="{\"test\" : \"true\"}",
