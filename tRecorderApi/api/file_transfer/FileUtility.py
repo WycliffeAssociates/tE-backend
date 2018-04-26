@@ -88,7 +88,10 @@ class FileUtility:
                     current_take += 1
 
                     if update_progress and task_args:
-                        new_task_args = task_args + (current_take, total_takes, 'Adding takes to database...',
+                        # 2/2 of overall task
+                        progress = int(((current_take / total_takes * 100) / 2) + (100 / 2))
+
+                        new_task_args = task_args + (progress, 100, 'Importing takes into database...',
                                                      {
                                                          'lang_slug': project_manifest["language"]["slug"],
                                                          'lang_name': project_manifest["language"]["name"],

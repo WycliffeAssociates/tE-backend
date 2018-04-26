@@ -26,11 +26,13 @@ def extract_and_save_project(self, file, directory, title, started):
     task = extract_and_save_project
     update_started(task, title, started, 'Extracting files...', {})
 
-    resp, stat = self.archive_project.extract(file, directory)
+    task_args = (task, title, started)
+
+    resp, stat = self.archive_project.extract(file, directory, update_progress, task_args)
     if resp == 'ok':
         self.file_utility.remove_file(file)
         logger.info("File extracted and removed.")
-        details = self.file_utility.import_project(directory, update_progress, (task, title, started))
+        details = self.file_utility.import_project(directory, update_progress, task_args)
 
         return task_finished(task, title, started, 'Upload complete!', details)
     else:
