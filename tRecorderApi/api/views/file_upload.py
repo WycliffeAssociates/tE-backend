@@ -23,7 +23,6 @@ class FileUploadView(views.APIView):
         if request.data["file"]:
             arch_project = ZipIt()
             file_to_upload = request.data["file"]
-            # uploaded_file_url = file_to_upload.temporary_file_path()
 
             fs = FileSystemStorage()
             filename_to_upload = fs.save("tmp/" + file_to_upload.name, file_to_upload)
