@@ -7,7 +7,9 @@
     <br>
     <form action="/api/upload/file" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="upload" />
+        <input type="file" name="file" />
+        <input type="text" name="lang" />
+        <input type="text" name="book" />
         <button type="submit"> Upload Zip or Tr</button>
     </form>
 

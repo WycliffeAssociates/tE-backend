@@ -13,8 +13,8 @@ class BaseTask(celery.Task):
         self.update_state(state='FAILURE',
                           meta={
                                'name': self.name,
-                               'message': "{0!r}".format(exc),
-                               'details': {"result": repr(einfo)},
+                               'message': "Process failed",
+                               'details': {"result": str(exc)},
                                'title': kwargs["title"],
                                'started': kwargs["started"],
                                'finished': datetime.datetime.now(),

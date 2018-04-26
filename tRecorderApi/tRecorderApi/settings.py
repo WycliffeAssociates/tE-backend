@@ -193,6 +193,8 @@ USE_TZ = True
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
+FILE_UPLOAD_TEMP_DIR = 'tmp'
+
 # MEDIA_ROOT = 'media'
 # MEDIA_URL = '/media/'
 
