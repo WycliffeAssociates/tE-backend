@@ -10,10 +10,14 @@ class Upload(FileTransfer):
     def __init__(self, archive_project, audio_utility, file_utility):
         super().__init__(archive_project, audio_utility, file_utility)
 
-    def upload(self, file):
+    def upload(self, file, langslug, langname, bookslug, bookname):
         directory = self.file_utility.root_dir(['media', 'dump'])
 
         task = extract_and_save_project.delay(self, file, directory,
+                                              langslug=langslug,
+                                              langname=langname,
+                                              bookslug=bookslug,
+                                              bookname=bookname,
                                               title='Upload and import project',
                                               started=datetime.datetime.now())
 

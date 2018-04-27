@@ -19,6 +19,7 @@ from api.models.version import Version
 
 logger = logging.getLogger(__name__)
 
+
 class CleanupType:
     TAKE = 1
     COMMENT = 2

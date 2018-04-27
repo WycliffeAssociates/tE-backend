@@ -23,6 +23,19 @@ class FileUploadView(views.APIView):
         if request.data["file"]:
             arch_project = ZipIt()
             file_to_upload = request.data["file"]
+            langslug = ""
+            langname = ""
+            bookslug = ""
+            bookname = ""
+
+            if "langslug" in request.data:
+                langslug = request.data["langslug"]
+            if "langname" in request.data:
+                langname = request.data["langname"]
+            if "bookslug" in request.data:
+                bookslug = request.data["bookslug"]
+            if "bookname" in request.data:
+                bookname = request.data["bookname"]
 
             fs = FileSystemStorage()
             filename_to_upload = fs.save("tmp/" + file_to_upload.name, file_to_upload)
@@ -31,7 +44,7 @@ class FileUploadView(views.APIView):
             if filename == "tr":
                 arch_project = TrIt()
             up = Upload(arch_project, None, FileUtility())
-            task_id = up.upload(uploaded_file_url)
+            task_id = up.upload(uploaded_file_url, langslug, langname, bookslug, bookname)
             return Response({"response": "processing", "task_id": task_id}, status=202)
         else:
             return Response({"response": "no file"}, status=200)
