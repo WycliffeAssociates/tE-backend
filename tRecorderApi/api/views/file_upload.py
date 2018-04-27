@@ -2,7 +2,7 @@ import logging
 
 from django.core.files.storage import FileSystemStorage
 from rest_framework import views
-from rest_framework.parsers import FileUploadParser, MultiPartParser
+from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 
 from api.file_transfer.FileUtility import FileUtility
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class FileUploadView(views.APIView):
-    parser_classes = (MultiPartParser,)
+    parser_classes = (FileUploadParser,)
 
     def post(self, request, filename):
 
