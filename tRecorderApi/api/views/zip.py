@@ -40,9 +40,17 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
         takes = Take.objects.filter(chunk__chapter__project=id)
 
         language_slug = takes[0].chunk.chapter.project.language.slug
+        language_name = takes[0].chunk.chapter.project.language.name
         book_slug = takes[0].chunk.chapter.project.book.slug
+        book_name = takes[0].chunk.chapter.project.book.name
         version_slug = takes[0].chunk.chapter.project.version.slug
-        project_name = language_slug + "_" + version_slug + "_" + book_slug
+        project = {
+            "lang_slug": language_slug,
+            "lang_name": language_name,
+            "book_slug": book_slug,
+            "book_name": book_name,
+            "ver_slug": version_slug
+        }
 
         zip_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
 
@@ -68,6 +76,6 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
             }
             take_location_list.append(location)
 
-        task_id = zip_it.download(project_name, take_location_list, root_dir, file_format)
+        task_id = zip_it.download(project, take_location_list, root_dir, file_format)
         return Response({"response": "processing", "task_id": task_id}, status=202)
 

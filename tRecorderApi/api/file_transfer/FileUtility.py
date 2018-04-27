@@ -54,7 +54,7 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def import_project(self, directory, task, title, started):
+    def import_project(self, directory, update_progress, task_args):
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -86,22 +86,20 @@ class FileUtility:
                     file = os.path.join(directory, take["name"])
 
                     current_take += 1
-                    task.update_state(state='PROGRESS',
-                                      meta={
-                                          'current': current_take,
-                                          'total': total_takes,
-                                          'name': task.name,
-                                          'started': started,
-                                          'title': title,
-                                          'message': 'Adding takes to database...',
-                                          'details': {
-                                              'lang_slug': project_manifest["language"]["slug"],
-                                              'lang_name': project_manifest["language"]["name"],
-                                              'book_slug': project_manifest["book"]["slug"],
-                                              'book_name': project_manifest["book"]["name"],
-                                              'result': take["name"],
-                                          }
-                                      })
+
+                    if update_progress and task_args:
+                        # 2/2 of overall task
+                        progress = int(((current_take / total_takes * 100) / 2) + (100 / 2))
+
+                        new_task_args = task_args + (progress, 100, 'Importing takes into database...',
+                                                     {
+                                                         'lang_slug': project_manifest["language"]["slug"],
+                                                         'lang_name': project_manifest["language"]["name"],
+                                                         'book_slug': project_manifest["book"]["slug"],
+                                                         'book_name': project_manifest["book"]["name"],
+                                                         'result': take["name"],
+                                                     })
+                        update_progress(*new_task_args)
 
                     try:
                         meta = TinyTag.get(file)
@@ -122,19 +120,12 @@ class FileUtility:
             add_info = 'Bad files: ' + ', '.join(bad_files)
 
         return {
-            'name': task.name,
-            'started': started,
-            'finished': datetime.datetime.now(),
-            'title': title,
-            'message': 'Upload complete!',
-            'details': {
                 'lang_slug': project_manifest["language"]["slug"],
                 'lang_name': project_manifest["language"]["name"],
                 'book_slug': project_manifest["book"]["slug"],
                 'book_name': project_manifest["book"]["name"],
                 'result': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
             }
-        }
 
     @staticmethod
     def get_markers(meta):
@@ -247,25 +238,24 @@ class FileUtility:
     def file_name(location):
         return os.path.basename(location)
 
-    def copy_files_from_src_to_dest(self, location_list, task, title, started):
+    def copy_files_from_src_to_dest(self, location_list, project, update_progress, task_args):
         current_take = 0
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
             current_take += 1
-            progress = int((current_take / len(location_list) * 100) / 3)  # 1/3 of overall task
-            task.update_state(state='PROGRESS',
-                              meta={
-                                  'current': progress,
-                                  'total': 100,
-                                  'name': task.name,
-                                  'started': started,
-                                  'title': title,
-                                  'message': 'Copying takes...',
-                                  'details': {
-                                      'result': location["fn"],
-                                  }
-                              })
+            if project and update_progress and task_args:
+                # 1/3 of overall task
+                progress = int((current_take / len(location_list) * 100) / 3)
+
+                new_task_args = task_args + (progress, 100, 'Copying takes...', {
+                    'lang_slug': project["lang_slug"],
+                    'lang_name': project["lang_name"],
+                    'book_slug': project["book_slug"],
+                    'book_name': project["book_name"],
+                    'result': location["fn"]
+                })
+                update_progress(*new_task_args)
 
     def copy_files(self, src, dst):
         base_dir = os.path.dirname(os.path.dirname(

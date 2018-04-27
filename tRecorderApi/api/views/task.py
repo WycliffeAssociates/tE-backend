@@ -4,8 +4,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..serializers import TaskSerializer
-from ..models import Task
+from api.serializers import TaskSerializer
+from api.models import Task
+from ..tasks import extract_and_save_project, download_project, cleanup_orphan_files
 
 import redis
 
@@ -17,8 +18,20 @@ class TaskViewSet(viewsets.ViewSet):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
 
+    def get_task_name_by_query(self, query):
+        type = query.get("type", "upload")
+
+        if type == "upload":
+            return extract_and_save_project.name
+        elif type == "download":
+            return download_project.name
+        elif type == "cleanup":
+            return cleanup_orphan_files.name
+
     def list(self, request):
         task_list = []
+
+        task_name = self.get_task_name_by_query(request.query_params)
 
         keys = redis_client.keys('celery-task-meta*')
 
@@ -28,7 +41,9 @@ class TaskViewSet(viewsets.ViewSet):
                 data = pickle.loads(task.strip(), encoding='UTF8')
                 data = self.get_defaults_from_data(data)
                 task_obj = self.get_task_from_data(data)
-                task_list.append(task_obj)
+
+                if task_name == task_obj.name:
+                    task_list.append(task_obj)
 
         sorted_list = sorted(task_list, key=lambda k: k.started, reverse=True)
         serializer = TaskSerializer(

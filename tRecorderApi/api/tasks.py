@@ -13,8 +13,8 @@ class BaseTask(celery.Task):
         self.update_state(state='FAILURE',
                           meta={
                                'name': self.name,
-                               'message': "{0!r}".format(exc),
-                               'details': {"result": repr(einfo)},
+                               'message': "Process failed",
+                               'details': {"result": str(exc)},
                                'title': kwargs["title"],
                                'started': kwargs["started"],
                                'finished': datetime.datetime.now(),
@@ -24,20 +24,17 @@ class BaseTask(celery.Task):
 @shared_task(name='extract_and_save_project', base=BaseTask)
 def extract_and_save_project(self, file, directory, title, started):
     task = extract_and_save_project
-    task.update_state(state='STARTED',
-                      meta={
-                          'name': task.name,
-                          'title': title,
-                          'started': started,
-                          'message': "Extracting files...",
-                          'details': {}
-                      })
+    update_started(task, title, started, 'Extracting files...', {})
 
-    resp, stat = self.archive_project.extract(file, directory)
+    task_args = (task, title, started)
+
+    resp, stat = self.archive_project.extract(file, directory, update_progress, task_args)
     if resp == 'ok':
         self.file_utility.remove_file(file)
         logger.info("File extracted and removed.")
-        return self.file_utility.import_project(directory, task, title, started)
+        details = self.file_utility.import_project(directory, update_progress, task_args)
+
+        return task_finished(task, title, started, 'Upload complete!', details)
     else:
         self.file_utility.remove_file(file)
         logger.info("File extraction failed, so removed.")
@@ -48,70 +45,84 @@ def extract_and_save_project(self, file, directory, title, started):
 @shared_task(name='cleanup_orphan_files', base=BaseTask)
 def cleanup_orphan_files(file_utility, title, started):
     task = cleanup_orphan_files
-    task.update_state(state='STARTED',
-                      meta={
-                          'name': task.name,
-                          'title': title,
-                          'started': started,
-                          'message': "Deleting orphan files...",
-                          'details': {}
-                      })
+    update_started(task, title, started, 'Removing orphan files...', {})
 
     files_removed = file_utility.cleanup_orphans()
     logger.info("{0} files have been removed".format(files_removed))
-    return {
-        'name': cleanup_orphan_files.name,
-        'title': title,
-        'message': "Cleaning files complete.",
-        'details': {"result": "{0} files have been removed".format(files_removed)},
-        'started': started,
-        'finished': datetime.datetime.now(),
-    }
+
+    return task_finished(task, title, started, 'Cleanup complete.', {
+        "result": "{0} files have been removed".format(files_removed)
+    })
 
 
 @shared_task(name='download_project')
-def download_project(self, project_name, root_dir, location_list, file_format, title, started):
+def download_project(self, project, root_dir, location_list, file_format, title, started):
     task = download_project
+    update_started(task, title, started, 'Download started', {
+        'lang_slug': project["lang_slug"],
+        'lang_name': project["lang_name"],
+        'book_slug': project["book_slug"],
+        'book_name': project["book_name"],
+    })
+
+    project_name = project["lang_slug"] + "_" + project["ver_slug"] + "_" + project["book_slug"]
+    task_args = (task, title, started)
+
+    # Copy files to temporary folder
+    self.file_utility.copy_files_from_src_to_dest(location_list, project,
+                                                  update_progress, task_args)  # 1/3 of overall progress
+
+    # Convert files to mp3 if it's needed
+    converted_list = self.audio_utility.convert_to_mp3(location_list, file_format, project,
+                                                       update_progress, task_args)  # 2/3 of overall progress
+
+    # Create zip archive
+    project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
+    zip_abs_location = self.archive_project.archive(root_dir, project_file, converted_list,
+                                                    self.file_utility.remove_dir, project,
+                                                    update_progress, task_args)  # 3/3 of overall progress
+
+    zip_rel_location = self.file_utility.relative_path(zip_abs_location)
+
+    return task_finished(task, title, started, 'Download is ready.', {
+        'lang_slug': project["lang_slug"],
+        'lang_name': project["lang_name"],
+        'book_slug': project["book_slug"],
+        'book_name': project["book_name"],
+        'result': zip_rel_location
+    })
+
+
+def update_started(task, title, started, message, details):
     task.update_state(state='STARTED',
                       meta={
                           'name': task.name,
                           'title': title,
                           'started': started,
-                          'message': "Starting download...",
-                          'details': {}
+                          'message': message,
+                          'details': details
                       })
 
-    self.file_utility.copy_files_from_src_to_dest(
-        location_list,
-        task,
-        title,
-        started)  # 1/3 of overall progress
 
-    converted_list = self.audio_utility.convert_to_mp3(
-        location_list,
-        file_format,
-        task,
-        title,
-        started)  # 2/3 of overall progress
+def update_progress(task, title, started, current, total, message, details):
+    task.update_state(state='PROGRESS',
+                      meta={
+                          'current': current,
+                          'total': total,
+                          'name': task.name,
+                          'started': started,
+                          'title': title,
+                          'message': message,
+                          'details': details
+                      })
 
-    project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
-    zip_abs_location = self.archive_project.archive(
-        root_dir,
-        project_file,
-        converted_list,
-        self.file_utility.remove_dir,
-        task,
-        title,
-        started
-    )  # 3/3 of overall progress
 
-    zip_rel_location = self.file_utility.relative_path(zip_abs_location)
-
+def task_finished(task, title, started, message, details):
     return {
-            'name': download_project.name,
+            'name': task.name,
             'title': title,
-            'message': "Download is ready.",
-            'details': {"result": zip_rel_location},
+            'message': message,
+            'details': details,
             'started': started,
             'finished': datetime.datetime.now(),
         }
