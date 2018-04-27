@@ -24,17 +24,14 @@ class ZipIt(ArchiveProject):
                         progress = int(((current_take / len(takes) * 100) / 2))
 
                         new_task_args = task_args + (progress, 100, 'Extracting takes...', {
-                            'lang_slug': "Get from args",
-                            'lang_name': "Get from args",
-                            'book_slug': "Get from args",
-                            'book_name': "Get from args",
+                            'lang_slug': "--",
+                            'lang_name': "--",
+                            'book_slug': "--",
+                            'book_name': "--",
                             'result': str(take.filename)
                         })
                         update_progress(*new_task_args)
 
-            # zip_file = zipfile.ZipFile(file)
-            # zip_file.extractall(directory)
-            # zip_file.close()
             return 'ok', 200
         except zipfile.BadZipfile as e:
                 return e, 400
