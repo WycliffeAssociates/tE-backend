@@ -24,7 +24,7 @@ SECRET_KEY = '&9e^=922_&wi-bw@bbe$id#r$7hb(im03nrow5w@tgg8##hfd('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc', 'opentranslationtools.org']
 
 # Application definition
 
@@ -104,8 +104,14 @@ DATABASES = {
     }
 }
 
+try:
+    with open("/dsn/DJANGO_SENTRY_DSN", "r") as django_file:
+        DJANGO_SENTRY_DSN = django_file.read()
+except FileNotFoundError:
+    pass
+
 RAVEN_CONFIG = {
-    'dsn': 'http://2e7130f730eb42dfa6bbe67875dfd8ee:15b0167a7b714b7697a63e6678081e3b@sentry:9000/1',
+    'dsn': DJANGO_SENTRY_DSN,
     # If you are using git, you can also automatically configure the
     # release based on the git info.
     'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
