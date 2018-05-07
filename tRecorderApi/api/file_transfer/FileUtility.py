@@ -54,7 +54,7 @@ class FileUtility:
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
 
-    def import_project(self, directory, update_progress, task_args):
+    def import_project(self, directory, user_icon_hash, update_progress, task_args):
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -93,6 +93,7 @@ class FileUtility:
 
                         new_task_args = task_args + (progress, 100, 'Importing takes into database...',
                                                      {
+                                                         'user_icon_hash': user_icon_hash,
                                                          'lang_slug': project_manifest["language"]["slug"],
                                                          'lang_name': project_manifest["language"]["name"],
                                                          'book_slug': project_manifest["book"]["slug"],
@@ -120,6 +121,7 @@ class FileUtility:
             add_info = 'Bad files: ' + ', '.join(bad_files)
 
         return {
+                'user_icon_hash': user_icon_hash,
                 'lang_slug': project_manifest["language"]["slug"],
                 'lang_name': project_manifest["language"]["name"],
                 'book_slug': project_manifest["book"]["slug"],
@@ -144,7 +146,7 @@ class FileUtility:
             return manifest
         except Exception as e:
             shutil.rmtree(directory)
-            logger.error("Error: ", e.message)
+            logger.error("Error: ", str(e))
 
     @staticmethod
     def manifest_takes_count(manifest):
