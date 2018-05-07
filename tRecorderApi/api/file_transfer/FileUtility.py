@@ -240,7 +240,7 @@ class FileUtility:
     def file_name(location):
         return os.path.basename(location)
 
-    def copy_files_from_src_to_dest(self, location_list, project, update_progress, task_args):
+    def copy_files_from_src_to_dest(self, location_list, project, user_icon_hash, update_progress, task_args):
         current_take = 0
         for location in location_list:
             shutil.copy2(location["src"], location["dst"])
@@ -251,6 +251,7 @@ class FileUtility:
                 progress = int((current_take / len(location_list) * 100) / 3)
 
                 new_task_args = task_args + (progress, 100, 'Copying takes...', {
+                    'user_icon_hash': user_icon_hash,
                     'lang_slug': project["lang_slug"],
                     'lang_name': project["lang_name"],
                     'book_slug': project["book_slug"],

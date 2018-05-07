@@ -7,7 +7,7 @@ class AudioUtility:
     def high_pass_filter(self):
         pass
 
-    def convert_to_mp3(self, location_list, file_format, project, update_progress, task_args):
+    def convert_to_mp3(self, location_list, file_format, project, user_icon_hash, update_progress, task_args):
         current_take = 0
 
         for i, take in enumerate(location_list):
@@ -32,6 +32,7 @@ class AudioUtility:
                 progress = int(((current_take / len(location_list) * 100) / 3) + (100 / 3))
 
                 new_task_args = task_args + (progress, 100, 'Converting takes...', {
+                    'user_icon_hash': user_icon_hash,
                     'lang_slug': project["lang_slug"],
                     'lang_name': project["lang_name"],
                     'book_slug': project["book_slug"],

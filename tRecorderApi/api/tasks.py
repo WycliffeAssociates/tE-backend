@@ -14,7 +14,10 @@ class BaseTask(celery.Task):
                           meta={
                                'name': self.name,
                                'message': "Process failed",
-                               'details': {"result": str(exc)},
+                               'details': {
+                                   "user_icon_hash": kwargs["user_icon_hash"],
+                                   "result": str(exc)
+                               },
                                'title': kwargs["title"],
                                'started': kwargs["started"],
                                'finished': datetime.datetime.now(),
@@ -43,22 +46,26 @@ def extract_and_save_project(self, file, directory, title, started, user_icon_ha
 
 
 @shared_task(name='cleanup_orphan_files', base=BaseTask)
-def cleanup_orphan_files(file_utility, title, started):
+def cleanup_orphan_files(file_utility, title, started, user_icon_hash):
     task = cleanup_orphan_files
-    update_started(task, title, started, 'Removing orphan files...', {})
+    update_started(task, title, started, 'Removing orphan files...', {
+        'user_icon_hash': user_icon_hash
+    })
 
     files_removed = file_utility.cleanup_orphans()
     logger.info("{0} files have been removed".format(files_removed))
 
     return task_finished(task, title, started, 'Cleanup complete.', {
-        "result": "{0} files have been removed".format(files_removed)
+        'user_icon_hash': user_icon_hash,
+        'result': "{0} files have been removed".format(files_removed)
     })
 
 
-@shared_task(name='download_project')
-def download_project(self, project, root_dir, location_list, file_format, title, started):
+@shared_task(name='download_project', base=BaseTask)
+def download_project(self, project, root_dir, location_list, file_format, title, started, user_icon_hash):
     task = download_project
     update_started(task, title, started, 'Download started', {
+        'user_icon_hash': user_icon_hash,
         'lang_slug': project["lang_slug"],
         'lang_name': project["lang_name"],
         'book_slug': project["book_slug"],
@@ -69,22 +76,25 @@ def download_project(self, project, root_dir, location_list, file_format, title,
     task_args = (task, title, started)
 
     # Copy files to temporary folder
-    self.file_utility.copy_files_from_src_to_dest(location_list, project,
+    self.file_utility.copy_files_from_src_to_dest(location_list, project, user_icon_hash,
                                                   update_progress, task_args)  # 1/3 of overall progress
 
     # Convert files to mp3 if it's needed
-    converted_list = self.audio_utility.convert_to_mp3(location_list, file_format, project,
+    converted_list = self.audio_utility.convert_to_mp3(location_list, file_format,
+                                                       project, user_icon_hash,
                                                        update_progress, task_args)  # 2/3 of overall progress
 
     # Create zip archive
     project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
     zip_abs_location = self.archive_project.archive(root_dir, project_file, converted_list,
                                                     self.file_utility.remove_dir, project,
+                                                    user_icon_hash,
                                                     update_progress, task_args)  # 3/3 of overall progress
 
     zip_rel_location = self.file_utility.relative_path(zip_abs_location)
 
     return task_finished(task, title, started, 'Download is ready.', {
+        'user_icon_hash': user_icon_hash,
         'lang_slug': project["lang_slug"],
         'lang_name': project["lang_name"],
         'book_slug': project["book_slug"],
