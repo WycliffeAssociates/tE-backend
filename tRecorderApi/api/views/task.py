@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from api.serializers import TaskSerializer
 from api.models import Task
-from ..tasks import extract_and_save_project, download_project, cleanup_orphan_files
+from api.tasks import extract_and_save_project, download_project, cleanup_orphan_files
 
 import redis
 

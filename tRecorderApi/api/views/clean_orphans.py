@@ -1,7 +1,5 @@
 import datetime
 
-from django.http import JsonResponse
-
 from api.file_transfer import FileUtility
 from api.tasks import cleanup_orphan_files
 from rest_framework import generics
@@ -16,8 +14,8 @@ class CleanupOrphansView(generics.GenericAPIView):
 
     def get(self, request):
         task = cleanup_orphan_files.delay(FileUtility(),
-                                             title='Clean orphan files',
-                                             started=datetime.datetime.now(),
-                                             user_icon_hash=request.user.icon_hash)
+                                          title='Clean orphan files',
+                                          started=datetime.datetime.now(),
+                                          user_icon_hash=request.user.icon_hash)
 
         return Response({"response": "processing", "task_id": task.id}, status=202)

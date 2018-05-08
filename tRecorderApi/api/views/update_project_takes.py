@@ -1,8 +1,8 @@
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-import json
-from ..models import Take
+from api.models import Take
 from rest_framework.response import Response
+
 
 class UpdateProjectTakesView(views.APIView):
     """This class handles the http POST requests."""

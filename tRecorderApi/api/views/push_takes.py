@@ -9,8 +9,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
 from .helpers import getFileName, md5Hash, getFilePath
-from ..file_transfer import FileUtility
-from ..models import Chunk
+from api.file_transfer import FileUtility
+from api.models import Chunk
 
 
 class PushTakesView(views.APIView):

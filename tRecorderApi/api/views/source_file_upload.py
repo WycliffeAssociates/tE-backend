@@ -5,9 +5,9 @@ import subprocess
 import time
 import uuid
 
-from ..file_transfer import FileUtility
-from ..file_transfer import TinyTag
-from ..models import Language, Book, Take
+from api.file_transfer import FileUtility
+from api.file_transfer import TinyTag
+from api.models import Language, Book, Take
 from django.conf import settings
 from rest_framework import views
 from rest_framework.parsers import MultiPartParser

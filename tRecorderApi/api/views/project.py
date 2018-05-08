@@ -7,7 +7,7 @@ from rest_framework import viewsets
 from django.core.exceptions import SuspiciousOperation
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from api.permissions import IsStaffOrReadOnly
+
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of projects based on given query string",
