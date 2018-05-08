@@ -4,13 +4,15 @@ from rest_framework.test import APIClient
 import random
 import string
 
-from ...models import Mode
+from ...models import Mode, User
 
 
 class ModesApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.mode = Mode.objects.create(
             slug="chk",
             name="chunk",
@@ -48,3 +50,4 @@ class ModesApiTest(TestCase):
 
     def tearDown(self):
         self.mode.delete()
+        self.user.delete()

@@ -4,13 +4,15 @@ from rest_framework.test import APIClient
 import random
 import string
 
-from ...models import Anthology
+from ...models import Anthology, User
 
 
 class AnthologyApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.anthology = Anthology.objects.create(
             name='New Testament',
             slug='ot')
@@ -47,3 +49,4 @@ class AnthologyApiTest(TestCase):
     
     def tearDown(self):
         self.anthology.delete()
+        self.user.delete()

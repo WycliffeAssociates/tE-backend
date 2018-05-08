@@ -69,20 +69,26 @@ class Chapter(models.Model):
     def get_uploaded_chunks(self):
         return self.chunks.count()
 
-    @staticmethod
-    def get_total_chunks(book_name_slug, chapter_number):
+    def get_total_chunks(self, book_name_slug, chapter_number):
         length = 0
+        lastvs = 0
         # TODO 'os' will not be useful when the code migrates to AWS
         for dirpath, dirnames, files in os.walk(os.path.abspath('static/chunks/')):
             if dirpath[-3:] == book_name_slug:
                 for fname in os.listdir(dirpath):
                     f = open(os.path.join(dirpath, fname), "r")
                     sus = json.loads(f.read())
+
                     for ch in sus:
                         n = re.sub(r'([0-9]{2,3})-([0-9]{2,3})', r'\1', ch["id"])
+
                         if int(n) == chapter_number:
+                            lastvs = ch["lastvs"]
                             length += 1
                 break
+
+        if str(self.project.mode) == "verse":
+            return int(lastvs)
         return length
 
     @staticmethod

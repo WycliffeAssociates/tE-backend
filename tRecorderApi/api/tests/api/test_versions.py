@@ -4,13 +4,15 @@ from rest_framework.test import APIClient
 import random
 import string
 
-from ...models import Version
+from ...models import Version, User
 
 
 class VersionApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.version = Version.objects.create(
             slug='ulb',
             name="Unlocked literal bible")
@@ -47,3 +49,4 @@ class VersionApiTest(TestCase):
 
     def tearDown(self):
         self.version.delete()
+        self.user.delete()

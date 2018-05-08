@@ -57,7 +57,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-/tRecorderApi/reports
+reports/
 
 # Translations
 *.mo
@@ -157,7 +157,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
 .tox/
 .coverage
 .coverage.*

@@ -1,5 +1,5 @@
-from ..models import Project
-from ..serializers import ProjectSerializer
+from api.models import Project
+from api.serializers import ProjectSerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

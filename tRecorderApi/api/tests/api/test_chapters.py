@@ -3,13 +3,15 @@ from rest_framework import status
 from rest_framework.test import APIClient
 import random
 import string
-from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter
+from ...models import Language, Anthology, Book, Version, Mode, Project, Chapter, User
 
 
 class ChapterApiTest(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.lang = Language.objects.create(
             slug='en-x-demo',
             name='english')
