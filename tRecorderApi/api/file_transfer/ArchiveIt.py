@@ -3,7 +3,7 @@ from .ArchiveProject import ArchiveProject
 
 
 class ArchiveIt(ArchiveProject):
-    def archive(self, root_dir, project_file, location_list, remove_dir, project, update_progress, task_args):
+    def archive(self, root_dir, project_file, location_list, remove_dir, project, user_icon_hash, update_progress, task_args):
         with zipfile.ZipFile(project_file, 'w') as zipped_f:
             current_take = 0
             for file in location_list:
@@ -16,6 +16,7 @@ class ArchiveIt(ArchiveProject):
                     progress = int(((current_take / len(location_list) * 100) / 3) + ((100 / 3) * 2)) - 1
 
                     new_task_args = task_args + (progress, 100, 'Zipping takes...', {
+                        'user_icon_hash': user_icon_hash,
                         'lang_slug': project["lang_slug"],
                         'lang_name': project["lang_name"],
                         'book_slug': project["book_slug"],
