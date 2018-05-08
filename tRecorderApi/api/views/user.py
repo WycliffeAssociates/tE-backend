@@ -131,8 +131,8 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
-    def blob2base64decode(str):
-        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
+    def get_blob_from_base64(base64_str):
+        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', base64_str), 'utf-8'))
 
     def create_name_audio(self, name_audio, uuid_name):
         nameaudios_folder = os.path.join(
@@ -144,7 +144,7 @@ class UserViewSet(viewsets.ModelViewSet):
             os.makedirs(nameaudios_folder)
 
         try:
-            name = self.blob2base64decode(name_audio)
+            name = self.get_blob_from_base64(name_audio)
             with open(nameaudio_location + '.webm', 'wb') as audio_file:
                 audio_file.write(name)
             sound = pydub.AudioSegment.from_file(nameaudio_location + '.webm')
