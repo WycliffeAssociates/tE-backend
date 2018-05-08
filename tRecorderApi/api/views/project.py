@@ -56,7 +56,8 @@ from api.permissions import IsStaffOrReadOnly
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = (IsStaffOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def build_params_filter(self, query):
         pk = query.get("id", None)

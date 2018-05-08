@@ -6,3 +6,6 @@ from django.apps import AppConfig    #pragma:no cover
 
 class ApiConfig(AppConfig):   #pragma:no cover
     name = 'api'    #pragma:no cover
+
+    def ready(self):
+        import api.signals

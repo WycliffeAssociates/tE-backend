@@ -40,8 +40,8 @@ class CanCreateOrDestroyOrReadonly(permissions.BasePermission):
             return True
 
         return (
-                request.user and
-                request.user == obj
+                request.user # and
+                # request.user == obj
         )
 
 

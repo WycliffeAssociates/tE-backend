@@ -70,17 +70,9 @@ class CommentViewSet(viewsets.ModelViewSet):
             else:
                 return None
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        try:
-            os.remove(instance.location)
-        except OSError:
-            pass
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
-
-    def blob2base64Decode(self, str):
-        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
+    @staticmethod
+    def get_blob_from_base64(base64_str):
+        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', base64_str), 'utf-8'))
 
     def create(self, request):
 
@@ -117,7 +109,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             os.makedirs(comments_folder)
 
         try:
-            comment = self.blob2base64Decode(comment)
+            comment = self.get_blob_from_base64(comment)
             with open(comment_location + '.webm', 'wb') as audio_file:
                 audio_file.write(comment)
             if os.path.isfile(comment_location + '.webm'):

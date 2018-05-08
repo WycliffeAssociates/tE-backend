@@ -4,10 +4,9 @@ import re
 import uuid
 
 import pydub
-from ..file_transfer import FileUtility
+from api.file_transfer import FileUtility
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
-from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -17,7 +16,6 @@ from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from api.permissions import CanCreateOrDestroyOrReadonly
@@ -48,6 +46,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (CanCreateOrDestroyOrReadonly,)
+    authentication_classes = (TokenAuthentication,)
 
     def retrieve(self, request, pk=None):
         if pk == 'me':
@@ -80,15 +79,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 return queryset
             else:
                 return None
-
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        try:
-            os.remove(instance.name_audio)
-        except OSError:
-            pass
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
 
     def create(self, request):
 
