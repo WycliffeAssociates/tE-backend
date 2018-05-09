@@ -54,11 +54,12 @@ class Take(models.Model):
             return ""
 
     @staticmethod
-    def import_takes(file_path, duration, markers, rating, chunk):
+    def import_takes(file_path, duration, markers, rating, chunk, owner):
         take = Take(location=file_path,
                     chunk=chunk,
                     duration=duration,
                     rating=rating,
                     markers=markers,
+                    owner=owner
                     )
         take.save()

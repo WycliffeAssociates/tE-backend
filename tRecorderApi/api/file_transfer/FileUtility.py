@@ -7,6 +7,8 @@ import subprocess
 import time
 import uuid
 
+from django.contrib.auth.hashers import make_password
+
 from api.file_transfer.tinytag import TinyTag
 from api.models.anthology import Anthology
 from api.models.book import Book
@@ -16,6 +18,7 @@ from api.models.language import Language
 from api.models.mode import Mode
 from api.models.project import Project
 from api.models.version import Version
+from api.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -66,8 +69,6 @@ class FileUtility:
         project = Project.import_project(
             version, mode, anthology, language, book)
 
-        title = project_manifest["language"]["name"] + " - " + \
-            project_manifest["book"]["name"]
         total_takes = self.manifest_takes_count(project_manifest["manifest"])
         takes_added = 0
         current_take = 0
@@ -110,11 +111,16 @@ class FileUtility:
                         bad_files.append(take["name"])
                         continue
 
+                    owner = None
+
+                    if "users" in project_manifest and "user_id" in take:
+                        owner = self.manifest_take_owner(project_manifest["users"], take["user_id"], directory)
+
                     markers = self.get_markers(meta)
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(self.relative_path(file), duration, markers, rating, chunk)
+                    Take.import_takes(self.relative_path(file), duration, markers, rating, chunk, owner)
                     takes_added += 1
 
         add_info = ""
@@ -157,6 +163,31 @@ class FileUtility:
                 takes_count += len(chunks["takes"])
 
         return takes_count
+
+    def manifest_take_owner(self, users, user_id, directory):
+        owner = None
+
+        for user in users:
+            if user["id"] == user_id:
+                # Check if user exists
+                owner = User.objects.filter(icon_hash=user["icon_hash"]).first()
+
+                # if not, then create it
+                if not owner:
+                    audio_file = os.path.join(directory, user["name_audio"])
+                    dest_file = os.path.join("media", "dump", "name_audios", user["name_audio"])
+                    os.rename(audio_file, dest_file)
+
+                    uuid_name = str(uuid.uuid1())[:8]
+                    password = make_password("P@ssw0rd")
+                    owner = User.objects.create(
+                        icon_hash=user["icon_hash"],
+                        username=uuid_name,
+                        password=password,
+                        name_audio=self.relative_path(dest_file)
+                    )
+
+        return owner
 
     @staticmethod
     def push_audio_processing_to_background(take):
