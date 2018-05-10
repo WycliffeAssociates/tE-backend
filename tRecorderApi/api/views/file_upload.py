@@ -38,7 +38,7 @@ class FileUploadView(views.APIView):
 
             user_data = {}
 
-            if not request.user:
+            if request.user.is_anonymous:
                 user_hash = "unknown_user_hash"
                 if "HTTP_TR_USER_HASH" in request.META:
                     user_hash = request.META["HTTP_TR_USER_HASH"]
