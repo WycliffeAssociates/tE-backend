@@ -86,6 +86,9 @@ class FileUtility:
                 for take in chunks["takes"]:
                     from api.models.take import Take
                     file = os.path.join(directory, take["name"])
+                    if not os.path.isfile(file):
+                        bad_files.append(take["name"])
+                        continue
 
                     current_take += 1
 
