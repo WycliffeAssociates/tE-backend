@@ -10,6 +10,7 @@
         <input type="file" name="file" id="file" />
         <button type="submit"> Upload Zip or Tr</button>
         <img style="display: none" id="upload_loader" src="/static/loader.gif" />
+        <span id="progress"></span>
         <br><br>
         <div id="upload_result" style="display: none; font-size: 18px; font-weight: bold">
             <div>File has been uploaded. Processing started...</div>
@@ -104,14 +105,19 @@
         document.getElementById("upload_result").style.display = "none"
         document.getElementById("upload_error").style.display = "none"
         document.getElementById("upload_loader").style.display = "inline-block";
+        document.getElementById("progress").innerText = "";
 
         var formData = new FormData();
         formData.append("file", document.getElementById("file").files[0]);
 
         var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        xmlhttp.open("POST", "/api/upload/file");
+        xmlhttp.upload.addEventListener("progress", function(evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = Math.ceil((evt.loaded / evt.total) * 100);
+                document.getElementById("progress").innerText = " " + percentComplete + "%";
+            }
+        });
         xmlhttp.responseType = "json"
-        xmlhttp.setRequestHeader('Authorization','Token ' + localStorage.getItem("token"));
 
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE) {
@@ -130,7 +136,8 @@
                 }
             }
         }
-
+        xmlhttp.open("POST", "/api/upload/file");
+        xmlhttp.setRequestHeader('Authorization','Token ' + localStorage.getItem("token"));
         xmlhttp.send(formData);
 
         event.preventDefault();
