@@ -137,7 +137,10 @@
             }
         }
         xmlhttp.open("POST", "/api/upload/file");
-        xmlhttp.setRequestHeader('Authorization','Token ' + localStorage.getItem("token"));
+
+        var token = localStorage.getItem("token");
+        if(token)
+            xmlhttp.setRequestHeader('Authorization','Token ' + token);
         xmlhttp.send(formData);
 
         event.preventDefault();
