@@ -19,6 +19,7 @@ from api.models.version import Version
 
 logger = logging.getLogger(__name__)
 
+
 class CleanupType:
     TAKE = 1
     COMMENT = 2
@@ -82,7 +83,7 @@ class FileUtility:
                 chunk = Chunk.import_chunk(chapter, startv, endv)
 
                 for take in chunks["takes"]:
-                    from ..models.take import Take
+                    from api.models.take import Take
                     file = os.path.join(directory, take["name"])
 
                     current_take += 1

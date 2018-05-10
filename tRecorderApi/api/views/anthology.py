@@ -1,5 +1,5 @@
-from ..models import Anthology
-from ..serializers import AnthologySerializer
+from api.models import Anthology
+from api.serializers import AnthologySerializer
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

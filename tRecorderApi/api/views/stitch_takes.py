@@ -1,12 +1,11 @@
 from pydub import AudioSegment
 from rest_framework import views, status
 from rest_framework.parsers import JSONParser
-from ..models import Take, Language, Book, Comment, Project
-import json
+from api.models import Take, Language, Book, Comment, Project
 from rest_framework.response import Response
 import os
 from django.conf import settings
-from ..file_transfer import FileUtility
+from api.file_transfer import FileUtility
 
 
 class SourceStitchView(views.APIView):

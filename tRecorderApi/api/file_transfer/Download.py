@@ -1,5 +1,4 @@
 import datetime
-import os
 
 from .FileTransfer import FileTransfer
 from api.tasks import download_project

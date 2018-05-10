@@ -60,8 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
-    owner_icon_hash = serializers.CharField(source='owner.icon_hash')
-    owner_name_audio = serializers.CharField(source='owner.name_audio')
+    owner_icon_hash = serializers.CharField(source='owner.icon_hash', allow_null=True)
+    owner_name_audio = serializers.CharField(source='owner.name_audio', allow_null=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -74,6 +74,8 @@ class TakeSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     take_num = serializers.IntegerField()
     comments = CommentSerializer(many=True, read_only=True)
+    owner_icon_hash = serializers.CharField(source='owner.icon_hash', allow_null=True)
+    owner_name_audio = serializers.CharField(source='owner.name_audio', allow_null=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""

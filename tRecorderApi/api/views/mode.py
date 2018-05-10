@@ -1,4 +1,4 @@
-from ..models import Mode
+from api.models import Mode
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -7,6 +7,7 @@ from api.serializers import ModeSerializer
 from django.core.exceptions import SuspiciousOperation
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of modes based on given query string",

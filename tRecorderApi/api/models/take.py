@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.timezone import now
 
-from api.models import book, language, chunk, anthology, version, chapter, mode
+from api.models import book, language, chunk, anthology, version, chapter, mode, user
 
 Language = language.Language
 Book = book.Book
@@ -14,6 +14,7 @@ Anthology = anthology.Anthology
 Version = version.Version
 Chapter = chapter.Chapter
 Mode = mode.Mode
+User = user.User
 
 
 class Take(models.Model):
@@ -25,6 +26,7 @@ class Take(models.Model):
     date_modified = models.DateTimeField(default=now)
     chunk = models.ForeignKey("Chunk", on_delete=models.CASCADE, related_name='takes')
     comments = GenericRelation("Comment")
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         ordering = ["chunk", "date_modified"]
