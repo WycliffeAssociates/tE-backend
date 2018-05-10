@@ -8,7 +8,7 @@ class ZipIt(ArchiveProject):
         pass
 
     @staticmethod
-    def extract(file, directory, user_icon_hash, update_progress, task_args):
+    def extract(file, directory, user, update_progress, task_args):
         try:
             with zipfile.ZipFile(file, "r") as zip_file:
                 takes = zip_file.infolist()
@@ -24,7 +24,8 @@ class ZipIt(ArchiveProject):
                         progress = int(((current_take / len(takes) * 100) / 2))
 
                         new_task_args = task_args + (progress, 100, 'Extracting takes...', {
-                            'user_icon_hash': user_icon_hash,
+                            'user_icon_hash': user["icon_hash"],
+                            'user_name_audio': user["name_audio"],
                             'lang_slug': "--",
                             'lang_name': "--",
                             'book_slug': "--",

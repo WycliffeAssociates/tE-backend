@@ -15,7 +15,8 @@ class BaseTask(celery.Task):
                                'name': self.name,
                                'message': "Process failed",
                                'details': {
-                                   "user_icon_hash": kwargs["user_icon_hash"],
+                                   "user_icon_hash": kwargs["user"]["icon_hash"],
+                                   "user_name_audio": kwargs["user"]["name_audio"],
                                    "result": str(exc)
                                },
                                'title': kwargs["title"],
@@ -25,17 +26,17 @@ class BaseTask(celery.Task):
 
 
 @shared_task(name='extract_and_save_project', base=BaseTask)
-def extract_and_save_project(self, file, directory, title, started, user_icon_hash):
+def extract_and_save_project(self, file, directory, title, started, user):
     task = extract_and_save_project
     update_started(task, title, started, 'Extracting files...', {})
 
     task_args = (task, title, started)
 
-    resp, stat = self.archive_project.extract(file, directory, user_icon_hash, update_progress, task_args)
+    resp, stat = self.archive_project.extract(file, directory, user, update_progress, task_args)
     if resp == 'ok':
         self.file_utility.remove_file(file)
         logger.info("File extracted and removed.")
-        details = self.file_utility.import_project(directory, user_icon_hash, update_progress, task_args)
+        details = self.file_utility.import_project(directory, user, update_progress, task_args)
 
         return task_finished(task, title, started, 'Upload complete!', details)
     else:
@@ -46,26 +47,29 @@ def extract_and_save_project(self, file, directory, title, started, user_icon_ha
 
 
 @shared_task(name='cleanup_orphan_files', base=BaseTask)
-def cleanup_orphan_files(file_utility, title, started, user_icon_hash):
+def cleanup_orphan_files(file_utility, title, started, user):
     task = cleanup_orphan_files
     update_started(task, title, started, 'Removing orphan files...', {
-        'user_icon_hash': user_icon_hash
+        'user_icon_hash': user["icon_hash"],
+        'user_name_audio': user["name_audio"],
     })
 
     files_removed = file_utility.cleanup_orphans()
     logger.info("{0} files have been removed".format(files_removed))
 
     return task_finished(task, title, started, 'Cleanup complete.', {
-        'user_icon_hash': user_icon_hash,
+        'user_icon_hash': user["icon_hash"],
+        'user_name_audio': user["name_audio"],
         'result': "{0} files have been removed".format(files_removed)
     })
 
 
 @shared_task(name='download_project', base=BaseTask)
-def download_project(self, project, root_dir, location_list, file_format, title, started, user_icon_hash):
+def download_project(self, project, root_dir, location_list, file_format, title, started, user):
     task = download_project
     update_started(task, title, started, 'Download started', {
-        'user_icon_hash': user_icon_hash,
+        'user_icon_hash': user["icon_hash"],
+        'user_name_audio': user["name_audio"],
         'lang_slug': project["lang_slug"],
         'lang_name': project["lang_name"],
         'book_slug': project["book_slug"],
@@ -76,25 +80,25 @@ def download_project(self, project, root_dir, location_list, file_format, title,
     task_args = (task, title, started)
 
     # Copy files to temporary folder
-    self.file_utility.copy_files_from_src_to_dest(location_list, project, user_icon_hash,
+    self.file_utility.copy_files_from_src_to_dest(location_list, project, user,
                                                   update_progress, task_args)  # 1/3 of overall progress
 
     # Convert files to mp3 if it's needed
     converted_list = self.audio_utility.convert_to_mp3(location_list, file_format,
-                                                       project, user_icon_hash,
+                                                       project, user,
                                                        update_progress, task_args)  # 2/3 of overall progress
 
     # Create zip archive
     project_file = self.file_utility.project_file(project_name, 'media/export', '.zip')
     zip_abs_location = self.archive_project.archive(root_dir, project_file, converted_list,
-                                                    self.file_utility.remove_dir, project,
-                                                    user_icon_hash,
+                                                    self.file_utility.remove_dir, project, user,
                                                     update_progress, task_args)  # 3/3 of overall progress
 
     zip_rel_location = self.file_utility.relative_path(zip_abs_location)
 
     return task_finished(task, title, started, 'Download is ready.', {
-        'user_icon_hash': user_icon_hash,
+        'user_icon_hash': user["icon_hash"],
+        'user_name_audio': user["name_audio"],
         'lang_slug': project["lang_slug"],
         'lang_name': project["lang_name"],
         'book_slug': project["book_slug"],
