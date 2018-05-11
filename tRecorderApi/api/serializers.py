@@ -33,11 +33,24 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+
+    owner_icon_hash = serializers.CharField(source='owner.icon_hash', allow_null=True)
+    owner_name_audio = serializers.CharField(source='owner.name_audio', allow_null=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Comment
+        fields = ('id', 'location', 'date_modified', 'object_id',
+                  'content_type', 'owner', 'owner_icon_hash', 'owner_name_audio')
+
+
 class ChapterSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     date_modified = serializers.DateTimeField()
     contributors = serializers.CharField()
-    has_comment = serializers.BooleanField(default=False)
+    comments = CommentSerializer(many=True, read_only=True)
     completed = serializers.IntegerField()
     total_chunks = serializers.IntegerField()
     uploaded_chunks = serializers.IntegerField()
@@ -55,19 +68,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         exclude = ('date_joined', 'password',
                    'last_login', 'user_permissions', 'groups', 'is_superuser',)
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-
-    owner_icon_hash = serializers.CharField(source='owner.icon_hash', allow_null=True)
-    owner_name_audio = serializers.CharField(source='owner.name_audio', allow_null=True)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Comment
-        fields = ('id', 'location', 'date_modified', 'object_id',
-                  'content_type', 'owner', 'owner_icon_hash', 'owner_name_audio')
 
 
 class TakeSerializer(serializers.ModelSerializer):
