@@ -10,13 +10,8 @@ class Upload(FileTransfer):
     def __init__(self, archive_project, audio_utility, file_utility):
         super().__init__(archive_project, audio_utility, file_utility)
 
-    def upload(self, file, user):
+    def upload(self, file, user_data):
         directory = self.file_utility.root_dir(['media', 'dump'])
-
-        user_data = {
-            "icon_hash": user.icon_hash,
-            "name_audio": user.name_audio
-        }
 
         task = extract_and_save_project.delay(self, file, directory,
                                               title='Upload and import project',
