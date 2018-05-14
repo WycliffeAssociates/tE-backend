@@ -24,7 +24,7 @@ SECRET_KEY = '&9e^=922_&wi-bw@bbe$id#r$7hb(im03nrow5w@tgg8##hfd('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc', 'opentranslationtools.org']
 
 # Application definition
 
@@ -194,6 +194,7 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 FILE_UPLOAD_TEMP_DIR = 'tmp'
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 # MEDIA_ROOT = 'media'
 # MEDIA_URL = '/media/'
