@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from zipfile import BadZipfile
 
 import celery
@@ -76,7 +77,8 @@ def download_project(self, project, root_dir, location_list, file_format, title,
         'book_name': project["book_name"],
     })
 
-    project_name = project["lang_slug"] + "_" + project["ver_slug"] + "_" + project["book_slug"]
+    uuid_name = str(uuid.uuid1())[:8]
+    project_name = project["lang_slug"] + "_" + project["ver_slug"] + "_" + project["book_slug"] + "_" + uuid_name
     task_args = (task, title, started)
 
     # Copy files to temporary folder

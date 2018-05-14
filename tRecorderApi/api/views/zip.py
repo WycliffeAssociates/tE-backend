@@ -21,6 +21,10 @@ from rest_framework.response import Response
             type=openapi.TYPE_INTEGER,
             description="Id of a project",
         ), openapi.Parameter(
+            name='chapters', in_=openapi.IN_PATH,
+            type=openapi.TYPE_ARRAY,
+            description="Filter by chapters",
+        ), openapi.Parameter(
             name='file_format', in_=openapi.IN_QUERY,
             type=openapi.TYPE_STRING,
             description="It can be 'mp3' or 'wav'",
@@ -39,9 +43,15 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
     def list(self, request, *args, **kwargs):
         id = self.request.query_params.get('id')
         file_format = self.request.query_params.get('file_format')
+        chapters = self.request.query_params.getlist('chapters')
+
         if id is None:
             id = kwargs.get("pk", None)
-        takes = Take.objects.filter(chunk__chapter__project=id)
+
+        if len(chapters) > 0:
+            takes = Take.objects.filter(chunk__chapter__in=chapters)
+        else:
+            takes = Take.objects.filter(chunk__chapter__project=id)
 
         if len(takes) > 0:
             language_slug = takes[0].chunk.chapter.project.language.slug
