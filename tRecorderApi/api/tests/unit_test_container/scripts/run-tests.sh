@@ -3,9 +3,10 @@
 #This script is for running the tests for the environment defined in test-runner.yml
 #The environment variables used in this script are defined in test-runner.env
 
-rm -rf /tE-backend/tRecorderApi/api/migrations 
-mkdir /tE-backend/tRecorderApi/api/migrations
-touch /tE-backend/tRecorderApi/api/migrations/__init__.py
+rm -rf $MIGRATIONS_DIR 
+mkdir $MIGRATIONS_DIR 
+mkdir $COVERAGE_DIR
+touch $MIGRATIONS_INIT 
 cd /tE-backend/tRecorderApi
 python3 manage.py makemigrations
 python3 manage.py migrate
