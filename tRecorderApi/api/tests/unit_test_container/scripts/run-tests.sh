@@ -1,10 +1,17 @@
-rm -rf /tE-backend/tRecorderApi/api/migrations 
-mkdir /tE-backend/tRecorderApi/api/migrations
-touch /tE-backend/tRecorderApi/api/migrations/__init__.py
+#!/usr/bin/env bash
+
+#This script is for running the tests for the environment defined in test-runner.yml
+#The environment variables used in this script are defined in test-runner.env
+
+rm -rf $MIGRATIONS_DIR 
+mkdir $MIGRATIONS_DIR 
+mkdir $COVERAGE_DIR
+touch $MIGRATIONS_INIT 
 cd /tE-backend/tRecorderApi
 python3 manage.py makemigrations
 python3 manage.py migrate
-python3 manage.py jenkins \
-	--enable-coverage \
-	--coverage-exclude='api.tests' \
-	--coverage-format=xml,html
+coverage run \
+	--source="api"\
+	--omit='**test**' \
+	manage.py test api
+coverage xml
