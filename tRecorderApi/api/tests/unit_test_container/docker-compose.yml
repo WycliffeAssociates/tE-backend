@@ -4,8 +4,6 @@ services:
     image: postgres
     container_name: te-postgres
     restart: always
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
