@@ -1,3 +1,7 @@
+| Branch | Build Status |
+| --- | --- |
+| Master | [![Build Status](https://travis-ci.org/WycliffeAssociates/tE-backend.svg?branch=master)](https://travis-ci.org/WycliffeAssociates/tE-backend) |
+| Dev | [![Build Status](https://travis-ci.org/WycliffeAssociates/tE-backend.svg?branch=dev)](https://travis-ci.org/WycliffeAssociates/tE-backend) |
 # translation Exchange Backend
 A local database to help translators send and access their audio files in an organized and efficient way. The system must be able to operate fully, without any kind of remote internet access. 
 
