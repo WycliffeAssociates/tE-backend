@@ -43,7 +43,7 @@ class ZipViewSet(viewsets.ReadOnlyModelViewSet):
     def list(self, request, *args, **kwargs):
         id = self.request.query_params.get('id')
         file_format = self.request.query_params.get('file_format')
-        chapters = self.request.query_params.getlist('chapters')
+        chapters = self.request.query_params.getlist('chapters[]')
 
         if id is None:
             id = kwargs.get("pk", None)
