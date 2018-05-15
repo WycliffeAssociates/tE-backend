@@ -10,7 +10,7 @@ from ...models import Language, Anthology, Book, Version, Mode, Project, User
 class ProjectsApiTest(TestCase):
 
     def setUp(self):
-        iself.user = User.objects.create(username='test')
+        self.user = User.objects.create(username='test')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.lang = Language.objects.create(
