@@ -42,6 +42,14 @@ class Chapter(models.Model):
         return Chapter.objects.filter(comments__object_id=self.id).exists()
 
     @property
+    def has_takes(self):
+        takes_count = 0
+        for chunk in self.chunks.all():
+            takes_count += chunk.takes.count()
+
+        return takes_count > 0
+
+    @property
     def completed(self):
         chunks_done = self.get_uploaded_chunks()
         total_chunks = self.get_total_chunks(self.project.book.slug, self.number)
