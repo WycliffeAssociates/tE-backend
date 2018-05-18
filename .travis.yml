@@ -21,7 +21,7 @@ jobs:
         - cd tRecorderApi/api/tests/unit_test_container
         - docker-compose -f test-runner.yml build test-runner
       script:
-        - docker-compose -d
+        - docker-compose up -d
         - docker ps -a
         - docker-compose -f test-runner.yml run --rm test-runner
       after_script:
