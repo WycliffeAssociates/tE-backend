@@ -1,18 +1,21 @@
+import base64
+import os
+import re
+import time
+import uuid
+
+import pydub
+from api.file_transfer import FileUtility
 from api.models import Comment, Chapter, Chunk, Take
+from api.serializers import CommentSerializer
+from django.conf import settings
 from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from api.serializers import CommentSerializer
-import os
-import re
-import base64
-import pydub
-import time
-import uuid
-from api.file_transfer import FileUtility
-from django.conf import settings
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -40,6 +43,8 @@ from django.conf import settings
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         queryset = []
@@ -59,23 +64,14 @@ class CommentViewSet(viewsets.ModelViewSet):
                 queryset = Comment.get_comments(chunk_id=chunk_id)
             if take_id is not None:
                 queryset = Comment.get_comments(take_id=take_id)
-
             if len(queryset) != 0:
                 return queryset
             else:
                 return None
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        try:
-            os.remove(instance.location)
-        except OSError:
-            pass
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
-
-    def blob2base64Decode(self, str):
-        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', str), 'utf-8'))
+    @staticmethod
+    def get_blob_from_base64(base64_str):
+        return base64.decodebytes(bytes(re.sub(r'^(.*base64,)', '', base64_str), 'utf-8'))
 
     def create(self, request):
 
@@ -112,7 +108,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             os.makedirs(comments_folder)
 
         try:
-            comment = self.blob2base64Decode(comment)
+            comment = self.get_blob_from_base64(comment)
             with open(comment_location + '.webm', 'wb') as audio_file:
                 audio_file.write(comment)
             if os.path.isfile(comment_location + '.webm'):
@@ -132,11 +128,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         c = Comment.objects.create(
             location=relpath + ".mp3",
             content_object=q_obj,
+            owner=request.user
         )
         c.save()
-        dic = {
-            "location": relpath + ".mp3",
-            "id": c.pk
-        }
 
-        return Response(dic, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(c)
+        return Response(serializer.data, status=status.HTTP_200_OK)

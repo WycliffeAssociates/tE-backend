@@ -1,14 +1,21 @@
+import datetime
+
 from .FileTransfer import FileTransfer
-from ..tasks import extract_and_save_project
+from api.tasks import extract_and_save_project
 
 
 class Upload(FileTransfer):
 
-    def __init__(self, archive_project, audio_utility, file_utility
-                 ):  # these objects come from file transfer
-
+    # these objects come from file transfer
+    def __init__(self, archive_project, audio_utility, file_utility):
         super().__init__(archive_project, audio_utility, file_utility)
 
-    def upload(self, file):
+    def upload(self, file, user_data):
         directory = self.file_utility.root_dir(['media', 'dump'])
-        extract_and_save_project.delay(self, file, directory)
+
+        task = extract_and_save_project.delay(self, file, directory,
+                                              title='Upload and import project',
+                                              started=datetime.datetime.now(),
+                                              user=user_data)
+
+        return task.id

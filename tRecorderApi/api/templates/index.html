@@ -2,13 +2,23 @@
     <title>Translation Recorder API</title>
 </head>
 
-<div style="width: 600px; margin: 0 auto">
+<div style="width: 900px; margin: 0 auto">
     <strong>Normal Upload:</strong>
     <br>
-    <form action="/api/upload/file" method="post" enctype="multipart/form-data">
+    <form action="/api/upload/file" method="post" enctype="multipart/form-data" id="upload">
         {% csrf_token %}
-        <input type="file" name="upload" />
+        <input type="file" name="file" id="file" />
         <button type="submit"> Upload Zip or Tr</button>
+        <img style="display: none" id="upload_loader" src="/static/loader.gif" />
+        <span id="progress"></span>
+        <br><br>
+        <div id="upload_result" style="display: none; font-size: 18px; font-weight: bold">
+            <div>File has been uploaded. Processing started...</div>
+            <div>Task id: <span id="task_id"></span></div>
+        </div>
+        <div id="upload_error" style="display: none; font-size: 18px; font-weight: bold">
+
+        </div>
     </form>
 
     <!--<form action="/api/upload/tr" method="post" enctype="multipart/form-data">-->
@@ -88,6 +98,54 @@
     <div style="clear:both"></div>
     {% endif %}
 </div>
+
+<!-- Upload form submit -->
+<script>
+    document.getElementById("upload").addEventListener("submit", function(event) {
+        document.getElementById("upload_result").style.display = "none"
+        document.getElementById("upload_error").style.display = "none"
+        document.getElementById("upload_loader").style.display = "inline-block";
+        document.getElementById("progress").innerText = "";
+
+        var formData = new FormData();
+        formData.append("file", document.getElementById("file").files[0]);
+
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        xmlhttp.upload.addEventListener("progress", function(evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = Math.ceil((evt.loaded / evt.total) * 100);
+                document.getElementById("progress").innerText = " " + percentComplete + "%";
+            }
+        });
+        xmlhttp.responseType = "json"
+
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                document.getElementById("upload_loader").style.display = "none";
+
+                if (this.status === 202) {
+                    console.log(this.response)
+                    document.getElementById("upload_result").style.display = "block";
+                    document.getElementById("task_id").innerText = this.response.task_id;
+                } else if (this.status === 401) {
+                    document.getElementById("upload_error").style.display = "block";
+                    document.getElementById("upload_error").innerText = "You are not authorized";
+                } else {
+                    document.getElementById("upload_error").style.display = "block";
+                    document.getElementById("upload_error").innerText = this.response.response;
+                }
+            }
+        }
+        xmlhttp.open("POST", "/api/upload/file");
+
+        var token = localStorage.getItem("token");
+        if(token)
+            xmlhttp.setRequestHeader('Authorization','Token ' + token);
+        xmlhttp.send(formData);
+
+        event.preventDefault();
+    }, false);
+</script>
 
 {% if lasttake %}
 <script>
@@ -195,6 +253,7 @@
 </script>
 {% endif %}
 
+<!--
 <script src="/static/resumable.js"></script>
 <script>
     (function() {
@@ -273,3 +332,4 @@
         });
     })();
 </script>
+-->

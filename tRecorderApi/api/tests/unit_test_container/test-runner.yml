@@ -1,0 +1,13 @@
+version: '2'
+services:
+  test-runner:
+    build: .
+    container_name: te_unit_tests
+    env_file:
+      - test-runner.env
+    volumes:
+      - "${PROJ_DIR}:/tE-backend"
+      - ./scripts:/scripts
+    command: bash -c "chmod +x /scripts/wait-for-it.sh
+                      && chmod +x /scripts/run-tests.sh
+                      && /scripts/wait-for-it.sh -h db -p 5432 -- /scripts/run-tests.sh"

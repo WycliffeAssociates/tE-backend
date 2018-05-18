@@ -4,6 +4,9 @@ from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
+from django.core.exceptions import SuspiciousOperation
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -23,7 +26,9 @@ from rest_framework import viewsets
 class VersionViewSet(viewsets.ModelViewSet):
     queryset = Version.objects.all()
     serializer_class = VersionSerializer
-
+    authentication_classes=(TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    
     def build_params_filter(self, query):
         pk = query.get("id", None)
         slug = query.get("slug", None)
@@ -40,5 +45,6 @@ class VersionViewSet(viewsets.ModelViewSet):
             filter = self.build_params_filter(self.request.query_params)
             if filter:
                 return queryset.filter(**filter)
-            return None
+            else:
+                raise SuspiciousOperation
         return queryset
