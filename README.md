@@ -1,6 +1,6 @@
-| Branch | Build Status |
-| --- | --- |
-| Master | [![Build Status](https://travis-ci.org/WycliffeAssociates/tE-backend.svg?branch=master)](https://travis-ci.org/WycliffeAssociates/tE-backend) |
+| Branch | Build Status | Coverage |
+| --- | --- | --- |
+| Master | [![Build Status](https://travis-ci.org/WycliffeAssociates/tE-backend.svg?branch=master)](https://travis-ci.org/WycliffeAssociates/tE-backend) |[![SonarQube Coverage](https://sonarcloud.io/api/project_badges/measure?project=te-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=te-backend)|
 | Dev | [![Build Status](https://travis-ci.org/WycliffeAssociates/tE-backend.svg?branch=dev)](https://travis-ci.org/WycliffeAssociates/tE-backend) |
 # translation Exchange Backend
 A local database to help translators send and access their audio files in an organized and efficient way. The system must be able to operate fully, without any kind of remote internet access. 
