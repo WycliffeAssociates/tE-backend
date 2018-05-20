@@ -66,7 +66,7 @@ def cleanup_orphan_files(file_utility, title, started, user):
 
 
 @shared_task(name='download_project', base=BaseTask)
-def download_project(self, project, root_dir, location_list, file_format, title, started, user):
+def download_project(self, project, takes, file_format, title, started, user):
     task = download_project
     update_started(task, title, started, 'Download started', {
         'user_icon_hash': user["icon_hash"],
@@ -78,15 +78,21 @@ def download_project(self, project, root_dir, location_list, file_format, title,
     })
 
     uuid_name = str(uuid.uuid1())[:8]
-    project_name = project["lang_slug"] + "_" + project["ver_slug"] + "_" + project["book_slug"] + "_" + uuid_name
+    project_name = project["lang_slug"] + "_" + project["version_slug"] + "_" + project["book_slug"] + "_" + uuid_name
     task_args = (task, title, started)
 
+    root_dir = self.file_utility.root_dir(['media', 'export'])
+
+    manifest = self.file_utility.generate_manifest_dictionary(project, takes)
+    file_location_list = self.file_utility.get_project_files(root_dir, manifest)
+    self.file_utility.create_manifest_file(root_dir, manifest)
+
     # Copy files to temporary folder
-    self.file_utility.copy_files_from_src_to_dest(location_list, project, user,
+    self.file_utility.copy_files_from_src_to_dest(file_location_list, project, user,
                                                   update_progress, task_args)  # 1/3 of overall progress
 
     # Convert files to mp3 if it's needed
-    converted_list = self.audio_utility.convert_to_mp3(location_list, file_format,
+    converted_list = self.audio_utility.convert_to_mp3(file_location_list, file_format,
                                                        project, user,
                                                        update_progress, task_args)  # 2/3 of overall progress
 
