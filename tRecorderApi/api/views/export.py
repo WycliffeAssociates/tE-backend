@@ -31,7 +31,7 @@ from rest_framework.response import Response
         )
     ]
 ))
-class ZipViewSet(viewsets.ReadOnlyModelViewSet):
+class ExportViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Take.objects.all()
     serializer_class = TakeForZipSerializer
     authentication_classes = (TokenAuthentication,)
