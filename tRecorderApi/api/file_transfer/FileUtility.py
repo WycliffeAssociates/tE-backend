@@ -22,6 +22,8 @@ from api.models.project import Project
 from api.models.version import Version
 from api.models.user import User
 
+from api.models import Comment
+
 logger = logging.getLogger(__name__)
 
 
@@ -56,6 +58,7 @@ class FileUtility:
         return root_directory
 
     def import_project(self, directory, user, update_progress, task_args):
+        print(" I am here")
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -74,13 +77,20 @@ class FileUtility:
             number = chapters["chapter"]
             checking_level = chapters["checking_level"]
             chapter = Chapter.import_chapter(project, number, checking_level)
-
+            if "comments" in chapters:
+                comments = chapters["comments"]
+                if len(comments) > 0:
+                    Comment.import_comment(comments, "chapter", chapter.id)
             for chunks in chapters["chunks"]:
                 startv = chunks["startv"]
                 endv = chunks["endv"]
                 chunk = Chunk.import_chunk(chapter, startv, endv)
-
+                if "comments" in chunks:
+                    comments = chunks["comments"]
+                    if len(comments) > 0:
+                        Comment.import_comment(comments, "chunk", chunk.id)
                 for take in chunks["takes"]:
+
                     from api.models.take import Take
                     file = os.path.join(directory, take["name"])
                     if not os.path.isfile(file):
@@ -123,7 +133,11 @@ class FileUtility:
                     rating = take["rating"]
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    Take.import_takes(self.relative_path(file), duration, markers, rating, chunk, owner)
+                    take_obj = Take.import_takes(self.relative_path(file), duration, markers, rating, chunk, owner)
+                    if "comments" in take:
+                        comments = take["comments"]
+                        if len(comments) > 0:
+                            Comment.import_comment(comments, "take", take_obj.id)
                     takes_added += 1
 
         add_info = ""
@@ -131,16 +145,16 @@ class FileUtility:
             add_info = 'Bad files: ' + ', '.join(bad_files)
 
         return {
-                'user_icon_hash': user["icon_hash"],
-                'user_name_audio': user["name_audio"],
-                'project_id': project.id,
-                'mode': mode.slug,
-                'lang_slug': project_manifest["language"]["slug"],
-                'lang_name': project_manifest["language"]["name"],
-                'book_slug': project_manifest["book"]["slug"],
-                'book_name': project_manifest["book"]["name"],
-                'result': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
-            }
+            'user_icon_hash': user["icon_hash"],
+            'user_name_audio': user["name_audio"],
+            'project_id': project.id,
+            'mode': mode.slug,
+            'lang_slug': project_manifest["language"]["slug"],
+            'lang_name': project_manifest["language"]["name"],
+            'book_slug': project_manifest["book"]["slug"],
+            'book_name': project_manifest["book"]["name"],
+            'result': "Imported {0} files of {1}. {2}".format(takes_added, total_takes, add_info),
+        }
 
     @staticmethod
     def get_markers(meta):
@@ -628,7 +642,7 @@ class FileUtility:
                         last_modified_date = datetime.datetime.fromtimestamp(mtime)
                         diff = datetime.datetime.now() - last_modified_date
                         # Include files for deletion older than 24 hours
-                        if diff.seconds > 24*60*60:
+                        if diff.seconds > 24 * 60 * 60:
                             fs_records.append(self.relative_path(filepath))
 
         orphans = frozenset(fs_records).difference(db_records)
