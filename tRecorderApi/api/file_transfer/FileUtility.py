@@ -58,7 +58,6 @@ class FileUtility:
         return root_directory
 
     def import_project(self, directory, user, update_progress, task_args):
-        print(" I am here")
         bad_files = []
         project_manifest = self.open_manifest_file(directory)
         language = Language.import_language(project_manifest["language"])
@@ -66,6 +65,8 @@ class FileUtility:
         book = Book.import_book(project_manifest["book"], anthology)
         version = Version.import_version(project_manifest["version"])
         mode = Mode.import_mode(project_manifest["mode"])
+        if "users" in project_manifest:
+            users_info = project_manifest["users"]
         project = Project.import_project(
             version, mode, anthology, language, book)
 
@@ -80,7 +81,7 @@ class FileUtility:
             if "comments" in chapters:
                 comments = chapters["comments"]
                 if len(comments) > 0:
-                    Comment.import_comment(comments, "chapter", chapter.id)
+                    Comment.import_comment(comments, "chapter", chapter.id, users_info)
             for chunks in chapters["chunks"]:
                 startv = chunks["startv"]
                 endv = chunks["endv"]
@@ -88,7 +89,7 @@ class FileUtility:
                 if "comments" in chunks:
                     comments = chunks["comments"]
                     if len(comments) > 0:
-                        Comment.import_comment(comments, "chunk", chunk.id)
+                        Comment.import_comment(comments, "chunk", chunk.id, users_info)
                 for take in chunks["takes"]:
 
                     from api.models.take import Take
@@ -137,7 +138,7 @@ class FileUtility:
                     if "comments" in take:
                         comments = take["comments"]
                         if len(comments) > 0:
-                            Comment.import_comment(comments, "take", take_obj.id)
+                            Comment.import_comment(comments, "take", take_obj.id, users_info)
                     takes_added += 1
 
         add_info = ""
