@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'rest_social_auth',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -89,10 +91,10 @@ WSGI_APPLICATION = 'tRecorderApi.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 # DATABASES = {
-    # 'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-    # }
+# 'default': {
+# 'ENGINE': 'django.db.backends.sqlite3',
+# 'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+# }
 # }
 DATABASES = {
     'default': {
@@ -218,7 +220,6 @@ CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
 CELERY_TASK_IGNORE_RESULT = False
 CELERY_TASK_TRACK_STARTED = True
-
 
 # DRF settings
 
