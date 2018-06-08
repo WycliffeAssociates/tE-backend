@@ -1,11 +1,11 @@
 import hashlib
 import json
 import os
-from itertools import filterfalse, chain
+import zipfile
 
 from api.models import Take
+
 from .ArchiveProject import ArchiveProject
-import zipfile
 
 
 class ZipIt(ArchiveProject):
@@ -18,7 +18,7 @@ class ZipIt(ArchiveProject):
         try:
             with zipfile.ZipFile(file, "r") as zip_file:
                 takes = zip_file.infolist()
-                diff_list = ZipIt.get_diff_list(ZipIt.get_files(takes, zip_file), takes)
+                diff_list = ZipIt.get_diff_list(ZipIt.get_files(zip_file), zip_file)
                 for d in diff_list:
                     print(d)
                 current_take = 0
@@ -55,8 +55,8 @@ class ZipIt(ArchiveProject):
             return e, 400
 
     @staticmethod
-    def get_files(files, zip_file):
-        for file in files:
+    def get_files(zip_file):
+        for file in zip_file.infolist():
             if file.filename == "manifest.json":
                 with zip_file.open(file) as f:
                     contents = f.read()
@@ -76,31 +76,37 @@ class ZipIt(ArchiveProject):
             chunk__chapter__project__book__slug__iexact=book)
 
     @staticmethod
-    def get_hash(location):
+    def get_local_file_hash(location):
         hash_md5 = hashlib.md5()
-        try:
-            with open(location, "rb") as file:
-                for chunk in iter(lambda: file.read(4096), b""):
-                    hash_md5.update(chunk)
-            return hash_md5.hexdigest()
-        except:
-            return ""
+        with open(location, "rb") as file:
+            for chunk in iter(lambda: file.read(4096), b''):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
 
     @staticmethod
-    def hash_list(file_list, zip_file=False):
+    def get_zip_file_hash(zip_file, location):
+        hash_md5 = hashlib.md5()
+        with zip_file.open(location, "r") as file:
+            for chunk in iter(lambda: file.read(4096), b''):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+
+    @staticmethod
+    def local_file_hash_list(file_list):
         hashes = []
         for file in file_list:
-            if zip_file:
-                hashes.append({file.filename, ZipIt.get_hash(file)})
-                continue
-            hashes.append({file.name, ZipIt.get_hash(file.location)})
+            hashes.append({file.name: ZipIt.get_local_file_hash(file.location)})
         return hashes
 
     @staticmethod
-    def get_diff_list(local_file_list, zip_file_list):
-        local_list = ZipIt.hash_list(local_file_list)
-        zip_list = ZipIt.hash_list(zip_file_list, True)
+    def zip_file_hash_list(zip_file):
+        hashes = []
+        for file in zip_file.infolist():
+            hashes.append({file.filename: ZipIt.get_zip_file_hash(zip_file, file)})
+        return hashes
 
-        return list(chain(filterfalse(lambda x: x in local_list, zip_list), filterfalse(
-            lambda x: x in zip_list,
-            local_list)))
+    @staticmethod
+    def get_diff_list(local_file_list, zip_file):
+        local_list = ZipIt.local_file_hash_list(local_file_list)
+        zip_list = ZipIt.zip_file_hash_list(zip_file)
+        return [x for x in local_list + zip_list if x not in local_list or x not in zip_list]
