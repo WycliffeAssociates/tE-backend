@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from api.serializers import ChapterSerializer
 from django.core.exceptions import SuspiciousOperation
 
+
 @method_decorator(name='list', decorator=swagger_auto_schema(
     operation_description="Return list of anthologies based on given query string",
     manual_parameters=[
@@ -59,11 +60,10 @@ class ChapterViewSet(viewsets.ModelViewSet):
         return filter
 
     def get_queryset(self):
-        queryset = Chapter.objects.all()
         if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
             if filter:
-                return queryset.filter(**filter)
+                return self.queryset.filter(**filter)
             else:
                 raise SuspiciousOperation
-        return queryset
+            return self.queryset

@@ -60,20 +60,20 @@ class UserViewSet(viewsets.ModelViewSet):
         queryset = []
         query = self.request.query_params
         if len(query) == 0:
-            return User.objects.filter(is_superuser=False)
+            return self.queryset.filter(is_superuser=False)
         else:
             pk = query.get("id", None)
             icon_hash = query.get("icon_hash", None)
             is_social = query.get("is_social", None)
             if pk is not None:
-                queryset = User.objects.filter(id=pk, is_superuser=False)
+                queryset = self.queryset.filter(id=pk, is_superuser=False)
             if icon_hash is not None:
-                queryset = User.objects.filter(icon_hash=icon_hash, is_superuser=False)
+                queryset = self.queryset.filter(icon_hash=icon_hash, is_superuser=False)
             if is_social is not None:
                 if is_social == "true":
-                    queryset = User.objects.filter(is_social=True, is_superuser=False)
+                    queryset = self.queryset.filter(is_social=True, is_superuser=False)
                 else:
-                    queryset = User.objects.filter(is_social=False, is_superuser=False)
+                    queryset = self.queryset.filter(is_social=False, is_superuser=False)
 
             if len(queryset) != 0:
                 return queryset

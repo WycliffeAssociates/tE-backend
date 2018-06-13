@@ -49,10 +49,9 @@ class ExcludeFilesViewSet(viewsets.ReadOnlyModelViewSet):
         return filter
 
     def get_queryset(self):
-        queryset = Take.objects.all()
         if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
             if filter:
-                return queryset.filter(**filter)
+                return self.queryset.filter(**filter)
             return None
-        return queryset
+        return self.queryset

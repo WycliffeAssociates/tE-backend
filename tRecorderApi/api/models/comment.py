@@ -24,7 +24,7 @@ class Comment(models.Model):
         return self.location
 
     @staticmethod
-    def get_comments(chunk_id=None, take_id=None, chapter_id=None):
+    def get_comments(queryset, chunk_id=None, take_id=None, chapter_id=None):
         commented_object = None
         object_id = None
         if chunk_id is not None:
@@ -38,8 +38,8 @@ class Comment(models.Model):
             object_id = chapter_id
         else:
             return None
-        comments = Comment.objects.filter(object_id=object_id,
-                                          content_type=ContentType.objects.get_for_model(commented_object))
+        comments = queryset.filter(object_id=object_id,
+                                   content_type=ContentType.objects.get_for_model(commented_object))
         return comments
 
     @staticmethod

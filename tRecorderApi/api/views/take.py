@@ -72,11 +72,10 @@ class TakeViewSet(viewsets.ModelViewSet):
         return filter
 
     def get_queryset(self):
-        queryset = Take.objects.all()
         if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
             if filter:
-                return queryset.filter(**filter)
+                return self.queryset.filter(**filter)
             else:
                 raise SuspiciousOperation
-        return queryset
+        return self.queryset

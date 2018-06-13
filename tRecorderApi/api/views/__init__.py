@@ -11,7 +11,6 @@ from .project import ProjectViewSet
 from .exclude_files import *
 from .file_upload import *
 from .index import *
-from .push_takes import *
 from .resumable_upload import *
 from .source_file import *
 from .source_file_upload import *

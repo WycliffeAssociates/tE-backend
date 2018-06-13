@@ -49,9 +49,9 @@ class ExportViewSet(viewsets.ReadOnlyModelViewSet):
             id = kwargs.get("pk", None)
 
         if len(chapters) > 0:
-            takes = Take.objects.filter(chunk__chapter__in=chapters)
+            takes = self.queryset.filter(chunk__chapter__in=chapters)
         else:
-            takes = Take.objects.filter(chunk__chapter__project=id)
+            takes = self.queryset.filter(chunk__chapter__project=id)
 
         if len(takes) > 0:
             language_slug = takes[0].chunk.chapter.project.language.slug

@@ -50,20 +50,20 @@ class CommentViewSet(viewsets.ModelViewSet):
         queryset = []
         query = self.request.query_params
         if len(query) == 0:
-            return Comment.objects.all()
+            return self.queryset
         else:
             pk = query.get("id", None)
             chapter_id = query.get("chapter_id", None)
             chunk_id = query.get("chunk_id", None)
             take_id = query.get("take_id", None)
             if pk is not None:
-                queryset = Comment.objects.filter(id=pk)
+                queryset = self.queryset.filter(id=pk)
             if chapter_id is not None:
-                queryset = Comment.get_comments(chapter_id=chapter_id)
+                queryset = Comment.get_comments(queryset=self.queryset, chapter_id=chapter_id)
             if chunk_id is not None:
-                queryset = Comment.get_comments(chunk_id=chunk_id)
+                queryset = Comment.get_comments(queryset=self.queryset, chunk_id=chunk_id)
             if take_id is not None:
-                queryset = Comment.get_comments(take_id=take_id)
+                queryset = Comment.get_comments(queryset=self.queryset, take_id=take_id)
             if len(queryset) != 0:
                 return queryset
             else:

@@ -36,7 +36,7 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    
+
     def build_params_filter(self, query):
         pk = query.get("id", None)
         slug = query.get("slug", None)
@@ -54,11 +54,10 @@ class BookViewSet(viewsets.ModelViewSet):
         return filter
 
     def get_queryset(self):
-        queryset = Book.objects.all()
         if self.request.query_params:
             filter = self.build_params_filter(self.request.query_params)
             if filter:
-                return queryset.filter(**filter)
+                return self.queryset.filter(**filter)
             else:
                 raise SuspiciousOperation
-        return queryset
+        return self.queryset

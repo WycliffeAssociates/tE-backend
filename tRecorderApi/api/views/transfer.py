@@ -49,10 +49,10 @@ class TransferViewSet(viewsets.ReadOnlyModelViewSet):
             id = kwargs.get("pk", None)
 
         if len(chapters) > 0:
-            takes = Take.objects.filter(chunk__chapter__in=chapters) \
+            takes = self.queryset.filter(chunk__chapter__in=chapters) \
                 .order_by('chunk__chapter__number', 'chunk__startv')
         else:
-            takes = Take.objects.filter(chunk__chapter__project=id) \
+            takes = self.queryset.filter(chunk__chapter__project=id) \
                 .order_by('chunk__chapter__number', 'chunk__startv')
 
         if len(takes) > 0:
