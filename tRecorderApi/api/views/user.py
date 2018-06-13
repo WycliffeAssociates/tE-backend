@@ -42,7 +42,7 @@ from rest_framework.response import Response
 ))
 class UserViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
-    queryset = User.objects.only("id", "password", "is_super", "is_staff", "icon_hash", "name_audio", "is_social")
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (CanCreateOrDestroyOrReadonly,)
     authentication_classes = (TokenAuthentication,)

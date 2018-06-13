@@ -28,7 +28,7 @@ from django.core.exceptions import SuspiciousOperation
     ]
 ))
 class ChunkViewSet(viewsets.ModelViewSet):
-    queryset = Chunk.objects.all()
+    queryset = Chunk.objects.prefetch_related("comments")
     serializer_class = ChunkSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
