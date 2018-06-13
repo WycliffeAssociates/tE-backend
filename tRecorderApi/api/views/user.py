@@ -5,6 +5,9 @@ import uuid
 
 import pydub
 from api.file_transfer import FileUtility
+from api.models.user import User
+from api.permissions import CanCreateOrDestroyOrReadonly
+from api.serializers import UserSerializer
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
@@ -17,10 +20,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
-
-from api.permissions import CanCreateOrDestroyOrReadonly
-from api.models.user import User
-from api.serializers import UserSerializer
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -43,7 +42,7 @@ from api.serializers import UserSerializer
 ))
 class UserViewSet(viewsets.ModelViewSet):
     """This class handles the http GET, PUT, PATCH, POST and DELETE requests."""
-    queryset = User.objects.all()
+    queryset = User.objects.only("id", "password", "is_super", "is_staff", "icon_hash", "name_audio", "is_social")
     serializer_class = UserSerializer
     permission_classes = (CanCreateOrDestroyOrReadonly,)
     authentication_classes = (TokenAuthentication,)
@@ -57,7 +56,6 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_queryset(self):
-        queryset = []
         query = self.request.query_params
         if len(query) == 0:
             return self.queryset.filter(is_superuser=False)
@@ -76,7 +74,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     queryset = self.queryset.filter(is_social=False, is_superuser=False)
 
             if len(queryset) != 0:
-                return queryset
+                return self.queryset
             else:
                 return None
 
