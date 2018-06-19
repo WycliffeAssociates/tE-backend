@@ -23,13 +23,12 @@ class ZipIt(ArchiveProject):
                 takes = ZipIt.get_files(zip_file)
                 keys = None
                 if takes:
-                    print("In takes")
                     user_comment = ZipIt.get_users_comments(takes)
                     diff_list = ZipIt.get_diff_list(takes, zip_file, user_comment)
                     keys = set().union(*(d.keys() for d in diff_list))
 
                 current_take = 0
-                for i, take in enumerate(takes_info):
+                for take in takes_info:
                     filename = take.filename
                     if keys is not None:
                         if filename not in keys:
@@ -77,7 +76,7 @@ class ZipIt(ArchiveProject):
                     book = manifest_file["book"]["slug"]
                     version = manifest_file["version"]["slug"]
                     anthology = manifest_file["anthology"]["slug"]
-        return ZipIt.get_takes(lang, book, version, anthology)
+                    return ZipIt.get_takes(lang, book, version, anthology)
 
     @staticmethod
     def get_takes(lang, book, version, anthology):
