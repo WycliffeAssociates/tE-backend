@@ -77,7 +77,6 @@ class ZipIt(ArchiveProject):
                     book = manifest_file["book"]["slug"]
                     version = manifest_file["version"]["slug"]
                     anthology = manifest_file["anthology"]["slug"]
-
         return ZipIt.get_takes(lang, book, version, anthology)
 
     @staticmethod
