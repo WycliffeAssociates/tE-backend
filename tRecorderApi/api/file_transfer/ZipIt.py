@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import shutil
 import zipfile
 
 from api.models import Take
@@ -42,6 +43,9 @@ class ZipIt(ArchiveProject):
                         loc = os.path.join(os.path.dirname(directory), "comments")
                         zip_file.extract(take, loc)
                         continue
+                    if filename[-1] == os.sep:
+                        continue
+                    take.filename = os.path.basename(filename)
                     zip_file.extract(take, directory)
 
                 current_take += 1
@@ -60,8 +64,7 @@ class ZipIt(ArchiveProject):
                         'result': str(take.filename)
                     })
                     update_progress(*new_task_args)
-
-            return 'ok', 200
+                return 'ok', 200
         except zipfile.BadZipfile as e:
             return e, 400
 
