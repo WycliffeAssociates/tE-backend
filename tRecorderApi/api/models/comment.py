@@ -66,8 +66,10 @@ class Comment(models.Model):
             for user_info in users_info:
                 if comment["user_id"] == user_info["id"]:
                     user = User.import_user(user_info)
-            Comment.objects.create(
-                location=comment["location"],
-                content_object=q_obj,
-                owner=User.objects.get(pk=user.id)
-            )
+                    Comment.objects.get_or_create(
+                        defaults={
+                            'content_object': q_obj
+                        },
+                        location=comment["location"],
+                        owner=User.objects.get(pk=user.id)
+                    )
