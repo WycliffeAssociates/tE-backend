@@ -1,13 +1,12 @@
 import hashlib
 import json
 import os
-import shutil
 import zipfile
 
+from api.models import Comment
 from api.models import Take
 
-from api.models import Comment
-from api.models.take import User
+from api.file_transfer import FileUtility
 from .ArchiveProject import ArchiveProject
 
 
@@ -22,17 +21,18 @@ class ZipIt(ArchiveProject):
             with zipfile.ZipFile(file, "r") as zip_file:
                 takes_info = zip_file.infolist()
                 takes = ZipIt.get_files(zip_file)
-                keys = None
+                filenames = None
                 if takes:
                     user_comment = ZipIt.get_users_comments(takes)
                     diff_list = ZipIt.get_diff_list(takes, zip_file, user_comment)
-                    keys = set().union(*(d.keys() for d in diff_list))
-
+                    print(diff_list)
+                    if len(diff_list) > 0:
+                        filenames = set().union(*(d.values() for d in diff_list))
                 current_take = 0
                 for take in takes_info:
                     filename = take.filename
-                    if keys is not None:
-                        if filename not in keys:
+                    if filenames is not None:
+                        if filename not in filenames:
                             continue
 
                     if len(filename) == 12:
@@ -98,8 +98,10 @@ class ZipIt(ArchiveProject):
                 for comment in comments:
                     user = comment.owner
                     if user:
-                        user_hash.append({user.icon_hash, ZipIt.get_local_file_hash(user.name_audio)})
-                    comment_hash.append({take.name, ZipIt.get_local_file_hash(comment.location)})
+                        user_hash.append(
+                            {ZipIt.get_local_file_hash(user.name_audio): FileUtility.file_name(user.name_audio)})
+                    comment_hash.append(
+                        {ZipIt.get_local_file_hash(comment.location): FileUtility.file_name(take.location)})
         return comment_hash + user_hash
 
     @staticmethod
@@ -119,21 +121,21 @@ class ZipIt(ArchiveProject):
         return hash_md5.hexdigest()
 
     @staticmethod
-    def local_file_hash_list(file_list):
+    def local_file_hash_list(take_list):
         hashes = []
-        for file in file_list:
-            hashes.append({file.name: ZipIt.get_local_file_hash(file.location)})
+        for take in take_list:
+            hashes.append({ZipIt.get_local_file_hash(take.location): FileUtility.file_name(take.location)})
         return hashes
 
     @staticmethod
     def zip_file_hash_list(zip_file):
         hashes = []
         for file in zip_file.infolist():
-            hashes.append({file.filename: ZipIt.get_zip_file_hash(zip_file, file)})
+            hashes.append({ZipIt.get_zip_file_hash(zip_file, file): file.filename})
         return hashes
 
     @staticmethod
-    def get_diff_list(local_file_list, zip_file, user_comment):
-        local_list = ZipIt.local_file_hash_list(local_file_list) + user_comment
+    def get_diff_list(take_list, zip_file, user_comments):
+        local_list = ZipIt.local_file_hash_list(take_list) + user_comments
         zip_list = ZipIt.zip_file_hash_list(zip_file)
         return [x for x in local_list + zip_list if x not in local_list or x not in zip_list]
