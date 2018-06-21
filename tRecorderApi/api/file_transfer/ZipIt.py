@@ -95,7 +95,7 @@ class ZipIt(ArchiveProject):
         for take in takes:
             comment = Comment.get_comments(take_id=take.id)
             if comment:
-                user = User.objects.filter(comment=comment)
+                user = comment.owner
                 user_hash.append({user.name_audio, ZipIt.get_local_file_hash(user.location)})
                 comment_hash.append({take.name, ZipIt.get_local_file_hash(comment.location)})
         return comment_hash + user_hash
