@@ -2,7 +2,7 @@ import hashlib
 import json
 import os
 import zipfile
-
+from itertools import chain
 from api.models import Comment
 from api.models import Take
 
@@ -19,40 +19,38 @@ class ZipIt(ArchiveProject):
     def extract(file, directory, user, update_progress, task_args):
         try:
             with zipfile.ZipFile(file, "r") as zip_file:
-                takes_info = zip_file.infolist()
+                files_info = zip_file.infolist()
                 takes = ZipIt.get_files(zip_file)
                 filenames = None
                 if takes:
                     user_comment = ZipIt.get_users_comments(takes)
                     diff_list = ZipIt.get_diff_list(takes, zip_file, user_comment)
-                    print(diff_list)
                     if len(diff_list) > 0:
                         filenames = set().union(*(d.values() for d in diff_list))
                 current_take = 0
-                for take in takes_info:
-                    filename = take.filename
+                for file in files_info:
+                    filename = file.filename
                     if filenames is not None:
                         if filename not in filenames:
                             continue
-
                     if len(filename) == 12:
                         loc = os.path.join(os.path.dirname(directory), "name_audios")
-                        zip_file.extract(take, loc)
+                        zip_file.extract(file, loc)
                         continue
                     if len(filename) > 12 and filename.endswith(".mp3"):
                         loc = os.path.join(os.path.dirname(directory), "comments")
-                        zip_file.extract(take, loc)
+                        zip_file.extract(file, loc)
                         continue
                     if filename[-1] == os.sep:
                         continue
-                    take.filename = os.path.basename(filename)
-                    zip_file.extract(take, directory)
+                    file.filename = os.path.basename(filename)
+                    zip_file.extract(file, directory)
 
                 current_take += 1
 
                 if update_progress and task_args:
                     # 1/2 of overall task
-                    progress = int(((current_take / len(takes_info) * 100) / 2))
+                    progress = int(((current_take / len(files_info) * 100) / 2))
 
                     new_task_args = task_args + (progress, 100, 'Extracting takes...', {
                         'user_icon_hash': user["icon_hash"],
@@ -61,7 +59,7 @@ class ZipIt(ArchiveProject):
                         'lang_name': "--",
                         'book_slug': "--",
                         'book_name': "--",
-                        'result': str(take.filename)
+                        'result': str(file.filename)
                     })
                     update_progress(*new_task_args)
                 return 'ok', 200
@@ -93,15 +91,17 @@ class ZipIt(ArchiveProject):
         comment_hash = []
         user_hash = []
         for take in takes:
-            comments = Comment.get_comments(take_id=take.id)
-            if len(comments) > 0:
-                for comment in comments:
-                    user = comment.owner
-                    if user:
-                        user_hash.append(
-                            {ZipIt.get_local_file_hash(user.name_audio): FileUtility.file_name(user.name_audio)})
-                    comment_hash.append(
-                        {ZipIt.get_local_file_hash(comment.location): FileUtility.file_name(take.location)})
+            chapter_comments = Comment.get_comments(chapter_id=take.chunk.chapter.id)
+            chunk_comments = Comment.get_comments(chunk_id=take.chunk.id)
+            take_comments = Comment.get_comments(take_id=take.id)
+            comments = list(chain(chapter_comments, chunk_comments, take_comments))
+            for comment in comments:
+                user = comment.owner
+                if user:
+                    user_hash.append(
+                        {ZipIt.get_local_file_hash(user.name_audio): FileUtility.file_name(user.name_audio)})
+                comment_hash.append(
+                    {ZipIt.get_local_file_hash(comment.location): FileUtility.file_name(comment.location)})
         return comment_hash + user_hash
 
     @staticmethod
