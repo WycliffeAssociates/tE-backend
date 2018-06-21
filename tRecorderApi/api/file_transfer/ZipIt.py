@@ -93,12 +93,13 @@ class ZipIt(ArchiveProject):
         comment_hash = []
         user_hash = []
         for take in takes:
-            comment = Comment.get_comments(take_id=take.id)
-            if comment:
-                user = comment.owner
-                if user:
-                    user_hash.append({user.name_audio, ZipIt.get_local_file_hash(user.location)})
-                comment_hash.append({take.name, ZipIt.get_local_file_hash(comment.location)})
+            comments = Comment.get_comments(take_id=take.id)
+            if len(comments) > 0:
+                for comment in comments:
+                    user = comment.owner
+                    if user:
+                        user_hash.append({user.name_audio, ZipIt.get_local_file_hash(user.location)})
+                    comment_hash.append({take.name, ZipIt.get_local_file_hash(comment.location)})
         return comment_hash + user_hash
 
     @staticmethod
