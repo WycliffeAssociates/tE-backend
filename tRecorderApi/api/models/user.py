@@ -10,7 +10,7 @@ class User(AbstractUser):
 
     @staticmethod
     def import_user(user):
-        username = user['name_audio'][:-4]
+        username = str(uuid.uuid1())[:8]
         user_obj, u_created = User.objects.get_or_create(
             icon_hash=user['icon_hash'],
             username=username,
