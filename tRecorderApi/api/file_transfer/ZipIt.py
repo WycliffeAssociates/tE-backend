@@ -33,14 +33,6 @@ class ZipIt(ArchiveProject):
                     if filenames is not None:
                         if filename not in filenames:
                             continue
-                    if len(filename) == 12:
-                        loc = os.path.join(os.path.dirname(directory), "name_audios")
-                        zip_file.extract(file, loc)
-                        continue
-                    if len(filename) > 12 and filename.endswith(".mp3"):
-                        loc = os.path.join(os.path.dirname(directory), "comments")
-                        zip_file.extract(file, loc)
-                        continue
                     if filename[-1] == os.sep:
                         continue
                     file.filename = os.path.basename(filename)

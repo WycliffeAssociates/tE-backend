@@ -70,6 +70,12 @@ class FileUtility:
         project = Project.import_project(
             version, mode, anthology, language, book)
 
+        if not os.path.exists(os.path.join("media", "dump", "comments")):
+            os.makedirs(os.path.join("media", "dump", "comments"))
+
+        if not os.path.exists(os.path.join("media", "dump", "name_audios")):
+            os.makedirs(os.path.join("media", "dump", "name_audios"))
+
         total_takes = self.manifest_takes_count(project_manifest["manifest"])
         takes_added = 0
         current_take = 0
@@ -81,7 +87,14 @@ class FileUtility:
             if "comments" in chapters:
                 comments = chapters["comments"]
                 if len(comments) > 0:
-                    Comment.import_comment(comments, "chapter", chapter.id, users_info)
+                    for comment in comments:
+                        comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                        owner = None
+                        if os.path.exists(comt_path):
+                    	    os.rename(comt_path, comment["location"])
+                        if "users" in project_manifest and "user_id" in comment:
+                            owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
+                        Comment.import_comment(comment, "chapter", chapter.id, owner)
             for chunks in chapters["chunks"]:
                 startv = chunks["startv"]
                 endv = chunks["endv"]
@@ -89,7 +102,14 @@ class FileUtility:
                 if "comments" in chunks:
                     comments = chunks["comments"]
                     if len(comments) > 0:
-                        Comment.import_comment(comments, "chunk", chunk.id, users_info)
+                        for comment in comments:
+                            comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                            owner = None
+                            if os.path.exists(comt_path):
+                            	os.rename(comt_path, comment["location"])
+                            if "users" in project_manifest and "user_id" in comment:
+                                owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
+                            Comment.import_comment(comment, "chunk", chunk.id, owner)
                 for take in chunks["takes"]:
 
                     from api.models.take import Take
@@ -138,7 +158,14 @@ class FileUtility:
                     if "comments" in take:
                         comments = take["comments"]
                         if len(comments) > 0:
-                            Comment.import_comment(comments, "take", take_obj.id, users_info)
+                            for comment in comments:
+                                comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                                owner = None
+                                if os.path.exists(comt_path):
+                            	    os.rename(comt_path, comment["location"])
+                                if "users" in project_manifest and "user_id" in comment:
+                                    owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
+                                Comment.import_comment(comment, "take", take_obj.id, owner)
                     takes_added += 1
 
         add_info = ""
@@ -368,11 +395,11 @@ class FileUtility:
                     dest_file = os.path.join("media", "dump", "name_audios", user["name_audio"])
                     os.rename(audio_file, dest_file)
 
-                    uuid_name = str(uuid.uuid1())[:8]
+                    username = str(uuid.uuid1())[:8]
                     password = make_password("P@ssw0rd")
                     owner = User.objects.create(
                         icon_hash=user["icon_hash"],
-                        username=uuid_name,
+                        username=username,
                         password=password,
                         name_audio=self.relative_path(dest_file)
                     )
