@@ -1,9 +1,3 @@
-"""
-    File containing mock values for tests that use mocks since these values are
-    too large to include in the actual tests.
-"""
-MOCK_FILE_NAME = "en_ulb_b06_jos_c01_v01-03_t02.wav"
-MOCK_FILE_LOCATION = "media/dump/1540049.2991178e/en_ulb_b06_jos_c01_v01-03_t02.wav"
 MOCKFILECONTENTS = [
     {
         {
@@ -44,8 +38,8 @@ MOCKFILECONTENTS = [
                             "takes"    :
                             [
                                 {
-                                    "name"     : MOCK_FILE_NAME,
-                                    "location" : MOCK_FILE_LOCATION,
+                                    "name"     : en_ulb_b06_jos_c01_v01-03_t02.wav,
+                                    "location" : media/dump/1540049.2991178e/en_ulb_b06_jos_c01_v01-03_t02.wav,
                                     "rating"   : 3,
                                     "published": false,
                                     "user_id"  : null,
