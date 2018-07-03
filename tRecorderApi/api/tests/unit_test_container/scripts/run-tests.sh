@@ -5,9 +5,12 @@
 
 rm -rf $MIGRATIONS_DIR 
 mkdir $MIGRATIONS_DIR 
-mkdir $COVERAGE_DIR
 touch $MIGRATIONS_INIT 
 cd /tE-backend/tRecorderApi
+if [ -d "reports" ]; then
+	rm -rf reports
+fi
+mkdir $COVERAGE_DIR
 python3 manage.py makemigrations
 python3 manage.py migrate
 coverage run \

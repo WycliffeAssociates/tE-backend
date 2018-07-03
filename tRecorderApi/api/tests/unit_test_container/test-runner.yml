@@ -6,7 +6,7 @@ services:
     env_file:
       - test-runner.env
     volumes:
-      - "${PROJ_DIR}:/tE-backend"
+      - C:\Users\dipinton\tE-backend:/tE-backend
       - ./scripts:/scripts
     command: bash -c "chmod +x /scripts/wait-for-it.sh
                       && chmod +x /scripts/run-tests.sh
