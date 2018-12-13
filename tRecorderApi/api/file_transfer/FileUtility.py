@@ -65,8 +65,7 @@ class FileUtility:
         book = Book.import_book(project_manifest["book"], anthology)
         version = Version.import_version(project_manifest["version"])
         mode = Mode.import_mode(project_manifest["mode"])
-        if "users" in project_manifest:
-            users_info = project_manifest["users"]
+
         project = Project.import_project(
             version, mode, anthology, language, book)
 
@@ -91,7 +90,7 @@ class FileUtility:
                         comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
                         owner = None
                         if os.path.exists(comt_path):
-                    	    os.rename(comt_path, comment["location"])
+                            os.rename(comt_path, comment["location"])
                         if "users" in project_manifest and "user_id" in comment:
                             owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
                         Comment.import_comment(comment, "chapter", chapter.id, owner)
@@ -106,7 +105,7 @@ class FileUtility:
                             comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
                             owner = None
                             if os.path.exists(comt_path):
-                            	os.rename(comt_path, comment["location"])
+                                os.rename(comt_path, comment["location"])
                             if "users" in project_manifest and "user_id" in comment:
                                 owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
                             Comment.import_comment(comment, "chunk", chunk.id, owner)
@@ -151,10 +150,12 @@ class FileUtility:
                         owner = self.manifest_take_owner(project_manifest["users"], take["user_id"], directory)
 
                     markers = self.get_markers(meta)
-                    rating = take["rating"]
+                    rating = take["rating"] if "rating" in take else 0
+                    published = take["published"] if "published" in take else False
                     duration = meta.duration
                     self.push_audio_processing_to_background(file)
-                    take_obj = Take.import_takes(self.relative_path(file), duration, markers, rating, chunk, owner)
+                    take_obj = Take.import_takes(self.relative_path(file), duration, markers, rating, published, chunk,
+                                                 owner)
                     if "comments" in take:
                         comments = take["comments"]
                         if len(comments) > 0:
@@ -162,7 +163,7 @@ class FileUtility:
                                 comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
                                 owner = None
                                 if os.path.exists(comt_path):
-                            	    os.rename(comt_path, comment["location"])
+                                    os.rename(comt_path, comment["location"])
                                 if "users" in project_manifest and "user_id" in comment:
                                     owner = self.manifest_take_owner(project_manifest["users"], comment["user_id"], directory)
                                 Comment.import_comment(comment, "take", take_obj.id, owner)

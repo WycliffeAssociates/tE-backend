@@ -54,11 +54,12 @@ class Take(models.Model):
             return ""
 
     @staticmethod
-    def import_takes(file_path, duration, markers, rating, chunk, owner):
+    def import_takes(file_path, duration, markers, rating, published, chunk, owner):
         take_obj, take_created = Take.objects.get_or_create(location=file_path,
                                                             chunk=chunk,
                                                             duration=duration,
                                                             rating=rating,
+                                                            published=published,
                                                             markers=markers,
                                                             owner=owner
                                                             )
