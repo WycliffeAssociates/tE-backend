@@ -23,6 +23,7 @@ from rest_framework.response import Response
         ), openapi.Parameter(
             name='chapters', in_=openapi.IN_PATH,
             type=openapi.TYPE_ARRAY,
+            items=openapi.Items(type=openapi.TYPE_INTEGER),
             description="Filter by chapters",
         ), openapi.Parameter(
             name='file_format', in_=openapi.IN_QUERY,
