@@ -87,7 +87,7 @@ class FileUtility:
                 comments = chapters["comments"]
                 if len(comments) > 0:
                     for comment in comments:
-                        comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                        comt_path = os.path.join(directory, comment["name"])
                         owner = None
                         if os.path.exists(comt_path):
                             os.rename(comt_path, comment["location"])
@@ -102,7 +102,7 @@ class FileUtility:
                     comments = chunks["comments"]
                     if len(comments) > 0:
                         for comment in comments:
-                            comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                            comt_path = os.path.join(directory, comment["name"])
                             owner = None
                             if os.path.exists(comt_path):
                                 os.rename(comt_path, comment["location"])
@@ -160,7 +160,7 @@ class FileUtility:
                         comments = take["comments"]
                         if len(comments) > 0:
                             for comment in comments:
-                                comt_path = os.path.join(directory, FileUtility.file_name(comment["location"]))
+                                comt_path = os.path.join(directory, comment["name"])
                                 owner = None
                                 if os.path.exists(comt_path):
                                     os.rename(comt_path, comment["location"])

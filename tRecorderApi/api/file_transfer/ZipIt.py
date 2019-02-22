@@ -69,13 +69,17 @@ class ZipIt(ArchiveProject):
                     book = manifest_file["book"]["slug"]
                     version = manifest_file["version"]["slug"]
                     anthology = manifest_file["anthology"]["slug"]
-                    return ZipIt.get_takes(lang, book, version, anthology)
+                    mode = manifest_file["mode"]
+                    return ZipIt.get_takes(lang, version, anthology, mode, book)
 
     @staticmethod
-    def get_takes(lang, book, version, anthology):
-        return Take.objects.filter(chunk__chapter__project__language__slug__iexact=lang).filter(
+    def get_takes(lang, version, anthology, mode, book):
+        return Take.objects.filter(
+            chunk__chapter__project__language__slug__iexact=lang).filter(
             chunk__chapter__project__anthology__slug__iexact=anthology).filter(
             chunk__chapter__project__version__slug__iexact=version).filter(
+            chunk__chapter__project__mode__slug__iexact=mode["slug"]).filter(
+            chunk__chapter__project__mode__unit__exact=1 if mode["type"] == "MULTI" else 0).filter(
             chunk__chapter__project__book__slug__iexact=book)
 
     @staticmethod

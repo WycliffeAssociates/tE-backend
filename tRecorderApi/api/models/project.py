@@ -72,7 +72,6 @@ class Project(models.Model):
             anthology=anthology,
             language=language,
             book=book,
-            published=published,
             defaults={
                 'version': version,
                 'mode': mode,
