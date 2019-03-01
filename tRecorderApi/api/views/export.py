@@ -68,6 +68,8 @@ class ExportViewSet(viewsets.ReadOnlyModelViewSet):
                 "ver_slug": version_slug
             }
 
+            leading_zeroes = 3 if(book_slug == "psa") else 2
+
             zip_it = Download(ArchiveIt(), AudioUtility(), FileUtility())
 
             root_dir = zip_it.file_utility.root_dir(['media', 'export'])
@@ -87,7 +89,7 @@ class ExportViewSet(viewsets.ReadOnlyModelViewSet):
                         language_slug,
                         version_slug,
                         book_slug,
-                        str(take.chunk.chapter).zfill(2))
+                        str(take.chunk.chapter).zfill(leading_zeroes))
                 }
                 take_location_list.append(location)
 
