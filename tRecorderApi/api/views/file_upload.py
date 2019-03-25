@@ -37,12 +37,17 @@ class FileUploadView(views.APIView):
             up = Upload(arch_project, None, FileUtility())
 
             user_data = {}
+            file_name = "unknown_file_name"
+            
+            if "HTTP_TR_FILE_NAME" in request.META:
+                file_name = request.META["HTTP_TR_FILE_NAME"]
 
             if request.user.is_anonymous:
                 user_hash = "unknown_user_hash"
+                
                 if "HTTP_TR_USER_HASH" in request.META:
                     user_hash = request.META["HTTP_TR_USER_HASH"]
-
+                
                 user = User.objects.filter(icon_hash=user_hash).first()
                 if user:
                     user_data["icon_hash"] = user.icon_hash
@@ -54,7 +59,7 @@ class FileUploadView(views.APIView):
                 user_data["icon_hash"] = request.user.icon_hash
                 user_data["name_audio"] = request.user.name_audio
 
-            task_id = up.upload(uploaded_file_url, user_data)
+            task_id = up.upload(uploaded_file_url, user_data, file_name)
             return Response({"response": "processing", "task_id": task_id}, status=202)
         else:
             return Response({"response": "no file"}, status=200)

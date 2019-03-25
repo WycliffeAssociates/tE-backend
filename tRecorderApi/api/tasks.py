@@ -18,6 +18,7 @@ class BaseTask(celery.Task):
                               'details': {
                                   "user_icon_hash": kwargs["user"]["icon_hash"],
                                   "user_name_audio": kwargs["user"]["name_audio"],
+                                  "file_name": kwargs["file_name"] if "file_name" in kwargs else "--",
                                   "result": str(exc)
                               },
                               'title': kwargs["title"],
@@ -27,7 +28,7 @@ class BaseTask(celery.Task):
 
 
 @shared_task(name='extract_and_save_project', base=BaseTask)
-def extract_and_save_project(self, file, directory, title, started, user):
+def extract_and_save_project(self, file, directory, title, started, user, file_name):
     task = extract_and_save_project
     update_started(task, title, started, 'Extracting files...', {})
 
