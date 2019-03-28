@@ -3,21 +3,24 @@ import datetime
 from api.file_transfer import FileUtility
 from api.tasks import cleanup_orphan_files
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.authentication import TokenAuthentication
+# from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import serializers
 
 
 class CleanupOrphansView(generics.GenericAPIView):
     serializer_class = serializers.Serializer
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+
+    # Authentication removed temporarily from this view
+    # in order to run it via cron job
 
     def get(self, request):
         user_data = {
-            "icon_hash": request.user.icon_hash,
-            "name_audio": request.user.name_audio
+            "icon_hash": "system",  # request.user.icon_hash,
+            "name_audio": "system"  # request.user.name_audio
         }
 
         task = cleanup_orphan_files.delay(FileUtility(),
