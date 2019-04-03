@@ -671,7 +671,7 @@ class FileUtility:
                         last_modified_date = datetime.datetime.fromtimestamp(mtime)
                         diff = datetime.datetime.now() - last_modified_date
                         # Include files for deletion older than 24 hours
-                        if diff.seconds > 24 * 60 * 60:
+                        if diff.total_seconds() > 24 * 60 * 60:
                             fs_records.append(self.relative_path(filepath))
 
         orphans = frozenset(fs_records).difference(db_records)
