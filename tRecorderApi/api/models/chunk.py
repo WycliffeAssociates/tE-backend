@@ -21,6 +21,10 @@ class Chunk(models.Model):
         return "{}"
 
     @property
+    def has_takes(self):
+        return self.takes.count() > 0
+
+    @property
     def has_comment(self):
         return Chunk.objects.filter(comments__object_id=self.id).exists()
 
