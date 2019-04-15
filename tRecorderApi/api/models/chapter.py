@@ -75,7 +75,11 @@ class Chapter(models.Model):
         return count
 
     def get_uploaded_chunks(self):
-        return self.chunks.count()
+        count = 0
+        for chunk in self.chunks.all():
+            if chunk.has_takes:
+                count += 1
+        return count
 
     def get_total_chunks(self, book_name_slug, chapter_number):
         length = 0
