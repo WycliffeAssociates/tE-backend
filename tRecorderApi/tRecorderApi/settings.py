@@ -24,7 +24,7 @@ SECRET_KEY = '&9e^=922_&wi-bw@bbe$id#r$7hb(im03nrow5w@tgg8##hfd('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc', 'opentranslationtools.org']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'te.loc', '.opentranslationtools.org']
 
 # Application definition
 
