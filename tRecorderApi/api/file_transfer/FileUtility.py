@@ -205,6 +205,34 @@ class FileUtility:
         except Exception as e:
             shutil.rmtree(directory)
             logger.error("Error: ", str(e))
+            
+    @staticmethod
+    def open_localization_file():
+        base_dir = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))))
+        path = os.path.join(base_dir, 'media/lang/textToDisplay.json')
+        
+        try:
+            with open(path) as json_file:
+                localization = json.load(json_file)
+                return localization
+        except Exception as e:
+            logger.error("Error: ", str(e))
+            
+    @staticmethod
+    def save_localization_file(localization):
+        base_dir = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))))
+        
+        target_dir = os.path.join(base_dir, 'media/lang/')
+        
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+        
+        target_file = os.path.join(target_dir, 'textToDisplay.json')
+        
+        with(open(target_file, 'w')) as out_file:
+            json.dump(localization, out_file, indent=4)
 
     def generate_manifest_dictionary(self, project, takes):
         manifest = {

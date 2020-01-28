@@ -24,5 +24,6 @@ from .frontend import FrontendAppView
 from .user import UserViewSet
 
 from .clean_orphans import *
+from .localization import *
 from .task import TaskViewSet
 from .downloads import DownloadsViewSet
