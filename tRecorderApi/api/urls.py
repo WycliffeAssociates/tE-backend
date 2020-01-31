@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^(?!api).*$', views.frontend.FrontendAppView.as_view()),
     url(r'^api/$', views.index, name='index'),
     url(r'^api/cleanup_orphans/$', views.clean_orphans.CleanupOrphansView.as_view()),
+    url(r'^api/localization/(?P<filename>[^/]+|)$', views.localization.LocalizationView.as_view()),
     url(r'^api/upload/(?P<filename>[^/]+)$',
         views.file_upload.FileUploadView.as_view()),
     url(r'^api/resumable_upload/(?P<filename>[^/]+)/$',
