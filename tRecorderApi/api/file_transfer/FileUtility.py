@@ -8,6 +8,7 @@ import time
 import uuid
 from collections import MutableMapping
 from contextlib import suppress
+from pathlib import Path
 
 from django.contrib.auth.hashers import make_password
 
@@ -47,8 +48,7 @@ class FileUtility:
         directory = ''
         for dir in root_dir_of:
             directory = os.path.join(directory, dir)
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
+        base_dir = FileUtility.get_base_dir()
 
         uuid_name = str(time.time()) + str(uuid.uuid4())
         root_directory = os.path.join(base_dir, directory, uuid_name)
@@ -56,6 +56,10 @@ class FileUtility:
         if not os.path.exists(root_directory):
             os.makedirs(root_directory)
         return root_directory
+
+    @staticmethod
+    def get_base_dir():
+        return str(Path(__file__).resolve().parents[2])
 
     def import_project(self, directory, user, update_progress, task_args):
         bad_files = []
@@ -208,11 +212,10 @@ class FileUtility:
             
     @staticmethod
     def open_localization_file():
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
-        path = os.path.join(base_dir, 'media/lang/textToDisplay.json')
-        
         try:
+            base_dir = FileUtility.get_base_dir()
+            path = os.path.join(base_dir, 'media/lang/textToDisplay.json')
+
             with open(path) as json_file:
                 localization = json.load(json_file)
                 return localization
@@ -221,16 +224,14 @@ class FileUtility:
             
     @staticmethod
     def save_localization_file(localization):
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
-        
+        base_dir = FileUtility.get_base_dir()
         target_dir = os.path.join(base_dir, 'media/lang/')
-        
+
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
-        
+
         target_file = os.path.join(target_dir, 'textToDisplay.json')
-        
+
         with(open(target_file, 'w')) as out_file:
             json.dump(localization, out_file, indent=4)
 
@@ -512,8 +513,7 @@ class FileUtility:
                 temp_file.write(chunk)
             try:
                 FNULL = open(os.devnull, 'wb')
-                base_dir = os.path.dirname(os.path.dirname(
-                    os.path.dirname(os.path.abspath(__file__))))
+                base_dir = FileUtility.get_base_dir()
 
                 path = os.path.join(base_dir, "aoh", "aoh.jar")
                 file_path = os.path.join(os.path.join(directory, "source.tr"))
@@ -565,13 +565,7 @@ class FileUtility:
 
     def take_location(self, take_location):
         return os.path.join(
-            os.path.dirname(
-                os.path.dirname(
-                    os.path.dirname(
-                        os.path.abspath(__file__)
-                    )
-                )
-            ),
+            FileUtility.get_base_dir(),
             take_location
         )
 
@@ -606,14 +600,12 @@ class FileUtility:
                 update_progress(*new_task_args)
 
     def copy_files(self, src, dst):
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
+        base_dir = FileUtility.get_base_dir()
         shutil.copy2(os.path.join(base_dir, src), dst)
         return os.path.join(dst, os.path.basename(src))
 
     def project_file(self, project_name, dir_of, file_extension):
-        return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), dir_of,
-                            project_name + file_extension)
+        return os.path.join(FileUtility.get_base_dir(), dir_of, project_name + file_extension)
 
     def remove_dir(self, dir_to_remove):
         shutil.rmtree(dir_to_remove)
@@ -626,13 +618,11 @@ class FileUtility:
         os.rename(oldname, newname)
 
     def create_tr_path(self, media, tmp, filename):
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
+        base_dir = FileUtility.get_base_dir()
         return os.path.join(base_dir, media, tmp, filename + ".tr")
 
     def compile_into_tr(self, root_dir):
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
+        base_dir = FileUtility.get_base_dir()
         FNULL = open(os.devnull, 'w')
         subprocess.call(
             ['java', '-jar', os.path.join(
@@ -683,8 +673,7 @@ class FileUtility:
         directory = ''
         for dir in target_dir:
             directory = os.path.join(directory, dir)
-        base_dir = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
+        base_dir = FileUtility.get_base_dir()
         root_directory = os.path.join(base_dir, directory)
 
         for subdir, dirs, files in os.walk(root_directory):
@@ -724,3 +713,4 @@ class FileUtility:
         total_removed += self.__cleanup_files(CleanupType.EXPORT)
 
         return total_removed
+
